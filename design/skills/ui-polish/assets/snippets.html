@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Polish Snippets</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{
+    --bg:#0b1812; --panel:#102019; --panel-2:#16291f;
+    --line:rgba(255,255,255,.08); --line-strong:rgba(255,255,255,.15);
+    --text:#e9f1ec; --muted:#a6bbaf; --muted-2:#86998d;
+    --accent:#1d7a49; --accent-hover:#228a54; --accent-bright:#43d18b;
+    --soft:rgba(67,209,139,.12); --gold:#d6a94e;
+    --pos:#52cb8c; --neg:#e08a6a;
+    --r:14px; --r-sm:10px;
+    --font:"Söhne","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 80% -10%,#13291e 0%,var(--bg) 55%);
+    color:var(--text);font-family:var(--font);line-height:1.5;
+    -webkit-font-smoothing:antialiased;padding:48px 24px 96px;
+  }
+  .wrap{max-width:980px;margin:0 auto}
+  .lede{max-width:680px;margin-bottom:44px}
+  .lede h1{font-size:30px;font-weight:650;letter-spacing:-.02em}
+  .lede p{color:var(--muted);margin-top:10px;font-size:15px}
+  .kicker{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--accent-bright);
+    background:var(--soft);border:1px solid var(--line-strong);padding:5px 11px;border-radius:999px;margin-bottom:18px}
+  section{margin-top:40px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .sec-head h2{font-size:18px;font-weight:620;letter-spacing:-.01em}
+  .sec-head .num{color:var(--accent-bright);font-variant-numeric:tabular-nums;font-weight:650;font-size:14px}
+  .sec-note{color:var(--muted);font-size:13.5px;margin-bottom:18px;max-width:640px}
+  .panel{background:linear-gradient(180deg,var(--panel) 0%,#0e1d16 100%);
+    border:1px solid var(--line);border-radius:var(--r);padding:22px}
+  .grid{display:grid;gap:16px}
+  .g-3{grid-template-columns:repeat(3,1fr)}
+  .g-2{grid-template-columns:1.05fr .95fr}
+  @media(max-width:720px){.g-3{grid-template-columns:1fr}.g-2{grid-template-columns:1fr}}
+  svg.lc{width:18px;height:18px;stroke-width:1.75}
+  .muted{color:var(--muted)}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* stat card */
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;
+    display:flex;flex-direction:column;gap:12px}
+  .stat .top{display:flex;justify-content:space-between;align-items:center}
+  .stat .label{font-size:12.5px;color:var(--muted);font-weight:550}
+  .stat .val{font-size:26px;font-weight:660;letter-spacing:-.02em}
+  .delta{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:650;
+    padding:3px 8px;border-radius:999px;font-variant-numeric:tabular-nums}
+  .delta.pos{color:var(--pos);background:rgba(82,203,140,.12)}
+  .delta.neg{color:var(--neg);background:rgba(224,138,106,.12)}
+  .delta svg{width:13px;height:13px}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:13.5px;font-weight:600;
+    border-radius:var(--r-sm);padding:9px 14px;border:1px solid transparent;cursor:pointer;color:var(--text)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:rgba(0,0,0,.2)}
+  .btn.primary:hover{background:var(--accent-hover)}
+  .btn.ghost{background:transparent;border-color:var(--line-strong);color:var(--text)}
+  .btn.ghost:hover{background:var(--panel-2)}
+  .btn svg{width:16px;height:16px}
+  .icon-btn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:var(--r-sm);
+    border:1px solid var(--line-strong);background:transparent;color:var(--muted);cursor:pointer}
+  .icon-btn:hover{background:var(--panel-2);color:var(--text)}
+  .icon-btn svg{width:18px;height:18px}
+
+  /* list card (optimized row) */
+  .row{display:grid;grid-template-columns:34px 1fr auto auto;gap:16px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+  .row + .row{margin-top:10px}
+  .favi{width:34px;height:34px;border-radius:9px;background:var(--panel-2);display:grid;place-items:center;color:var(--accent-bright)}
+  .favi svg{width:17px;height:17px}
+  .row .title{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:8px}
+  .row .sub{color:var(--muted);font-size:12.5px;margin-top:2px;display:flex;align-items:center;gap:8px}
+  .metaicons{display:flex;gap:10px;color:var(--muted-2)}
+  .metaicons svg{width:15px;height:15px}
+  .when{color:var(--muted);font-size:12.5px;text-align:center;min-width:84px}
+  .kebab-wrap{position:relative}
+  .menu{position:absolute;right:0;top:40px;min-width:168px;background:var(--panel-2);
+    border:1px solid var(--line-strong);border-radius:var(--r-sm);padding:6px;z-index:20;
+    box-shadow:0 18px 40px rgba(0,0,0,.45);display:none}
+  .menu.open{display:block}
+  .menu button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;
+    color:var(--text);font:inherit;font-size:13px;padding:8px 10px;border-radius:7px;cursor:pointer;text-align:left}
+  .menu button:hover{background:var(--panel)}
+  .menu button.danger{color:var(--neg)}
+  .menu svg{width:15px;height:15px}
+  .menu .sep{height:1px;background:var(--line);margin:5px 2px}
+
+  /* account card */
+  .acct{max-width:300px;background:var(--panel-2);border:1px solid var(--line-strong);
+    border-radius:var(--r);padding:8px;box-shadow:0 22px 50px rgba(0,0,0,.5)}
+  .acct .id{display:flex;gap:11px;align-items:center;padding:10px 10px 12px}
+  .avatar{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#1d7a49,#0e3d26);
+    display:grid;place-items:center;font-weight:650;font-size:15px;color:#eafff3;border:1px solid var(--line-strong)}
+  .acct .name{font-weight:620;font-size:14px}
+  .acct .email{color:var(--muted);font-size:12px}
+  .acct .switch{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 4px 8px;
+    padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);font-size:12.5px;color:var(--muted)}
+  .acct nav{display:flex;flex-direction:column;padding:2px}
+  .acct nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;
+    color:var(--text);text-decoration:none;font-size:13.5px}
+  .acct nav a:hover{background:var(--panel)}
+  .acct nav a svg{width:16px;height:16px;color:var(--muted)}
+  .acct .sep{height:1px;background:var(--line);margin:6px 4px}
+  .acct nav a.out{color:var(--neg)}
+  .acct nav a.out svg{color:var(--neg)}
+
+  /* donut */
+  .usage{display:flex;align-items:center;gap:16px;padding:14px;border:1px solid var(--line);
+    border-radius:var(--r);background:var(--panel)}
+  .donut{position:relative;width:84px;height:84px;flex:none}
+  .donut .ctr{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+  .donut .ctr b{font-size:17px;font-weight:670;line-height:1}
+  .donut .ctr span{font-size:10px;color:var(--muted)}
+  .usage .u-label{font-size:13px;font-weight:600}
+  .usage .u-sub{font-size:12px;color:var(--muted);margin-top:3px}
+
+  /* segmented control */
+  .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
+  .seg button{font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);background:none;border:none;
+    padding:7px 13px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px}
+  .seg button.on{background:var(--accent);color:#fff}
+  .seg button svg{width:14px;height:14px}
+
+  /* pricing */
+  .plan{border:1px solid var(--line);border-radius:var(--r);padding:18px;background:var(--panel);position:relative}
+  .plan.best{border-color:rgba(214,169,78,.55);background:linear-gradient(180deg,rgba(214,169,78,.08),var(--panel))}
+  .plan .pin{position:absolute;top:-10px;left:18px;font-size:11px;font-weight:650;color:#22150a;
+    background:var(--gold);padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .plan h3{font-size:14px;font-weight:600;color:var(--muted)}
+  .plan .price{font-size:28px;font-weight:680;letter-spacing:-.02em;margin:6px 0 2px}
+  .plan .price span{font-size:13px;font-weight:500;color:var(--muted)}
+  .save{font-size:11.5px;color:var(--pos);font-weight:600}
+  .plan ul{list-style:none;margin:14px 0 16px;display:flex;flex-direction:column;gap:9px}
+  .plan li{display:flex;gap:9px;align-items:center;font-size:13px;color:var(--text)}
+  .plan li svg{width:15px;height:15px;color:var(--accent-bright);flex:none}
+  .plan li.off{color:var(--muted-2)}
+  .plan li.off svg{color:var(--muted-2)}
+  .plan .btn{width:100%;justify-content:center}
+  .plan .btn.current{background:transparent;border-color:var(--line-strong);color:var(--muted);cursor:default}
+
+  /* modal */
+  dialog{border:none;padding:0;background:transparent;color:var(--text);max-width:480px;width:92vw}
+  dialog::backdrop{background:rgba(5,12,9,.66);backdrop-filter:blur(3px)}
+  .modal{background:linear-gradient(180deg,var(--panel-2),#0f1e17);border:1px solid var(--line-strong);
+    border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .modal header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+  .modal header h3{font-size:16px;font-weight:630}
+  .modal .body{padding:20px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:7px}
+  .input{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line-strong);
+    border-radius:10px;padding:11px 12px}
+  .input:focus-within{border-color:var(--accent-bright);box-shadow:0 0 0 3px var(--soft)}
+  .input svg{width:17px;height:17px;color:var(--muted)}
+  .input input{background:none;border:none;outline:none;color:var(--text);font:inherit;font-size:14px;width:100%}
+  .input .pre{color:var(--muted);font-size:13.5px}
+  details.adv{border-top:1px solid var(--line);margin-top:4px;padding-top:6px}
+  details.adv summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;
+    color:var(--muted);font-size:13px;font-weight:600;padding:8px 0}
+  details.adv summary::-webkit-details-marker{display:none}
+  details.adv summary .chev{transition:transform .2s ease}
+  details.adv[open] summary .chev{transform:rotate(90deg)}
+  .adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 0 4px}
+  @media(max-width:520px){.adv-grid{grid-template-columns:1fr}}
+  .modal footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 20px;border-top:1px solid var(--line);background:var(--panel)}
+  .preview{display:flex;align-items:center;gap:9px;background:var(--soft);border:1px dashed rgba(67,209,139,.4);
+    border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:16px}
+  .preview svg{width:16px;height:16px;color:var(--accent-bright)}
+  .preview b{font-weight:650}
+  .caption{font-size:12px;color:var(--muted-2);margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="lede">
+    <div class="kicker"><svg data-lucide="sparkles" style="width:14px;height:14px"></svg> UI Polish Kit</div>
+    <h1>Paste-ready components, post-polish</h1>
+    <p>Each block is the "after" state from a polish pass: no emojis, one icon family (Lucide), a cohesive forest-green palette, functional micro-charts, and calm hierarchy. Lift what you need. The theme is driven by CSS variables at the top of this file, so it re-skins to any DESIGN.md by changing the tokens.</p>
+  </div>
+
+  <!-- 1. Micro-charts -->
+  <section>
+    <div class="sec-head"><span class="num">01</span><h2>Micro-charts, not decorative icons</h2></div>
+    <p class="sec-note">A stat card should make its number mean something. Each card below carries a sparkline or a trend delta instead of a corner icon, so the recent story is visible at a glance.</p>
+    <div class="grid g-3">
+      <div class="stat">
+        <div class="top"><span class="label">Total clicks</span><span class="delta pos"><svg data-lucide="trending-up"></svg>18%</span></div>
+        <div class="val tnum">128,540</div>
+        <svg viewBox="0 0 120 32" preserveAspectRatio="none" width="100%" height="32" aria-hidden="true">
+          <polyline points="0,26 15,24 30,25 45,18 60,20 75,12 90,14 105,7 120,5" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="stat">
+        <div class="top"><span class="label">Unique visitors</span><span class="delta pos"><svg data-lucide="trending-up"></svg>9%</span></div>
+        <div class="val tnum">41,209</div>
+        <svg viewBox="0 0 120 32" preserveAspectRatio="none" width="100%" height="32" aria-hidden="true">
+          <polyline points="0,20 15,22 30,16 45,18 60,15 75,17 90,11 105,13 120,9" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="stat">
+        <div class="top"><span class="label">Bounce rate</span><span class="delta neg"><svg data-lucide="trending-down"></svg>4%</span></div>
+        <div class="val tnum">32.6%</div>
+        <svg viewBox="0 0 120 32" preserveAspectRatio="none" width="100%" height="32" aria-hidden="true">
+          <polyline points="0,8 15,11 30,10 45,14 60,13 75,18 90,17 105,22 120,24" fill="none" stroke="var(--neg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Optimized list cards -->
+  <section>
+    <div class="sec-head"><span class="num">02</span><h2>Optimized list card</h2></div>
+    <p class="sec-note">Actions collapse into one kebab menu. Metadata becomes icons with tooltips. The date is quiet and centered. The short link leads. Click the triple-dot to open the menu.</p>
+    <div>
+      <div class="row">
+        <div class="favi"><svg data-lucide="link-2"></svg></div>
+        <div>
+          <div class="title">champ.bm/launch <svg data-lucide="copy" style="width:14px;height:14px;color:var(--muted-2);cursor:pointer" title="Copy link"></svg></div>
+          <div class="sub">
+            <span class="metaicons" title="Destination">
+              <svg data-lucide="globe"></svg>
+            </span>
+            <span>productlaunch.io/spring</span>
+            <span class="metaicons">
+              <svg data-lucide="lock" title="Password protected"></svg>
+              <svg data-lucide="clock" title="Expires in 12 days"></svg>
+            </span>
+          </div>
+        </div>
+        <div class="when">Jun 18</div>
+        <div class="kebab-wrap">
+          <button class="icon-btn" aria-label="Row actions" onclick="toggleMenu(this)"><svg data-lucide="more-vertical"></svg></button>
+          <div class="menu">
+            <button><svg data-lucide="copy"></svg> Copy link</button>
+            <button><svg data-lucide="bar-chart-3"></svg> View stats</button>
+            <button><svg data-lucide="qr-code"></svg> QR code</button>
+            <button><svg data-lucide="pencil"></svg> Edit</button>
+            <div class="sep"></div>
+            <button class="danger"><svg data-lucide="trash-2"></svg> Delete</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="favi"><svg data-lucide="link-2"></svg></div>
+        <div>
+          <div class="title">champ.bm/webinar</div>
+          <div class="sub">
+            <span class="metaicons"><svg data-lucide="globe"></svg></span>
+            <span>events.champ.io/q3-webinar</span>
+            <span class="metaicons"><svg data-lucide="tag" title="Tagged: events"></svg></span>
+          </div>
+        </div>
+        <div class="when">Jun 14</div>
+        <div class="kebab-wrap">
+          <button class="icon-btn" aria-label="Row actions" onclick="toggleMenu(this)"><svg data-lucide="more-vertical"></svg></button>
+          <div class="menu">
+            <button><svg data-lucide="copy"></svg> Copy link</button>
+            <button><svg data-lucide="bar-chart-3"></svg> View stats</button>
+            <button><svg data-lucide="qr-code"></svg> QR code</button>
+            <button><svg data-lucide="pencil"></svg> Edit</button>
+            <div class="sep"></div>
+            <button class="danger"><svg data-lucide="trash-2"></svg> Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Account card -->
+  <section>
+    <div class="sec-head"><span class="num">03</span><h2>Account card</h2></div>
+    <p class="sec-note">The popover that replaces a bare gradient avatar. It pulls billing, team switching, and secondary links out of the sidebar into one consistent home.</p>
+    <div class="acct">
+      <div class="id">
+        <div class="avatar">SS</div>
+        <div>
+          <div class="name">Sreedeep S.</div>
+          <div class="email">deep@championsmail.com</div>
+        </div>
+      </div>
+      <div class="switch"><span>Champions Group</span><svg data-lucide="chevrons-up-down" style="width:15px;height:15px"></svg></div>
+      <nav>
+        <a href="#"><svg data-lucide="user"></svg> Profile</a>
+        <a href="#"><svg data-lucide="settings"></svg> Settings</a>
+        <a href="#"><svg data-lucide="credit-card"></svg> Billing and plans</a>
+        <a href="#"><svg data-lucide="users"></svg> Team</a>
+        <a href="#"><svg data-lucide="key"></svg> API keys</a>
+        <div class="sep"></div>
+        <a href="#"><svg data-lucide="life-buoy"></svg> Help and docs</a>
+        <a href="#" class="out"><svg data-lucide="log-out"></svg> Sign out</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- 4. Billing two-column -->
+  <section>
+    <div class="sec-head"><span class="num">04</span><h2>Humane billing</h2></div>
+    <p class="sec-note">Usage shown as donuts so people see how close they are to the ceiling. Plans on the right with a recommended tier, the annual saving stated, and legible feature differentials.</p>
+    <div class="grid g-2">
+      <div class="panel">
+        <div style="font-size:13px;font-weight:600;margin-bottom:14px;color:var(--muted)">This month</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="usage">
+            <div class="donut">
+              <svg width="84" height="84" viewBox="0 0 84 84" aria-hidden="true">
+                <circle cx="42" cy="42" r="34" fill="none" stroke="var(--line-strong)" stroke-width="9"/>
+                <circle cx="42" cy="42" r="34" fill="none" stroke="var(--accent-bright)" stroke-width="9" stroke-linecap="round"
+                  stroke-dasharray="213.6" stroke-dashoffset="62" transform="rotate(-90 42 42)"/>
+              </svg>
+              <div class="ctr"><b>71%</b><span>used</span></div>
+            </div>
+            <div>
+              <div class="u-label">Tracked clicks</div>
+              <div class="u-sub tnum">35,400 of 50,000</div>
+            </div>
+          </div>
+          <div class="usage">
+            <div class="donut">
+              <svg width="84" height="84" viewBox="0 0 84 84" aria-hidden="true">
+                <circle cx="42" cy="42" r="34" fill="none" stroke="var(--line-strong)" stroke-width="9"/>
+                <circle cx="42" cy="42" r="34" fill="none" stroke="var(--gold)" stroke-width="9" stroke-linecap="round"
+                  stroke-dasharray="213.6" stroke-dashoffset="139" transform="rotate(-90 42 42)"/>
+              </svg>
+              <div class="ctr"><b>35%</b><span>used</span></div>
+            </div>
+            <div>
+              <div class="u-label">Active links</div>
+              <div class="u-sub tnum">348 of 1,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="plan">
+          <h3>Starter</h3>
+          <div class="price">$0<span> / mo</span></div>
+          <ul>
+            <li><svg data-lucide="check"></svg> 1,000 links</li>
+            <li><svg data-lucide="check"></svg> 50k tracked clicks</li>
+            <li class="off"><svg data-lucide="minus"></svg> Custom domains</li>
+          </ul>
+          <button class="btn current">Current plan</button>
+        </div>
+        <div class="plan best">
+          <span class="pin">Recommended</span>
+          <h3>Pro</h3>
+          <div class="price">$24<span> / mo</span></div>
+          <div class="save">Save $58 a year on annual billing</div>
+          <ul>
+            <li><svg data-lucide="check"></svg> Unlimited links</li>
+            <li><svg data-lucide="check"></svg> 500k tracked clicks</li>
+            <li><svg data-lucide="check"></svg> 5 custom domains and team seats</li>
+          </ul>
+          <button class="btn primary"><svg data-lucide="rocket"></svg> Upgrade to Pro</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Rich analytics control -->
+  <section>
+    <div class="sec-head"><span class="num">05</span><h2>Comparative analytics control</h2></div>
+    <p class="sec-note">Instead of one static aggregate, a toggle splits the view into individual links for the comparison people actually want. The segmented control is the pattern.</p>
+    <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div class="seg" role="tablist" aria-label="Analytics view">
+        <button class="on" role="tab" aria-selected="true" onclick="seg(this)"><svg data-lucide="layers"></svg> Combined</button>
+        <button role="tab" aria-selected="false" onclick="seg(this)"><svg data-lucide="git-branch"></svg> Split by link</button>
+      </div>
+      <button class="btn ghost"><svg data-lucide="calendar"></svg> Last 30 days</button>
+    </div>
+  </section>
+
+  <!-- 6. Creation modal -->
+  <section>
+    <div class="sec-head"><span class="num">06</span><h2>Creation modal</h2></div>
+    <p class="sec-note">A focused modal beats a sparse page. The required field leads, the live preview reassures, and the advanced options stay collapsed until needed.</p>
+    <button class="btn primary" onclick="document.getElementById('createDlg').showModal()"><svg data-lucide="plus"></svg> New link</button>
+
+    <dialog id="createDlg" aria-labelledby="dlgTitle">
+      <form method="dialog" class="modal">
+        <header>
+          <h3 id="dlgTitle">Create a link</h3>
+          <button class="icon-btn" aria-label="Close" value="cancel"><svg data-lucide="x"></svg></button>
+        </header>
+        <div class="body">
+          <div class="field">
+            <label for="dest">Destination URL</label>
+            <div class="input"><svg data-lucide="globe"></svg><input id="dest" type="url" placeholder="https://your-destination.com" autofocus></div>
+          </div>
+          <div class="preview"><svg data-lucide="link-2"></svg> Your link: <b>champ.bm/spring-launch</b></div>
+          <details class="adv">
+            <summary><svg class="chev" data-lucide="chevron-right"></svg> Advanced options</summary>
+            <div class="adv-grid">
+              <div class="field" style="margin:0">
+                <label for="slug">Custom slug</label>
+                <div class="input"><span class="pre">champ.bm/</span><input id="slug" placeholder="spring-launch"></div>
+              </div>
+              <div class="field" style="margin:0">
+                <label for="tag">Tag</label>
+                <div class="input"><svg data-lucide="tag"></svg><input id="tag" placeholder="campaign"></div>
+              </div>
+              <div class="field" style="margin:0">
+                <label for="exp">Expiry</label>
+                <div class="input"><svg data-lucide="clock"></svg><input id="exp" type="date"></div>
+              </div>
+              <div class="field" style="margin:0">
+                <label for="pw">Password</label>
+                <div class="input"><svg data-lucide="lock"></svg><input id="pw" type="password" placeholder="Optional"></div>
+              </div>
+            </div>
+          </details>
+        </div>
+        <footer>
+          <button class="btn ghost" value="cancel">Cancel</button>
+          <button class="btn primary" value="default"><svg data-lucide="check"></svg> Create link</button>
+        </footer>
+      </form>
+    </dialog>
+    <p class="caption">Built on the native dialog element: Escape and click-outside close it, focus lands on the first field.</p>
+  </section>
+
+</div>
+
+<script>
+  function toggleMenu(btn){
+    var menu = btn.nextElementSibling;
+    var isOpen = menu.classList.contains('open');
+    document.querySelectorAll('.menu.open').forEach(function(m){m.classList.remove('open')});
+    if(!isOpen) menu.classList.add('open');
+    event.stopPropagation();
+  }
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.menu.open').forEach(function(m){m.classList.remove('open')});
+  });
+  function seg(btn){
+    btn.parentElement.querySelectorAll('button').forEach(function(b){b.classList.remove('on');b.setAttribute('aria-selected','false')});
+    btn.classList.add('on');btn.setAttribute('aria-selected','true');
+  }
+  // close-on-backdrop for the dialog
+  var dlg = document.getElementById('createDlg');
+  dlg.addEventListener('click', function(e){ if(e.target === dlg) dlg.close(); });
+  // render icons
+  lucide.createIcons();
+</script>
+</body>
+</html>

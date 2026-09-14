@@ -1,0 +1,70 @@
+{
+  "_comment": "Copy this file, fill every field from the ICP research step (SKILL.md Step 1-2), pass the path to scripts/generate_visuals.js. This schema is deliberately close to b2b-growth-showcase's config for consistency, but the output is 12 separate images, not a deck.",
+
+  "client_name": "Acme Health",
+  "client_domain": "acmehealth.com",
+  "client_industry": "Healthcare Technology",
+  "brand_colors": {
+    "primary": "6D08BE",
+    "_note": "Hex without #, derived from the client's actual website where possible. Falls back to LakeB2B purple if not confirmed."
+  },
+
+  "icp": {
+    "title": "Chief Information Officers",
+    "industry_descriptor": "US healthcare companies",
+    "geography": "United States"
+  },
+
+  "trigger_context": "expanding its digital healthcare capabilities",
+  "primary_pain": "increasing integration and operating costs as they add applications, cloud infrastructure, and data systems",
+  "primary_outcome": "simplify their technology environment, improve visibility, and reduce avoidable expenditure",
+
+  "audience_count_contacts": 18450,
+  "audience_count_illustrative": true,
+
+  "include_meta_ad": false,
+  "_include_meta_ad_note": "Only set true if the ICP is consumer-adjacent (SMB owners, clinicians, retail, hospitality, education). Leave false for enterprise/technical B2B ICPs.",
+
+  "seo_search": {
+    "_note": "REQUIRED for a client-ready run. Populate from a real web_search/web_fetch before generating Image 4 — never ship the fallback below to an actual client.",
+    "query": "best healthcare data-intelligence platforms in the US",
+    "source": "example.com, updated August 2026",
+    "results": [
+      { "rank": 1, "name": "Competitor A" },
+      { "rank": 2, "name": "Competitor B" },
+      { "rank": 3, "name": "Competitor C" }
+    ],
+    "client_rank": null
+  },
+
+  "target_account_example": {
+    "use_generic": true,
+    "generic_descriptor": "a mid-market healthcare technology prospect",
+    "real_name": null
+  },
+
+  "candidate_stats": { "total": 2850, "passive": 1940, "illustrative": true },
+  "buying_committee_priority_accounts": 100,
+
+  "tam": {
+    "companies": 1200000,
+    "contacts": 340000,
+    "current_penetration_pct": 18,
+    "illustrative": true
+  },
+
+  "platform_concept_name": "HealthTech Connect",
+
+  "webinar": {
+    "title": "Cutting Integration Costs in Digital Healthcare — Live Webinar",
+    "registration_pct": 12,
+    "attendance_pct": 45
+  },
+  "event": {
+    "format": "executive roundtable lunch",
+    "title": "Cutting Integration Costs in Digital Healthcare — Executive Roundtable",
+    "city": "Chicago",
+    "house_rsvp_pct": 8,
+    "icp_rsvp_pct": 22
+  }
+}

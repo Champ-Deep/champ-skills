@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<!--
+  PAGE REFRESH TEMPLATE
+  =====================
+  Fill the {{slots}} below from source content. Delete any section whose source content
+  does not exist. Do NOT invent copy. See SKILL.md and design-system.md for guidance.
+
+  Brand swap: change the four CSS variables in :root marked "BRAND TOKENS".
+  Default preset is LakeB2B (purple). See design-system.md for other presets.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- TITLE FORMULA: [Primary Keyword]. [Unique Value Prop] | [Brand] -->
+<title>{{primary_keyword}}. {{unique_value_prop}} | {{brand_name}}</title>
+<meta name="description" content="{{meta_description_140_to_158_chars}}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Alata&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* ========== BRAND TOKENS (swap these for brand) ========== */
+    --brand-primary: #6D08BE;        /* LakeB2B purple */
+    --brand-primary-deep: #4A0581;
+    --brand-accent: #DD1286;         /* LakeB2B magenta */
+    --brand-gold: #FFB703;           /* Always gold for outcome highlights */
+    --brand-navy: #011A6B;
+    --brand-primary-soft: #F4ECFD;   /* Tint of primary for surfaces */
+    /* ========================================================== */
+
+    /* Neutrals (rarely change) */
+    --bg: #FFFFFF;
+    --surface: #FAFAFB;
+    --line: #E5E7EB;
+    --line-strong: #D1D5DB;
+    --text: #0F0A1A;
+    --text-2: #2E2A3A;
+    --text-3: #6B6776;
+
+    /* Semantic */
+    --positive: #15803D;
+    --positive-bg: #ecfdf5;
+    --negative: #B91C1C;
+    --negative-bg: #fef2f2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    color: var(--text); background: var(--bg);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand-primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+
+  /* NAV */
+  .nav { background: var(--bg); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 16px clamp(20px, 4vw, 48px); max-width: 1180px; margin: 0 auto; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; color: var(--brand-primary); letter-spacing: -0.02em; }
+  .logo-mark { width: 32px; height: 32px; background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)); border-radius: 8px; display: grid; place-items: center; color: white; font-weight: 800; font-size: 16px; }
+  .logo-tag { font-family: 'Alata', sans-serif; font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-3); margin-top: 2px; display: block; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-2); font-weight: 500; font-size: 14px; }
+  .nav-cta { background: var(--brand-primary); color: white !important; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+  .nav-cta:hover { background: var(--brand-primary-deep); text-decoration: none; }
+  @media (max-width: 820px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  /* BREADCRUMB */
+  .breadcrumb { padding: 16px 0; font-size: 13px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+  .breadcrumb a { color: var(--text-3); }
+  .breadcrumb .sep { margin: 0 8px; opacity: 0.5; }
+  .breadcrumb .current { color: var(--brand-primary); font-weight: 500; }
+
+  /* HERO */
+  .hero { padding: 24px 0 64px; border-bottom: 1px solid var(--line); }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+  @media (max-width: 940px) { .hero-grid { grid-template-columns: 1fr; } }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--brand-primary-soft); color: var(--brand-primary); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 100px; margin-bottom: 20px; font-family: 'Alata', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+  .hero-eyebrow .dot { width: 6px; height: 6px; background: var(--brand-primary); border-radius: 50%; }
+  .hero h1 { font-weight: 800; font-size: clamp(34px, 5vw, 56px); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 20px; color: var(--text); }
+  .hero h1 span { color: var(--brand-primary); background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-deck { font-size: 18px; color: var(--text-2); line-height: 1.6; margin-bottom: 28px; max-width: 52ch; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  .hero-meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+  .hero-meta-value { font-size: 14px; font-weight: 600; color: var(--text); }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 15px; transition: transform 0.15s ease, box-shadow 0.15s ease; cursor: pointer; border: none; font-family: inherit; }
+  .btn-primary { background: var(--brand-primary); color: white; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+  .btn-primary:hover { background: var(--brand-primary-deep); transform: translateY(-1px); text-decoration: none; }
+  .btn-secondary { background: transparent; color: var(--brand-primary); border: 1.5px solid var(--line-strong); }
+  .btn-secondary:hover { border-color: var(--brand-primary); background: var(--brand-primary-soft); text-decoration: none; }
+
+  /* HERO VISUAL . outcome-first dashboard, overflow:visible so the tag is not clipped */
+  .hero-visual { position: relative; background: radial-gradient(circle at 15% 10%, rgba(255, 183, 3, 0.14), transparent 45%), radial-gradient(circle at 85% 90%, rgba(221, 18, 134, 0.22), transparent 50%), linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-deep) 55%, var(--brand-navy) 100%); border-radius: 24px; padding: 28px; box-shadow: 0 28px 70px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.12); }
+  .hero-visual-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 28px 28px; border-radius: 24px; pointer-events: none; -webkit-mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 75%); mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 75%); }
+  .hero-visual-mark { position: absolute; top: 20px; right: 22px; font-family: 'Alata', sans-serif; font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 2; }
+  .visual-tag { position: absolute; top: -16px; left: 28px; background: var(--brand-gold); color: var(--text); font-size: 11px; font-weight: 700; padding: 9px 16px; border-radius: 100px; font-family: 'Alata', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; box-shadow: 0 10px 24px rgba(0,0,0,0.18), 0 0 0 4px rgba(255, 183, 3, 0.18); display: inline-flex; align-items: center; gap: 9px; z-index: 3; }
+  .visual-tag .pulse { width: 7px; height: 7px; background: #E8033A; border-radius: 50%; box-shadow: 0 0 0 4px rgba(232, 3, 58, 0.28); animation: pulse-dot 1.8s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.25); } }
+  @media (prefers-reduced-motion: reduce) { .visual-tag .pulse, .visual-card-live .pulse-dot { animation: none; } }
+  .visual-card { position: relative; background: white; border-radius: 16px; padding: 22px 24px; box-shadow: 0 6px 24px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.5); z-index: 1; }
+  .visual-card-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+  .visual-card-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .visual-card-sub { font-size: 11px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.03em; }
+  .visual-card-live { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 700; color: var(--positive); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 10px; background: var(--positive-bg); border-radius: 100px; white-space: nowrap; }
+  .visual-card-live .pulse-dot { width: 7px; height: 7px; background: var(--positive); border-radius: 50%; box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.22); animation: pulse-dot 1.8s ease-in-out infinite; }
+  .chart-wrapper { position: relative; height: 168px; margin-bottom: 4px; }
+  .chart-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .chart-callout { position: absolute; top: -4px; right: 8px; background: var(--text); color: white; padding: 9px 14px 10px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.22); display: flex; flex-direction: column; align-items: flex-end; line-height: 1.1; z-index: 3; }
+  .chart-callout::after { content: ''; position: absolute; bottom: -6px; right: 22px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid var(--text); }
+  .chart-callout-value { font-size: 16px; font-weight: 800; color: var(--brand-gold); font-family: 'JetBrains Mono', monospace; letter-spacing: -0.01em; }
+  .chart-callout-label { font-size: 9px; color: rgba(255,255,255,0.7); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+  .chart-xaxis { display: flex; justify-content: space-between; padding: 0 4px; margin-top: 10px; margin-bottom: 18px; }
+  .chart-xaxis span { font-size: 10px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+  .visual-footer { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .visual-footer-item { text-align: center; padding: 4px 6px; }
+  .visual-footer-item + .visual-footer-item { border-left: 1px solid var(--line); }
+  .visual-footer-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); font-family: 'JetBrains Mono', monospace; margin-bottom: 6px; }
+  .visual-footer-value { font-size: 22px; font-weight: 800; color: var(--brand-primary); font-family: 'JetBrains Mono', monospace; line-height: 1; letter-spacing: -0.01em; }
+  .visual-footer-value.gold { color: var(--brand-gold); }
+
+  /* RESULT STRIP */
+  .result-strip { background: linear-gradient(135deg, var(--brand-primary-deep), var(--brand-primary) 60%, var(--brand-accent)); padding: 48px 0; color: white; position: relative; overflow: hidden; }
+  .result-strip::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 90% 50%, rgba(255, 183, 3, 0.18), transparent 40%); }
+  .result-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
+  @media (max-width: 820px) { .result-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; } }
+  .result-number { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; color: white; }
+  .result-number .unit { color: var(--brand-gold); }
+  .result-label { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.4; }
+
+  /* SECTIONS */
+  .section { padding: clamp(48px, 7vw, 80px) 0; }
+  .section + .section { border-top: 1px solid var(--line); }
+  .section-eyebrow { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--brand-primary); font-family: 'Alata', sans-serif; margin-bottom: 12px; }
+  .section-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1.5px; background: var(--brand-primary); vertical-align: middle; margin-right: 10px; }
+  .section h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; color: var(--text); max-width: 28ch; }
+  .section-deck { font-size: 17px; color: var(--text-2); line-height: 1.6; max-width: 56ch; margin-bottom: 32px; }
+
+  /* CLIENT CARD */
+  .client-card { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 32px; }
+  @media (max-width: 820px) { .client-card { grid-template-columns: 1fr; gap: 24px; } }
+  .client-row { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: baseline; }
+  .client-row:last-child { border-bottom: none; }
+  .client-row-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+  .client-row-value { font-size: 14px; font-weight: 500; color: var(--text); }
+  .client-summary { border-left: 3px solid var(--brand-primary); padding-left: 24px; }
+  .client-summary h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .client-summary p { color: var(--text-2); line-height: 1.7; }
+
+  /* PSO GRID */
+  .pso-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .pso-grid { grid-template-columns: 1fr; } }
+  .pso-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px; position: relative; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .pso-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); }
+  .pso-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; }
+  .pso-badge.problem { background: var(--negative-bg); color: var(--negative); }
+  .pso-badge.solution { background: var(--brand-primary-soft); color: var(--brand-primary); }
+  .pso-badge.outcome { background: var(--positive-bg); color: var(--positive); }
+  .pso-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 14px; line-height: 1.3; }
+  .pso-card p { color: var(--text-2); line-height: 1.7; font-size: 14px; }
+  .pso-stat { margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--line); font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-3); }
+  .pso-stat strong { color: var(--brand-primary); font-weight: 700; }
+
+  /* PLAYBOOK */
+  .playbook { background: var(--surface); border-radius: 20px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--line); }
+  .timeline { margin-top: 32px; }
+  .timeline-bar { display: grid; grid-template-columns: repeat(3, 1fr); height: 90px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+  .timeline-phase { padding: 16px; color: white; display: flex; flex-direction: column; justify-content: space-between; }
+  .timeline-phase:nth-child(1) { background: var(--brand-primary-deep); }
+  .timeline-phase:nth-child(2) { background: var(--brand-primary); }
+  .timeline-phase:nth-child(3) { background: var(--brand-accent); }
+  .timeline-phase-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; }
+  .timeline-phase-title { font-weight: 700; font-size: 14px; }
+  .timeline-phase-days { font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: 0.85; }
+  .step { display: grid; grid-template-columns: 80px 1fr 200px; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .step:last-child { border-bottom: none; }
+  @media (max-width: 820px) { .step { grid-template-columns: 60px 1fr; } .step-metric { grid-column: 1 / -1; padding-left: 84px; margin-top: -8px; } }
+  .step-number { font-family: 'Alata', sans-serif; font-size: 36px; font-weight: 400; color: var(--brand-primary); line-height: 1; }
+  .step-content h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .step-content p { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+  .step-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .step-tag { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 4px; background: var(--bg); border: 1px solid var(--line); color: var(--text-2); }
+  .step-metric { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 14px; text-align: center; }
+  .step-metric-value { font-size: 24px; font-weight: 800; color: var(--brand-primary); font-family: 'JetBrains Mono', monospace; line-height: 1; }
+  .step-metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+
+  /* QUOTE */
+  .quote-section { background: linear-gradient(135deg, var(--brand-navy), var(--brand-primary-deep)); color: white; border-radius: 20px; padding: clamp(40px, 6vw, 64px); position: relative; overflow: hidden; }
+  .quote-section::before { content: '"'; position: absolute; top: -40px; left: 20px; font-family: 'Alata', sans-serif; font-size: 300px; color: rgba(255, 183, 3, 0.15); line-height: 1; }
+  .quote-text { font-size: clamp(22px, 3vw, 32px); font-weight: 500; line-height: 1.35; margin-bottom: 24px; position: relative; max-width: 36ch; letter-spacing: -0.01em; color: white; }
+  .quote-attr { display: flex; align-items: center; gap: 16px; position: relative; }
+  .quote-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-gold), #FF6903); display: grid; place-items: center; font-weight: 700; color: var(--text); font-size: 16px; }
+  .quote-name { font-weight: 700; font-size: 15px; color: white; }
+  .quote-role { font-size: 13px; color: rgba(255,255,255,0.75); }
+
+  /* OUTCOMES TABLE */
+  .outcomes-table { width: 100%; border-collapse: collapse; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: white; }
+  .outcomes-table thead { background: var(--brand-primary-soft); }
+  .outcomes-table th { text-align: left; padding: 16px 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand-primary); font-family: 'JetBrains Mono', monospace; font-weight: 600; border-bottom: 1px solid var(--line); }
+  .outcomes-table th.num { text-align: right; }
+  .outcomes-table td { padding: 16px 20px; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--text-2); }
+  .outcomes-table td.num { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+  .outcomes-table tr:last-child td { border-bottom: none; }
+  .outcomes-table .delta { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .outcomes-table .delta.up { background: var(--positive-bg); color: var(--positive); }
+  .outcomes-table .delta.down { background: var(--negative-bg); color: var(--negative); }
+
+  /* CTA BANNER */
+  .cta-banner { background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-deep) 60%, var(--brand-navy)); border-radius: 20px; padding: clamp(40px, 6vw, 64px); color: white; display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: center; position: relative; overflow: hidden; }
+  .cta-banner::before { content: ''; position: absolute; top: -40px; right: -40px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(255, 183, 3, 0.25), transparent 60%); border-radius: 50%; }
+  @media (max-width: 820px) { .cta-banner { grid-template-columns: 1fr; } }
+  .cta-banner h2 { font-size: clamp(26px, 3.5vw, 36px); font-weight: 800; line-height: 1.15; margin-bottom: 12px; color: white; max-width: 22ch; letter-spacing: -0.02em; }
+  .cta-banner p { color: rgba(255,255,255,0.85); font-size: 16px; line-height: 1.6; max-width: 44ch; }
+  .cta-banner-actions { display: flex; flex-direction: column; gap: 12px; position: relative; }
+  .btn-cta-primary { background: var(--brand-gold); color: var(--text); padding: 16px 24px; border-radius: 10px; font-weight: 700; text-align: center; transition: transform 0.15s ease; }
+  .btn-cta-primary:hover { transform: translateY(-1px); text-decoration: none; }
+  .btn-cta-secondary { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.4); padding: 16px 24px; border-radius: 10px; font-weight: 600; text-align: center; }
+  .btn-cta-secondary:hover { border-color: white; background: rgba(255,255,255,0.08); text-decoration: none; color: white; }
+
+  /* RELATED */
+  .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .related-grid { grid-template-columns: 1fr; } }
+  .related-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; transition: transform 0.2s ease, border-color 0.2s ease; cursor: pointer; }
+  .related-card:hover { transform: translateY(-2px); border-color: var(--brand-primary); }
+  .related-tag { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand-primary); margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
+  .related-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+  .related-card p { font-size: 13px; color: var(--text-3); line-height: 1.5; }
+  .related-card .arrow { margin-top: 14px; color: var(--brand-primary); font-weight: 600; font-size: 13px; }
+
+  /* FOOTER */
+  .footer { background: var(--text); color: rgba(255,255,255,0.7); padding: 48px 0 24px; }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+  @media (max-width: 820px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; } }
+  .footer-brand { color: white; font-weight: 800; font-size: 22px; margin-bottom: 8px; }
+  .footer-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--brand-gold); font-family: 'Alata', sans-serif; margin-bottom: 16px; }
+  .footer-blurb { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.65); }
+  .footer-col h5 { color: white; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+  .footer-col a { display: block; color: rgba(255,255,255,0.7); font-size: 13px; padding: 4px 0; }
+  .footer-col a:hover { color: var(--brand-gold); text-decoration: none; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.5); }
+  @media (max-width: 600px) { .footer-bottom { flex-direction: column; gap: 8px; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">{{brand_initial}}</div>
+      <div>
+        {{brand_name}}
+        <span class="logo-tag">{{brand_tagline}}</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#">{{nav_link_1}}</a>
+      <a href="#">{{nav_link_2}}</a>
+      <a href="#">{{nav_link_3}}</a>
+      <a href="#">{{nav_link_4}}</a>
+      <a href="#" class="nav-cta">{{nav_cta_label}}</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    <a href="#">Home</a>
+    <span class="sep">/</span>
+    <a href="#">{{breadcrumb_parent}}</a>
+    <span class="sep">/</span>
+    <span class="current">{{breadcrumb_current}}</span>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="dot"></span>
+          {{eyebrow_label}}
+        </div>
+
+        <!-- H1: wrap the most outcome-y phrase in <span> for brand gradient -->
+        <h1>{{headline_part_1}} <span>{{headline_accent_phrase}}</span> {{headline_part_2}}</h1>
+
+        <p class="hero-deck">{{deck_paragraph}}</p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <div class="hero-meta-label">{{meta_1_label}}</div>
+            <div class="hero-meta-value">{{meta_1_value}}</div>
+          </div>
+          <div class="hero-meta-item">
+            <div class="hero-meta-label">{{meta_2_label}}</div>
+            <div class="hero-meta-value">{{meta_2_value}}</div>
+          </div>
+          <div class="hero-meta-item">
+            <div class="hero-meta-label">{{meta_3_label}}</div>
+            <div class="hero-meta-value">{{meta_3_value}}</div>
+          </div>
+          <div class="hero-meta-item">
+            <div class="hero-meta-label">{{meta_4_label}}</div>
+            <div class="hero-meta-value">{{meta_4_value}}</div>
+          </div>
+        </div>
+
+        <div class="hero-ctas">
+          <a href="#cta" class="btn btn-primary">
+            {{cta_primary_label}}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#playbook" class="btn btn-secondary">{{cta_secondary_label}}</a>
+        </div>
+      </div>
+
+      <!--
+        HERO VISUAL: outcome-first dashboard. Always shows the result, not a stock photo.
+        The SVG path coordinates below assume a 6-point line over a 0 to 320 x-axis and
+        a 0 to 160 y-axis. y=160 is the bottom. y=0 is the top. Lower y = higher value.
+        Replace the 6 (x,y) coords in path d="..." and the 6 <circle> cx/cy attributes
+        with values that fit your data series. Keep the gold circle at the peak point.
+      -->
+      <div class="hero-visual" aria-label="{{hero_visual_aria_label}}">
+
+        <div class="hero-visual-grid"></div>
+        <div class="hero-visual-mark">{{brand_name}} . {{watermark_suffix}}</div>
+
+        <div class="visual-tag">
+          <span class="pulse"></span>
+          {{hero_visual_tag}}
+        </div>
+
+        <div class="visual-card">
+          <div class="visual-card-header">
+            <div>
+              <div class="visual-card-title">{{chart_title}}</div>
+              <div class="visual-card-sub">{{chart_subtitle}}</div>
+            </div>
+            <div class="visual-card-live">
+              <span class="pulse-dot"></span>
+              {{chart_live_label}}
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <svg class="chart-svg" viewBox="0 0 320 160" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="line-gradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" style="stop-color: var(--brand-primary);"/>
+                  <stop offset="100%" style="stop-color: var(--brand-accent);"/>
+                </linearGradient>
+                <linearGradient id="area-gradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" style="stop-color: var(--brand-primary); stop-opacity: 0.28;"/>
+                  <stop offset="100%" style="stop-color: var(--brand-primary); stop-opacity: 0;"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Gridlines -->
+              <line x1="0" y1="40" x2="320" y2="40" stroke="#E5E7EB" stroke-dasharray="2,4" stroke-width="1"/>
+              <line x1="0" y1="80" x2="320" y2="80" stroke="#E5E7EB" stroke-dasharray="2,4" stroke-width="1"/>
+              <line x1="0" y1="120" x2="320" y2="120" stroke="#E5E7EB" stroke-dasharray="2,4" stroke-width="1"/>
+
+              <!-- Area fill .  bottom edge runs (16,160) -> (304,160) -->
+              <path d="M 16 {{y_1}} L 76 {{y_2}} L 136 {{y_3}} L 196 {{y_4}} L 244 {{y_5}} L 304 {{y_6}} L 304 160 L 16 160 Z" fill="url(#area-gradient)"/>
+
+              <!-- Line -->
+              <path d="M 16 {{y_1}} L 76 {{y_2}} L 136 {{y_3}} L 196 {{y_4}} L 244 {{y_5}} L 304 {{y_6}}" stroke="url(#line-gradient)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+              <!-- Data points (use style for CSS var support) -->
+              <circle cx="16" cy="{{y_1}}" r="4" fill="white" style="stroke: var(--brand-primary);" stroke-width="2.2"/>
+              <circle cx="76" cy="{{y_2}}" r="4" fill="white" style="stroke: var(--brand-primary);" stroke-width="2.2"/>
+              <circle cx="136" cy="{{y_3}}" r="4" fill="white" style="stroke: var(--brand-primary);" stroke-width="2.2"/>
+              <circle cx="196" cy="{{y_4}}" r="4" fill="white" style="stroke: var(--brand-primary);" stroke-width="2.2"/>
+              <circle cx="244" cy="{{y_5}}" r="4" fill="white" style="stroke: var(--brand-primary);" stroke-width="2.2"/>
+              <!-- Peak: oversized gold ring -->
+              <circle cx="304" cy="{{y_6}}" r="7" style="fill: var(--brand-gold); stroke: var(--brand-primary);" stroke-width="2.5"/>
+              <circle cx="304" cy="{{y_6}}" r="12" fill="none" style="stroke: var(--brand-gold);" stroke-width="1.5" opacity="0.45"/>
+            </svg>
+
+            <div class="chart-callout">
+              <span class="chart-callout-value">{{peak_value}}</span>
+              <span class="chart-callout-label">{{peak_label}}</span>
+            </div>
+          </div>
+
+          <div class="chart-xaxis">
+            <span>{{x_1}}</span>
+            <span>{{x_2}}</span>
+            <span>{{x_3}}</span>
+            <span>{{x_4}}</span>
+            <span>{{x_5}}</span>
+            <span>{{x_6}}</span>
+          </div>
+
+          <div class="visual-footer">
+            <div class="visual-footer-item">
+              <div class="visual-footer-label">{{kpi_1_label}}</div>
+              <div class="visual-footer-value">{{kpi_1_value}}</div>
+            </div>
+            <div class="visual-footer-item">
+              <div class="visual-footer-label">{{kpi_2_label}}</div>
+              <div class="visual-footer-value gold">{{kpi_2_value}}</div>
+            </div>
+            <div class="visual-footer-item">
+              <div class="visual-footer-label">{{kpi_3_label}}</div>
+              <div class="visual-footer-value">{{kpi_3_value}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- RESULT STRIP . delete this section if source lacks 4 strong metrics -->
+<section class="result-strip">
+  <div class="container">
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="result-number">{{strip_1_number}}<span class="unit">{{strip_1_unit}}</span></div>
+        <div class="result-label">{{strip_1_label}}</div>
+      </div>
+      <div class="result-item">
+        <div class="result-number">{{strip_2_number}}<span class="unit">{{strip_2_unit}}</span></div>
+        <div class="result-label">{{strip_2_label}}</div>
+      </div>
+      <div class="result-item">
+        <div class="result-number">{{strip_3_number}}<span class="unit">{{strip_3_unit}}</span></div>
+        <div class="result-label">{{strip_3_label}}</div>
+      </div>
+      <div class="result-item">
+        <div class="result-number">{{strip_4_number}}<span class="unit">{{strip_4_unit}}</span></div>
+        <div class="result-label">{{strip_4_label}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- CLIENT/CONTEXT CARD -->
+  <section class="section">
+    <span class="section-eyebrow">{{client_section_eyebrow}}</span>
+    <h2>{{client_section_h2}}</h2>
+    <p class="section-deck">{{client_section_deck}}</p>
+
+    <div class="client-card">
+      <div class="client-details">
+        <div class="client-row">
+          <div class="client-row-label">{{detail_1_label}}</div>
+          <div class="client-row-value">{{detail_1_value}}</div>
+        </div>
+        <div class="client-row">
+          <div class="client-row-label">{{detail_2_label}}</div>
+          <div class="client-row-value">{{detail_2_value}}</div>
+        </div>
+        <div class="client-row">
+          <div class="client-row-label">{{detail_3_label}}</div>
+          <div class="client-row-value">{{detail_3_value}}</div>
+        </div>
+        <div class="client-row">
+          <div class="client-row-label">{{detail_4_label}}</div>
+          <div class="client-row-value">{{detail_4_value}}</div>
+        </div>
+      </div>
+      <div class="client-summary">
+        <h3>{{client_summary_h3}}</h3>
+        <p>{{client_summary_paragraph}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PSO GRID -->
+  <section class="section">
+    <span class="section-eyebrow">{{pso_section_eyebrow}}</span>
+    <h2>{{pso_section_h2}}</h2>
+    <p class="section-deck">{{pso_section_deck}}</p>
+
+    <div class="pso-grid">
+      <div class="pso-card">
+        <span class="pso-badge problem">Problem</span>
+        <h3>{{problem_h3}}</h3>
+        <p>{{problem_paragraph}}</p>
+        <div class="pso-stat">{{problem_stat_prefix}} <strong>{{problem_stat}}</strong></div>
+      </div>
+      <div class="pso-card">
+        <span class="pso-badge solution">Our solution</span>
+        <h3>{{solution_h3}}</h3>
+        <p>{{solution_paragraph}}</p>
+        <div class="pso-stat">{{solution_stat_prefix}} <strong>{{solution_stat}}</strong></div>
+      </div>
+      <div class="pso-card">
+        <span class="pso-badge outcome">Outcome</span>
+        <h3>{{outcome_h3}}</h3>
+        <p>{{outcome_paragraph}}</p>
+        <div class="pso-stat">{{outcome_stat_prefix}} <strong>{{outcome_stat}}</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYBOOK . delete if source has no numbered sequence -->
+  <section class="section" id="playbook">
+    <span class="section-eyebrow">{{playbook_eyebrow}}</span>
+    <h2>{{playbook_h2}}</h2>
+    <p class="section-deck">{{playbook_deck}}</p>
+
+    <div class="timeline">
+      <div class="timeline-bar">
+        <div class="timeline-phase">
+          <div>
+            <div class="timeline-phase-label">Phase 01</div>
+            <div class="timeline-phase-title">{{phase_1_title}}</div>
+          </div>
+          <div class="timeline-phase-days">{{phase_1_days}}</div>
+        </div>
+        <div class="timeline-phase">
+          <div>
+            <div class="timeline-phase-label">Phase 02</div>
+            <div class="timeline-phase-title">{{phase_2_title}}</div>
+          </div>
+          <div class="timeline-phase-days">{{phase_2_days}}</div>
+        </div>
+        <div class="timeline-phase">
+          <div>
+            <div class="timeline-phase-label">Phase 03</div>
+            <div class="timeline-phase-title">{{phase_3_title}}</div>
+          </div>
+          <div class="timeline-phase-days">{{phase_3_days}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="playbook" style="margin-top: 32px;">
+      <!-- Repeat .step for each step. Default 5 steps. -->
+      <div class="step">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h4>{{step_1_h4}}</h4>
+          <p>{{step_1_paragraph}}</p>
+          <div class="step-tags">
+            <span class="step-tag">{{step_1_tag_1}}</span>
+            <span class="step-tag">{{step_1_tag_2}}</span>
+            <span class="step-tag">{{step_1_tag_3}}</span>
+          </div>
+        </div>
+        <div class="step-metric">
+          <div class="step-metric-value">{{step_1_metric_value}}</div>
+          <div class="step-metric-label">{{step_1_metric_label}}</div>
+        </div>
+      </div>
+      <!-- Duplicate this .step block for steps 2 through N -->
+    </div>
+  </section>
+
+  <!-- QUOTE . delete if source has no testimonial -->
+  <section class="section">
+    <div class="quote-section">
+      <div class="quote-text">{{quote_text}}</div>
+      <div class="quote-attr">
+        <div class="quote-avatar">{{quote_initials}}</div>
+        <div>
+          <div class="quote-name">{{quote_name}}</div>
+          <div class="quote-role">{{quote_role}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTCOMES TABLE . delete if source has no before/after data -->
+  <section class="section">
+    <span class="section-eyebrow">{{outcomes_eyebrow}}</span>
+    <h2>{{outcomes_h2}}</h2>
+    <p class="section-deck">{{outcomes_deck}}</p>
+
+    <table class="outcomes-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="num">Baseline</th>
+          <th class="num">Result</th>
+          <th class="num">Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{metric_1}}</td>
+          <td class="num">{{metric_1_baseline}}</td>
+          <td class="num">{{metric_1_result}}</td>
+          <td class="num"><span class="delta up">{{metric_1_delta}}</span></td>
+        </tr>
+        <!-- Duplicate rows for additional metrics -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- WHAT'S INCLUDED GRID . optional, for services/landing pages -->
+  <section class="section">
+    <span class="section-eyebrow">{{included_eyebrow}}</span>
+    <h2>{{included_h2}}</h2>
+    <p class="section-deck">{{included_deck}}</p>
+
+    <div class="pso-grid">
+      <!-- Repeat .pso-card with .solution badge for each included item, up to 6 -->
+      <div class="pso-card">
+        <span class="pso-badge solution">{{included_1_badge}}</span>
+        <h3>{{included_1_h3}}</h3>
+        <p>{{included_1_paragraph}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="section" id="cta">
+    <div class="cta-banner">
+      <div>
+        <h2>{{cta_banner_h2}}</h2>
+        <p>{{cta_banner_paragraph}}</p>
+      </div>
+      <div class="cta-banner-actions">
+        <a href="#" class="btn-cta-primary">{{cta_banner_primary_label}}</a>
+        <a href="#" class="btn-cta-secondary">{{cta_banner_secondary_label}}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED -->
+  <section class="section">
+    <span class="section-eyebrow">{{related_eyebrow}}</span>
+    <h2>{{related_h2}}</h2>
+    <div class="related-grid">
+      <div class="related-card">
+        <div class="related-tag">{{related_1_tag}}</div>
+        <h4>{{related_1_h4}}</h4>
+        <p>{{related_1_paragraph}}</p>
+        <div class="arrow">{{related_1_arrow}}</div>
+      </div>
+      <div class="related-card">
+        <div class="related-tag">{{related_2_tag}}</div>
+        <h4>{{related_2_h4}}</h4>
+        <p>{{related_2_paragraph}}</p>
+        <div class="arrow">{{related_2_arrow}}</div>
+      </div>
+      <div class="related-card">
+        <div class="related-tag">{{related_3_tag}}</div>
+        <h4>{{related_3_h4}}</h4>
+        <p>{{related_3_paragraph}}</p>
+        <div class="arrow">{{related_3_arrow}}</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">{{brand_name}}</div>
+        <div class="footer-tag">{{brand_tagline}}</div>
+        <div class="footer-blurb">{{footer_blurb}}</div>
+      </div>
+      <div class="footer-col">
+        <h5>{{footer_col_1_heading}}</h5>
+        <a href="#">{{footer_col_1_link_1}}</a>
+        <a href="#">{{footer_col_1_link_2}}</a>
+        <a href="#">{{footer_col_1_link_3}}</a>
+        <a href="#">{{footer_col_1_link_4}}</a>
+      </div>
+      <div class="footer-col">
+        <h5>{{footer_col_2_heading}}</h5>
+        <a href="#">{{footer_col_2_link_1}}</a>
+        <a href="#">{{footer_col_2_link_2}}</a>
+        <a href="#">{{footer_col_2_link_3}}</a>
+        <a href="#">{{footer_col_2_link_4}}</a>
+      </div>
+      <div class="footer-col">
+        <h5>{{footer_col_3_heading}}</h5>
+        <a href="#">{{footer_col_3_link_1}}</a>
+        <a href="#">{{footer_col_3_link_2}}</a>
+        <a href="#">{{footer_col_3_link_3}}</a>
+        <a href="#">{{footer_col_3_link_4}}</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>(c) {{year}} {{brand_name}}. All rights reserved.</div>
+      <div>{{footer_meta}}</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
