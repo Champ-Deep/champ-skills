@@ -1,0 +1,58 @@
+{
+  "_comment": "Copy this file, fill every field for the target client, pass the path to scripts/generate_deck.js. Fields marked illustrative-ok can stay as round numbers if the person has no real platform counts, but keep them clearly labeled as illustrative in any client-facing copy that references them.",
+
+  "brand": "lakeb2b",
+  "_brand_options": "lakeb2b | ampliz | champions",
+
+  "client_name": "Acme Health",
+  "client_domain": "acmehealth.com",
+  "client_industry": "Healthcare Technology",
+
+  "icp": {
+    "title": "Chief Information Officers",
+    "industry_descriptor": "US healthcare companies",
+    "geography": "United States"
+  },
+
+  "trigger_context": "expanding its digital healthcare capabilities",
+  "primary_pain": "increasing integration and operating costs as they add applications, cloud infrastructure, and data systems",
+  "primary_outcome": "simplify their technology environment, improve visibility, and reduce avoidable expenditure",
+
+  "audience_count_contacts": 18450,
+  "audience_count_illustrative": true,
+
+  "competitors": ["Competitor A", "Competitor B", "Competitor C"],
+  "seo_search_query": "best healthcare data-intelligence platforms in the US",
+
+  "target_account_example": {
+    "use_generic": true,
+    "generic_descriptor": "a mid-market healthcare technology prospect",
+    "real_name": null,
+    "_note": "Only set real_name if the person explicitly supplied a real target company. Otherwise leave null and use_generic:true."
+  },
+
+  "candidate_stats": { "total": 2850, "passive": 1940, "illustrative": true },
+
+  "buying_committee_priority_accounts": 100,
+
+  "tam": {
+    "companies": 1200000,
+    "contacts": 340000,
+    "current_penetration_pct": 18,
+    "illustrative": true
+  },
+
+  "platform_concept_name": "HealthTech Connect",
+  "platform_category": "healthcare-professional community",
+
+  "include_event_slide": true,
+  "_include_event_slide_note": "On by default. Adds an 11th section: Event & Webinar Attendee Acceleration (invite mockup + house-list vs. ICP-matched RSVP comparison). Set false to go back to the original 10-section deck.",
+  "event": {
+    "format": "webinar",
+    "_format_options": "webinar | plant-tour lunch | executive roundtable lunch",
+    "title": "Cutting Integration Costs in Digital Healthcare — Executive Roundtable",
+    "city": "Chicago",
+    "house_rsvp_pct": 8,
+    "icp_rsvp_pct": 22
+  }
+}

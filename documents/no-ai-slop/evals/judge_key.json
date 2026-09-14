@@ -1,0 +1,22 @@
+{
+ "B1_cold_email": {
+  "A": "baseline",
+  "B": "gated"
+ },
+ "B2_linkedin_post": {
+  "A": "baseline",
+  "B": "gated"
+ },
+ "B3_blog_intro": {
+  "A": "baseline",
+  "B": "gated"
+ },
+ "B4_client_followup": {
+  "A": "gated",
+  "B": "baseline"
+ },
+ "B5_landing_hero": {
+  "A": "gated",
+  "B": "baseline"
+ }
+}

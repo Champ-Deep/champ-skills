@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VertexGrid x LakeB2B — ICP Alignment</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card: rgba(18,18,26,0.85);
+    --card-hover: #1a1a26;
+    --accent: #7c3aed;
+    --accent-glow: rgba(124,58,237,0.3);
+    --accent-soft: rgba(124,58,237,0.12);
+    --green: #22c55e;
+    --green-glow: rgba(34,197,94,0.25);
+    --amber: #f59e0b;
+    --amber-glow: rgba(245,158,11,0.2);
+    --cyan: #06b6d4;
+    --rose: #f43f5e;
+    --text: #e4e4eb;
+    --text-dim: #8888a0;
+    --text-muted: #55556a;
+    --border: #2a2a3a;
+    --border-accent: #3a3a5a;
+    --danger: #ef4444;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Ambient glow */
+  .ambient { position:fixed; width:600px; height:600px; border-radius:50%; filter:blur(150px); opacity:0.08; pointer-events:none; z-index:0; }
+  .ambient-1 { background: var(--accent); top:-200px; right:-100px; }
+  .ambient-2 { background: var(--cyan); bottom:-200px; left:-100px; }
+  .ambient-3 { background: var(--rose); top:50%; left:50%; transform:translate(-50%,-50%); opacity:0.04; width:800px; height:800px; }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header { text-align:center; margin-bottom:48px; animation:fadeUp 0.6s ease-out; }
+
+  .header-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 16px; border-radius:100px;
+    background:var(--accent-soft); border:1px solid rgba(124,58,237,0.25);
+    font-family:'Space Mono',monospace; font-size:11px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--accent);
+    margin-bottom:24px;
+  }
+  .header-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+
+  .header h1 {
+    font-size:32px; font-weight:800; letter-spacing:-0.5px; line-height:1.2; margin-bottom:12px;
+    background:linear-gradient(135deg,#fff 0%,#a78bfa 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .header p { color:var(--text-dim); font-size:15px; line-height:1.6; max-width:480px; margin:0 auto; }
+  .header .time-est {
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:'Space Mono',monospace; font-size:11px; color:var(--text-muted);
+    letter-spacing:1px; text-transform:uppercase;
+  }
+
+  /* Progress */
+  .progress-wrap { margin-bottom:40px; animation:fadeUp 0.6s ease-out 0.1s both; }
+  .progress-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .progress-label { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); }
+  .progress-count { font-family:'Space Mono',monospace; font-size:13px; color:var(--accent); font-weight:700; }
+  .progress-bar { width:100%; height:4px; background:var(--border); border-radius:4px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),#a78bfa); border-radius:4px; transition:width 0.5s cubic-bezier(0.16,1,0.3,1); box-shadow:0 0 12px var(--accent-glow); }
+
+  /* Question Cards */
+  .question-card {
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity:0; transform:translateY(20px);
+    animation: fadeSlideIn 0.6s ease forwards;
+  }
+  .question-card:nth-child(1) { animation-delay:0.1s; }
+  .question-card:nth-child(2) { animation-delay:0.2s; }
+  .question-card:nth-child(3) { animation-delay:0.3s; }
+  .question-card:nth-child(4) { animation-delay:0.4s; }
+  .question-card:nth-child(5) { animation-delay:0.5s; }
+  .question-card:nth-child(6) { animation-delay:0.6s; }
+
+  @keyframes fadeSlideIn { to { opacity:1; transform:translateY(0); } }
+
+  .question-card::before {
+    content:''; position:absolute; top:0; left:0;
+    width:3px; height:100%; background:var(--border); transition:background 0.3s ease;
+  }
+  .question-card.active { border-color:var(--border-accent); }
+  .question-card.active::before { background:var(--accent); box-shadow:0 0 10px var(--accent-glow); }
+  .question-card.completed { border-color:rgba(34,197,94,0.2); }
+  .question-card.completed::before { background:var(--green); }
+
+  .q-header { display:flex; align-items:flex-start; gap:14px; margin-bottom:16px; }
+  .q-number {
+    flex-shrink:0; width:32px; height:32px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:13px; font-weight:700;
+    background:var(--accent-soft); color:var(--accent);
+    border:1px solid rgba(124,58,237,0.2); transition:all 0.3s ease;
+  }
+  .question-card.completed .q-number { background:var(--green-glow); color:var(--green); border-color:rgba(34,197,94,0.3); }
+  .q-title { font-size:16px; font-weight:600; line-height:1.4; padding-top:4px; }
+  .q-subtitle { font-size:13px; color:var(--text-dim); line-height:1.5; margin-bottom:16px; padding-left:46px; }
+
+  .q-tag {
+    display:inline-block; padding:3px 10px; border-radius:6px;
+    font-size:10px; font-family:'Space Mono',monospace;
+    letter-spacing:1px; text-transform:uppercase; font-weight:700;
+    margin-bottom:12px; margin-left:46px;
+  }
+  .q-tag.critical { background:rgba(239,68,68,0.12); color:#f87171; border:1px solid rgba(239,68,68,0.2); }
+  .q-tag.important { background:var(--amber-glow); color:var(--amber); border:1px solid rgba(245,158,11,0.25); }
+  .q-tag.nice { background:rgba(6,182,212,0.1); color:#22d3ee; border:1px solid rgba(6,182,212,0.2); }
+
+  .q-body { padding-left:46px; }
+  .helper-text { font-size:12px; color:var(--text-muted); margin-top:10px; font-style:italic; }
+
+  /* ===========================================================
+     Q1: ICON CHIP CARDS — Industries
+     =========================================================== */
+  .icon-chip-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; margin-bottom:12px;
+  }
+  .icon-chip {
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:16px 10px; border-radius:14px;
+    border:1px solid var(--border); background:transparent;
+    cursor:pointer; transition:all 0.25s cubic-bezier(0.16,1,0.3,1);
+    user-select:none; text-align:center; position:relative; overflow:hidden;
+  }
+  .icon-chip .ic-emoji { font-size:28px; margin-bottom:6px; transition:transform 0.25s; }
+  .icon-chip .ic-label { font-size:12px; font-weight:500; color:var(--text-dim); transition:color 0.2s; line-height:1.3; }
+  .icon-chip:hover { border-color:var(--accent); background:var(--accent-soft); transform:translateY(-2px); }
+  .icon-chip:hover .ic-label { color:var(--text); }
+  .icon-chip.selected {
+    border-color:var(--accent); background:rgba(124,58,237,0.18);
+    box-shadow:0 0 0 1px var(--accent), 0 4px 20px var(--accent-glow);
+    transform:translateY(-2px);
+  }
+  .icon-chip.selected .ic-emoji { transform:scale(1.15); }
+  .icon-chip.selected .ic-label { color:#c4b5fd; font-weight:600; }
+  .icon-chip.selected::after {
+    content:'✓'; position:absolute; top:6px; right:8px;
+    font-size:10px; color:var(--green); font-weight:700;
+  }
+  .chip-count {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Space Mono',monospace; font-size:11px; color:var(--accent);
+    margin-top:8px; opacity:0; transition:opacity 0.3s;
+  }
+  .chip-count.visible { opacity:1; }
+
+  .text-input-mini {
+    width:100%; padding:10px 14px; border-radius:10px;
+    border:1px solid var(--border); background:rgba(255,255,255,0.03);
+    color:var(--text); font-family:'Outfit',sans-serif; font-size:13px;
+    transition:border-color 0.2s; outline:none; margin-top:8px;
+  }
+  .text-input-mini:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft); }
+  .text-input-mini::placeholder { color:var(--text-muted); }
+
+  /* ===========================================================
+     Q2: PRIORITY RANKING TILES — CXO Titles
+     =========================================================== */
+  .priority-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; margin-bottom:12px;
+  }
+  .priority-tile {
+    position:relative; padding:14px 12px; border-radius:14px;
+    border:1px solid var(--border); cursor:pointer;
+    transition:all 0.25s cubic-bezier(0.16,1,0.3,1);
+    user-select:none; text-align:center; overflow:hidden;
+  }
+  .priority-tile .pt-title { font-size:14px; font-weight:600; margin-bottom:4px; transition:color 0.2s; }
+  .priority-tile .pt-level {
+    font-size:10px; font-family:'Space Mono',monospace;
+    letter-spacing:1px; text-transform:uppercase;
+    color:var(--text-muted); transition:color 0.2s;
+    min-height:16px;
+  }
+  .priority-tile::before {
+    content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.3s; border-radius:14px;
+  }
+  /* Level 0: unselected */
+  .priority-tile:hover { border-color:var(--border-accent); transform:translateY(-1px); }
+
+  /* Level 1: Must Have */
+  .priority-tile[data-level="1"] {
+    border-color:var(--rose); background:rgba(244,63,94,0.1);
+    box-shadow:0 0 0 1px var(--rose), 0 4px 16px rgba(244,63,94,0.15);
+  }
+  .priority-tile[data-level="1"] .pt-title { color:#fda4af; }
+  .priority-tile[data-level="1"] .pt-level { color:var(--rose); }
+
+  /* Level 2: Nice to Have */
+  .priority-tile[data-level="2"] {
+    border-color:var(--amber); background:rgba(245,158,11,0.08);
+    box-shadow:0 0 0 1px var(--amber), 0 4px 16px rgba(245,158,11,0.12);
+  }
+  .priority-tile[data-level="2"] .pt-title { color:#fcd34d; }
+  .priority-tile[data-level="2"] .pt-level { color:var(--amber); }
+
+  .priority-legend {
+    display:flex; gap:16px; margin-top:10px; flex-wrap:wrap;
+  }
+  .priority-legend span {
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:11px; color:var(--text-muted);
+  }
+  .priority-legend .dot-legend {
+    width:8px; height:8px; border-radius:50%;
+  }
+
+  /* ===========================================================
+     Q3: TAG BUILDER — Exclusions
+     =========================================================== */
+  .tag-builder { margin-bottom:8px; }
+  .tag-input-wrap {
+    display:flex; align-items:center; gap:8px;
+    padding:8px 12px; border-radius:12px;
+    border:1px solid var(--border); background:rgba(255,255,255,0.03);
+    transition:border-color 0.2s;
+  }
+  .tag-input-wrap:focus-within { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft); }
+  .tag-input-wrap input {
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--text); font-family:'Outfit',sans-serif; font-size:13px;
+  }
+  .tag-input-wrap input::placeholder { color:var(--text-muted); }
+  .tag-input-wrap .add-tag-btn {
+    padding:4px 12px; border-radius:8px; border:1px solid var(--border);
+    background:var(--accent-soft); color:var(--accent);
+    font-family:'Outfit',sans-serif; font-size:11px; font-weight:600;
+    cursor:pointer; transition:all 0.2s; white-space:nowrap;
+  }
+  .tag-input-wrap .add-tag-btn:hover { background:rgba(124,58,237,0.25); border-color:var(--accent); }
+
+  .tag-wall {
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; min-height:20px;
+  }
+  .tag-pill {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 12px; border-radius:20px;
+    background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25);
+    color:#fca5a5; font-size:12px; font-weight:500;
+    animation:tagIn 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes tagIn { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .tag-pill .tag-x {
+    width:16px; height:16px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; cursor:pointer; transition:all 0.2s;
+    background:rgba(239,68,68,0.2);
+  }
+  .tag-pill .tag-x:hover { background:rgba(239,68,68,0.4); }
+
+  /* ===========================================================
+     Q4: SPLIT DROP ZONES — Dream Accounts
+     =========================================================== */
+  .split-zones {
+    display:grid; grid-template-columns:1fr 1fr; gap:14px;
+  }
+  @media(max-width:600px) { .split-zones { grid-template-columns:1fr; } }
+  .drop-zone {
+    border-radius:14px; border:1px dashed var(--border);
+    padding:16px; background:rgba(255,255,255,0.015);
+    transition:all 0.3s;
+  }
+  .drop-zone.has-items { border-style:solid; }
+  .dz-header {
+    display:flex; align-items:center; gap:8px; margin-bottom:12px;
+  }
+  .dz-header .dz-icon { font-size:20px; }
+  .dz-header .dz-title { font-size:13px; font-weight:600; color:var(--text-dim); }
+  .dz-header .dz-count {
+    margin-left:auto; font-family:'Space Mono',monospace;
+    font-size:10px; color:var(--text-muted);
+  }
+  .drop-zone .tag-input-wrap { border-color:rgba(255,255,255,0.06); }
+  .drop-zone .tag-wall { min-height:32px; }
+  .drop-zone .tag-pill {
+    background:rgba(124,58,237,0.1); border-color:rgba(124,58,237,0.25); color:#c4b5fd;
+  }
+  .drop-zone .tag-pill .tag-x { background:rgba(124,58,237,0.2); }
+  .drop-zone .tag-pill .tag-x:hover { background:rgba(124,58,237,0.4); }
+
+  /* Zone accent colors */
+  .zone-attendees .dz-title { color:#22d3ee; }
+  .zone-attendees.has-items { border-color:rgba(6,182,212,0.2); background:rgba(6,182,212,0.03); }
+  .zone-attendees .tag-pill { background:rgba(6,182,212,0.1); border-color:rgba(6,182,212,0.25); color:#67e8f9; }
+
+  .zone-sponsors .dz-title { color:#fbbf24; }
+  .zone-sponsors.has-items { border-color:rgba(251,191,36,0.2); background:rgba(251,191,36,0.03); }
+  .zone-sponsors .tag-pill { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.25); color:#fde68a; }
+
+  /* ===========================================================
+     Q5: CONCEPT CARDS — Event Theme
+     =========================================================== */
+  .concept-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; margin-bottom:12px;
+  }
+  .concept-card {
+    position:relative; padding:18px 14px; border-radius:14px;
+    border:1px solid var(--border); cursor:pointer;
+    transition:all 0.25s cubic-bezier(0.16,1,0.3,1);
+    user-select:none; overflow:hidden;
+  }
+  .concept-card .cc-icon { font-size:24px; margin-bottom:8px; }
+  .concept-card .cc-title { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .concept-card .cc-desc { font-size:11px; color:var(--text-muted); line-height:1.4; }
+  .concept-card:hover { border-color:var(--accent); transform:translateY(-2px); background:var(--accent-soft); }
+  .concept-card.selected {
+    border-color:var(--accent); background:rgba(124,58,237,0.15);
+    box-shadow:0 0 0 1px var(--accent), 0 4px 20px var(--accent-glow);
+  }
+  .concept-card.selected::after {
+    content:'✓'; position:absolute; top:8px; right:10px;
+    font-size:12px; color:var(--green); font-weight:700;
+  }
+  .concept-card.selected .cc-title { color:#c4b5fd; }
+
+  .custom-theme-row {
+    display:flex; align-items:center; gap:8px; margin-top:8px;
+  }
+  .custom-theme-row input {
+    flex:1; padding:10px 14px; border-radius:10px;
+    border:1px solid var(--border); background:rgba(255,255,255,0.03);
+    color:var(--text); font-family:'Outfit',sans-serif; font-size:13px;
+    outline:none; transition:border-color 0.2s;
+  }
+  .custom-theme-row input:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft); }
+  .custom-theme-row input::placeholder { color:var(--text-muted); }
+  .custom-theme-row .or-label {
+    font-size:11px; color:var(--text-muted); font-family:'Space Mono',monospace;
+    letter-spacing:1px; text-transform:uppercase; white-space:nowrap;
+  }
+
+  /* ===========================================================
+     Q6: SCOPE RADAR — Geography
+     =========================================================== */
+  .scope-radar {
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .scope-option {
+    display:flex; align-items:center; gap:14px;
+    padding:14px 18px; border-radius:14px;
+    border:1px solid var(--border); cursor:pointer;
+    transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+    position:relative; overflow:hidden;
+  }
+  .scope-option:hover { border-color:var(--border-accent); background:rgba(255,255,255,0.02); transform:translateX(4px); }
+
+  .scope-radar-icon {
+    position:relative; width:40px; height:40px; flex-shrink:0;
+  }
+  .scope-radar-icon .radar-ring {
+    position:absolute; border-radius:50%; border:1px solid var(--border);
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    transition:all 0.3s;
+  }
+  .scope-radar-icon .radar-ring:nth-child(1) { width:12px; height:12px; background:rgba(124,58,237,0.3); border-color:rgba(124,58,237,0.4); }
+  .scope-radar-icon .radar-ring:nth-child(2) { width:24px; height:24px; }
+  .scope-radar-icon .radar-ring:nth-child(3) { width:36px; height:36px; }
+
+  .scope-text { flex:1; }
+  .scope-text .scope-title { font-size:14px; font-weight:600; margin-bottom:2px; transition:color 0.3s; }
+  .scope-text .scope-desc { font-size:11px; color:var(--text-muted); line-height:1.4; }
+
+  .scope-reach {
+    font-family:'Space Mono',monospace; font-size:10px;
+    color:var(--text-muted); letter-spacing:1px; text-transform:uppercase;
+    padding:4px 10px; border-radius:20px; border:1px solid var(--border);
+    white-space:nowrap; transition:all 0.3s;
+  }
+
+  /* Active states by scope level */
+  .scope-option.selected { transform:translateX(4px); }
+
+  .scope-option[data-scope="1"].selected {
+    border-color:var(--accent); background:rgba(124,58,237,0.08);
+    box-shadow:0 0 0 1px var(--accent), 0 4px 16px var(--accent-glow);
+  }
+  .scope-option[data-scope="1"].selected .scope-title { color:#c4b5fd; }
+  .scope-option[data-scope="1"].selected .scope-reach { border-color:var(--accent); color:var(--accent); }
+  .scope-option[data-scope="1"].selected .radar-ring:nth-child(1) { background:var(--accent); border-color:var(--accent); }
+
+  .scope-option[data-scope="2"].selected {
+    border-color:var(--cyan); background:rgba(6,182,212,0.06);
+    box-shadow:0 0 0 1px var(--cyan), 0 4px 16px rgba(6,182,212,0.15);
+  }
+  .scope-option[data-scope="2"].selected .scope-title { color:#67e8f9; }
+  .scope-option[data-scope="2"].selected .scope-reach { border-color:var(--cyan); color:var(--cyan); }
+  .scope-option[data-scope="2"].selected .radar-ring:nth-child(1) { background:var(--cyan); border-color:var(--cyan); }
+  .scope-option[data-scope="2"].selected .radar-ring:nth-child(2) { border-color:var(--cyan); background:rgba(6,182,212,0.15); }
+
+  .scope-option[data-scope="3"].selected {
+    border-color:var(--amber); background:rgba(245,158,11,0.06);
+    box-shadow:0 0 0 1px var(--amber), 0 4px 16px rgba(245,158,11,0.12);
+  }
+  .scope-option[data-scope="3"].selected .scope-title { color:#fcd34d; }
+  .scope-option[data-scope="3"].selected .scope-reach { border-color:var(--amber); color:var(--amber); }
+  .scope-option[data-scope="3"].selected .radar-ring:nth-child(1) { background:var(--amber); border-color:var(--amber); }
+  .scope-option[data-scope="3"].selected .radar-ring:nth-child(2) { border-color:var(--amber); background:rgba(245,158,11,0.1); }
+  .scope-option[data-scope="3"].selected .radar-ring:nth-child(3) { border-color:var(--amber); background:rgba(245,158,11,0.06); }
+
+  .scope-option[data-scope="4"].selected {
+    border-color:var(--green); background:rgba(34,197,94,0.06);
+    box-shadow:0 0 0 1px var(--green), 0 4px 16px rgba(34,197,94,0.12);
+  }
+  .scope-option[data-scope="4"].selected .scope-title { color:#86efac; }
+  .scope-option[data-scope="4"].selected .scope-reach { border-color:var(--green); color:var(--green); }
+  .scope-option[data-scope="4"].selected .radar-ring { background:rgba(34,197,94,0.15); border-color:var(--green); }
+
+  /* ===========================================================
+     SUMMARY, BUTTONS, TOAST
+     =========================================================== */
+  .summary-section { display:none; animation:fadeUp 0.5s ease-out; }
+  .summary-section.visible { display:block; }
+
+  .summary-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:28px; margin-bottom:16px;
+  }
+  .summary-card h3 {
+    font-size:14px; font-weight:600; color:var(--accent);
+    margin-bottom:12px; display:flex; align-items:center; gap:8px;
+  }
+  .summary-card p, .summary-card li { font-size:14px; color:var(--text-dim); line-height:1.7; }
+  .summary-card ul { list-style:none; padding:0; }
+  .summary-card li::before { content:'\2192'; color:var(--accent); margin-right:8px; font-weight:600; }
+
+  .copy-block {
+    background:#0d0d14; border:1px solid var(--border); border-radius:12px;
+    padding:20px; margin-top:20px; position:relative;
+    font-family:'Outfit',sans-serif; font-size:13.5px; line-height:1.75;
+    color:var(--text-dim); white-space:pre-wrap; word-wrap:break-word;
+    max-height:500px; overflow-y:auto;
+  }
+
+  .btn-row { display:flex; gap:12px; margin-top:32px; justify-content:center; flex-wrap:wrap; }
+
+  .btn {
+    padding:12px 28px; border-radius:12px; font-family:'Outfit',sans-serif;
+    font-size:14px; font-weight:600; border:none; cursor:pointer;
+    transition:all 0.25s ease; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary {
+    background:var(--accent); color:white; box-shadow:0 4px 20px var(--accent-glow);
+  }
+  .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 28px var(--accent-glow); }
+  .btn-primary:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+  .btn-ghost { background:transparent; color:var(--text-dim); border:1px solid var(--border); }
+  .btn-ghost:hover { border-color:var(--border-accent); color:var(--text); }
+  .btn-success { background:rgba(34,197,94,0.15); color:var(--green); border:1px solid rgba(34,197,94,0.25); }
+  .btn-success:hover { background:rgba(34,197,94,0.22); }
+
+  .toast {
+    position:fixed; bottom:32px; left:50%;
+    transform:translateX(-50%) translateY(80px);
+    padding:12px 24px; background:var(--green); color:#000;
+    border-radius:12px; font-weight:600; font-size:14px;
+    z-index:10000; transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    pointer-events:none;
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  @media(max-width:600px) {
+    .container { padding:24px 16px 60px; }
+    .header h1 { font-size:24px; }
+    .question-card { padding:20px; }
+    .q-body, .q-subtitle, .q-tag { padding-left:0; margin-left:0; }
+    .icon-chip-grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
+    .priority-grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
+    .concept-grid { grid-template-columns:1fr; }
+    .scope-radar { flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+<div class="ambient ambient-3"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-badge"><span class="dot"></span> ICP Alignment</div>
+    <h1>Quick Inputs for Data Segmentation</h1>
+    <p>We need a few quick answers to kick off the target list. Your answers go straight to our data team.</p>
+    <div class="time-est">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~3 minutes
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Progress</span>
+      <span class="progress-count" id="progressCount">0 / 6</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div id="questionsContainer">
+
+    <!-- ==================== Q1: ICON CHIP CARDS ==================== -->
+    <div class="question-card" data-q="1">
+      <div class="q-header">
+        <div class="q-number">01</div>
+        <div class="q-title">Which industry verticals should we prioritize for attendees?</div>
+      </div>
+      <div class="q-subtitle">Tap all that apply. We will focus outreach on your top picks first.</div>
+      <span class="q-tag critical">Critical — Blocks Segmentation</span>
+      <div class="q-body">
+        <div class="icon-chip-grid" id="industryGrid">
+          <div class="icon-chip" data-value="IT/ITES">
+            <span class="ic-emoji">💻</span>
+            <span class="ic-label">IT / ITES</span>
+          </div>
+          <div class="icon-chip" data-value="BFSI">
+            <span class="ic-emoji">🏦</span>
+            <span class="ic-label">BFSI</span>
+          </div>
+          <div class="icon-chip" data-value="Manufacturing">
+            <span class="ic-emoji">🏭</span>
+            <span class="ic-label">Manufacturing</span>
+          </div>
+          <div class="icon-chip" data-value="Healthcare IT">
+            <span class="ic-emoji">🏥</span>
+            <span class="ic-label">Healthcare IT</span>
+          </div>
+          <div class="icon-chip" data-value="Retail/E-commerce">
+            <span class="ic-emoji">🛒</span>
+            <span class="ic-label">Retail / E-com</span>
+          </div>
+          <div class="icon-chip" data-value="Telecom">
+            <span class="ic-emoji">📡</span>
+            <span class="ic-label">Telecom</span>
+          </div>
+          <div class="icon-chip" data-value="Logistics/Supply Chain">
+            <span class="ic-emoji">🚛</span>
+            <span class="ic-label">Logistics</span>
+          </div>
+          <div class="icon-chip" data-value="EdTech">
+            <span class="ic-emoji">🎓</span>
+            <span class="ic-label">EdTech</span>
+          </div>
+        </div>
+        <div class="chip-count" id="industryCount">0 selected</div>
+        <input class="text-input-mini" id="industryOther" placeholder="Others? Type here..." />
+      </div>
+    </div>
+
+    <!-- ==================== Q2: PRIORITY RANKING TILES ==================== -->
+    <div class="question-card" data-q="2">
+      <div class="q-header">
+        <div class="q-number">02</div>
+        <div class="q-title">Which CXO titles matter most for the room?</div>
+      </div>
+      <div class="q-subtitle">Tap once for <strong style="color:var(--rose)">Must Have</strong>, tap again for <strong style="color:var(--amber)">Nice to Have</strong>, tap a third time to deselect.</div>
+      <span class="q-tag critical">Critical — Blocks Segmentation</span>
+      <div class="q-body">
+        <div class="priority-grid" id="titleGrid">
+          <div class="priority-tile" data-value="CIO" data-level="0">
+            <div class="pt-title">CIO</div>
+            <div class="pt-level"></div>
+          </div>
+          <div class="priority-tile" data-value="CTO" data-level="0">
+            <div class="pt-title">CTO</div>
+            <div class="pt-level"></div>
+          </div>
+          <div class="priority-tile" data-value="CDO" data-level="0">
+            <div class="pt-title">CDO</div>
+            <div class="pt-level"></div>
+          </div>
+          <div class="priority-tile" data-value="CISO" data-level="0">
+            <div class="pt-title">CISO</div>
+            <div class="pt-level"></div>
+          </div>
+          <div class="priority-tile" data-value="VP Engineering" data-level="0">
+            <div class="pt-title">VP Eng</div>
+            <div class="pt-level"></div>
+          </div>
+          <div class="priority-tile" data-value="VP IT" data-level="0">
+            <div class="pt-title">VP IT</div>
+            <div class="pt-level"></div>
+          </div>
+          <div class="priority-tile" data-value="Head of Digital" data-level="0">
+            <div class="pt-title">Head Digital</div>
+            <div class="pt-level"></div>
+          </div>
+        </div>
+        <div class="priority-legend">
+          <span><span class="dot-legend" style="background:var(--rose)"></span> Must Have</span>
+          <span><span class="dot-legend" style="background:var(--amber)"></span> Nice to Have</span>
+          <span><span class="dot-legend" style="background:var(--border)"></span> Skip</span>
+        </div>
+        <input class="text-input-mini" id="titleOther" placeholder="Any specific titles we're missing?" />
+      </div>
+    </div>
+
+    <!-- ==================== Q3: TAG BUILDER ==================== -->
+    <div class="question-card" data-q="3">
+      <div class="q-header">
+        <div class="q-number">03</div>
+        <div class="q-title">Any companies or people we should NOT contact?</div>
+      </div>
+      <div class="q-subtitle">Type a name and hit Enter or click Add. Build your exclusion wall below.</div>
+      <span class="q-tag critical">Critical — Avoid Embarrassment</span>
+      <div class="q-body">
+        <div class="tag-builder" id="exclusionBuilder">
+          <div class="tag-input-wrap">
+            <input type="text" id="exclusionInput" placeholder="e.g. Acme Corp, John Doe..." />
+            <button class="add-tag-btn" id="exclusionAddBtn">+ Add</button>
+          </div>
+          <div class="tag-wall" id="exclusionWall"></div>
+        </div>
+        <div class="helper-text">Leave empty if none. We can always add more later.</div>
+      </div>
+    </div>
+
+    <!-- ==================== Q4: SPLIT DROP ZONES ==================== -->
+    <div class="question-card" data-q="4">
+      <div class="q-header">
+        <div class="q-number">04</div>
+        <div class="q-title">Any dream accounts you want in the room?</div>
+      </div>
+      <div class="q-subtitle">Even 10-15 named companies helps us build Tier 1. Type and Enter to add.</div>
+      <span class="q-tag important">Important — Helps Prioritization</span>
+      <div class="q-body">
+        <div class="split-zones">
+          <div class="drop-zone zone-attendees" id="zoneAttendees">
+            <div class="dz-header">
+              <span class="dz-icon">🎯</span>
+              <span class="dz-title">Attendee Targets</span>
+              <span class="dz-count" id="attendeeCount">0</span>
+            </div>
+            <div class="tag-input-wrap">
+              <input type="text" id="attendeeInput" placeholder="Company name..." />
+              <button class="add-tag-btn" onclick="addDreamTag('attendee')">+</button>
+            </div>
+            <div class="tag-wall" id="attendeeWall"></div>
+          </div>
+          <div class="drop-zone zone-sponsors" id="zoneSponsors">
+            <div class="dz-header">
+              <span class="dz-icon">💎</span>
+              <span class="dz-title">Sponsor Targets</span>
+              <span class="dz-count" id="sponsorCount">0</span>
+            </div>
+            <div class="tag-input-wrap">
+              <input type="text" id="sponsorInput" placeholder="Vendor name..." />
+              <button class="add-tag-btn" onclick="addDreamTag('sponsor')">+</button>
+            </div>
+            <div class="tag-wall" id="sponsorWall"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== Q5: CONCEPT CARDS ==================== -->
+    <div class="question-card" data-q="5">
+      <div class="q-header">
+        <div class="q-number">05</div>
+        <div class="q-title">What is the event theme or roundtable topic?</div>
+      </div>
+      <div class="q-subtitle">Pick a direction or type your own. This shapes which CXO profiles we target.</div>
+      <span class="q-tag important">Important — Shapes Targeting</span>
+      <div class="q-body">
+        <div class="concept-grid" id="conceptGrid">
+          <div class="concept-card" data-value="AI & Enterprise Transformation">
+            <div class="cc-icon">🤖</div>
+            <div class="cc-title">AI & Enterprise Transformation</div>
+            <div class="cc-desc">Generative AI, ML ops, agentic workflows</div>
+          </div>
+          <div class="concept-card" data-value="Cybersecurity for the C-Suite">
+            <div class="cc-icon">🛡️</div>
+            <div class="cc-title">Cybersecurity for the C-Suite</div>
+            <div class="cc-desc">Zero trust, SOC, compliance, ransomware</div>
+          </div>
+          <div class="concept-card" data-value="Cloud & Infrastructure Modernization">
+            <div class="cc-icon">☁️</div>
+            <div class="cc-title">Cloud & Infra Modernization</div>
+            <div class="cc-desc">Multi-cloud, Kubernetes, cost optimization</div>
+          </div>
+          <div class="concept-card" data-value="Data-Driven Decision Making">
+            <div class="cc-icon">📊</div>
+            <div class="cc-title">Data-Driven Decisions</div>
+            <div class="cc-desc">Data mesh, real-time analytics, CDPs</div>
+          </div>
+          <div class="concept-card" data-value="Digital CX & Customer Intelligence">
+            <div class="cc-icon">🎯</div>
+            <div class="cc-title">Digital CX & Intelligence</div>
+            <div class="cc-desc">Omnichannel, personalization, customer 360</div>
+          </div>
+        </div>
+        <div class="custom-theme-row">
+          <span class="or-label">Or custom:</span>
+          <input type="text" id="customTheme" placeholder="Type your own theme..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== Q6: SCOPE RADAR ==================== -->
+    <div class="question-card" data-q="6">
+      <div class="q-header">
+        <div class="q-number">06</div>
+        <div class="q-title">Geography scope for attendees?</div>
+      </div>
+      <div class="q-subtitle">This significantly changes universe size and outreach approach. Pick one.</div>
+      <span class="q-tag nice">Quick Confirm</span>
+      <div class="q-body">
+        <div class="scope-radar" id="scopeRadar">
+          <div class="scope-option" data-scope="1" data-value="Bangalore only">
+            <div class="scope-radar-icon">
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+            </div>
+            <div class="scope-text">
+              <div class="scope-title">Bangalore Only</div>
+              <div class="scope-desc">Tight focus — local CXOs, easy logistics</div>
+            </div>
+            <span class="scope-reach">~500 contacts</span>
+          </div>
+          <div class="scope-option" data-scope="2" data-value="Bangalore + South India">
+            <div class="scope-radar-icon">
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+            </div>
+            <div class="scope-text">
+              <div class="scope-title">BLR + South India</div>
+              <div class="scope-desc">Chennai, Hyderabad, Kochi included</div>
+            </div>
+            <span class="scope-reach">~2K contacts</span>
+          </div>
+          <div class="scope-option" data-scope="3" data-value="Bangalore primary + pan-India CXOs who travel">
+            <div class="scope-radar-icon">
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+            </div>
+            <div class="scope-text">
+              <div class="scope-title">BLR + Traveling CXOs</div>
+              <div class="scope-desc">Pan-India CXOs who visit BLR regularly</div>
+            </div>
+            <span class="scope-reach">~5K contacts</span>
+          </div>
+          <div class="scope-option" data-scope="4" data-value="Pan-India">
+            <div class="scope-radar-icon">
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+              <div class="radar-ring"></div>
+            </div>
+            <div class="scope-text">
+              <div class="scope-title">Pan-India</div>
+              <div class="scope-desc">Full national reach — we fly in key folks</div>
+            </div>
+            <span class="scope-reach">~15K contacts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Generate Summary -->
+  <div class="btn-row" id="generateRow">
+    <button class="btn btn-primary" id="generateBtn" disabled onclick="generateSummary()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      Generate Summary
+    </button>
+  </div>
+
+  <!-- Summary Section -->
+  <div class="summary-section" id="summarySection">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div class="header-badge" style="margin-bottom:16px;"><span class="dot"></span> Ready to Go</div>
+      <h2 style="font-size:24px;font-weight:700;background:linear-gradient(135deg,#fff,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ICP Alignment Complete</h2>
+    </div>
+    <div class="summary-card" id="summaryContent"></div>
+    <div style="margin-top:20px;">
+      <h3 style="font-size:14px;font-weight:600;color:var(--text-dim);margin-bottom:12px;">Copy-Paste Ready (WhatsApp / Email)</h3>
+      <div class="copy-block" id="copyBlock"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="copyToClipboard()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy Summary
+      </button>
+      <button class="btn btn-ghost" onclick="resetQuiz()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Start Over
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+// ============================================
+// STATE
+// ============================================
+const state = {
+  industries: [],
+  industries_other: '',
+  titles_must: [],
+  titles_nice: [],
+  titles_other: '',
+  exclusions: [],
+  dream_attendees: [],
+  dream_sponsors: [],
+  theme: '',
+  theme_custom: '',
+  geography: ''
+};
+
+const visited = { 3: false, 4: false, 5: false };
+
+// ============================================
+// Q1: ICON CHIP CARDS
+// ============================================
+document.querySelectorAll('#industryGrid .icon-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    chip.classList.toggle('selected');
+    const val = chip.dataset.value;
+    if (chip.classList.contains('selected')) {
+      state.industries.push(val);
+    } else {
+      state.industries = state.industries.filter(v => v !== val);
+    }
+    const countEl = document.getElementById('industryCount');
+    const n = state.industries.length;
+    countEl.textContent = n + ' selected';
+    countEl.classList.toggle('visible', n > 0);
+    updateProgress();
+  });
+});
+
+document.getElementById('industryOther').addEventListener('input', function() {
+  state.industries_other = this.value.trim();
+  updateProgress();
+});
+
+// ============================================
+// Q2: PRIORITY RANKING TILES
+// ============================================
+const LEVELS = ['', '🔥 MUST HAVE', '⚡ NICE TO HAVE'];
+document.querySelectorAll('#titleGrid .priority-tile').forEach(tile => {
+  tile.addEventListener('click', () => {
+    let level = parseInt(tile.dataset.level) || 0;
+    level = (level + 1) % 3;
+    tile.dataset.level = level;
+    tile.querySelector('.pt-level').textContent = LEVELS[level];
+
+    // Rebuild state
+    state.titles_must = [];
+    state.titles_nice = [];
+    document.querySelectorAll('#titleGrid .priority-tile').forEach(t => {
+      const lv = parseInt(t.dataset.level) || 0;
+      if (lv === 1) state.titles_must.push(t.dataset.value);
+      if (lv === 2) state.titles_nice.push(t.dataset.value);
+    });
+    updateProgress();
+  });
+});
+
+document.getElementById('titleOther').addEventListener('input', function() {
+  state.titles_other = this.value.trim();
+  updateProgress();
+});
+
+// ============================================
+// Q3: TAG BUILDER — Exclusions
+// ============================================
+function addExclusionTag() {
+  const input = document.getElementById('exclusionInput');
+  const val = input.value.trim();
+  if (!val) return;
+  if (state.exclusions.includes(val)) { input.value = ''; return; }
+  state.exclusions.push(val);
+  input.value = '';
+  visited[3] = true;
+  renderExclusionWall();
+  updateProgress();
+}
+
+function removeExclusionTag(val) {
+  state.exclusions = state.exclusions.filter(v => v !== val);
+  renderExclusionWall();
+  updateProgress();
+}
+
+function renderExclusionWall() {
+  const wall = document.getElementById('exclusionWall');
+  wall.innerHTML = state.exclusions.map(tag =>
+    '<div class="tag-pill"><span>' + tag + '</span><span class="tag-x" onclick="removeExclusionTag(\'' + tag.replace(/'/g, "\\'") + '\')">✕</span></div>'
+  ).join('');
+}
+
+document.getElementById('exclusionInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); addExclusionTag(); }
+});
+document.getElementById('exclusionInput').addEventListener('focus', function() { visited[3] = true; });
+document.getElementById('exclusionAddBtn').addEventListener('click', addExclusionTag);
+
+// ============================================
+// Q4: SPLIT ZONES — Dream Accounts
+// ============================================
+function addDreamTag(type) {
+  const inputId = type === 'attendee' ? 'attendeeInput' : 'sponsorInput';
+  const input = document.getElementById(inputId);
+  const val = input.value.trim();
+  if (!val) return;
+  const arr = type === 'attendee' ? state.dream_attendees : state.dream_sponsors;
+  if (arr.includes(val)) { input.value = ''; return; }
+  arr.push(val);
+  input.value = '';
+  visited[4] = true;
+  renderDreamWall(type);
+  updateProgress();
+}
+
+function removeDreamTag(type, val) {
+  if (type === 'attendee') {
+    state.dream_attendees = state.dream_attendees.filter(v => v !== val);
+  } else {
+    state.dream_sponsors = state.dream_sponsors.filter(v => v !== val);
+  }
+  renderDreamWall(type);
+  updateProgress();
+}
+
+function renderDreamWall(type) {
+  const wallId = type === 'attendee' ? 'attendeeWall' : 'sponsorWall';
+  const countId = type === 'attendee' ? 'attendeeCount' : 'sponsorCount';
+  const arr = type === 'attendee' ? state.dream_attendees : state.dream_sponsors;
+  const zoneId = type === 'attendee' ? 'zoneAttendees' : 'zoneSponsors';
+
+  document.getElementById(wallId).innerHTML = arr.map(tag =>
+    '<div class="tag-pill"><span>' + tag + '</span><span class="tag-x" onclick="removeDreamTag(\'' + type + '\',\'' + tag.replace(/'/g, "\\'") + '\')">✕</span></div>'
+  ).join('');
+  document.getElementById(countId).textContent = arr.length;
+  document.getElementById(zoneId).classList.toggle('has-items', arr.length > 0);
+}
+
+document.getElementById('attendeeInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); addDreamTag('attendee'); }
+});
+document.getElementById('sponsorInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); addDreamTag('sponsor'); }
+});
+document.getElementById('attendeeInput').addEventListener('focus', function() { visited[4] = true; });
+document.getElementById('sponsorInput').addEventListener('focus', function() { visited[4] = true; });
+
+// ============================================
+// Q5: CONCEPT CARDS — Theme
+// ============================================
+document.querySelectorAll('#conceptGrid .concept-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const wasSelected = card.classList.contains('selected');
+    document.querySelectorAll('#conceptGrid .concept-card').forEach(c => c.classList.remove('selected'));
+    if (!wasSelected) {
+      card.classList.add('selected');
+      state.theme = card.dataset.value;
+      document.getElementById('customTheme').value = '';
+      state.theme_custom = '';
+    } else {
+      state.theme = '';
+    }
+    visited[5] = true;
+    updateProgress();
+  });
+});
+
+document.getElementById('customTheme').addEventListener('input', function() {
+  state.theme_custom = this.value.trim();
+  if (state.theme_custom) {
+    document.querySelectorAll('#conceptGrid .concept-card').forEach(c => c.classList.remove('selected'));
+    state.theme = '';
+  }
+  visited[5] = true;
+  updateProgress();
+});
+
+document.getElementById('customTheme').addEventListener('focus', function() { visited[5] = true; });
+
+// ============================================
+// Q6: SCOPE RADAR SELECTOR
+// ============================================
+document.querySelectorAll('#scopeRadar .scope-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const wasSelected = opt.classList.contains('selected');
+
+    // Clear all
+    document.querySelectorAll('#scopeRadar .scope-option').forEach(o => {
+      o.classList.remove('selected');
+    });
+
+    if (!wasSelected) {
+      opt.classList.add('selected');
+      state.geography = opt.dataset.value;
+    } else {
+      state.geography = '';
+    }
+    updateProgress();
+  });
+});
+
+// ============================================
+// PROGRESS TRACKING
+// ============================================
+function getThemeValue() {
+  return state.theme || state.theme_custom || '';
+}
+
+function countCompleted() {
+  let done = 0;
+  if (state.industries.length > 0 || state.industries_other) done++;
+  if (state.titles_must.length > 0 || state.titles_nice.length > 0 || state.titles_other) done++;
+  if (state.exclusions.length > 0 || visited[3]) done++;
+  if (state.dream_attendees.length > 0 || state.dream_sponsors.length > 0 || visited[4]) done++;
+  if (getThemeValue() || visited[5]) done++;
+  if (state.geography) done++;
+  return done;
+}
+
+function updateProgress() {
+  const done = countCompleted();
+  const pct = (done / 6) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressCount').textContent = done + ' / 6';
+
+  document.querySelectorAll('.question-card').forEach(cardEl => {
+    const q = parseInt(cardEl.dataset.q);
+    let isComplete = false;
+    switch(q) {
+      case 1: isComplete = state.industries.length > 0 || !!state.industries_other; break;
+      case 2: isComplete = state.titles_must.length > 0 || state.titles_nice.length > 0 || !!state.titles_other; break;
+      case 3: isComplete = state.exclusions.length > 0 || visited[3]; break;
+      case 4: isComplete = state.dream_attendees.length > 0 || state.dream_sponsors.length > 0 || visited[4]; break;
+      case 5: isComplete = !!getThemeValue() || visited[5]; break;
+      case 6: isComplete = !!state.geography; break;
+    }
+    cardEl.classList.toggle('completed', isComplete);
+    cardEl.classList.toggle('active', !isComplete);
+  });
+
+  const canGenerate = (state.industries.length > 0 || state.industries_other) &&
+                      (state.titles_must.length > 0 || state.titles_nice.length > 0 || state.titles_other) &&
+                      state.geography;
+  document.getElementById('generateBtn').disabled = !canGenerate;
+}
+
+// ============================================
+// SUMMARY GENERATION
+// ============================================
+function generateSummary() {
+  const industries = [...state.industries];
+  if (state.industries_other) industries.push(state.industries_other);
+
+  const mustTitles = [...state.titles_must];
+  const niceTitles = [...state.titles_nice];
+  if (state.titles_other) mustTitles.push(state.titles_other);
+
+  const theme = getThemeValue();
+
+  let html = '<h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg> ICP Summary for VertexGrid Event</h3>';
+  html += '<ul>';
+  html += '<li><strong>Industries:</strong> ' + industries.join(', ') + '</li>';
+  if (mustTitles.length > 0) html += '<li><strong>Must-Have Titles:</strong> ' + mustTitles.join(', ') + '</li>';
+  if (niceTitles.length > 0) html += '<li><strong>Nice-to-Have Titles:</strong> ' + niceTitles.join(', ') + '</li>';
+  html += '<li><strong>Geography:</strong> ' + state.geography + '</li>';
+  if (theme) html += '<li><strong>Event Theme:</strong> ' + theme + '</li>';
+  html += '<li><strong>Exclusions:</strong> ' + (state.exclusions.length > 0 ? state.exclusions.join(', ') : 'None specified') + '</li>';
+  if (state.dream_attendees.length > 0) html += '<li><strong>Dream Attendees:</strong> ' + state.dream_attendees.join(', ') + '</li>';
+  if (state.dream_sponsors.length > 0) html += '<li><strong>Dream Sponsors:</strong> ' + state.dream_sponsors.join(', ') + '</li>';
+  html += '</ul>';
+
+  document.getElementById('summaryContent').innerHTML = html;
+
+  let text = 'ICP ALIGNMENT - VERTEXGRID EVENT\n';
+  text += '================================\n\n';
+  text += 'Priority Industries: ' + industries.join(', ') + '\n\n';
+  if (mustTitles.length > 0) text += 'Must-Have Titles: ' + mustTitles.join(', ') + '\n\n';
+  if (niceTitles.length > 0) text += 'Nice-to-Have Titles: ' + niceTitles.join(', ') + '\n\n';
+  text += 'Geography: ' + state.geography + '\n\n';
+  if (theme) text += 'Event Theme: ' + theme + '\n\n';
+  text += 'Exclusion List: ' + (state.exclusions.length > 0 ? state.exclusions.join(', ') : 'None specified') + '\n\n';
+  if (state.dream_attendees.length > 0) text += 'Dream Attendee Companies: ' + state.dream_attendees.join(', ') + '\n\n';
+  if (state.dream_sponsors.length > 0) text += 'Dream Sponsor Companies: ' + state.dream_sponsors.join(', ') + '\n\n';
+  text += '---\n';
+  text += 'Company Size: 500-5,000 employees\n';
+  text += 'Attendee Target: 45-50 confirmed RSVPs\n';
+  text += 'Sponsor Target: 12-16 warm leads (converting to 6-8 conversations)\n';
+  text += 'Campaign Launch: ASAP upon ICP confirmation';
+
+  document.getElementById('copyBlock').textContent = text;
+  document.getElementById('summarySection').classList.add('visible');
+  document.getElementById('generateRow').style.display = 'none';
+  document.getElementById('summarySection').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ============================================
+// CLIPBOARD
+// ============================================
+function copyToClipboard() {
+  const text = document.getElementById('copyBlock').textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast()).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    showToast();
+  } catch (err) {
+    const block = document.getElementById('copyBlock');
+    const range = document.createRange();
+    range.selectNodeContents(block);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    showToast('Text selected — press Ctrl+C to copy');
+  }
+  document.body.removeChild(ta);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg || 'Copied to clipboard!';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ============================================
+// RESET
+// ============================================
+function resetQuiz() {
+  state.industries = [];
+  state.industries_other = '';
+  state.titles_must = [];
+  state.titles_nice = [];
+  state.titles_other = '';
+  state.exclusions = [];
+  state.dream_attendees = [];
+  state.dream_sponsors = [];
+  state.theme = '';
+  state.theme_custom = '';
+  state.geography = '';
+  visited[3] = false;
+  visited[4] = false;
+  visited[5] = false;
+
+  document.querySelectorAll('.icon-chip').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.priority-tile').forEach(t => { t.dataset.level = '0'; t.querySelector('.pt-level').textContent = ''; });
+  document.querySelectorAll('.concept-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.scope-option').forEach(o => o.classList.remove('selected'));
+
+  document.getElementById('industryOther').value = '';
+  document.getElementById('titleOther').value = '';
+  document.getElementById('exclusionInput').value = '';
+  document.getElementById('customTheme').value = '';
+  document.getElementById('attendeeInput').value = '';
+  document.getElementById('sponsorInput').value = '';
+
+  document.getElementById('exclusionWall').innerHTML = '';
+  document.getElementById('attendeeWall').innerHTML = '';
+  document.getElementById('sponsorWall').innerHTML = '';
+  document.getElementById('industryCount').classList.remove('visible');
+  document.getElementById('attendeeCount').textContent = '0';
+  document.getElementById('sponsorCount').textContent = '0';
+  document.getElementById('zoneAttendees').classList.remove('has-items');
+  document.getElementById('zoneSponsors').classList.remove('has-items');
+
+  document.getElementById('summarySection').classList.remove('visible');
+  document.getElementById('generateRow').style.display = 'flex';
+  updateProgress();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// Init
+updateProgress();
+</script>
+</body>
+</html>

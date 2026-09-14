@@ -1,0 +1,156 @@
+{
+  "B1_cold_email": {
+    "A": {
+      "slop": [
+        {"pattern": "aphorism / portability failure", "quote": "New reps are only as effective as the list they're handed on day one."},
+        {"pattern": "padding before the ask (soft pitch phrasing)", "quote": "I'd like to walk you through how we did it and what a rebuilt list could look like for Kova."}
+      ],
+      "unsupported": [
+        "\"If your Malaysia team is about to start prospecting APAC SMBs\" assumes timing and target (hedged as a conditional, so minor)"
+      ],
+      "compliance_issues": [
+        "First two lines are the job-post hook plus a generic aphorism. Neither says why Deep is writing, and the ask comes in the last line"
+      ]
+    },
+    "B": {
+      "slop": [],
+      "unsupported": [
+        "Subject says \"SDR hires\" but the brief says openings (minor)"
+      ],
+      "compliance_issues": [
+        "None. 64 words, all three facts used, ask present. Line 2 states the purpose. It could tie the bounce result to Kova a little more explicitly"
+      ]
+    },
+    "winner": "B",
+    "why": "B says who, why and what in 64 plain words with no aphorism, while A pads with a portable maxim and a walk-you-through line that makes the ask feel like a pitch."
+  },
+  "B2_linkedin_post": {
+    "A": {
+      "slop": [
+        {"pattern": "binary contrast (X doesn't fail because of Y)", "quote": "Most AI SDR pilots don't fail because of the AI."},
+        {"pattern": "colon reveal", "quote": "Each one had the same complaint: the agent was sending, but the replies weren't coming."},
+        {"pattern": "negative listing / tricolon", "quote": "The problem wasn't the prompts, the sequences, or the model."},
+        {"pattern": "stacked fragments", "quote": "People who had left the company. Addresses that bounced."},
+        {"pattern": "robotic parallel pair plus empty adverb", "quote": "The agents were doing exactly what they were told. They were just doing it to people who weren't there anymore."},
+        {"pattern": "aphorism", "quote": "An AI SDR scales whatever you feed it."},
+        {"pattern": "robotic parallel sentences", "quote": "Give it a clean list and it scales conversations. Give it a stale one and it scales bounces"},
+        {"pattern": "fake-profound kicker (chiasmus)", "quote": "audit the list before you audit the agent."}
+      ],
+      "unsupported": [
+        "\"Each one had the same complaint: the agent was sending, but the replies weren't coming\" is an invented client complaint",
+        "\"The problem wasn't the prompts, the sequences, or the model\" presents unverified reasoning as fact",
+        "\"leadership walks away convinced AI outbound doesn't work\" is an invented outcome",
+        "\"Most AI SDR pilots\" generalizes from an audit of 3 pilots"
+      ]
+    ,
+      "compliance_issues": [
+        "160 words, inside range. The opening line is a binary-contrast hook rather than the finding, so the data doesn't show up until line 2"
+      ]
+    },
+    "B": {
+      "slop": [
+        {"pattern": "mild repetition / rhythm", "quote": "In all 3, the agents were working from stale lists. ... Reply rates roughly doubled in all 3 pilots."}
+      ],
+      "unsupported": [
+        "\"More than a third of each list\" turns an aggregate 38% into a per-list claim the brief does not support",
+        "\"every one of those contacts still counted against the pilot's reply rate\" is inferred reasoning presented as fact",
+        "\"In all 3, the agents were working from stale lists\" is a slight stretch from the brief, which gives only an overall 38% figure"
+      ],
+      "compliance_issues": [
+        "None. 138 words, and the first two lines carry the audit and the finding. It ends on a real question"
+      ]
+    },
+    "winner": "B",
+    "why": "B leads with the audit data and reasons plainly, while A is a stack of LinkedIn tics (binary hook, fragments, parallel pairs, chiasmus kicker) wrapped around invented color."
+  },
+  "B3_blog_intro": {
+    "A": {
+      "slop": [
+        {"pattern": "binary setup / assumption hook", "quote": "Your HCP database was accurate the day it was built. It probably isn't today."},
+        {"pattern": "tricolon-plus list", "quote": "They join a new group, move to a hospital system, split time across clinics, or leave a practice altogether."},
+        {"pattern": "stacked fragments / robotic parallel", "quote": "The name is still right. The specialty is still right. But the clinic your rep is driving to is one the physician no longer works at."},
+        {"pattern": "colon reveal plus tricolon", "quote": "That's a cost most pharma marketing teams never see on a dashboard: a rep in the wrong waiting room, a visit that doesn't happen, a planned conversation that never takes place."},
+        {"pattern": "stops being X, becomes Y", "quote": "stale affiliation data stops being a data problem. It becomes a field-force problem."},
+        {"pattern": "metadiscourse", "quote": "Here's why HCP data decays so quickly, and what your team can do about it."},
+        {"pattern": "inanimate human verb / puffery", "quote": "Each move quietly breaks a record in your CRM."}
+      ],
+      "unsupported": [
+        "\"was accurate the day it was built\"",
+        "\"a cost most pharma marketing teams never see on a dashboard\" is an unsourced generalization",
+        "\"split time across clinics, or leave a practice altogether\" goes past the brief's plain affiliation change",
+        "\"decays so quickly\" implies a rate the brief does not quantify"
+      ],
+      "compliance_issues": [
+        "About 155 words of body plus the title, slightly over 150",
+        "Ends on a metadiscourse transition instead of a concrete point"
+      ]
+    },
+    "B": {
+      "slop": [
+        {"pattern": "mild kicker", "quote": "The visit is lost, and so is the rep's time."},
+        {"pattern": "parallel construction", "quote": "The affiliation is the part that went wrong, and it is the part that tells a rep where to go."},
+        {"pattern": "aphorism-leaning line", "quote": "A record can pass every other test and still send a rep to the wrong clinic."}
+      ],
+      "unsupported": [
+        "\"nobody flags the record\" is an assertion without support",
+        "\"a steady stream of records\" is inferred from 'often' with no number (reasonable, but still reasoning presented as fact)",
+        "\"the first field to check\" is opinion presented as fact (acceptable for a blog voice)"
+      ],
+      "compliance_issues": [
+        "None. Exactly 150 words, no invented statistics, the opening scene carries the message, and both Ampliz numbers are used"
+      ]
+    },
+    "winner": "B",
+    "why": "B opens on a concrete field scene and stays inside the facts, while A strings a colon-reveal tricolon, a stops-being/becomes turn and a Here's-why transition around claims the brief doesn't support."
+  },
+  "B4_client_followup": {
+    "A": {
+      "slop": [],
+      "unsupported": [
+        "\"The CFO of a logistics firm\" where the brief says \"a CFO\" (trivial)"
+      ],
+      "compliance_issues": [
+        "None. The subject and the first two lines carry both the status and the deadline ask, it is short and plain, and it names no vendor"
+      ]
+    },
+    "B": {
+      "slop": [
+        {"pattern": "colon reveal / throat-clearing lead-in", "quote": "One thing we need from you: please send us the name"},
+        {"pattern": "formatting slop (numbered report-style list in a short client email)", "quote": "1. CFO, logistics firm: confirmed for Thursday, 10:00 SGT."}
+      ],
+      "unsupported": [
+        "\"and update you\" (minor addition)"
+      ],
+      "compliance_issues": [
+        "Buried ask: the 6pm deadline request is in the third block and missing from the subject, so the first two lines give only the status",
+        "Report formatting goes against the house rule for client email"
+      ]
+    },
+    "winner": "A",
+    "why": "A puts the deadline ask in the subject and the second line, so Mei can act from the preview, while B buries it under a numbered list and a colon lead-in."
+  },
+  "B5_landing_hero": {
+    "A": {
+      "slop": [],
+      "unsupported": [],
+      "compliance_issues": [
+        "The line under the button is only the tagline. It does nothing to reduce friction or say what happens after the click (minor)"
+      ]
+    },
+    "B": {
+      "slop": [
+        {"pattern": "portability failure / headline does not state the benefit", "quote": "Headline: Time worth spending."}
+      ],
+      "unsupported": [
+        "\"built for corporate offsites\" is a mild stretch from 'hosts groups of up to 40'",
+        "\"Share your dates and group size to get started.\" implies an intake flow the brief does not describe"
+      ],
+      "compliance_issues": [
+        "The rubric says headlines state the benefit plainly. The tagline headline could sit on any venue page",
+        "Neither Champions Ranch nor Bangalore appears anywhere in the copy"
+      ]
+    },
+    "winner": "A",
+    "why": "A's headline states the offer and location plainly and names the Ranch, while B spends the headline on a portable tagline and drops both the name and the city."
+  }
+}

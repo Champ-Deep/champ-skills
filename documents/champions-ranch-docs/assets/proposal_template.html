@@ -1,0 +1,542 @@
+<!--
+  Champions Ranch document template.
+  Brand: Ranch Green #2F7D3F / Warm Gold #D4AF37 / Earthy Brown #8B6F47.
+  Fonts: Lora (headlines) + Poppins (body), with Georgia/DejaVu fallbacks.
+  Build:  python ../scripts/build_pdf.py proposal_template.html out.pdf
+  Swap the hero line, snapshot, and body sections for new documents.
+  See references/components.md for copy-paste blocks and references/brand-voice.md for tone.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Champions Ranch Corporate Stay Proposal</title>
+<style>
+  @page {
+    size: A4;
+    margin: 16mm 15mm 18mm 15mm;
+    @bottom-center {
+      content: "Champions Ranch  ·  Sarjapur Road, Bangalore  ·  Time Worth Spending";
+      font-family: 'Poppins', sans-serif;
+      font-size: 7.4pt;
+      letter-spacing: 0.04em;
+      color: #8B6F47;
+    }
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-family: 'Poppins', sans-serif;
+      font-size: 7.4pt;
+      color: #B7A98C;
+    }
+  }
+  @page cover { margin: 0; @bottom-center { content: ""; } @bottom-right { content: ""; } }
+
+  :root{
+    --green:#2F7D3F; --dark:#1A5C2A; --deep:#143F1E;
+    --gold:#D4AF37; --gold-deep:#B4912A;
+    --brown:#8B6F47; --barn:#C1440B;
+    --cream:#F5EFE0; --paper:#FFFDF8;
+    --ink:#28301F; --muted:#6E6A5C;
+    --charcoal:#2D2D2D; --champgold:#C9A84C;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:'Poppins','DejaVu Sans',sans-serif;
+    color:var(--ink);
+    font-size:10pt;
+    line-height:1.5;
+    background:var(--paper);
+  }
+  h1,h2,h3,.serif{ font-family:'Lora','DejaVu Serif',serif; }
+  .num{ font-family:'Poppins',sans-serif; font-variant-numeric:tabular-nums; }
+  p{ margin:0 0 8pt; }
+  .lead{ font-size:10.5pt; color:#3a4230; }
+
+  /* ---------- COVER ---------- */
+  .cover{ page:cover; height:297mm; width:210mm; position:relative; background:var(--paper); overflow:hidden; }
+  .cover-top{ padding:17mm 16mm 0 16mm; position:relative; z-index:3; }
+  .eyebrow{
+    font-size:8pt; letter-spacing:0.34em; text-transform:uppercase;
+    color:var(--brown); font-weight:600; margin:0 0 3mm;
+  }
+  .wordmark{
+    font-family:'Lora',serif; font-weight:700; font-size:21pt; letter-spacing:0.16em;
+    color:var(--dark); text-transform:uppercase; margin:0;
+  }
+  .wordmark .dot{ color:var(--gold); }
+  .cover-rule{ height:2.4pt; width:34mm; background:var(--gold); margin:5mm 0 0; border-radius:2pt; }
+
+  .hero-head{ padding:14mm 16mm 0 16mm; position:relative; z-index:3; }
+  .hero-head h1{
+    font-size:38pt; line-height:1.04; color:var(--deep); margin:0; font-weight:700; letter-spacing:-0.01em;
+  }
+  .hero-head h1 .amp{ color:var(--gold-deep); }
+  .hero-sub{
+    margin:7mm 0 0; font-size:12.5pt; color:var(--brown); font-weight:500; letter-spacing:0.02em;
+  }
+  .hero-tag{
+    margin:3mm 0 0; font-family:'Lora',serif; font-style:italic; font-size:14pt; color:var(--green);
+  }
+
+  .scene{ position:absolute; left:0; right:0; bottom:64mm; width:210mm; height:96mm; z-index:1; }
+
+  .cover-meta{
+    position:absolute; left:16mm; right:16mm; bottom:20mm; z-index:4;
+    background:var(--deep); border-radius:4mm; padding:7mm 8mm 6mm;
+    box-shadow:0 6pt 20pt rgba(20,63,30,0.22);
+  }
+  .cover-meta .mh{
+    font-size:7.5pt; letter-spacing:0.26em; text-transform:uppercase; color:var(--gold);
+    font-weight:600; margin:0 0 4mm;
+  }
+  .meta-grid{ width:100%; border-collapse:collapse; }
+  .meta-grid td{ padding:2.4mm 3mm; vertical-align:top; width:33.33%; border:0; }
+  .meta-grid .k{
+    display:block; font-size:7.2pt; letter-spacing:0.16em; text-transform:uppercase;
+    color:#9FC6A6; margin-bottom:1mm; font-weight:600;
+  }
+  .meta-grid .v{ display:block; color:#F4F1E6; font-size:10.5pt; font-weight:500; }
+  .meta-grid .v.big{ font-family:'Lora',serif; font-size:12pt; color:#fff; }
+  .cover-foot{
+    position:absolute; left:16mm; right:16mm; bottom:11mm; z-index:4;
+    font-size:7.6pt; letter-spacing:0.12em; color:var(--brown); text-transform:uppercase;
+    display:flex; justify-content:space-between;
+  }
+
+  /* ---------- GENERIC SECTION ---------- */
+  .sheet{ break-before:page; }
+  .kicker{
+    display:flex; align-items:center; gap:3mm; margin:0 0 4mm;
+  }
+  .kicker .hs{ width:9mm; height:9mm; flex:0 0 auto; }
+  .kicker .kt{
+    font-size:8pt; letter-spacing:0.26em; text-transform:uppercase; color:var(--brown); font-weight:600;
+  }
+  h2.section{
+    font-size:21pt; color:var(--dark); margin:0 0 3mm; font-weight:700; line-height:1.1;
+  }
+  .section-rule{ height:2pt; width:24mm; background:var(--gold); border-radius:2pt; margin:0 0 5mm; }
+
+  /* note / letter */
+  .note-card{
+    background:var(--cream); border-radius:4mm; padding:9mm 10mm; border:0.6pt solid #E6DcC4;
+  }
+  .note-card .greet{ font-family:'Lora',serif; font-size:13pt; color:var(--dark); margin:0 0 4mm; }
+  .pos-wrap{ display:flex; gap:5mm; margin-top:7mm; }
+  .pos{
+    flex:1; border-radius:3mm; padding:5mm 5.5mm; break-inside:avoid;
+  }
+  .pos.are{ background:#EAF2EA; border:0.7pt solid #CFE3D1; }
+  .pos.arenot{ background:#F6EEE9; border:0.7pt solid #E8D5C8; }
+  .pos h4{
+    margin:0 0 3mm; font-size:8pt; letter-spacing:0.18em; text-transform:uppercase; font-weight:700;
+  }
+  .pos.are h4{ color:var(--green); }
+  .pos.arenot h4{ color:var(--barn); }
+  .pos ul{ margin:0; padding:0; list-style:none; }
+  .pos li{ font-size:9pt; padding:1.6mm 0 1.6mm 6mm; position:relative; color:#3c4233; line-height:1.4; }
+  .pos li::before{ position:absolute; left:0; top:1.4mm; font-size:9pt; }
+  .pos.are li::before{ content:"✓"; color:var(--green); font-weight:700; }
+  .pos.arenot li::before{ content:"✕"; color:var(--barn); }
+
+  /* experience cards */
+  .xcard{
+    border:0.7pt solid #E4DAC2; border-radius:4mm; overflow:hidden; margin-bottom:5mm; break-inside:avoid;
+  }
+  .xcard .xhead{
+    background:var(--green); color:#fff; padding:3.6mm 6mm; display:flex; align-items:center; justify-content:space-between;
+  }
+  .xcard .xhead.alt{ background:var(--dark); }
+  .xcard .xhead .xt{ font-family:'Lora',serif; font-size:13.5pt; font-weight:600; }
+  .xcard .xhead .xp{ font-size:8.2pt; color:#DDF0DF; letter-spacing:0.06em; text-align:right; }
+  .xcard .xhead .xp b{ display:block; font-family:'Poppins'; font-size:12.5pt; color:#fff; font-weight:600; letter-spacing:0; }
+  .xbody{ padding:3.8mm 6mm 4.2mm; background:#fff; }
+  .xbody p{ font-size:9.3pt; color:#3c4233; }
+
+  table.rooms{ width:100%; border-collapse:collapse; margin-top:2mm; font-size:8.4pt; }
+  table.rooms th{
+    text-align:left; background:#EFEAD9; color:var(--brown); font-weight:600;
+    font-size:7.4pt; letter-spacing:0.1em; text-transform:uppercase; padding:1.7mm 3mm;
+  }
+  table.rooms th.r, table.rooms td.r{ text-align:right; }
+  table.rooms td{ padding:1.35mm 3mm; border-bottom:0.5pt solid #ECE6D6; color:#3a4030; }
+  table.rooms tr:last-child td{ border-bottom:0; }
+  table.rooms tr.sub td{
+    background:#F3EFE2; font-weight:600; color:var(--dark); border-top:1pt solid var(--gold);
+  }
+  .roomname b{ color:var(--ink); font-weight:600; }
+  .roomname span{ display:block; font-size:7.1pt; color:var(--muted); }
+
+  .checks{ width:100%; border-collapse:collapse; margin-top:1mm; }
+  .checks td{
+    width:33.33%; padding:2.2mm 2mm 2.2mm 7mm; position:relative; font-size:9pt; color:#3c4233; vertical-align:top;
+  }
+  .checks td::before{
+    content:"✓"; position:absolute; left:1mm; top:2mm; color:var(--gold-deep); font-weight:700; font-size:9.5pt;
+  }
+  .checks.two td{ width:50%; }
+
+  .pill{
+    display:inline-block; background:#EFEAD9; color:var(--brown); border-radius:20pt;
+    font-size:7.6pt; letter-spacing:0.08em; padding:1.4mm 3.2mm; font-weight:600; text-transform:uppercase;
+  }
+
+  /* commercial */
+  table.bill{ width:100%; border-collapse:collapse; font-size:10pt; margin-top:1mm; }
+  table.bill td{ padding:3.2mm 4mm; border-bottom:0.6pt solid #ECE6D6; }
+  table.bill td.amt{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--ink); }
+  table.bill td.lbl{ color:#3a4030; }
+  table.bill tr.subtot td{ background:#F3EFE2; font-weight:600; color:var(--dark); border-top:1pt solid #E0D6BC; }
+  table.bill tr.gst td{ color:var(--muted); font-size:9.2pt; }
+  table.bill tr.grand td{
+    background:var(--deep); color:#fff; font-size:13pt; font-family:'Lora',serif; font-weight:600; padding:4.6mm 4mm;
+  }
+  table.bill tr.grand td.amt{ color:var(--gold); }
+  .pp{
+    margin-top:6mm; background:var(--gold); border-radius:4mm; padding:5.5mm 6mm;
+    display:flex; align-items:center; justify-content:space-between; break-inside:avoid;
+  }
+  .pp .ppl{ font-family:'Lora',serif; font-size:11.5pt; color:var(--deep); font-weight:600; }
+  .pp .ppl span{ display:block; font-family:'Poppins'; font-size:8pt; font-weight:500; color:#5a4d1e; letter-spacing:0.04em; text-transform:uppercase; }
+  .pp .ppv{ font-family:'Lora',serif; font-size:25pt; color:var(--deep); font-weight:700; }
+  .pp .ppv small{ font-size:10pt; font-weight:500; }
+
+  .incl{ margin-top:7mm; background:var(--cream); border-radius:4mm; padding:6.5mm 7mm; break-inside:avoid; }
+  .incl h4{ margin:0 0 4mm; font-size:8pt; letter-spacing:0.2em; text-transform:uppercase; color:var(--green); font-weight:700; }
+  .incl ul{ margin:0; padding:0; list-style:none; column-count:1; }
+  .incl li{ position:relative; padding:1.8mm 0 1.8mm 7mm; font-size:9.2pt; color:#3a4030; border-bottom:0.5pt solid #ECE3CC; }
+  .incl li:last-child{ border-bottom:0; }
+  .incl li::before{ content:"✓"; position:absolute; left:0; top:1.8mm; color:var(--gold-deep); font-weight:700; }
+
+  /* terms / closing */
+  .terms{ list-style:none; margin:0; padding:0; }
+  .terms li{ position:relative; padding:2.6mm 0 2.6mm 9mm; font-size:9.4pt; color:#3a4030; border-bottom:0.5pt solid #ECE6D6; }
+  .terms li:last-child{ border-bottom:0; }
+  .terms li b{ color:var(--dark); }
+  .terms li .tn{
+    position:absolute; left:0; top:2.4mm; width:6mm; height:6mm; background:var(--green); color:#fff;
+    border-radius:50%; font-size:7.6pt; font-weight:700; text-align:center; line-height:6mm;
+  }
+  .closing-quote{
+    background:var(--deep); color:#F1EEDF; border-radius:4mm; padding:9mm 10mm; margin-top:2mm; break-inside:avoid;
+  }
+  .closing-quote p{ font-family:'Lora',serif; font-size:12.5pt; line-height:1.55; color:#F4F1E4; }
+  .closing-quote p.small{ font-family:'Poppins'; font-size:9.4pt; color:#CFE0D1; line-height:1.5; }
+  .sign{ margin-top:7mm; }
+  .sign .sr{ font-size:9.4pt; color:var(--muted); margin:0 0 1mm; }
+  .sign .sn{ font-family:'Lora',serif; font-size:13pt; color:var(--dark); font-weight:600; }
+  .sign .so{ font-size:9pt; color:var(--brown); }
+
+  .lockup{
+    margin-top:9mm; padding-top:5mm; border-top:1pt solid #E5DcC6; text-align:center;
+  }
+  .lockup .l1{ font-size:7.8pt; letter-spacing:0.22em; text-transform:uppercase; color:var(--charcoal); font-weight:600; }
+  .lockup .l1 .gd{ color:var(--champgold); }
+  .lockup .l2{ font-family:'Lora',serif; font-style:italic; font-size:11pt; color:var(--green); margin-top:2mm; }
+
+  .callout-distance{
+    display:flex; gap:4mm; margin-top:6mm; flex-wrap:wrap;
+  }
+  .callout-distance.row4{ flex-wrap:nowrap; gap:3.5mm; }
+  .chip{
+    flex:1 1 0; min-width:0; background:#fff; border:0.7pt solid #E4DAC2; border-radius:3mm; padding:4mm 4.5mm; break-inside:avoid;
+  }
+  .chip .cn{ font-family:'Lora',serif; font-size:16pt; color:var(--green); font-weight:700; }
+  .chip .cl{ font-size:7.8pt; letter-spacing:0.08em; text-transform:uppercase; color:var(--brown); margin-top:1mm; }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="cover-top">
+    <p class="eyebrow">An InfraTech Property · Champions Group</p>
+    <p class="wordmark">Champions Ranch</p>
+    <div class="cover-rule"></div>
+  </div>
+
+  <div class="hero-head">
+    <h1>The offsite they&rsquo;ll<br>actually talk about.</h1>
+    <p class="hero-sub">Corporate Stay &amp; Adventure Retreat &middot; 150 Guests</p>
+    <p class="hero-tag">&ldquo;Time worth spending.&rdquo;</p>
+  </div>
+
+  <!-- landscape scene -->
+  <svg class="scene" viewBox="0 0 1000 460" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FBF7EC"/>
+        <stop offset="1" stop-color="#F1E7CF"/>
+      </linearGradient>
+      <linearGradient id="h3" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3C8C4C"/>
+        <stop offset="1" stop-color="#2F7D3F"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="1000" height="460" fill="url(#sky)"/>
+    <circle cx="795" cy="150" r="64" fill="#D4AF37" opacity="0.92"/>
+    <circle cx="795" cy="150" r="92" fill="#D4AF37" opacity="0.16"/>
+    <!-- far hills -->
+    <path d="M0 300 Q170 232 360 280 T720 268 T1000 286 V460 H0 Z" fill="#1A5C2A" opacity="0.92"/>
+    <!-- mid hill -->
+    <path d="M0 348 Q230 286 470 332 T1000 330 V460 H0 Z" fill="#256A33"/>
+    <!-- front hill -->
+    <path d="M0 392 Q260 348 540 384 T1000 380 V460 H0 Z" fill="url(#h3)"/>
+    <!-- trees -->
+    <g fill="#143F1E">
+      <path d="M150 300 l16 -44 l16 44 z"/><rect x="161" y="298" width="5" height="14"/>
+      <path d="M186 304 l13 -36 l13 36 z"/><rect x="195" y="302" width="4" height="12"/>
+    </g>
+    <!-- lone tree right -->
+    <g>
+      <rect x="660" y="300" width="9" height="34" fill="#6B4F2E"/>
+      <circle cx="664" cy="292" r="26" fill="#256A33"/>
+      <circle cx="650" cy="300" r="18" fill="#2F7D3F"/>
+      <circle cx="680" cy="300" r="18" fill="#1A5C2A"/>
+    </g>
+    <!-- fence -->
+    <g stroke="#8B6F47" stroke-width="5" stroke-linecap="round">
+      <line x1="40" y1="360" x2="40" y2="406"/>
+      <line x1="120" y1="356" x2="120" y2="404"/>
+      <line x1="200" y1="360" x2="200" y2="408"/>
+      <line x1="280" y1="358" x2="280" y2="406"/>
+      <line x1="20" y1="372" x2="300" y2="370"/>
+      <line x1="20" y1="390" x2="300" y2="388"/>
+    </g>
+    <!-- horse silhouette -->
+    <g fill="#143F1E" transform="translate(430 320) scale(1.15)">
+      <path d="M8 60 L8 34 Q10 22 22 20 L40 18 Q46 10 56 12 Q60 4 64 12 L66 18 Q78 20 86 30 L96 30 L88 40 L86 56 L80 56 L80 42 Q72 48 60 48 L60 60 L54 60 L54 48 L34 48 L34 60 L28 60 L28 46 Q20 44 16 38 L16 60 Z"/>
+    </g>
+    <!-- birds -->
+    <g stroke="#1A5C2A" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7">
+      <path d="M250 120 q10 -9 20 0 q10 -9 20 0"/>
+      <path d="M300 150 q8 -7 16 0 q8 -7 16 0"/>
+    </g>
+  </svg>
+
+  <div class="cover-meta">
+    <p class="mh">Proposal Snapshot</p>
+        <table class="meta-grid">
+      <tr>
+        <td><span class="k">Group Size</span><span class="v big">150 Guests</span></td>
+        <td><span class="k">Stay Format</span><span class="v">One Night &middot; Two Days</span></td>
+        <td><span class="k">Prepared By</span><span class="v">Champions Ranch Team</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="cover-foot">
+    <span>Champions Ranch &middot; Sarjapur Road, Bangalore</span>
+    <span>30 Minutes From Your Desk</span>
+  </div>
+</div>
+
+<!-- ================= NOTE ================= -->
+<div class="sheet">
+  <div class="kicker">
+    <svg class="hs" viewBox="0 0 40 40"><path d="M20 4 C10 4 4 12 4 22 C4 31 11 36 11 36 L15 31 C15 31 10 28 10 21 C10 15 14 10 20 10 C26 10 30 15 30 21 C30 28 25 31 25 31 L29 36 C29 36 36 31 36 22 C36 12 30 4 20 4 Z" fill="#D4AF37"/></svg>
+    <span class="kt">A note before the numbers</span>
+  </div>
+  <h2 class="section">Not a resort. Something you have to feel.</h2>
+  <div class="section-rule"></div>
+
+  <div class="note-card">
+    <p class="greet">Thank you for considering Champions Ranch for your team&rsquo;s stay.</p>
+    <p class="lead">We are glad you reached out, and we have put together a plan we think will land well with your group of 150.</p>
+    <p>Here is what we are not. We are not a luxury resort. We are not a theme park. Champions Ranch is a working experience center on the edge of Bangalore, 30 minutes from Sarjapur Road, where corporate teams come to step back, breathe, and spend time that actually matters. Horses, open fields, wellness, fire, farm-table meals, real conversation. No projectors. No forced icebreakers.</p>
+    <p>What follows is a one-night, two-day plan built around your group size, with accommodation, full board, and the complete adventure menu. The commercials are clean and itemised. The experience is designed for your team to unplug, connect, and leave changed.</p>
+
+    <div class="pos-wrap">
+      <div class="pos are">
+        <h4>What you get</h4>
+        <ul>
+          <li>Open sky, red earth, and room to breathe</li>
+          <li>Horses, fire, water, and the full activity menu</li>
+          <li>Farm-table meals, served warm and unhurried</li>
+          <li>A team that leaves talking differently</li>
+        </ul>
+      </div>
+      <div class="pos arenot">
+        <h4>What you skip</h4>
+        <ul>
+          <li>Conference rooms and projector cables</li>
+          <li>Forced icebreakers and trust falls</li>
+          <li>Resort gloss with nothing underneath</li>
+          <li>The offsite no one remembers by Monday</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-distance row4">
+    <div class="chip"><div class="cn">30 min</div><div class="cl">From Sarjapur Road</div></div>
+    <div class="chip"><div class="cn">150</div><div class="cl">Guests Hosted Together</div></div>
+    <div class="chip"><div class="cn">15+</div><div class="cl">Activities On The Menu</div></div>
+    <div class="chip"><div class="cn">1N / 2D</div><div class="cl">Full-Board Stay</div></div>
+  </div>
+</div>
+
+<!-- ================= ACCOMMODATION ================= -->
+<div class="sheet">
+  <div class="kicker">
+    <svg class="hs" viewBox="0 0 40 40"><path d="M20 6 L34 17 L34 34 L24 34 L24 24 L16 24 L16 34 L6 34 L6 17 Z" fill="#D4AF37"/></svg>
+    <span class="kt">The Experience · 01</span>
+  </div>
+  <h2 class="section">Where your team stays</h2>
+  <div class="section-rule"></div>
+
+  <div class="xcard">
+    <div class="xhead">
+      <span class="xt">On-property cottages</span>
+      <span class="xp">Approx. 50 guests on-site<b>&#8377; 80,995</b></span>
+    </div>
+    <div class="xbody">
+      <p>Stay across themed cottages on the Ranch, each named in keeping with our nature and animal heritage, so your team picks character along with comfort. A mix of AC and rustic mud-house stays within the open property.</p>
+      <table class="rooms">
+        <tr><th>Cottage</th><th class="r">Rooms</th><th class="r">Guests</th><th class="r">Amount (&#8377;)</th></tr>
+        <tr><td class="roomname"><b>Sabha Nivas</b> <span>Stage Room · 3 sharing · AC</span></td><td class="r">4</td><td class="r">12</td><td class="r num">18,000</td></tr>
+        <tr><td class="roomname"><b>Prithvi Nivas</b> <span>Mud House · 3 sharing</span></td><td class="r">5</td><td class="r">15</td><td class="r num">22,500</td></tr>
+        <tr><td class="roomname"><b>Dimbh Nivas</b> <span>Eagle House · 4 sharing · AC</span></td><td class="r">1</td><td class="r">5</td><td class="r num">7,999</td></tr>
+        <tr><td class="roomname"><b>Shvana Nivas</b> <span>Rottweiler House · 3 sharing</span></td><td class="r">1</td><td class="r">3</td><td class="r num">6,999</td></tr>
+        <tr><td class="roomname"><b>Ashwa Nivas</b> <span>Horse House · 4 sharing</span></td><td class="r">1</td><td class="r">4</td><td class="r num">8,999</td></tr>
+        <tr><td class="roomname"><b>Container Stay</b> <span>4 sharing</span></td><td class="r">1</td><td class="r">5</td><td class="r num">4,999</td></tr>
+        <tr><td class="roomname"><b>Glass House</b> <span>5 sharing</span></td><td class="r">1</td><td class="r">5</td><td class="r num">6,999</td></tr>
+        <tr><td class="roomname"><b>Elephant House</b> <span>3 sharing</span></td><td class="r">1</td><td class="r">3</td><td class="r num">4,500</td></tr>
+        <tr class="sub"><td>On-property subtotal · 15 rooms</td><td class="r">15</td><td class="r">~50</td><td class="r num">80,995</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="xcard">
+    <div class="xhead alt">
+      <span class="xt">Partner accommodation support</span>
+      <span class="xp">100 guests · executive rooms<b>&#8377; 1,99,235</b></span>
+    </div>
+    <div class="xbody">
+      <p>To host the wider group comfortably, we extend our trusted hospitality partner network nearby. The remaining 100 guests stay in premium executive rooms with breakfast included, close to the Ranch, so the full group of 150 stays together within easy reach. We coordinate the stay end to end.</p>
+      <table class="checks two">
+        <tr><td>Premium executive rooms</td><td>Breakfast included</td></tr>
+        <tr><td>Minutes from the Ranch</td><td>End-to-end coordination by our team</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ================= DINING + ADVENTURE ================= -->
+<div class="sheet">
+  <div class="kicker">
+    <svg class="hs" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="none" stroke="#D4AF37" stroke-width="3"/><path d="M20 9 L20 31 M9 20 L31 20" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/></svg>
+    <span class="kt">The Experience · 02</span>
+  </div>
+  <h2 class="section">Dining &amp; adventure</h2>
+  <div class="section-rule"></div>
+
+  <div class="xcard">
+    <div class="xhead">
+      <span class="xt">Dining at the Ranch</span>
+      <span class="xp">150 guests &times; &#8377;1,500<b>&#8377; 2,25,000</b></span>
+    </div>
+    <div class="xbody">
+      <p>A specially curated buffet, both vegetarian and non-vegetarian, served farm-table style. Full board across the one-night stay. A complete veg and non-veg menu with salads, starters, mains, breads, and desserts is shared separately for your selection.</p>
+      <table class="checks">
+        <tr><td>Welcome drinks on arrival</td><td>Buffet lunch</td><td>Buffet dinner</td></tr>
+        <tr><td>Hi-tea with snacks</td><td>Breakfast next morning</td><td>Veg &amp; non-veg spread</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="xcard">
+    <div class="xhead alt">
+      <span class="xt">Adventure &amp; recreation</span>
+      <span class="xp">150 guests &times; &#8377;1,000<b>&#8377; 1,50,000</b></span>
+    </div>
+    <div class="xbody">
+      <p>The full Ranch activity menu is open to your group across the stay. Horses, height, ground games, water, fire. Choose your own pace, with equipment and supervision throughout.</p>
+      <table class="checks">
+        <tr><td>Horse riding</td><td>Zip lining</td><td>Sky cycling</td></tr>
+        <tr><td>Target shooting</td><td>Rock climbing</td><td>Swimming pool access</td></tr>
+        <tr><td>Music &amp; bonfire</td><td>Cricket arena</td><td>Football</td></tr>
+        <tr><td>Billiards</td><td>Basketball</td><td>Table tennis</td></tr>
+        <tr><td>Carrom</td><td>Chess</td><td>Cards &amp; darts</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:5mm"><span class="pill">Indoor &amp; outdoor games · equipment &amp; supervision included</span></div>
+</div>
+
+<!-- ================= COMMERCIALS ================= -->
+<div class="sheet">
+  <div class="kicker">
+    <svg class="hs" viewBox="0 0 40 40"><path d="M20 4 C10 4 4 12 4 22 C4 31 11 36 11 36 L15 31 C15 31 10 28 10 21 C10 15 14 10 20 10 C26 10 30 15 30 21 C30 28 25 31 25 31 L29 36 C29 36 36 31 36 22 C36 12 30 4 20 4 Z" fill="#D4AF37"/></svg>
+    <span class="kt">The Commercials</span>
+  </div>
+  <h2 class="section">Clean numbers, nothing hidden</h2>
+  <div class="section-rule"></div>
+
+  <table class="bill">
+    <tr><td class="lbl">Accommodation &middot; on-property cottages</td><td class="amt num">&#8377; 80,995</td></tr>
+    <tr><td class="lbl">Food package &middot; full board, 150 guests</td><td class="amt num">&#8377; 2,25,000</td></tr>
+    <tr><td class="lbl">Adventure activity package &middot; 150 guests</td><td class="amt num">&#8377; 1,50,000</td></tr>
+    <tr><td class="lbl">Partner accommodation support &middot; 100 guests</td><td class="amt num">&#8377; 1,99,235</td></tr>
+    <tr class="subtot"><td>Sub-total</td><td class="amt num">&#8377; 6,55,230</td></tr>
+    <tr class="gst"><td>GST @ 18%</td><td class="amt num">&#8377; 1,17,941</td></tr>
+    <tr class="grand"><td>Grand Total</td><td class="amt num">&#8377; 7,73,171</td></tr>
+  </table>
+
+  <div class="pp">
+    <div class="ppl">All-in, per guest<span>150 guests · inclusive of GST</span></div>
+    <div class="ppv">&#8377;5,154<small> / pax</small></div>
+  </div>
+
+  <div class="incl">
+    <h4>What is included</h4>
+    <ul>
+      <li>One night accommodation across themed cottages on-property, plus partner premium executive rooms for the wider group</li>
+      <li>Welcome drinks, buffet lunch, buffet dinner, hi-tea with snacks, and breakfast (full board)</li>
+      <li>Complete adventure and recreation package across the full activity menu</li>
+      <li>Indoor and outdoor games with equipment and supervision</li>
+      <li>Full access to Ranch amenities: themed cottages, in-house dining, swimming pool, bonfire, adventure circuits, open spaces, farm walkthroughs</li>
+      <li>Event coordination support throughout the stay</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================= TERMS + CLOSING ================= -->
+<div class="sheet">
+  <div class="kicker">
+    <svg class="hs" viewBox="0 0 40 40"><path d="M20 4 C10 4 4 12 4 22 C4 31 11 36 11 36 L15 31 C15 31 10 28 10 21 C10 15 14 10 20 10 C26 10 30 15 30 21 C30 28 25 31 25 31 L29 36 C29 36 36 31 36 22 C36 12 30 4 20 4 Z" fill="#D4AF37"/></svg>
+    <span class="kt">Terms &amp; next steps</span>
+  </div>
+  <h2 class="section">Simple to confirm</h2>
+  <div class="section-rule"></div>
+
+  <ul class="terms">
+    <li><span class="tn">1</span><b>Validity.</b> This proposal holds for 30 days from the date of issue. Pricing is reviewed after that against the season and your final dates.</li>
+    <li><span class="tn">2</span><b>Pricing.</b> All figures are in Indian Rupees and itemised above. GST at 18% is shown separately. Per-guest cost is based on the full group of 150.</li>
+    <li><span class="tn">3</span><b>Headcount &amp; menu.</b> Final headcount, dates, and menu selections are confirmed ahead of arrival. We will share the full veg and non-veg menu for selection.</li>
+    <li><span class="tn">4</span><b>Make it yours.</b> Anything here can be reshaped: capacity, food, activities, evening programming. We will make it fit your team.</li>
+    <li><span class="tn">5</span><b>To confirm.</b> Reach out and our team will hold your dates and walk you through booking and advance details.</li>
+  </ul>
+
+  <div class="closing-quote">
+    <p>This is what an offsite looks like when no one is performing. Teams arrive in the evening, settle in around the fire, and by the next afternoon something has shifted. People talk differently. They listen longer. They leave changed.</p>
+    <p class="small">If anything here needs reshaping, we will make it fit your team. Looking forward to hosting you at Champions Ranch.</p>
+  </div>
+
+  <div class="sign">
+    <p class="sr">Warm regards,</p>
+    <p class="sn">Champions Ranch Team</p>
+    <p class="so">Champions Ranch &middot; Sarjapur Road, Bangalore</p>
+  </div>
+
+  <div class="lockup">
+    <div class="l1">Champions Ranch &middot; An InfraTech Property &middot; A <span class="gd">Champions Group</span> Experience</div>
+    <div class="l2">Time Worth Spending.</div>
+  </div>
+</div>
+
+</body>
+</html>

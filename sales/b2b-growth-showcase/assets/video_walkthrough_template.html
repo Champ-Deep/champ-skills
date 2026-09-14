@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>10 Ways [CLIENT_NAME] Can Use B2B Data — Walkthrough</title>
+<style>
+  :root{
+    --primary:#6D08BE; --deep:#3D0570; --accent:#FFB703; --alt:#E8033A;
+    --ink:#1A1030; --gray:#6B6478; --lightbg:#F7F5FC; --white:#FFFFFF; --border:#E1DCEF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0; height:100%; background:#0d0616; font-family:'Segoe UI',Arial,sans-serif; overflow:hidden;}
+  .stage{position:relative; width:100vw; height:100vh; max-height:100vh;}
+  .frame{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+    padding:6vw 8vw; opacity:0; transform:translateY(16px);
+    transition:opacity .6s ease, transform .6s ease; background:var(--white);
+  }
+  .frame.dark{background:linear-gradient(135deg,var(--deep),#1A1030); color:#fff;}
+  .frame.active{opacity:1; transform:translateY(0); z-index:2;}
+  .eyebrow{color:var(--primary); font-weight:700; letter-spacing:2px; font-size:.8vw; text-transform:uppercase; margin-bottom:.6vw;}
+  .frame.dark .eyebrow{color:var(--accent);}
+  .num{font-size:5vw; font-weight:800; color:var(--accent); line-height:1;}
+  h1{font-size:2.6vw; margin:.4vw 0 1vw; color:var(--ink); font-weight:800; line-height:1.1;}
+  .frame.dark h1{color:#fff;}
+  p.desc{font-size:1.15vw; color:var(--gray); max-width:46vw; line-height:1.5;}
+  .frame.dark p.desc{color:#D8CDEF;}
+  .card{
+    margin-top:2vw; background:var(--lightbg); border:1px solid var(--border); border-radius:.6vw;
+    padding:1.4vw 1.8vw; max-width:60vw;
+  }
+  .card b{color:var(--deep);}
+  .progress{position:absolute; bottom:0; left:0; height:5px; background:var(--accent); width:0%; z-index:5; transition:width linear;}
+  .dots{position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:5;}
+  .dot{width:8px; height:8px; border-radius:50%; background:#ccc;}
+  .dot.on{background:var(--primary);}
+  .badge{position:absolute; top:24px; right:32px; font-size:.8vw; color:var(--gray); font-weight:600; z-index:5;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="progress" id="progress"></div>
+  <div class="badge">LakeB2B · [CLIENT_NAME] Growth Showcase</div>
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+/* ---- EDIT THESE to match config.json for the client ---- */
+const CLIENT = "[CLIENT_NAME]";
+const SLIDES = [
+  { dark:true, eyebrow:"LakeB2B · Enabling Growth", title:`10 Ways Our B2B Data\nDrives Growth for ${CLIENT}`, desc:"A personalized data, campaign, and market-expansion blueprint." },
+  { num:"01", title:"Email Campaigns", desc:"A ready-to-send, personalized outreach template built from our contact and firmographic layers.", card:"<b>Sample subject:</b> Reducing operating costs at {{Company Name}}" },
+  { num:"02", title:"Social Campaign Outreach", desc:"LinkedIn and Meta creative built around lookalike audiences from our firmographic and intent data.", card:"<b>LinkedIn:</b> \"Is " + CLIENT + " losing revenue to disconnected data?\"" },
+  { num:"03", title:"Customer Acquisition — Telemarketing", desc:"An AI voice agent script generated from verified contact and firmographic data.", card:"<b>AI Agent:</b> \"Hi, calling on behalf of " + CLIENT + "...\"" },
+  { num:"04", title:"SEO Optimization / AEO", desc:"Where competitors are visible in Google and ChatGPT — and where " + CLIENT + " is missing.", card:"<b>Gap:</b> Competitors cited. " + CLIENT + " — not mentioned." },
+  { num:"05", title:"Talent Acquisition / Recruitment", desc:"Reaching experienced passive candidates who aren't on job boards at all.", card:"<b>85%</b> of great candidates aren't actively applying anywhere." },
+  { num:"06", title:"KOL & Buyer Committee Identification", desc:"Mapping who actually influences and signs off on a deal.", card:"Economic Buyer → Technical Evaluator → Champion → KOL/Influencer" },
+  { num:"07", title:"Data & Industry Analysis", desc:"The input-file and ICP analysis becomes a deliverable in itself.", card:"Match rate, ICP fit, and whitespace vs. TAM — quantified." },
+  { num:"08", title:"Company Org Chart / Profiles", desc:"Full account intelligence — org structure and role profiles.", card:"Reps walk in already knowing the map." },
+  { num:"09", title:"Powering LLM & API Infrastructure", desc:"The same dataset powers structured API and LLM/RAG pipelines.", card:"POST /v1/enrich → real-time firmographic + intent data" },
+  { num:"10", title:"A Platform Connecting You to Your TAM", desc:"A branded, always-on portal — not a one-time file drop.", card:CLIENT + " Connect — self-serve access to your total addressable market." },
+  { dark:true, title:"Ten channels. One dataset.", desc:"Every use case draws from the same verified B2B data reservoir, personalized for " + CLIENT + "." }
+];
+/* Timing per slide, ms. Tune to taste before recording. */
+const DURATION = 5200;
+
+const stage = document.getElementById("stage");
+const progressEl = document.getElementById("progress");
+const dotsEl = document.getElementById("dots");
+let idx = 0;
+let frames = [];
+
+SLIDES.forEach((sl, i) => {
+  const f = document.createElement("div");
+  f.className = "frame" + (sl.dark ? " dark" : "");
+  f.innerHTML = `
+    ${sl.eyebrow ? `<div class="eyebrow">${sl.eyebrow}</div>` : ""}
+    ${sl.num ? `<div class="num">${sl.num}</div>` : ""}
+    <h1>${(sl.title || "").replace(/\n/g, "<br>")}</h1>
+    <p class="desc">${sl.desc || ""}</p>
+    ${sl.card ? `<div class="card">${sl.card}</div>` : ""}
+  `;
+  stage.appendChild(f);
+  frames.push(f);
+  const d = document.createElement("div");
+  d.className = "dot";
+  dotsEl.appendChild(d);
+});
+
+function show(i) {
+  frames.forEach((f, j) => f.classList.toggle("active", j === i));
+  [...dotsEl.children].forEach((d, j) => d.classList.toggle("on", j === i));
+  progressEl.style.transition = "none";
+  progressEl.style.width = "0%";
+  requestAnimationFrame(() => {
+    progressEl.style.transition = `width ${DURATION}ms linear`;
+    progressEl.style.width = "100%";
+  });
+}
+
+function tick() {
+  show(idx);
+  idx = (idx + 1) % frames.length;
+  setTimeout(tick, DURATION);
+}
+tick();
+
+/* Manual controls: click left/right half of screen to step */
+stage.addEventListener("click", (e) => {
+  const half = window.innerWidth / 2;
+  idx = e.clientX < half ? (idx - 2 + frames.length) % frames.length : idx;
+  show(idx);
+  idx = (idx + 1) % frames.length;
+});
+</script>
+</body>
+</html>

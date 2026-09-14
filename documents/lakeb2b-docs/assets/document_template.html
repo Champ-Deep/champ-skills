@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LakeB2B Document</title>
+<!--
+  LakeB2B document template.  Category: the B2B growth stack.  Promise: ENABLING GROWTH.
+  Brand: Purple #6D08BE (anchor 60%) / Gold #FFB703 / Red #E8033A, with magenta, teal,
+  orange, navy as secondary accents.  Fonts: Montserrat (headings/body) + JetBrains Mono
+  (labels/data), with Poppins / DejaVu Mono fallbacks baked in.
+  Build:  python ../scripts/build_pdf.py document_template.html out.pdf
+  Swap the hero line, snapshot, and body sections for new documents.
+  See references/components.md for blocks and references/brand-voice.md for tone.
+-->
+<style>
+  @page {
+    size: A4;
+    margin: 15mm 15mm 16mm 15mm;
+    @bottom-left {
+      content: "LAKEB2B  ·  THE B2B GROWTH STACK";
+      font-family: 'JetBrains Mono','DejaVu Sans Mono',monospace;
+      font-size: 6.8pt; letter-spacing: 0.12em; color: #8E86A6;
+    }
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-family: 'JetBrains Mono','DejaVu Sans Mono',monospace;
+      font-size: 6.8pt; color: #B3ADC4;
+    }
+  }
+  @page cover { margin: 0; @bottom-left { content: ""; } @bottom-right { content: ""; } }
+
+  :root{
+    --purple:#6D08BE; --purple-deep:#46067E; --purple-ink:#2C0A4A;
+    --navy:#011A6B; --gold:#FFB703; --red:#E8033A;
+    --magenta:#DD1286; --teal:#0095A0; --orange:#FF6903; --lavender:#7A76DA;
+    --ink:#1C1430; --muted:#6B6480; --line:#E7E2F0;
+    --wash:#F4ECFD; --paper:#FFFFFF;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:'Montserrat','Poppins','DejaVu Sans',sans-serif;
+    color:var(--ink); font-size:10pt; line-height:1.5; background:var(--paper);
+  }
+  h1,h2,h3{ font-family:'Montserrat','Poppins',sans-serif; font-weight:800; }
+  .mono{ font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; }
+  .num{ font-variant-numeric:tabular-nums; }
+  p{ margin:0 0 8pt; }
+  .lead{ font-size:10.5pt; color:#382f4d; }
+
+  /* ---------------- COVER ---------------- */
+  .cover{ page:cover; width:210mm; height:297mm; position:relative; overflow:hidden; background:var(--purple-deep); }
+  .cover-bg{ position:absolute; inset:0; width:210mm; height:297mm; z-index:1; }
+  .cover-inner{ position:absolute; inset:0; z-index:3; padding:20mm 18mm; display:flex; flex-direction:column; height:297mm; }
+
+  .brandrow{ display:flex; align-items:center; gap:4mm; }
+  .brandmark{ width:11mm; height:11mm; }
+  .brandname{ font-family:'Montserrat','Poppins',sans-serif; font-weight:800; font-size:17pt; color:#fff; letter-spacing:0.01em; }
+  .brandname b{ color:var(--gold); }
+  .cover-eyebrow{
+    margin-top:14mm; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace;
+    font-size:8pt; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold);
+  }
+  .cover-h1{
+    margin:5mm 0 0; font-size:37pt; line-height:1.05; color:#fff; font-weight:800; letter-spacing:-0.015em; max-width:165mm;
+  }
+  .cover-h1 .grad{ color:var(--gold); }
+  .cover-sub{ margin:7mm 0 0; font-size:11.5pt; color:#D9CEF1; max-width:150mm; line-height:1.55; }
+  .cover-promise{
+    margin-top:9mm; display:inline-block; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace;
+    font-size:9pt; letter-spacing:0.28em; color:#0E0327; background:var(--gold);
+    padding:2.4mm 5mm; border-radius:40pt; font-weight:700;
+  }
+  .spacer{ flex:1; }
+
+  .snap{
+    border:1pt solid rgba(255,255,255,0.16); border-radius:5mm; padding:7mm 7mm 6mm;
+    background:rgba(255,255,255,0.05);
+  }
+  .snap .sh{
+    font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.2pt; letter-spacing:0.24em;
+    text-transform:uppercase; color:var(--gold); margin:0 0 4mm;
+  }
+  .snap-grid{ width:100%; border-collapse:collapse; }
+  .snap-grid td{ vertical-align:top; padding:2mm 3mm 2mm 0; width:33.33%; border:0; }
+  .snap-grid .k{ display:block; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:6.8pt; letter-spacing:0.16em; text-transform:uppercase; color:#B9A9E4; margin-bottom:1.4mm; }
+  .snap-grid .v{ display:block; color:#fff; font-size:10pt; font-weight:600; line-height:1.3; }
+  .snap-grid .v.big{ font-size:11.5pt; }
+  .cover-foot{
+    margin-top:6mm; display:flex; justify-content:space-between;
+    font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7pt; letter-spacing:0.1em; color:#9A8FBE;
+  }
+
+  /* ---------------- SECTIONS ---------------- */
+  .sheet{ break-before:page; }
+  .kicker{ display:flex; align-items:center; gap:3mm; margin:0 0 3.5mm; }
+  .kdot{ width:7mm; height:7mm; border-radius:2mm; background:linear-gradient(135deg,var(--purple),var(--magenta)); flex:0 0 auto; }
+  .kt{ font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.6pt; letter-spacing:0.22em; text-transform:uppercase; color:var(--purple); font-weight:700; }
+  h2.section{ font-size:22pt; color:var(--purple-ink); margin:0 0 3mm; font-weight:800; line-height:1.08; letter-spacing:-0.01em; }
+  h2.section .grad{ color:var(--magenta); }
+  .rule{ height:3pt; width:26mm; border-radius:3pt; background:linear-gradient(90deg,var(--purple),var(--magenta) 60%,var(--gold)); margin:0 0 6mm; }
+
+  .intro{ background:var(--wash); border-radius:5mm; padding:8mm 9mm; border:1pt solid var(--line); }
+  .intro p{ font-size:10.5pt; color:#3a3152; }
+  .intro .big{ font-family:'Montserrat','Poppins',sans-serif; font-size:13pt; font-weight:700; color:var(--purple-ink); margin-bottom:4mm; line-height:1.4; }
+
+  /* positioning ladder */
+  .ladder{ margin-top:7mm; border:1pt solid var(--line); border-radius:5mm; overflow:hidden; }
+  .lrow{ display:flex; align-items:center; gap:5mm; padding:4mm 6mm; border-bottom:1pt solid var(--line); }
+  .lrow:last-child{ border-bottom:0; }
+  .lrow .llabel{
+    flex:0 0 32mm; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.4pt; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--purple); font-weight:700;
+  }
+  .lrow .lval{ font-size:10pt; color:#33294d; }
+  .lrow .lval b{ color:var(--purple-ink); }
+  .lrow.top{ background:linear-gradient(100deg,var(--purple),var(--purple-deep) 70%,var(--navy)); }
+  .lrow.top .llabel{ color:var(--gold); }
+  .lrow.top .lval{ color:#fff; font-size:12pt; font-weight:700; font-family:'Montserrat','Poppins',sans-serif; }
+
+  /* vertical cards 2x2 */
+  .vgrid{ display:flex; flex-wrap:wrap; gap:5mm; }
+  .vcard{ flex:1 1 calc(50% - 2.5mm); min-width:calc(50% - 2.5mm); border:1pt solid var(--line); border-radius:5mm; overflow:hidden; break-inside:avoid; }
+  .vhead{ padding:4.5mm 5.5mm; color:#fff; }
+  .vhead .vn{ font-family:'Montserrat','Poppins',sans-serif; font-weight:800; font-size:14pt; }
+  .vhead .vtag{ font-size:8.4pt; color:rgba(255,255,255,0.92); margin-top:1mm; }
+  .vbody{ padding:4.5mm 5.5mm 5mm; background:#fff; }
+  .vbody p{ font-size:9pt; color:#463c5e; margin:0; }
+  .v-sales .vhead{ background:linear-gradient(135deg,var(--purple),var(--purple-deep)); }
+  .v-mar .vhead{ background:linear-gradient(135deg,var(--magenta),#A50E68); }
+  .v-rec .vhead{ background:linear-gradient(135deg,var(--teal),#016E76); }
+  .v-growth .vhead{ background:linear-gradient(135deg,var(--orange),var(--red)); }
+  .v-sales{ border-top:3pt solid var(--purple); }
+  .v-mar{ border-top:3pt solid var(--magenta); }
+  .v-rec{ border-top:3pt solid var(--teal); }
+  .v-growth{ border-top:3pt solid var(--orange); }
+
+  /* flow */
+  .flow{ display:flex; align-items:stretch; gap:0; margin-top:2mm; }
+  .fstep{ flex:1; background:var(--wash); border:1pt solid var(--line); border-radius:4mm; padding:5mm 4mm; text-align:center; }
+  .fstep .fi{ font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:6.8pt; letter-spacing:0.14em; color:var(--purple); text-transform:uppercase; }
+  .fstep .ft{ font-family:'Montserrat','Poppins',sans-serif; font-weight:700; font-size:10pt; color:var(--purple-ink); margin-top:2mm; }
+  .farrow{ flex:0 0 8mm; display:flex; align-items:center; justify-content:center; color:var(--magenta); font-size:14pt; font-weight:700; }
+
+  /* chips */
+  .chips{ display:flex; gap:4mm; margin-top:6mm; }
+  .chip{ flex:1 1 0; min-width:0; border:1pt solid var(--line); border-radius:4mm; padding:4.5mm 4mm; background:#fff; box-shadow:0 3pt 10pt rgba(109,8,190,0.06); }
+  .chip .cn{ font-family:'Montserrat','Poppins',sans-serif; font-weight:800; font-size:13pt; color:var(--purple); }
+  .chip .cl{ font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:6.8pt; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-top:1.5mm; }
+
+  /* engagement table */
+  table.grid{ width:100%; border-collapse:collapse; margin-top:1mm; font-size:9.4pt; }
+  table.grid th{ text-align:left; background:var(--purple-ink); color:#fff; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.2pt; letter-spacing:0.1em; text-transform:uppercase; padding:3mm 4mm; }
+  table.grid td{ padding:3.4mm 4mm; border-bottom:1pt solid var(--line); vertical-align:top; color:#3a3152; }
+  table.grid tr:last-child td{ border-bottom:0; }
+  table.grid .mname{ font-weight:700; color:var(--purple-ink); font-family:'Montserrat','Poppins',sans-serif; }
+  table.grid .amt{ text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  table.grid tr.subtot td{ background:var(--wash); font-weight:700; color:var(--purple-ink); border-top:1.5pt solid var(--purple); }
+  table.grid tr.grand td{ background:linear-gradient(100deg,var(--purple),var(--purple-deep) 70%,var(--navy)); color:#fff; font-family:'Montserrat','Poppins',sans-serif; font-weight:800; font-size:12pt; padding:4.4mm 4mm; }
+  table.grid tr.grand td.amt{ color:var(--gold); }
+
+  .incl{ margin-top:7mm; background:var(--wash); border-radius:5mm; padding:6.5mm 7mm; border:1pt solid var(--line); break-inside:avoid; }
+  .incl h4{ margin:0 0 4mm; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.4pt; letter-spacing:0.16em; text-transform:uppercase; color:var(--purple); }
+  .incl ul{ margin:0; padding:0; list-style:none; }
+  .incl li{ position:relative; padding:1.9mm 0 1.9mm 7mm; font-size:9.4pt; color:#3a3152; border-bottom:1pt solid #EBE4F6; }
+  .incl li:last-child{ border-bottom:0; }
+  .incl li::before{ content:"▸"; position:absolute; left:1mm; top:1.9mm; color:var(--magenta); font-weight:700; }
+
+  ul.terms{ list-style:none; margin:0; padding:0; }
+  ul.terms li{ position:relative; padding:2.8mm 0 2.8mm 10mm; font-size:9.6pt; color:#3a3152; border-bottom:1pt solid var(--line); }
+  ul.terms li:last-child{ border-bottom:0; }
+  ul.terms li b{ color:var(--purple-ink); }
+  ul.terms li .tn{ position:absolute; left:0; top:2.4mm; width:6.5mm; height:6.5mm; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--magenta)); color:#fff; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.4pt; text-align:center; line-height:6.5mm; font-weight:700; }
+
+  .cta{
+    margin-top:8mm; border-radius:6mm; padding:10mm 9mm; text-align:center; position:relative; overflow:hidden;
+    background:linear-gradient(120deg,var(--purple) 0%,var(--purple-deep) 55%,var(--navy) 100%); color:#fff; break-inside:avoid;
+  }
+  .cta h3{ font-size:19pt; margin:0; color:#fff; font-weight:800; }
+  .cta p{ margin:3mm 0 0; color:#D9CEF1; font-size:10pt; }
+  .cta .promise{ margin-top:6mm; display:inline-block; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:8.4pt; letter-spacing:0.26em; color:#0E0327; background:var(--gold); padding:2.4mm 5mm; border-radius:40pt; font-weight:700; }
+
+  .lockup{ margin-top:9mm; padding-top:5mm; border-top:1pt solid var(--line); text-align:center; }
+  .lockup .l1{ font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:7.4pt; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); }
+  .lockup .l1 b{ color:var(--purple); }
+  .lockup .l2{ font-family:'Montserrat','Poppins',sans-serif; font-weight:800; font-size:12pt; color:var(--purple-ink); margin-top:2mm; letter-spacing:0.02em; }
+</style>
+</head>
+<body>
+
+<!-- ===================== COVER ===================== -->
+<div class="cover">
+  <svg class="cover-bg" viewBox="0 0 595 842" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#6D08BE"/>
+        <stop offset="0.55" stop-color="#46067E"/>
+        <stop offset="1" stop-color="#011A6B"/>
+      </linearGradient>
+      <linearGradient id="ln1" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#DD1286"/><stop offset="1" stop-color="#FF6903"/>
+      </linearGradient>
+      <linearGradient id="ln2" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#FFB703"/><stop offset="1" stop-color="#DD1286"/>
+      </linearGradient>
+    </defs>
+    <rect width="595" height="842" fill="url(#bg)"/>
+    <!-- faint grid -->
+    <g stroke="#FFFFFF" stroke-width="0.6" opacity="0.06">
+      <line x1="0" y1="120" x2="595" y2="120"/><line x1="0" y1="240" x2="595" y2="240"/>
+      <line x1="0" y1="360" x2="595" y2="360"/><line x1="0" y1="480" x2="595" y2="480"/>
+      <line x1="0" y1="600" x2="595" y2="600"/><line x1="0" y1="720" x2="595" y2="720"/>
+      <line x1="100" y1="0" x2="100" y2="842"/><line x1="200" y1="0" x2="200" y2="842"/>
+      <line x1="300" y1="0" x2="300" y2="842"/><line x1="400" y1="0" x2="400" y2="842"/>
+      <line x1="500" y1="0" x2="500" y2="842"/>
+    </g>
+    <!-- flowing curves -->
+    <path d="M-20 560 C 150 470, 320 690, 640 520" fill="none" stroke="url(#ln1)" stroke-width="2.4" opacity="0.85"/>
+    <path d="M-20 640 C 180 560, 360 770, 640 600" fill="none" stroke="url(#ln2)" stroke-width="1.8" opacity="0.6"/>
+    <path d="M-20 500 C 160 430, 330 600, 640 450" fill="none" stroke="#7A76DA" stroke-width="1.4" opacity="0.5"/>
+    <!-- data-dot network (lower right) -->
+    <g opacity="0.9">
+      <g stroke="#FFFFFF" stroke-width="0.7" opacity="0.32">
+        <line x1="430" y1="690" x2="500" y2="650"/><line x1="500" y1="650" x2="560" y2="700"/>
+        <line x1="430" y1="690" x2="470" y2="745"/><line x1="470" y1="745" x2="540" y2="760"/>
+        <line x1="500" y1="650" x2="470" y2="745"/><line x1="540" y1="760" x2="560" y2="700"/>
+      </g>
+      <circle cx="430" cy="690" r="5" fill="#FFB703"/>
+      <circle cx="500" cy="650" r="6" fill="#DD1286"/>
+      <circle cx="560" cy="700" r="4.5" fill="#FF6903"/>
+      <circle cx="470" cy="745" r="4.5" fill="#7A76DA"/>
+      <circle cx="540" cy="760" r="5.5" fill="#FFFFFF"/>
+    </g>
+  </svg>
+
+  <div class="cover-inner">
+    <div class="brandrow">
+      <svg class="brandmark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#FFFFFF" stroke-width="1.2" opacity="0.5">
+          <line x1="9" y1="14" x2="22" y2="9"/><line x1="22" y1="9" x2="31" y2="18"/>
+          <line x1="9" y1="14" x2="14" y2="27"/><line x1="14" y1="27" x2="27" y2="31"/>
+          <line x1="22" y1="9" x2="14" y2="27"/><line x1="27" y1="31" x2="31" y2="18"/>
+        </g>
+        <circle cx="9" cy="14" r="3.2" fill="#FFB703"/>
+        <circle cx="22" cy="9" r="3.6" fill="#DD1286"/>
+        <circle cx="31" cy="18" r="3" fill="#FF6903"/>
+        <circle cx="14" cy="27" r="3" fill="#7A76DA"/>
+        <circle cx="27" cy="31" r="3.4" fill="#FFFFFF"/>
+      </svg>
+      <span class="brandname">Lake<b>B2B</b></span>
+    </div>
+
+    <div class="cover-eyebrow">The B2B Growth Stack</div>
+    <h1 class="cover-h1">Turn deep data into <span class="grad">pipeline, campaigns, and talent.</span></h1>
+    <p class="cover-sub">One integrated stack across data intelligence, marketing technology, sales enablement, and talent. Built for enterprise revenue leaders who scale with intelligence, speed, and precision.</p>
+    <div class="cover-promise">ENABLING GROWTH</div>
+
+    <div class="spacer"></div>
+
+    <div class="snap">
+      <p class="sh">At a glance</p>
+      <table class="snap-grid">
+        <tr>
+          <td><span class="k">Document</span><span class="v big">Capabilities &amp; Engagement Overview</span></td>
+          <td><span class="k">Verticals</span><span class="v">SalesTech · MarTech · RecruitTech · GrowthTech</span></td>
+          <td><span class="k">Prepared by</span><span class="v">LakeB2B</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="cover-foot">
+      <span>LAKEB2B · ENABLING GROWTH</span>
+      <span>DEPTH · DATA · PARTNERSHIP</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== THE GROWTH STACK ===================== -->
+<div class="sheet">
+  <div class="kicker"><span class="kdot"></span><span class="kt">The Growth Stack</span></div>
+  <h2 class="section">One stack behind the <span class="grad">whole revenue motion.</span></h2>
+  <div class="rule"></div>
+
+  <div class="intro">
+    <p class="big">Every enterprise sits on a lake of data. Most cannot use it.</p>
+    <p>LakeB2B is the B2B growth stack that turns that depth into pipeline. One integrated platform, four verticals covering lead generation, campaigns, recruitment, and bespoke CXO strategy. We are not a vendor in one box. We are the infrastructure behind your full revenue motion, built on a single promise: ENABLING GROWTH.</p>
+  </div>
+
+  <div class="ladder">
+    <div class="lrow top"><span class="llabel">Category</span><span class="lval">The B2B growth stack</span></div>
+    <div class="lrow"><span class="llabel">Promise</span><span class="lval"><b>ENABLING GROWTH</b></span></div>
+    <div class="lrow"><span class="llabel">Proof</span><span class="lval">Four integrated verticals: SalesTech, MarTech, RecruitTech, GrowthTech</span></div>
+    <div class="lrow"><span class="llabel">Foundation</span><span class="lval">Deep data reservoirs, the depth of the lake</span></div>
+    <div class="lrow"><span class="llabel">Outcome</span><span class="lval">Pipeline, campaigns, talent, and CXO level strategy</span></div>
+  </div>
+</div>
+
+<!-- ===================== FOUR VERTICALS ===================== -->
+<div class="sheet">
+  <div class="kicker"><span class="kdot"></span><span class="kt">Four Integrated Verticals</span></div>
+  <h2 class="section">The full lifecycle, one platform.</h2>
+  <div class="rule"></div>
+
+  <div class="vgrid">
+    <div class="vcard v-sales">
+      <div class="vhead"><div class="vn">SalesTech</div><div class="vtag">Unleashing data-driven lead generation</div></div>
+      <div class="vbody"><p>Targeted prospect intelligence and enriched contact data that turn the reservoir into qualified pipeline for your sales teams.</p></div>
+    </div>
+    <div class="vcard v-mar">
+      <div class="vhead"><div class="vn">MarTech</div><div class="vtag">Elevating marketing strategies with data-driven insights</div></div>
+      <div class="vbody"><p>Audience, intent, and campaign infrastructure that make every marketing motion sharper, measurable, and built to convert.</p></div>
+    </div>
+    <div class="vcard v-rec">
+      <div class="vhead"><div class="vn">RecruitTech</div><div class="vtag">Revolutionizing recruitment processes</div></div>
+      <div class="vbody"><p>Talent data and sourcing intelligence that help enterprises find, reach, and hire the right people, faster.</p></div>
+    </div>
+    <div class="vcard v-growth">
+      <div class="vhead"><div class="vn">GrowthTech</div><div class="vtag">Bespoke solutions for CXOs</div></div>
+      <div class="vbody"><p>Custom, strategy-led engagements for revenue leaders who need the full stack shaped around a specific growth thesis.</p></div>
+    </div>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><div class="cn">Pipeline</div><div class="cl">Sales outcomes</div></div>
+    <div class="chip"><div class="cn">Campaigns</div><div class="cl">Marketing outcomes</div></div>
+    <div class="chip"><div class="cn">Talent</div><div class="cl">Hiring outcomes</div></div>
+    <div class="chip"><div class="cn">Strategy</div><div class="cl">CXO outcomes</div></div>
+  </div>
+</div>
+
+<!-- ===================== HOW THE STACK WORKS ===================== -->
+<div class="sheet">
+  <div class="kicker"><span class="kdot"></span><span class="kt">How The Stack Works</span></div>
+  <h2 class="section">Depth in. <span class="grad">Growth out.</span></h2>
+  <div class="rule"></div>
+
+  <div class="flow">
+    <div class="fstep"><div class="fi">01 · Source</div><div class="ft">Deep data reservoirs</div></div>
+    <div class="farrow">→</div>
+    <div class="fstep"><div class="fi">02 · Refine</div><div class="ft">Intelligence &amp; enrichment</div></div>
+    <div class="farrow">→</div>
+    <div class="fstep"><div class="fi">03 · Activate</div><div class="ft">Across four verticals</div></div>
+    <div class="farrow">→</div>
+    <div class="fstep"><div class="fi">04 · Result</div><div class="ft">Revenue motion</div></div>
+  </div>
+
+  <div class="incl">
+    <h4>What the stack gives you</h4>
+    <ul>
+      <li>One integrated platform instead of a patchwork of single point vendors</li>
+      <li>Data intelligence built on deep, continuously refreshed reservoirs</li>
+      <li>Sales, marketing, recruitment, and CXO strategy under one partnership</li>
+      <li>Modularity to start in one vertical and scale across the full lifecycle</li>
+      <li>Enterprise-grade precision, speed, and measurable outcomes</li>
+    </ul>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><div class="cn">Integrated</div><div class="cl">One stack, four verticals</div></div>
+    <div class="chip"><div class="cn">Modular</div><div class="cl">Start anywhere, scale</div></div>
+    <div class="chip"><div class="cn">Enterprise</div><div class="cl">Built for revenue leaders</div></div>
+  </div>
+</div>
+
+<!-- ===================== ENGAGEMENT MODELS ===================== -->
+<div class="sheet">
+  <div class="kicker"><span class="kdot"></span><span class="kt">Engagement Models</span></div>
+  <h2 class="section">Ways to plug in the stack.</h2>
+  <div class="rule"></div>
+
+  <table class="grid">
+    <tr><th>Model</th><th>Best for</th><th>What it covers</th></tr>
+    <tr>
+      <td class="mname">Data as a Service</td>
+      <td>Teams that need reliable, enriched data on tap</td>
+      <td>Prospect and account intelligence, enrichment, and continuous data refresh feeding your existing systems.</td>
+    </tr>
+    <tr>
+      <td class="mname">Campaign as a Service</td>
+      <td>Marketing and demand-gen leaders</td>
+      <td>Managed, multi-channel campaigns built on LakeB2B data, from audience to activation to reporting.</td>
+    </tr>
+    <tr>
+      <td class="mname">Managed Growth</td>
+      <td>CXOs scaling a full revenue motion</td>
+      <td>Bespoke, strategy-led engagement across the verticals, shaped around a specific growth thesis.</td>
+    </tr>
+  </table>
+
+  <div class="incl">
+    <h4>Every engagement includes</h4>
+    <ul>
+      <li>A named partnership team, not a ticket queue</li>
+      <li>Data and reporting transparency at every stage</li>
+      <li>A clear path to scale into adjacent verticals when you are ready</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== NEXT STEPS + CTA ===================== -->
+<div class="sheet">
+  <div class="kicker"><span class="kdot"></span><span class="kt">Next Steps</span></div>
+  <h2 class="section">Simple to start.</h2>
+  <div class="rule"></div>
+
+  <ul class="terms">
+    <li><span class="tn">1</span><b>Discovery.</b> A short working session to map your revenue motion and the data you already sit on.</li>
+    <li><span class="tn">2</span><b>Fit.</b> We identify the vertical and engagement model that will move your number fastest.</li>
+    <li><span class="tn">3</span><b>Pilot.</b> A scoped first engagement with clear metrics, so value is visible before you scale.</li>
+    <li><span class="tn">4</span><b>Scale.</b> Expand across the stack as outcomes compound, from one vertical to the full lifecycle.</li>
+  </ul>
+
+  <div class="cta">
+    <h3>Let's build your growth stack.</h3>
+    <p>Bring the data. We turn it into pipeline, campaigns, and talent.</p>
+    <div class="promise">ENABLING GROWTH</div>
+  </div>
+
+  <div class="lockup">
+    <div class="l1"><b>LakeB2B</b> · The B2B growth stack · Data intelligence, MarTech, sales enablement, and talent</div>
+    <div class="l2">ENABLING GROWTH</div>
+  </div>
+</div>
+
+</body>
+</html>

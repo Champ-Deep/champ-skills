@@ -1,0 +1,175 @@
+{
+ "slop": [
+  {
+   "id": "S1_cold_email",
+   "channel": "email",
+   "expect": [
+    "filler_phrase",
+    "throat_clearing",
+    "dash",
+    "binary_contrast",
+    "banned_word",
+    "weasel_attribution",
+    "colon_reveal"
+   ],
+   "text": "Hi Priya,\n\nI hope this email finds you well. Here's the thing\u2014 most APAC SaaS teams aren't struggling with leads. It's not a volume problem. It's a data problem.\n\nOur robust, cutting-edge platform empowers revenue teams to unlock seamless pipeline growth. Studies show that 70% of B2B data decays every year.\n\nThe best part: it takes five minutes to set up.\n\nWorth a chat?\n\nDeep"
+  },
+  {
+   "id": "S2_linkedin",
+   "channel": "linkedin",
+   "expect": [
+    "faux_insight",
+    "negative_listing",
+    "binary_contrast"
+   ],
+   "text": "Everyone is talking about AI SDRs.\n\nWhat nobody tells you is this: AI SDRs don't fail because of the model. They fail because of the data.\n\nNot a tooling problem. Not a talent problem. A data problem.\n\nWe learned this the hard way at LakeB2B.\n\nThe future of outbound isn't coming. It's already here."
+  },
+  {
+   "id": "S3_blog_intro",
+   "channel": "blog",
+   "expect": [
+    "filler_phrase",
+    "banned_word",
+    "puffery",
+    "superficial_ing",
+    "weasel_attribution",
+    "recap_ending"
+   ],
+   "text": "In today's fast-paced B2B landscape, clean data has become paramount. Let's dive in.\n\nThe launch of our new enrichment API marks a pivotal moment for revenue teams, underscoring our commitment to innovation. Experts agree that clean data is the foundation of growth.\n\nIn conclusion, the companies that harness their data will win the decade."
+  },
+  {
+   "id": "S4_case_study",
+   "channel": "case_study",
+   "expect": [
+    "puffery",
+    "binary_contrast",
+    "dramatic_fragment"
+   ],
+   "text": "Acme Health's journey is a testament to what's possible with the right partner. They didn't just grow their pipeline, but rebuilt their entire go-to-market motion in one quarter. That's it. That's the whole story."
+  },
+  {
+   "id": "S5_landing_hero",
+   "channel": "landing",
+   "expect": [
+    "dash",
+    "banned_word",
+    "rhetorical_setup"
+   ],
+   "text": "Where innovation meets execution\u2014seamlessly. Supercharge your pipeline with world-class data. What if I told you your CRM is 40% dead contacts? Think about it: every bounce costs you a meeting."
+  },
+  {
+   "id": "S6_followup",
+   "channel": "email",
+   "expect": [
+    "filler_phrase",
+    "metadiscourse",
+    "banned_word"
+   ],
+   "text": "Hi Rahul,\n\nJust circling back on my last note. As you can see from the attached sheet, the numbers speak for themselves. The key point is simple: we can help. Going forward, let's leverage our synergies and move fast.\n\nBest,\nDeep"
+  },
+  {
+   "id": "S7_talking_points",
+   "channel": "talking_points",
+   "expect": [
+    "throat_clearing",
+    "binary_contrast"
+   ],
+   "text": "Here's the thing. Most companies get this wrong. Not because they're bad at sales. Because they're calling the wrong list."
+  },
+  {
+   "id": "S8_recap_email",
+   "channel": "email",
+   "expect": [
+    "dash",
+    "puffery",
+    "recap_ending"
+   ],
+   "text": "Hi team,\n\nThanks for the time today. The pilot window is Sep 3\u20139 and we will share the first 200 contacts on Monday.\n\nUltimately, this partnership plays a vital role in our shared vision for APAC growth."
+  }
+ ],
+ "clean": [
+  {
+   "id": "C1_plain_email",
+   "channel": "email",
+   "text": "Hi Priya,\n\nWe met at the SaaSBoomi session in Bengaluru on 3 September. You mentioned your SDRs lose about a day a week to bounced emails.\n\nIn June we rebuilt a 12,000-contact list for a Singapore fintech, and their bounce rate fell from 18% to 4% on the first send.\n\nWould a 20-minute call on Thursday or Friday work to see if the same fix applies to your APAC list?\n\nDeep"
+  },
+  {
+   "id": "C2_legit_colon_list",
+   "channel": "report",
+   "text": "Three things changed in Q2: we added phone verification, we dropped two stale sources, and we moved refreshes from quarterly to monthly. Bounces fell 31% across 40,000 records."
+  },
+  {
+   "id": "C3_legit_negation",
+   "channel": "report",
+   "text": "The pilot did not include healthcare accounts, so the 4% bounce rate applies to fintech only. We have not tested the Japan segment yet, and we will share those numbers once the 900-record sample is back."
+  },
+  {
+   "id": "C4_push_pikvita",
+   "channel": "push",
+   "is_push": true,
+   "text": "Your fridge is judging you. Restock it with Brik Oven sourdough and Araku coffee before dinner."
+  },
+  {
+   "id": "C5_quoted_examples",
+   "channel": "style_note",
+   "text": "Cut openers like \"Here's the thing\" and words like \"leverage\" from client emails, and replace them with the fact you were about to state."
+  },
+  {
+   "id": "C6_bad_news_plain",
+   "channel": "email",
+   "text": "We missed the September target by 6 SQLs. Two of the misses came from the Japan list, which we sourced before the switch in August. We are re-verifying those 900 records this week and will send the revised count on Friday."
+  }
+ ],
+ "regression": [
+  {
+   "id": "R_B2_baseline",
+   "source": "baseline run, judged blind",
+   "expect": [
+    "binary_contrast",
+    "negative_listing",
+    "robotic_parallel"
+   ],
+   "text": "Most AI SDR pilots don't fail because of the AI.\n\nIn Q2, my team audited 3 AI SDR pilots at mid-market B2B companies. Each one had the same complaint: the agent was sending, but the replies weren't coming.\n\nThe problem wasn't the prompts, the sequences, or the model.\n\n38% of the contacts the agents were emailing were stale. People who had left the company. Addresses that bounced.\n\nThe agents were doing exactly what they were told. They were just doing it to people who weren't there anymore.\n\nSo we re-verified the lists. Reply rates roughly doubled in all 3.\n\nAn AI SDR scales whatever you feed it. Give it a clean list and it scales conversations. Give it a stale one and it scales bounces, and leadership walks away convinced AI outbound doesn't work.\n\nIf you're about to launch a pilot, audit the list before you audit the agent.\n\nWhat's the first thing your team checks before switching one on?\n"
+  },
+  {
+   "id": "R_B3_baseline",
+   "source": "baseline run, judged blind",
+   "expect": [
+    "binary_contrast",
+    "metadiscourse",
+    "robotic_parallel"
+   ],
+   "text": "Why HCP contact data goes stale faster than you think\n\nYour HCP database was accurate the day it was built. It probably isn't today.\n\nPhysicians change practice affiliation often. They join a new group, move to a hospital system, split time across clinics, or leave a practice altogether. Each move quietly breaks a record in your CRM. The name is still right. The specialty is still right. But the clinic your rep is driving to is one the physician no longer works at.\n\nThat's a cost most pharma marketing teams never see on a dashboard: a rep in the wrong waiting room, a visit that doesn't happen, a planned conversation that never takes place. Repeat that across a territory and a quarter, and stale affiliation data stops being a data problem. It becomes a field-force problem.\n\nAt Ampliz, we cover more than 4 million physicians and 9,000+ hospitals. Here's why HCP data decays so quickly, and what your team can do about it.\n"
+  },
+  {
+   "id": "R_B4_baseline",
+   "source": "baseline run, judged blind",
+   "expect": [
+    "colon_reveal"
+   ],
+   "text": "Subject: Singapore ERP campaign: 2 appointments booked\n\nHi Mei,\n\nWe've booked 2 appointments for the Singapore ERP campaign:\n\n1. CFO, logistics firm: confirmed for Thursday, 10:00 SGT.\n2. IT Director, distributor: tentative for Friday. We'll confirm this tomorrow and update you.\n\nOne thing we need from you: please send us the name of the person from your side attending Thursday's meeting by 6pm today.\n\nFull details are in the attached sheet.\n\nThanks,\nDeep\n"
+  }
+ ],
+ "clean_generated": [
+  {
+   "id": "G_B1_cold_email",
+   "text": "Subject: Kova's Malaysia SDR hires\n\nHi Priya,\n\nI saw Kova posted 3 SDR openings for Malaysia. I'd like to talk about the contact list those reps will start with.\n\nIn June, LakeB2B rebuilt a 12,000-contact list for a Singapore fintech. Their bounce rate fell from 18% to 4% on the first send.\n\nCould we do a 20-minute call on Thursday or Friday?\n\nDeep\nLakeB2B\n"
+  },
+  {
+   "id": "G_B2_linkedin_post",
+   "text": "In Q2 my team audited 3 AI SDR pilots at mid-market B2B companies. In all 3, the agents were working from stale lists.\n\n38% of the contacts they were emailing had left the company or bounced. More than a third of each list could never reply, however good the copy was, and every one of those contacts still counted against the pilot's reply rate.\n\nWe re-verified the lists. Reply rates roughly doubled in all 3 pilots.\n\nIf your AI SDR pilot is stalling, check the list before you rewrite the prompts or the sequence. An agent will email a contact who has left the company as readily as one who is still in the job, and a bounce tells you nothing about whether your message worked.\n\nWhen did your team last verify the contacts your agents are emailing?\n"
+  },
+  {
+   "id": "G_B3_blog_intro",
+   "text": "Your rep drives to the clinic listed in your CRM, asks for the physician, and learns she now practices somewhere else. The visit is lost, and so is the rep's time.\n\nPhysicians change practice affiliation often. When a doctor moves to a new group or hospital, your records do not update on their own. The name and specialty still look right, so nobody flags the record. The affiliation is the part that went wrong, and it is the part that tells a rep where to go.\n\nThat makes affiliation the first field to check in any HCP list your team buys or maintains. A record can pass every other test and still send a rep to the wrong clinic.\n\nAmpliz covers 4M+ physicians and 9,000+ hospitals. Across a physician base that size, frequent affiliation changes produce a steady stream of records that look correct and point to the wrong place.\n"
+  },
+  {
+   "id": "G_B4_client_followup",
+   "text": "Subject: 2 appointments booked, Thursday attendee name needed by 6pm\n\nHi Mei,\n\nWe've booked 2 appointments for your Singapore ERP campaign. Please send me the name of the person from your side attending Thursday's meeting by 6pm today.\n\nThe CFO of a logistics firm is confirmed for Thursday at 10:00 SGT. The IT director at a distributor is tentative for Friday, and we will confirm that one tomorrow.\n\nDetails for both are in the attached sheet.\n\nDeep\n"
+  },
+  {
+   "id": "G_B5_landing_hero",
+   "text": "Headline: Take your team offsite, 30 minutes from Sarjapur Road, Bangalore\nSubhead: Champions Ranch is a working experience center that hosts corporate groups of up to 40.\nButton: Plan your offsite\nUnder the button: Time worth spending.\n"
+  }
+ ]
+}

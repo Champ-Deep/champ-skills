@@ -1,0 +1,302 @@
+<!--
+  INTERVIEW SCORECARD TEMPLATE
+  =============================
+  How to use this file (see SKILL.md Step 4 for the full walkthrough):
+
+  1. Copy this whole file, don't link to it, the final scorecard needs to be a
+     standalone HTML file in Atlas/Hiring/.
+  2. Fill every {{PLACEHOLDER}} below.
+  3. Duplicate the example <section class="section" id="secA"> block once per
+     dimension you're testing (3-6 sections is the right range). Inside each
+     section, duplicate the example <div class="q"> block once per question.
+  4. Every question needs a unique data-q id (e.g. A1, A2, B1). Add every id
+     you use, in order, to the `allQ` array near the bottom of the <script>
+     block. If a button's data-q isn't in that array, its score is silently
+     ignored, this is the most common way this template breaks.
+  5. If one question is decisive (a gating question that should override an
+     otherwise-good total, like "does this answer reveal a dealbreaker"),
+     wire it into the verdict logic inside updateScore() the way the example
+     does with a placeholder gating check, otherwise delete that branch and
+     let the plain total/percentage thresholds decide the verdict.
+  6. Delete this comment block before saving the final file.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Scorecard - {{CANDIDATE_NAME}} - {{ROLE}}</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --ink:#f3f5f8; --mut:#aab2c0; --mut2:#8b93a3;
+    --orange:#ff6a1a; --orange-soft:rgba(255,106,26,.14);
+    --green:#2fbf71; --green-soft:rgba(47,191,113,.12);
+    --red:#ff5d5d; --red-soft:rgba(255,93,93,.10);
+    --blue:#5aa9ff; --amber:#ffc24b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; font-size:16px;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 22px 140px}
+
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg,#0e1014 0%, rgba(14,16,20,.94) 100%);
+    border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+  }
+  .topbar{max-width:1180px; margin:0 auto; padding:14px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+  .badge{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); font-weight:800}
+  .topbar h1{font-size:18px; margin:0; font-weight:700; color:var(--ink)}
+  .topbar h1 span{color:var(--mut2); font-weight:500}
+  .score-readout{margin-left:auto; display:flex; align-items:center; gap:14px}
+  .score-pill{background:var(--panel2); border:1px solid var(--line); border-radius:999px; padding:8px 16px; display:flex; align-items:center; gap:10px}
+  .score-pill .num{font-size:22px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums}
+  .score-pill .lbl{font-size:11px; color:var(--mut2); text-transform:uppercase; letter-spacing:.08em}
+  .verdict-chip{font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:999px; border:1px solid var(--line); color:var(--mut); white-space:nowrap}
+
+  .hero{padding:34px 0 8px}
+  .hero h2{font-size:30px; margin:0 0 6px; letter-spacing:-.01em}
+  .hero .sub{color:var(--mut); font-size:16px; max-width:760px}
+
+  .grid2{display:grid; grid-template-columns:1.35fr .9fr; gap:18px; margin-top:24px}
+  @media(max-width:880px){ .grid2{grid-template-columns:1fr} .topbar h1{font-size:16px} }
+
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px 24px}
+  .card h3{margin:0 0 14px; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--orange); font-weight:800}
+
+  .snap-row{display:flex; justify-content:space-between; gap:14px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:14.5px}
+  .snap-row:last-child{border-bottom:none}
+  .snap-row .k{color:var(--mut2)}
+  .snap-row .v{color:var(--ink); text-align:right; font-weight:600}
+
+  ul.tight{margin:6px 0 0; padding-left:18px}
+  ul.tight li{margin:7px 0; color:var(--mut)}
+  ul.tight li b{color:var(--ink)}
+
+  .flag{display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-bottom:1px dashed var(--line); font-size:14px; color:var(--mut)}
+  .flag:last-child{border-bottom:none}
+  .flag .dot{flex:0 0 auto; width:9px; height:9px; border-radius:50%; margin-top:7px; background:var(--amber)}
+
+  .mustask{margin-top:18px; background:var(--orange-soft); border:1px solid rgba(255,106,26,.4); border-radius:var(--radius); padding:18px 22px}
+  .mustask h3{color:var(--orange); margin:0 0 10px; font-size:13px; letter-spacing:.1em; text-transform:uppercase; font-weight:800}
+  .mustask ol{margin:0; padding-left:20px}
+  .mustask ol li{margin:7px 0; color:var(--ink); font-size:14.5px}
+  .mustask ol li b{color:#fff}
+
+  .secnav{position:sticky; top:64px; z-index:40; display:flex; gap:8px; flex-wrap:wrap; padding:14px 0; margin-top:30px; background:linear-gradient(180deg,#0e1014 70%, rgba(14,16,20,0)); }
+  .secnav a{font-size:12.5px; color:var(--mut); text-decoration:none; border:1px solid var(--line); background:var(--panel); padding:6px 12px; border-radius:999px; transition:.15s}
+  .secnav a:hover{color:var(--ink); border-color:var(--orange)}
+
+  .section{margin-top:30px}
+  .section-head{display:flex; align-items:baseline; gap:12px; margin:0 0 6px}
+  .section-head .lt{font-size:13px; font-weight:800; color:#0e1014; background:var(--orange); width:26px; height:26px; border-radius:7px; display:inline-flex; align-items:center; justify-content:center}
+  .section-head h2{font-size:21px; margin:0; letter-spacing:-.01em}
+  .section-head .wt{margin-left:auto; font-size:11.5px; color:var(--mut2); text-transform:uppercase; letter-spacing:.08em; border:1px solid var(--line); padding:4px 10px; border-radius:999px}
+  .section > p.intro{color:var(--mut); margin:2px 0 16px; font-size:14.5px}
+
+  .q{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; margin:14px 0}
+  .q .qmeta{display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap}
+  .q .qid{font-size:11px; font-weight:800; color:var(--orange); letter-spacing:.08em}
+  .q .wtag{font-size:10.5px; color:var(--mut2); border:1px solid var(--line); padding:2px 8px; border-radius:999px; text-transform:uppercase; letter-spacing:.06em}
+  .q .qtext{font-size:16.5px; font-weight:650; color:var(--ink); margin:0 0 4px}
+  .q .why{font-size:13.5px; color:var(--mut2); margin:0 0 14px; font-style:italic}
+
+  .ans{border-radius:10px; padding:13px 15px; margin:10px 0; font-size:14px}
+  .ans.good{background:var(--green-soft); border:1px solid rgba(47,191,113,.3)}
+  .ans.bad{background:var(--red-soft); border:1px solid rgba(255,93,93,.28)}
+  .ans.probe{background:rgba(90,169,255,.09); border:1px solid rgba(90,169,255,.3)}
+  .ans .lab{display:block; font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px}
+  .ans.good .lab{color:var(--green)} .ans.bad .lab{color:var(--red)} .ans.probe .lab{color:var(--blue)}
+  .ans p{margin:0; color:var(--ink)}
+  .ans ul{margin:4px 0 0; padding-left:18px}
+  .ans li{margin:5px 0; color:var(--ink)}
+  .ans li b, .ans p b{color:#fff}
+
+  .scorerow{display:flex; align-items:center; gap:12px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); flex-wrap:wrap}
+  .scorerow .sl{font-size:12px; color:var(--mut2); text-transform:uppercase; letter-spacing:.08em; font-weight:700}
+  .dots{display:flex; gap:6px}
+  .dots button{width:34px; height:34px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--mut); font-weight:700; cursor:pointer; font-size:14px; transition:.12s}
+  .dots button:hover{border-color:var(--orange); color:var(--ink)}
+  .dots button.on{background:var(--orange); border-color:var(--orange); color:#0e1014}
+  .scorerow .scl{font-size:12px; color:var(--mut2); margin-left:2px}
+
+  .dock{position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(20,23,30,.97); border-top:1px solid var(--line); backdrop-filter:blur(10px)}
+  .dock-in{max-width:1180px; margin:0 auto; padding:12px 22px; display:flex; align-items:center; gap:18px; flex-wrap:wrap}
+  .dock .bigscore{font-size:30px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1}
+  .dock .bigscore small{font-size:14px; color:var(--mut2); font-weight:600}
+  .dock .progress{flex:1; min-width:160px}
+  .dock .bar{height:9px; background:var(--panel2); border-radius:999px; overflow:hidden; border:1px solid var(--line)}
+  .dock .bar > i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#ff6a1a,#ffc24b); transition:width .3s}
+  .dock .meta{font-size:12px; color:var(--mut2); margin-top:5px}
+  .dock .vbox{font-size:13px; font-weight:800; padding:9px 15px; border-radius:10px; border:1px solid var(--line); color:var(--mut); white-space:nowrap}
+
+  .notes{margin-top:22px}
+  .notes textarea{width:100%; min-height:90px; background:var(--panel); border:1px solid var(--line); border-radius:12px; color:var(--ink); padding:14px; font-family:inherit; font-size:14px; resize:vertical}
+  .notes textarea::placeholder{color:var(--mut2)}
+
+  footer{margin-top:40px; padding-top:20px; border-top:1px solid var(--line); color:var(--mut2); font-size:12.5px}
+  footer a{color:var(--blue); text-decoration:none}
+  .src{margin-top:8px; line-height:1.9}
+
+  @media print{
+    .dock,.secnav,header.top{display:none}
+    body{background:#fff; color:#111}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="topbar">
+    <div class="badge">{{COMPANY_OR_GROUP}}</div>
+    <h1>Interview Scorecard <span>&mdash; {{CANDIDATE_NAME}}, {{ROLE}}</span></h1>
+    <div class="score-readout">
+      <div class="score-pill"><span class="num" id="pillNum">0</span><span class="lbl">/ {{MAX_SCORE}}</span></div>
+      <div class="verdict-chip" id="verdictChip">Not started</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h2>{{ONE_LINE_FRAMING_OF_WHAT_THIS_CALL_DECIDES}}</h2>
+    <p class="sub">{{TWO_TO_THREE_SENTENCE_SUMMARY_OF_CANDIDATE_AND_WHY_THIS_MATTERS}}</p>
+  </section>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Candidate snapshot</h3>
+      <!-- One snap-row per fact worth surfacing at a glance: current role, tenure, prior roles, education, certifications, domain depth, relevant fluency, role considered -->
+      <div class="snap-row"><span class="k">{{FIELD}}</span><span class="v">{{VALUE}}</span></div>
+    </div>
+    <div class="card">
+      <h3>Flags to hold lightly, not dismiss</h3>
+      <!-- One flag per genuine thing worth a plain, non-accusatory question. Don't manufacture flags if the resume is clean. -->
+      <div class="flag"><span class="dot"></span><span><b>{{FLAG_LABEL}}</b> {{FLAG_DETAIL}}</span></div>
+    </div>
+  </div>
+
+  <div class="mustask">
+    <h3>Must-ask (decides the meeting)</h3>
+    <ol>
+      <!-- 2-4 items. Each should be the single highest-leverage question for this specific seat, not a generic favorite. -->
+      <li><b>{{QUESTION_LABEL}}.</b> {{QUESTION_TEXT}}</li>
+    </ol>
+  </div>
+
+  <div class="secnav">
+    <!-- One link per section id below -->
+    <a href="#secA">A. {{SECTION_A_NAME}}</a>
+  </div>
+
+  <!-- SECTION EXAMPLE: duplicate this whole <section> block once per dimension -->
+  <section class="section" id="secA">
+    <div class="section-head"><span class="lt">A</span><h2>{{SECTION_A_NAME}}</h2><span class="wt">weight: {{low|medium|high|decisive|gating}}</span></div>
+    <p class="intro">{{ONE_SENTENCE_ON_WHAT_THIS_SECTION_TESTS_AND_WHY_IT_MATTERS_FOR_THIS_ROLE}}</p>
+
+    <!-- QUESTION EXAMPLE: duplicate this whole <div class="q"> block once per question. data-q must be unique and must appear in the allQ array in the script below. -->
+    <div class="q">
+      <div class="qmeta"><span class="qid">A1</span><span class="wtag">{{tag, e.g. core / gating}}</span></div>
+      <p class="qtext">{{THE_QUESTION_TO_ASK}}</p>
+      <p class="why">Why: {{WHAT_THIS_IS_ACTUALLY_TESTING}}</p>
+      <div class="ans good"><span class="lab">Strong tell</span><p>{{WHAT_A_GENUINELY_STRONG_ANSWER_SOUNDS_LIKE}}</p></div>
+      <div class="ans probe"><span class="lab">Probe further</span><p>{{OPTIONAL: what a partial answer sounds like and how to push on it}}</p></div>
+      <div class="ans bad"><span class="lab">Red flag</span><p>{{WHAT_A_WEAK_OR_CONCERNING_ANSWER_SOUNDS_LIKE}}</p></div>
+      <div class="scorerow"><span class="sl">Score</span><div class="dots" data-q="A1">
+        <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
+      </div><span class="scl">1 weak &mdash; 5 exceptional</span></div>
+    </div>
+
+  </section>
+
+  <div class="notes">
+    <h3 style="font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); font-weight:800; margin:0 0 10px;">Live notes</h3>
+    <textarea id="freeNotes" placeholder="Freeform notes during the call..."></textarea>
+  </div>
+
+  <footer>
+    <div>Internal hiring prep. {{COMPANY_OR_GROUP}}. Prepared {{DATE}}, ahead of the {{MEETING_TIME}} interview.</div>
+    <div class="src">Source resume: {{RESUME_FILENAME}} &middot; Companion note: {{PREP_NOTE_FILENAME}}</div>
+  </footer>
+
+</div>
+
+<div class="dock">
+  <div class="dock-in">
+    <div class="bigscore"><span id="dockNum">0</span><small> / {{MAX_SCORE}}</small></div>
+    <div class="progress">
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="meta" id="dockMeta">0 of {{QUESTION_COUNT}} questions scored</div>
+    </div>
+    <div class="vbox" id="dockVerdict">No recommendation yet</div>
+  </div>
+</div>
+
+<script>
+  const scores = {};
+  const maxPerQ = 5;
+  // List every data-q id used on the page, in the order they appear.
+  // If a button's data-q isn't listed here, its score is silently ignored.
+  const allQ = ['A1'];
+
+  document.querySelectorAll('.dots').forEach(dotGroup => {
+    const qid = dotGroup.getAttribute('data-q');
+    dotGroup.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        scores[qid] = parseInt(btn.getAttribute('data-v'), 10);
+        dotGroup.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        updateScore();
+      });
+    });
+  });
+
+  function updateScore(){
+    const answered = Object.keys(scores).filter(k => allQ.includes(k));
+    const total = answered.reduce((sum,k) => sum + scores[k], 0);
+    const maxPossible = allQ.length * maxPerQ;
+    document.getElementById('pillNum').textContent = total;
+    document.getElementById('dockNum').textContent = total;
+    document.getElementById('dockMeta').textContent = answered.length + ' of ' + allQ.length + ' questions scored';
+    const pct = maxPossible > 0 ? Math.round((total / maxPossible) * 100) : 0;
+    document.getElementById('barFill').style.width = pct + '%';
+
+    let verdict = 'No recommendation yet';
+    let chipVerdict = 'Not started';
+    if (answered.length === allQ.length){
+      // OPTIONAL gating check: if one question is decisive (e.g. the must-ask
+      // that should override an otherwise-good total), reference its id here.
+      // Delete this block entirely if there's no single gating question.
+      const gatingId = 'A1'; // <-- set to the decisive question's id, or delete this branch
+      const gatingScore = scores[gatingId] || 0;
+      if (gatingScore <= 2){
+        verdict = 'No hire: fails the gating question';
+        chipVerdict = 'No hire (gate fail)';
+      } else if (pct >= 75){
+        verdict = 'Strong yes: advance';
+        chipVerdict = 'Advance';
+      } else if (pct >= 55){
+        verdict = 'Borderline: one more targeted round';
+        chipVerdict = 'Borderline';
+      } else {
+        verdict = 'No hire: capability gaps too wide';
+        chipVerdict = 'No hire';
+      }
+    } else if (answered.length > 0){
+      verdict = 'In progress: ' + (allQ.length - answered.length) + ' questions left';
+      chipVerdict = 'In progress';
+    }
+    document.getElementById('dockVerdict').textContent = verdict;
+    document.getElementById('verdictChip').textContent = chipVerdict;
+  }
+</script>
+
+</body>
+</html>
