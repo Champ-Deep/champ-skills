@@ -1,6 +1,6 @@
 ---
 name: page-refresh
-description: Reskin bland pages with an outcome-first editorial design language (gradient hero, color result strip, PSO grid, 3-phase playbook timeline, dark quote panel, outcomes table with delta badges, brand-locked CTA banner). Use this skill whenever the user wants to refresh a page's look without rewriting the copy. MANDATORY TRIGGER for: "refresh this page", "make this look better", "reskin this", "give this a fresh look", "apply the showpiece design", "make this bland page look like our case study", "editorial design for this content", "redesign this page", "give it a glow up", "make this less bland", "design pass on this", "polish this page", "fresh look", "page-refresh", "showpiece design", "elevate this page", or any request to upgrade visual design while preserving content. Preserves every word of the original copy. Applies SEO fundamentals: 3-second value prop, title tag formula, outcome-focused hero visual, original data over stock, clear CTA pattern.
+description: "Reskin bland pages with an outcome-first editorial design language (gradient hero, color result strip, PSO grid, 3-phase playbook timeline, dark quote panel, outcomes table with delta badges, brand-locked CTA banner). Use this skill whenever the user wants to refresh a page's look without rewriting the copy. MANDATORY TRIGGER for: \"refresh this page\", \"make this look better\", \"reskin this\", \"give this a fresh look\", \"apply the showpiece design\", \"make this bland page look like our case study\", \"editorial design for this content\", \"redesign this page\", \"give it a glow up\", \"make this less bland\", \"design pass on this\", \"polish this page\", \"fresh look\", \"page-refresh\", \"showpiece design\", \"elevate this page\", or any request to upgrade visual design while preserving content. Preserves every word of the original copy. Applies SEO fundamentals: 3-second value prop, title tag formula, outcome-focused hero visual, original data over stock, clear CTA pattern."
 ---
 
 # Page Refresh
@@ -180,3 +180,16 @@ The four things this catches that nothing else does:
 Zero FAILs before delivery. Every WARN either fixed or justified in one line. If no browser is available, say so and label the output **unverified**, listing what was not checked.
 
 → Full protocol: the `visual-verify` skill.
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).
+- Page-refresh exception: the source copy is approved and stays word for word. Run `no-ai-slop` in Detect mode on it and list any findings at the bottom of the reply for the user to decide. Apply Gate mode only to text this skill writes itself (title tag, CTAs, labels, alt text, placeholders).

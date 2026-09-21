@@ -2,7 +2,7 @@
 
 Searchable index of every skill in this repo. Each skill is a self-contained folder with a `SKILL.md` entry point. `skill-creator` can also compose new skills.
 
-**122 skills** across **9 categories**.
+**128 skills** across **9 categories**.
 
 ## All skills (flat)
 
@@ -21,6 +21,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `frontend-handoff` | Design & Creative | Turns a backend into a frontend. Ingests routes, endpoints, schemas, auth, roles, and error codes from OpenAPI, Postman, a route file, source code, or live Supabase intro |
 | `impeccable` | Design & Creative | Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a |
 | `landing-page` | Design & Creative | Design and build landing pages, marketing sites, product pages, campaign pages, and pre-launch pages that convert rather than merely look finished. Covers the message hie |
+| `meeting-growth-visuals` | Design & Creative | Formerly vk-b2b-visuals. From a client website URL and the context of a named meeting, research the client and build 12 separate, client-specific 16:9 visuals showing how |
 | `notebooklm-slide-deck` | Design & Creative | Create a Google NotebookLM notebook from a set of prepared documents (client context files, meeting prep, research briefs, or any other document set for any client) and g |
 | `page-refresh` | Design & Creative | Reskin bland pages with an outcome-first editorial design language (gradient hero, color result strip, PSO grid, 3-phase playbook timeline, dark quote panel, outcomes tab |
 | `pdf-to-html` | Design & Creative | Convert a PDF into a single, self-contained, faithful HTML file that the presales team can host, share as a web link, drop into a page, or edit. Use this skill whenever s |
@@ -48,13 +49,16 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `lead-gen-playbook-builder` | Marketing & Content | Turns a simple campaign idea into a complete, rep-ready lead-gen playbook. Use this whenever someone gives a one-line campaign idea (a target, a product, an event, a mome |
 | `paa-seo-builder` | Marketing & Content | > |
 | `pikvita-push-notifications` | Marketing & Content | Write and schedule push notifications for Pikvita, the Bangalore independent store delivery app. MANDATORY TRIGGER for: 'push notification', 'notification copy', 'notific |
+| `reddit-reply` | Marketing & Content | Draft and vet Reddit comments that read as a practitioner rather than a vendor. Use for any Reddit reply, r/Coldemailing daily engagement, or whenever a reply could touch |
 | `science-topic-forge` | Marketing & Content | Judge, reshape, and convert any research topic idea into a best-practice Claude Science prompt tuned to the ICP of the Champions Group brand it is for (LakeB2B, Ampliz, S |
+| `search-intent-audit` | Marketing & Content | Diagnose why organic traffic or rankings are declining by auditing search intent match first, before blaming algorithm updates, AI Overviews, or LLMs. Runs a five-stage a |
 | `seo-rapid-ranker` | Marketing & Content | > |
 | `slack-gif-creator` | Marketing & Content | Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GI |
 | `vinh-copywriting` | Marketing & Content | > |
 | `b2b-growth-showcase` | Sales & Outreach | Unified B2B growth showcase generator (v2). From just a prospect's website/domain, produces personalized sales assets in one of three modes: (A) 12 standalone premium ima |
 | `champions-growth-profiler` | Sales & Outreach | Champions Group Growth & Opportunity Research Assistant. Researches any person or company and produces a structured, sales-ready profile mapped to the right Champions Gro |
 | `champions-hour` | Sales & Outreach | The Champions Group REACH orchestrator. Runs one full daily REACH pass on a single account (Research, Engage, Activate, Cadence, Hold) and ends with a scoreboard. Use whe |
+| `infratech-card-to-pitch` | Sales & Outreach | Turns a business card or bare contact details into a researched Champions Infratech meeting request. Researches the company, assigns it to one of 14 audience categories,  |
 | `negotiation-coach` | Sales & Outreach | Real-time negotiation coaching (Getting to Yes framework). Two modes: PREP before a meeting (BATNA, interest mapping, opening strategy, concession plan) and CATCH-ME-UP d |
 | `outbound-email` | Sales & Outreach | > |
 | `prospect-campaign-plan` | Sales & Outreach | > |
@@ -65,6 +69,8 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `reach-research` | Sales & Outreach | REACH Stage R. Research a B2B prospect or account fast and surface the wedge and the "Why Now". Use when someone says "research [company]", "prospect brief for [name]", " |
 | `send-kit` | Sales & Outreach | Assemble ready-to-send documentation packages (\"send kits\") for external meetings: cleaned follow-up email + committed docs + one-pager, staged as drafts. Trigger on \" |
 | `signal-scout` | Sales & Outreach | >- |
+| `treg-contact-pipeline` | Sales & Outreach | Build, verify and deliver account-based contact lists through the Treg API gateway with a staged, budget-gated workflow (discover, filter, verify, then buy contact data). |
+| `vendor-lead-handoff` | Sales & Outreach | Turn a delivery vendor's lead or appointment handover into a client-safe email with the vendor scrubbed out. MANDATORY TRIGGER for any pasted or forwarded vendor email de |
 | `alphafold2` | Research & Science | > |
 | `boltz` | Research & Science | > |
 | `borzoi` | Research & Science | > |

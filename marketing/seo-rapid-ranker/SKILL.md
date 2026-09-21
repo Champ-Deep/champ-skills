@@ -1,19 +1,6 @@
 ---
 name: seo-rapid-ranker
-description: >
-  Fast-action, surgical SEO workflow for ranking a specific service or product page
-  higher on Google — quickly. Based on a 5-step competitive gap + question optimization
-  + internal linking methodology. Use this skill whenever the user wants to rank a
-  specific page faster, boost a service page, outrank competitors for a keyword, do a
-  quick competitive SEO gap analysis, optimize a page for People Also Ask / FAQ,
-  or find questions to add to a page. MANDATORY TRIGGER for: "rank this page",
-  "rank faster", "outrank competitors", "boost my page", "why am I not ranking",
-  "competitive gap", "what are competitors doing better", "add FAQs to my page",
-  "find questions people ask about [topic]", "quick SEO fix", "rapid rank",
-  "fast ranking", "rank #1", "page optimization sprint", "SEO sprint", or any
-  request to quickly improve a single page's Google ranking. This is NOT a full
-  site audit — use marketing:seo-audit for comprehensive audits. This is the
-  tactical, page-level, "do this today and see results this week" workflow.
+description: "Fast-action, surgical SEO workflow for ranking a specific service or product page higher on Google — quickly. Based on a 5-step competitive gap + question optimization + internal linking methodology. Use this skill whenever the user wants to rank a specific page faster, boost a service page, outrank competitors for a keyword, do a quick competitive SEO gap analysis, optimize a page for People Also Ask / FAQ, or find questions to add to a page. MANDATORY TRIGGER for: \"rank this page\", \"rank faster\", \"outrank competitors\", \"boost my page\", \"why am I not ranking\", \"competitive gap\", \"what are competitors doing better\", \"add FAQs to my page\", \"find questions people ask about [topic]\", \"quick SEO fix\", \"rapid rank\", \"fast ranking\", \"rank #1\", \"page optimization sprint\", \"SEO sprint\", or any request to quickly improve a single page's Google ranking. This is NOT a full site audit — use marketing:seo-audit for comprehensive audits. This is the tactical, page-level, \"do this today and see results this week\" workflow."
 ---
 
 # SEO Rapid Ranker
@@ -314,3 +301,15 @@ After presenting the report, offer:
 
 5. **One page at a time.** Resist the urge to audit the whole site. Pick your
    most important page, rank it, then move to the next one.
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

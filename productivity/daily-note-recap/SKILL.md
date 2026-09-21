@@ -1,13 +1,14 @@
 ---
 name: "daily-note-recap"
-description: "Generate a comprehensive daily note in the Celsus Obsidian vault recapping activity, PLUS a visual HTML executive report in Lake B2B branding. Pulls from the vault, Google Calendar, Zoom MCP (meetings, AI summaries, My Notes, recordings), Wispr Flow MCP (recorded meeting transcripts, action items, scratchpad voice notes), and Apple Notes. Runs Tue to Sat at 00:30 IST, covering Monday to Friday. MANDATORY TRIGGER for: 'daily note', 'daily recap', 'end of day', 'eod report', 'daily report', 'what did I do today', 'recap my day', 'send daily update', 'manager report', 'executive summary'. Also run by the daily-note-recap scheduled task."
+description: "Generate a comprehensive daily note in the Celsus Obsidian vault recapping activity, PLUS a visual HTML executive report in Lake B2B branding, PLUS the nightly BearDrive knowledge sync (curates the day's documents into the BearDrive agent knowledge space per Atlas/Ops/BearDrive/BearDrive Sync SOP.md). Pulls from the vault, Google Calendar, Zoom MCP (meetings, AI summaries, My Notes, recordings), Wispr Flow MCP (recorded meeting transcripts, action items, scratchpad voice notes), and Apple Notes. Runs Tue to Sat at 00:30 IST, covering Monday to Friday. MANDATORY TRIGGER for: 'daily note', 'daily recap', 'end of day', 'eod report', 'daily report', 'what did I do today', 'recap my day', 'send daily update', 'manager report', 'executive summary', 'beardrive sync'. Also run by the daily-note-recap scheduled task."
 ---
 
-# Daily Note Recap: Vault Note + Executive HTML Report
+# Daily Note Recap: Vault Note + Executive HTML Report + BearDrive Sync
 
-> **Purpose:** Generate TWO outputs every day:
+> **Purpose:** Generate THREE outputs every day:
 > 1. A comprehensive Obsidian vault daily note (`Calendar/Daily Notes/YYYY-MM-DD.md`)
 > 2. A colorful Lake B2B-branded HTML executive report for the reporting manager
+> 3. A BearDrive knowledge sync: the day's qualifying documents curated into the BearDrive agent knowledge space (Step 6.5)
 >
 > **Gold standard:** `2026-03-16.md` is the benchmark. Every daily note must match or exceed this quality.
 
@@ -91,13 +92,15 @@ If `-mtime -1` is too narrow (e.g., no files match), fall back to `-newer` using
 
 Categorize as **created** vs. **modified**. Group by folder: Atlas/, Efforts/, Calendar/, Inbox/.
 
+**Keep this file list.** Step 6.5 (BearDrive sync) reuses it as its input. Do not discard it after writing the vault-activity section.
+
 ### 3b. Non-Markdown Assets
 
 ```bash
 find /path/to/Celsus -not -name "*.md" -not -path "*/.obsidian/*" -not -path "*/.DS_Store" -not -path "*/.git/*" -not -path "*/.skills/*" -not -path "*/.local-plugins/*" -mtime -1 | sort
 ```
 
-Group by folder. If assets appear in `Atlas/Clients/` or `Atlas/Context Docs/`, flag them under **Sales Enablement / Deliverables**.
+Group by folder. If assets appear in `Atlas/Clients/` or `Atlas/Context Docs/`, flag them under **Sales Enablement / Deliverables**. This list also feeds Step 6.5.
 
 ### 3c. Cowork Session (this session)
 
@@ -531,6 +534,7 @@ Wispr Flow MCP:         connected, N meetings / N transcripts / N notes   |  aut
 Apple Notes:            N notes captured / N need context / access failed
 WhatsApp:               pending
 Claude Code sessions:   manual only
+BearDrive sync:         N synced / N pending / N failed / N review  |  CLI not wired  |  SOP missing
 ```
 
 ---
@@ -633,13 +637,33 @@ Hub: [[Home]] - [[Efforts MOC]]
 
 ---
 
+## Step 6.5: BearDrive Knowledge Sync (MANDATORY, runs every night)
+
+BearDrive is Sreedeep's curated knowledge space for agents: the drive that Champ Workspace and other agents read for context. This step curates the day's documents into it so Sreedeep never has to think about keeping his agent knowledge base current.
+
+**The SOP is the law:** read `Atlas/Ops/BearDrive/BearDrive Sync SOP.md` at the start of this step. It owns the curation rules (what goes up, hard exclusions, folder mapping), the config block, and any changes Sreedeep makes to the policy. This skill step executes the SOP; it never overrides it. If the SOP and this section ever disagree, the SOP wins.
+
+**Flow:**
+
+1. **Input:** reuse the changed-file lists from Steps 3a and 3b. Never run a second vault scan.
+2. **Filter** through the SOP's curation rules. Include classes (client docs, context docs, MOCs, the day's daily note, meeting notes, active efforts, ops SOPs). Apply hard exclusions ruthlessly: credentials or anything matching `*login*`/`*password*`/`*credential*`, the Vendor Anonymization Key, `Atlas/Me/`, `#private`-tagged notes, signed contracts/NDAs, media over 5 MB, codebases, HTML exec reports. When unsure about a file, stage it as `review`, do not upload it.
+3. **Write the manifest** to `Atlas/Ops/BearDrive/Sync Log/YYYY-MM-DD.md`: one table row per candidate with local path, remote path (per the SOP folder mapping), and status (`synced` / `pending` / `failed` / `review`).
+4. **Check the config** block in the SOP. If `wired: false` (or the SOP/config is missing), mark all candidates `pending: CLI not wired`, note it in the integration tracker, and move on. Do not fail the recap run over BearDrive.
+5. **If `wired: true`:** run the configured `upload_cmd` template per file via shell (substituting `{local_path}` and `{remote_path}` under the configured `root`). Capture output. Mark `synced` or `failed` with the error text. Also sweep prior manifests for `pending` rows and sync the backlog (idempotent: same file, same remote path, latest wins).
+6. **Report** one line in the daily note Appendix integration tracker and in the exec summary: `BearDrive: N synced, N pending, N failed, N for review`. Files marked `review` get listed in the Capture Inbox needs-context flow so the morning routine surfaces them.
+
+**Failure posture:** BearDrive problems never block the daily note or the HTML report. Log, flag, carry forward.
+
+---
+
 ## Step 7: Summary for Sreedeep
 
-After both outputs are created, provide a short bullet-point summary:
+After all outputs are created, provide a short bullet-point summary:
 - What is in the vault note (sections, data sources used)
 - What is in the HTML report (link to file)
 - Meeting coverage: N meetings, N recorded by Zoom, N transcribed by Wispr, N with no coverage
 - Capture status: how many from each source, how many processed, how many need morning context
+- BearDrive sync: N synced / pending / failed / review, and whether the CLI is wired yet
 - Any flags (stale efforts, missing meeting notes, connector failures, new prospects to track)
 
 ---
@@ -659,6 +683,8 @@ After both outputs are created, provide a short bullet-point summary:
 | `Atlas/Products/` | Product notes |
 | `Atlas/People/` | People |
 | `Atlas/Context Docs/` | Context docs |
+| `Atlas/Ops/BearDrive/BearDrive Sync SOP.md` | BearDrive curation rules + CLI config (owns Step 6.5 policy) |
+| `Atlas/Ops/BearDrive/Sync Log/` | Nightly BearDrive sync manifests |
 
 ## Known Corrections (Hardcoded, Update as needed)
 
@@ -675,6 +701,7 @@ After both outputs are created, provide a short bullet-point summary:
 - Dictated notes carry transcription artifacts. Normalize: "Jreanoth" not "Dre"; "Champion InfoMetrics" not "champion informatics"; "Gujarathi" with the h. Flag single-occurrence unknown names as unverified rather than creating person notes.
 - Vendor names (not client names) are anonymized as Vendor A/B/C in any team-facing output. Key at `Atlas/Ops/Vendor Anonymization Key.md`.
 - No em dashes in any output, vault note or HTML.
+- BearDrive: the Sync SOP in the vault owns curation policy and CLI config. Until `wired: true` in its config block, Step 6.5 stages manifests only. Never upload anything on the hard-exclusion list, and never let a BearDrive failure block the recap.
 
 ## Quality Benchmark
 
@@ -696,6 +723,7 @@ What makes a good daily note:
 15. Meeting Intelligence separates decisions, Sreedeep's commitments, and commitments owed to him
 16. Every timestamp shown in IST, never raw UTC
 17. Every meeting-derived claim traceable to a Zoom UUID or Wispr meeting_id in the Appendix
+18. BearDrive sync ran (or staged): manifest written to `Atlas/Ops/BearDrive/Sync Log/`, one-line status in the Appendix tracker and the exec summary, zero hard-exclusion files ever uploaded
 
 ## Iteration Log
 
@@ -728,4 +756,6 @@ What makes a good daily note:
 | 2026-08-20 | v4: Per-source Inbox folders | Provenance was lost once Wispr and Zoom notes joined Apple Notes |
 | 2026-08-20 | v4: Meeting IDs recorded in Appendix | Transcript-derived claims need to be traceable back to source |
 | 2026-08-20 | v4: Wispr modified-time caveat documented | since/until filter on modified, not start, silently pulling stale meetings into the day |
-
+| 2026-09-01 | v5: BearDrive Knowledge Sync added (Step 6.5) | BearDrive is the curated agent knowledge space; daily docs now flow up automatically so Sreedeep never curates by hand |
+| 2026-09-01 | v5: Sync SOP as external policy source | Curation rules and CLI config live in the vault (Atlas/Ops/BearDrive/), editable without touching the skill |
+| 2026-09-01 | v5: Stage-then-wire posture | CLI not yet configured; manifests accumulate as a backlog that syncs in full on first wired run |

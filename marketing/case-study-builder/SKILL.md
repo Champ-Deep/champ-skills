@@ -1,16 +1,6 @@
 ---
 name: case-study-builder
-description: >
-  End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence,
-  shape the narrative for the specific buyer, write on-page + full PDF formats, hand off to design.
-  MANDATORY TRIGGER for: "build a case study", "write up a client win", "create a success story",
-  "turn this into a case study", "proof points for [client]", "showcase what we did for [client]",
-  "client results content", "write our case study for [company]", "client impact story",
-  "document this win", "which clients should we case study", "find case study opportunities",
-  "who should we case study next", "case study pipeline", "identify case study candidates",
-  "niche clients without case studies", "high-ticket clients we should document", or any request
-  involving client outcomes, proof points, publishable win stories, or auditing which sectors
-  lack proof content. Also trigger when a client hit a milestone or delivered strong results.
+description: "End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence, shape the narrative for the specific buyer, write on-page + full PDF formats, hand off to design. MANDATORY TRIGGER for: \"build a case study\", \"write up a client win\", \"create a success story\", \"turn this into a case study\", \"proof points for [client]\", \"showcase what we did for [client]\", \"client results content\", \"write our case study for [company]\", \"client impact story\", \"document this win\", \"which clients should we case study\", \"find case study opportunities\", \"who should we case study next\", \"case study pipeline\", \"identify case study candidates\", \"niche clients without case studies\", \"high-ticket clients we should document\", or any request involving client outcomes, proof points, publishable win stories, or auditing which sectors lack proof content. Also trigger when a client hit a milestone or delivered strong results."
 ---
 
 # Case Study Builder
@@ -225,3 +215,15 @@ requires delivery data through Sean.
 | Champions Group | Cross-portfolio wins, accelerator outcomes | Growth rate, expansion | Visionary, founder-to-founder |
 
 Load the matching brand skill alongside this one for full voice and visual alignment.
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

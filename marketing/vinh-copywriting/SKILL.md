@@ -1,7 +1,6 @@
 ---
 name: vinh-copywriting
-description: >
-  Writing layer that sharpens persuasive text — emails, talking points, slide copy, pitch decks, proposals, LinkedIn posts. Based on Vinh Giang's communication and storytelling frameworks. COMPANION SKILL: pptx, power-design, clf-meeting-prep, reach-engage, outbound-email, prospect-deck, reach-cadence load this when producing copy meant to persuade. MANDATORY TRIGGER for writing, copywriting, content creation, or any text improvement request. Also trigger on: "make this clearer," "simplify," "too corporate," "jargon," "punch this up," "tighten this," "write like a human," "make this land," "strip the fluff," "tell a story," "add a story," "rewrite for clarity." NOT for landing pages. If persuasive words are being written, this skill applies.
+description: "Writing layer that sharpens persuasive text — emails, talking points, slide copy, pitch decks, proposals, LinkedIn posts. Based on Vinh Giang's communication and storytelling frameworks. COMPANION SKILL: pptx, power-design, clf-meeting-prep, reach-engage, outbound-email, prospect-deck, reach-cadence load this when producing copy meant to persuade. MANDATORY TRIGGER for writing, copywriting, content creation, or any text improvement request. Also trigger on: \"make this clearer,\" \"simplify,\" \"too corporate,\" \"jargon,\" \"punch this up,\" \"tighten this,\" \"write like a human,\" \"make this land,\" \"strip the fluff,\" \"tell a story,\" \"add a story,\" \"rewrite for clarity.\" NOT for landing pages. If persuasive words are being written, this skill applies."
 ---
 
 # The Vinh Giang Writing Method
@@ -79,7 +78,7 @@ Most business copy defaults to a habitual corporate drone: passive voice, hedge 
 > "Our industry-leading platform leverages cutting-edge AI to deliver best-in-class solutions that drive transformative business outcomes."
 
 **After (earned voice):**
-> "Our tool uses AI to find you better leads. That's it. And it works."
+> "Our AI tool tells your reps which leads to call first."
 
 ### Law 3: Vary the Speed — Rhythm Is Meaning
 
@@ -90,6 +89,8 @@ In writing, rhythm = sentence length variation.
 - Then you stop.
 
 **The pattern:** Long → short. Build → punch. Explain → land.
+
+Short sentences land a specific fact, not a slogan. Stacked fragments ("They land. Every time.") read as AI output; keep one short sentence per key point at most.
 
 Monotone sentence length is the written equivalent of speaking in a flat drone. Mix it up. Let the important stuff breathe in its own short sentence.
 
@@ -194,7 +195,7 @@ Hey [Name],
 >
 > Hey Sarah,
 >
-> 68% of outbound calls go to people who'll never buy. We fixed that for Acme Corp — their connect rate jumped 3x in 60 days.
+> 68% of outbound calls go to people who'll never buy. We fixed that for Acme Corp, and their connect rate jumped 3x in 60 days.
 >
 > Worth a 15-min call to see if we can do the same for [Company]?
 
@@ -214,7 +215,7 @@ Since this method is rooted in speech, talking points should feel like natural s
 
 1. Open with a question or bold statement (creates the "lean-in" moment)
 2. Use the P.A.R.A. structure for each point
-3. Write in fragments where a speaker would pause: "Here's the thing. / Most companies get this wrong. / Not because they're bad at sales. / Because they're calling the wrong list."
+3. Write in short spoken beats where a speaker would pause: "Most teams blame their reps. / The reps are fine. / They are calling a list that went stale in March." Never open with "Here's the thing" and never use the "Not because X. Because Y." shape (see `no-ai-slop`).
 4. End every section with a transition question or bridge phrase
 5. Mark **[PAUSE]** where the speaker should let a point breathe
 6. Include one anchor story per major talking point (Law 6 — Relive, don't Report)
@@ -249,7 +250,7 @@ Every section of a pitch document should follow this rhythm:
 **Example pitch paragraph:**
 > Your outbound team is burning budget on bad data. [POINT]
 >
-> Last quarter, a SaaS company in your space was calling 300 contacts a day — 12 pickups. They switched to our verified lists. Same team, same scripts. 47 pickups a day within 30 days. [STORY + RESULT, relived]
+> Last quarter, a SaaS company in your space was calling 300 contacts a day and getting 12 pickups. They switched to our verified lists. Same team, same scripts. 47 pickups a day within 30 days. [STORY + RESULT, relived]
 >
 > Let's run a 500-contact pilot and see what your numbers look like. [ASK]
 
@@ -264,7 +265,7 @@ One post = one idea. Apply Law 4 (Whitespace) aggressively.
 
 [2-3 lines expanding the point]
 
-[The turn — "But here's what most people miss..."]
+[The turn: the specific fact or result that changes the picture]
 
 [The insight — the thing only you can say]
 
@@ -291,6 +292,7 @@ Run this checklist on ANY piece of copy before delivering it:
 | 8 | **The friend test:** Would you send this exact text to a smart friend who knows nothing about your industry? | |
 | 9 | **One CTA:** Is there exactly one clear thing you want the reader to do? | |
 | 10 | **Proof point:** Is there at least one specific number, name, or outcome? | |
+| 11 | **No AI slop:** Ran `no-ai-slop` in Gate mode. Zero em dashes, no binary contrasts, no kicker endings. | |
 
 ---
 
@@ -369,7 +371,7 @@ These words are the written equivalent of Level 4-5 jargon. When you find them, 
 > We are a leading provider of holistic, end-to-end business intelligence solutions, empowering organizations to leverage data-driven methodologies for optimized decision-making across the enterprise value chain.
 
 **After (Level 1-2, with story):**
-> A SaaS company in Austin was spending $40K/month on outbound. Half those calls went to wrong numbers. We cleaned their list in a week. Next month: same budget, 3x the meetings. That's what better data does.
+> A SaaS company in Austin was spending $40K/month on outbound. Half those calls went to wrong numbers. We cleaned their list in a week. The next month they booked 3x the meetings on the same budget.
 
 ### Example 4: Follow-up Email
 
@@ -377,7 +379,7 @@ These words are the written equivalent of Level 4-5 jargon. When you find them, 
 > I wanted to circle back regarding our previous conversation about how our innovative platform can help streamline your customer acquisition workflow.
 
 **After (Level 1):**
-> Quick update — since we last spoke, we ran a pilot with a company your size. They booked 23 meetings in their first month. Want to see the breakdown?
+> Quick update: since we last spoke, we ran a pilot with a company your size. They booked 23 meetings in their first month. Want to see the breakdown?
 
 ---
 
@@ -420,3 +422,15 @@ This skill is built on the communication and storytelling frameworks of **Vinh G
 
 Vinh Giang's YouTube: https://www.youtube.com/@askvinh
 Vinh Giang's Website: https://www.vinhgiang.com
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

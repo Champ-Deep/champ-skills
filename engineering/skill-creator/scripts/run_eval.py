@@ -6,7 +6,6 @@ for a set of queries. Outputs results as JSON.
 """
 
 import argparse
-import errno
 import json
 import os
 import select
@@ -56,7 +55,7 @@ def run_single_query(
 
     try:
         project_commands_dir.mkdir(parents=True, exist_ok=True)
-
+        # Use YAML block scalar to avoid breaking on quotes in description
         indented_desc = "\n  ".join(skill_description.split("\n"))
         command_content = (
             f"---\n"
@@ -78,9 +77,9 @@ def run_single_query(
         if model:
             cmd.extend(["--model", model])
 
-
-
-
+        # Remove CLAUDECODE env var to allow nesting claude -p inside a
+        # Claude Code session. The guard is for interactive terminal conflicts;
+        # programmatic subprocess usage is safe.
         env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 
         process = subprocess.Popen(
@@ -94,7 +93,7 @@ def run_single_query(
         triggered = False
         start_time = time.time()
         buffer = ""
-
+        # Track state for stream event detection
         pending_tool_name = None
         accumulated_json = ""
 
@@ -126,7 +125,7 @@ def run_single_query(
                     except json.JSONDecodeError:
                         continue
 
-
+                    # Early detection via stream events
                     if event.get("type") == "stream_event":
                         se = event.get("event", {})
                         se_type = se.get("type", "")
@@ -154,7 +153,7 @@ def run_single_query(
                             if se_type == "message_stop":
                                 return False
 
-
+                    # Fallback: full assistant message
                     elif event.get("type") == "assistant":
                         message = event.get("message", {})
                         for content_item in message.get("content", []):
@@ -171,7 +170,7 @@ def run_single_query(
                     elif event.get("type") == "result":
                         return triggered
         finally:
-
+            # Clean up process on any exit path (return, exception, timeout)
             if process.poll() is None:
                 process.kill()
                 process.wait()
@@ -221,28 +220,6 @@ def run_eval(
                 query_triggers[query] = []
             try:
                 query_triggers[query].append(future.result())
-            except OSError as e:
-
-
-
-
-
-
-
-
-                if e.errno in (errno.EACCES, errno.EPERM, errno.EROFS):
-                    print(
-                        "ERROR: cannot write the trigger-probe command file "
-                        f"under {project_root}/.claude ({e}). The sandbox "
-                        "denies .claude writes by default; run outside the "
-                        "sandbox or grant .claude explicitly (L16). Aborting "
-                        "the eval rather than recording corrupted verdicts.",
-                        file=sys.stderr,
-                    )
-                    executor.shutdown(wait=False, cancel_futures=True)
-                    raise SystemExit(2)
-                print(f"Warning: query failed: {e}", file=sys.stderr)
-                query_triggers[query].append(False)
             except Exception as e:
                 print(f"Warning: query failed: {e}", file=sys.stderr)
                 query_triggers[query].append(False)

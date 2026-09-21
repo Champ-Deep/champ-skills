@@ -1,36 +1,39 @@
 ---
-name: vk-b2b-visuals
-description: "From a client website URL, research the company and build 12 separate, client-specific 16:9 visuals showing how LakeB2B data drives the client's real commercial goal (sales, M&A sourcing, recruiting or partnerships), plus a short live-meeting shortlist."
+name: meeting-growth-visuals
+description: "Formerly vk-b2b-visuals. From a client website URL and the context of a named meeting, research the client and build 12 separate, client-specific 16:9 visuals showing how a Champions Group brand (LakeB2B, CIPL, Ampliz or Champions Infratech) drives the client's real commercial goal, plus a live-meeting showing order. Use when the user names a meeting or wants standalone images rather than a deck."
 ---
 
-# Client Website to 12 B2B Growth Visuals
+# Meeting Growth Visuals: client website to 12 meeting-ready visuals
 
-When the user provides a client website URL, research the company and create 12 separate, client-specific visuals showing how LakeB2B data supports the client's actual commercial objective.
+When the user provides a client website URL and a meeting (a date, a name, or "we are seeing them on Thursday"), research the client and create 12 separate, client-specific visuals that show how the chosen Champions Group brand supports the client's actual commercial objective. Ship them with a showing order for the meeting.
 
-> Overlap note: `b2b-growth-showcase` also produces 12 images and a deck. Use this skill when the user asks for it by name or wants standalone images tied to a specific meeting. If both would apply, ask once which one.
+> Overlap note: `b2b-growth-showcase` also produces 12 images and a deck and is the default when no meeting is named. Use this skill when the user asks for it by name (including "VK visuals"), names a meeting, or wants standalone images with a showing order. If both would apply, ask once which one.
 
 ## Primary input
 Required:
 - Client website URL
 
 Optional (infer if missing, label assumptions):
+- The meeting: who, when, what they asked for
+- Champions Group brand to present as (default LakeB2B; CIPL for an Indian client buying data and marketing; Ampliz for healthcare data; Champions Infratech for a developer, landowner or hospitality client)
 - Target geography
 - Priority product or service
 - Target industry
 - Known ICP
 - Campaign objective
 - Preferred dimensions (default 1600x900, exported at 2x)
-- Brand look: client look (default), LakeB2B, or neutral
+- Brand look: client look (default), Champions brand look, or neutral
 
 ## Step 0: Pull meeting context first
-Before researching the website, search email, calendar, Zoom, Notion and Drive for the client name and contacts. Extract:
+Before researching the website, search email, calendar, Zoom, Notion, Drive and the Celsus vault (`Atlas/Clients`, `Calendar/Meetings`, any marketing audit or meeting prep for this client) for the client name and contacts. Extract:
 - What the client said they want, in their words
 - Confirmed numbers already shared with them (counts, TAM, ranges). These may be used and labeled "Confirmed [month year]".
 - Objections and requests from past calls. At least one visual must answer each request directly.
 - Open decisions (sender identity, scope, pricing). Reflect them as "to confirm" labels, never as settled facts.
+- If a marketing audit exists for the client, reuse its ICP, channel findings and confirmed figures rather than re-researching.
 
-## Step 1: Detect the client's real objective, then remap
-The 12 use cases were written for a client selling to businesses. Many clients want something else. Identify the objective from the website plus meeting context, then remap every image before building.
+## Step 1: Pick the brand, detect the client's real objective, then remap
+The 12 use cases were written for LakeB2B presenting to a client that sells to businesses. Many clients want something else. Identify the objective from the website plus meeting context, then remap every image before building.
 
 | Objective | Who the "buyer" in each visual becomes | Example remaps |
 |---|---|---|
@@ -38,8 +41,10 @@ The 12 use cases were written for a client selling to businesses. Many clients w
 | M&A or practice acquisition | Owners of target companies and their advisors | Buying committee becomes decision unit (owner, partners, CPA, attorney, family). Data analysis becomes deal universe. Webinar and event become owner-options sessions. Platform becomes an owner-facing partnership site. |
 | Recruiting | Passive candidates | Email and social become candidate outreach. Org chart becomes team maps at source companies. |
 | Partnerships or channel | Partner companies | Buying committee becomes partner decision makers. |
+| Real estate developer selling homes (LakeB2B or CIPL as the brand) | HNI and NRI homebuyers, upgraders, channel partners | Email and social become pre-launch audience programmes. Buying committee becomes the household decision unit (buyer, spouse, parents, NRI relative, channel partner). Data analysis becomes launch demand sizing by micro-market and diaspora city. Org chart becomes channel partner tiering. Webinar becomes an NRI launch preview. Event becomes a sales gallery or roadshow evening. |
+| Real estate developer, land or hospitality client (Champions Infratech as the brand) | The developer's buyers and the developer's board | Replace the data stack with the Infratech stack: waterfront masterplan on the client's parcel, senior living and longevity concept, wellness and hospitality layers, sustainability and water metrics, NRI and HNI demand, channel partner activation, launch absorption case. Keep the Infratech claim boundaries: no uplift percentages, lagoon costs, IRRs or completed-project counts unless the user supplies approved figures. |
 
-State the detected objective and the remap in the ICP brief. If the objective is ambiguous, pick the most likely one, say so, and continue.
+State the chosen brand, the detected objective and the remap in the ICP brief. If the objective is ambiguous, pick the most likely one, say so, and continue.
 
 ## Mandatory website research
 1. Browse the client's official website. Capture brand colors and fonts from computed styles, plus one screenshot.
@@ -51,7 +56,7 @@ State the detected objective and the remap in the ICP brief. If the objective is
 7. Label every number with one tag: Confirmed, Illustrative, Estimated, Sample, or To be validated.
 
 ## ICP brief (send before building)
-Send briefly: client name, website, business summary, detected objective and remap, primary and secondary ICPs, industries, geographies, company sizes, priority roles, core problems, recommended campaign message, and assumptions to validate. Then proceed without waiting.
+Send briefly: client name, website, business summary, brand chosen, detected objective and remap, primary and secondary ICPs, industries, geographies, company sizes, priority roles, core problems, recommended campaign message, the meeting requests each visual will answer, and assumptions to validate. Then proceed without waiting.
 
 # Required output: 12 separate images
 Each image must:
@@ -63,8 +68,8 @@ Each image must:
 - Use the client's website colors and font by default
 - Include realistic interface mock-ups, diagrams, campaign examples or dashboards
 - Use concise, readable text (body text no smaller than 13px at 1600 wide)
-- Connect LakeB2B data to the client's objective
-- Include "Powered by LakeB2B" discreetly
+- Connect the chosen brand's offer to the client's objective
+- Include "Powered by [brand]" discreetly (LakeB2B, CIPL, Ampliz or Champions Infratech)
 - Carry a footer note stating what is confirmed, sample or illustrative
 
 ## The 12 use cases
@@ -82,6 +87,8 @@ Adapt headlines to the remap. Headline templates below are for the default objec
 10. **Client-owned platform.** Branded concept with a client-specific name, modules, and why it pays off. Label "Concept mock-up, name and URL illustrative".
 11. **Webinar campaign.** Title, invite, registration page, reminder sequence, qualification, follow-up. Label "Sample webinar".
 12. **Event, roundtable or executive dinner.** Invitation, limited seats, agenda, 1:1 scheduler, capture, follow-up. Never imply attendance at a real event unless verified. Label "Sample event".
+
+For the Champions Infratech remap, replace 1 to 12 with: waterfront masterplan on the client's parcel; launch absorption case (confirmed figures only); senior living and longevity concept; wellness and hospitality layer; sustainability and water metrics for green finance and ratings; NRI and HNI demand map; channel partner activation; experience centre journey; brand licence structure options (labels only, no terms); phased delivery view; community programming calendar; the working session agenda. Label concept visuals "Concept, indicative, subject to technical session".
 
 # How to build
 Build visuals as HTML and render them to PNG with Playwright, one section per image, at 2x. This keeps names, numbers and copy exact. Use image generation only for background imagery or texture, never for text-bearing layouts.
@@ -106,10 +113,12 @@ Before delivering:
 4. Fix, re-render, re-check.
 5. Grep all copy for em and en dashes. There must be none.
 6. Check the client name spelling and ICP on every image.
+7. Run the no-ai-slop gate on every line of copy.
 
 # Deliverables
 - 12 PNGs named `[CLIENT]_[NN]_[Use_Case].png`, plus a zip
-- A live-meeting shortlist: the 4 or 5 visuals that answer what the client asked for, in showing order, with one line on what to say for each. Hold the rest in reserve and map each to the topic that would justify showing it.
+- A live-meeting showing order: the 4 or 5 visuals that answer what the client asked for, in showing order, with one line on what to say for each. Hold the rest in reserve and map each to the topic that would justify showing it.
+- Save the set and the showing order to the Celsus vault under `Atlas/Clients/[Client]/` when the vault is mounted.
 - Optional follow-ons: run of show for the meeting, PowerPoint deck, PDF proposal, LinkedIn carousel
 
 # Visual quality rules
@@ -122,6 +131,7 @@ Avoid: collages when separate images were requested, tiny text, repetitive layou
 - Follow no-ai-slop: no "It's not X, it's Y", no throat-clearing, no buzzwords such as leverage, delve or streamline
 - Outreach copy in Round 1 leads with the recipient's situation, not the offer
 - Never put firm prices, multiples or timelines in sample outreach unless the client approved them
+- Champions Infratech visuals never carry uplift percentages, lagoon costs, IRRs, licence territory or exclusivity terms unless the user supplies approved figures
 
 # Default user experience
-When the user sends only a URL, reply: "I'll research the company, identify its real ICP and objective, and create 12 separate B2B growth visuals tailored to the business." Then begin research without asking unnecessary questions.
+When the user sends only a URL and a meeting, reply: "I'll research the company, pick the brand, identify its real ICP and objective, and create 12 separate growth visuals with a showing order for the meeting." Then begin research without asking unnecessary questions.

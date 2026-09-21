@@ -1,6 +1,6 @@
 ---
 name: no-ai-slop
-description: Remove AI-slop patterns from any human-facing writing (emails, blogs, case studies, decks, pitches, landing pages, posts, proposals) while keeping the writer's voice, or detect slop without rewriting. Every Champions Group writing skill calls this as its final gate before delivery.
+description: "Remove AI-slop patterns from any human-facing writing (emails, blogs, case studies, decks, pitches, landing pages, posts, proposals) while keeping the writer's voice, or detect slop without rewriting. Every Champions Group writing skill calls this as its final gate before delivery."
 ---
 
 # No AI slop

@@ -2,16 +2,16 @@
 
 Shared agent skills for the Champions Group teams. Published for collaborators to clone and drop into any Claude Code / Cursor / Gemini / agent-skill runtime.
 
-**122 skills** across 8 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
+**128 skills** across 8 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
 
 ## Categories
 
 | Category | Folder | What's inside | Count |
 |---|---|---|---|
-| Design & Creative | `design/skills/` | UI/UX, frontend design, decks, visuals, infographics, art | 25 |
+| Design & Creative | `design/skills/` | UI/UX, frontend design, decks, visuals, infographics, art | 26 |
 | Brand Guidelines | `design/brand-guidelines/` | Official brand systems for Champions Group companies | 5 |
-| Marketing & Content | `marketing/` | Blog, campaign, SEO, copywriting, social, thought leadership | 14 |
-| Sales & Outreach | `sales/` | REACH stages, prospecting, negotiation, lead gen, outreach | 13 |
+| Marketing & Content | `marketing/` | Blog, campaign, SEO, copywriting, social, thought leadership | 16 |
+| Sales & Outreach | `sales/` | REACH stages, prospecting, negotiation, lead gen, outreach | 16 |
 | Research & Science | `research/` | Literature review, papers, bioinformatics (AlphaFold/Boltz etc.) | 19 |
 | Documents & Contracts | `documents/` | NDAs, docs co-authoring, one-pagers, ranch docs, reports | 7 |
 | Engineering & Dev | `engineering/` | MCP, compute, testing, frontend build, site ops, webapps | 18 |
@@ -22,7 +22,7 @@ Shared agent skills for the Champions Group teams. Published for collaborators t
 
 ```
 champ-skills/
-  INDEX.md                searchable index of all 122 skills
+  INDEX.md                searchable index of all 128 skills
   design/
     skills/               design skills (frontend-design, impeccable, power-design, ...)
     brand-guidelines/     Champions Group, Lake B2B, Ampliz, SPAN Global, DeepEnd HQ brand systems

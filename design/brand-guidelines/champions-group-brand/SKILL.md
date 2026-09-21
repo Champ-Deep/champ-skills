@@ -312,3 +312,7 @@ function headerCell(text, width) {
 ---
 
 *Last updated: 2026-04-10. Palette migrated from charcoal+gold to orange+white to match current Champions Group logo.*
+
+## Voice gate: no AI slop
+
+All copy written under this brand (decks, emails, posts, one-pagers, web pages, captions) passes the `no-ai-slop` skill in Gate mode before delivery. Brand voice is the voice it preserves. Minimum if that skill cannot be loaded: zero em dashes or en dashes; no "It's not X, it's Y" contrasts, "Here's the thing" openers, colon reveals, dramatic fragments, kicker lines, or recap endings; none of delve, leverage, utilize, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, transformative, elevate, game changer; every claim carries a real name, number, or mechanism, or it goes. Official taglines, vertical names, and product names stay exactly as written.

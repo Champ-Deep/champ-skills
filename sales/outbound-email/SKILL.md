@@ -1,12 +1,6 @@
 ---
 name: outbound-email
-description: >
-  Full-stack B2B cold outbound email skill. Use this skill whenever a user wants to write, generate,
-  or build a cold email, outreach sequence, sales email, or prospecting email for B2B audiences.
-  Also trigger when the user provides a prospect name and/or company and wants to reach out, pitch,
-  or start a conversation. Covers the full workflow: prospect research → pitch strategy → 3-touch
-  email sequence (cold email + follow-up + breakup). Always use this skill even if the user simply
-  says "write a cold email to [name] at [company]" — do not attempt outbound email generation without it.
+description: "Full-stack B2B cold outbound email skill. Use this skill whenever a user wants to write, generate, or build a cold email, outreach sequence, sales email, or prospecting email for B2B audiences. Also trigger when the user provides a prospect name and/or company and wants to reach out, pitch, or start a conversation. Covers the full workflow: prospect research → pitch strategy → 3-touch email sequence (cold email + follow-up + breakup). Always use this skill even if the user simply says \"write a cold email to [name] at [company]\" — do not attempt outbound email generation without it."
 ---
 
 # B2B Outbound Email Skill
@@ -184,3 +178,15 @@ After presenting, offer:
 | `references/service-catalogue.md` | Step 4 — signal-to-service mapping |
 | `references/pitch-frameworks.md` | Step 5 — full framework structures + examples |
 | `references/persona-matrix.md` | Step 6 — tone rules by title tier × vertical |
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

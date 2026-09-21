@@ -1,17 +1,6 @@
 ---
 name: b2b-blog-writer
-description: >
-  Full-pipeline B2B blog writing skill that transforms trending topics into authoritative,
-  thought-leadership blog posts for any entity. Use this skill whenever the user wants to
-  write a blog post, create B2B content, draft an article, write a thought-leadership piece,
-  create content marketing, write for a company blog, or turn a trending topic into a blog.
-  Also trigger for: "write a blog about", "blog post on", "content piece about",
-  "article about", "trending topic", "turn this into a blog", "write up on",
-  "thought leadership on", "draft content about", "blog for [company]",
-  "write about [topic] for [entity]", or any request that involves researching a topic
-  and producing long-form B2B content. MANDATORY TRIGGER for all blog writing tasks.
-  This skill works across all entities -- it is methodology-focused, not brand-specific.
-  Brand voice comes from the entity's own brand skill loaded alongside this one.
+description: "Full-pipeline B2B blog writing skill that transforms trending topics into authoritative, thought-leadership blog posts for any entity. Use this skill whenever the user wants to write a blog post, create B2B content, draft an article, write a thought-leadership piece, create content marketing, write for a company blog, or turn a trending topic into a blog. Also trigger for: \"write a blog about\", \"blog post on\", \"content piece about\", \"article about\", \"trending topic\", \"turn this into a blog\", \"write up on\", \"thought leadership on\", \"draft content about\", \"blog for [company]\", \"write about [topic] for [entity]\", or any request that involves researching a topic and producing long-form B2B content. MANDATORY TRIGGER for all blog writing tasks. This skill works across all entities -- it is methodology-focused, not brand-specific. Brand voice comes from the entity's own brand skill loaded alongside this one."
 ---
 
 # B2B Blog Writer
@@ -268,3 +257,15 @@ If they agree, propose specific edits to the relevant reference file (usually `t
 - **Publish-ready means publish-ready.** If you wouldn't be proud to see this on a website with your name on it, run the editorial pass again. The difference between content that gets published and content that sits in a Google Doc forever is the editorial tightening pass.
 - **Always suggest the blog-enhancer skill.** After delivering the blog, remind the user that the `blog-enhancer` skill exists to create infographics, interactive tools, and visual assets that transform the blog from text into a full content experience.
 - **The Commodity Test is always on.** At every phase, ask yourself: "Am I creating something only this entity could create, or am I writing what any competent content team could produce with a good prompt?" If the latter, stop and find the non-commodity angle before continuing. A well-written commodity article is still commodity. Execution quality does not compensate for lack of original insight.
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

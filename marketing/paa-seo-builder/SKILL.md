@@ -1,16 +1,6 @@
 ---
 name: paa-seo-builder
-description: >
-  Full-pipeline People Also Ask (PAA) SEO strategy builder. Takes a target domain
-  and seed keywords, harvests PAA questions, builds topic clusters, creates FAQ hub
-  architecture, writes content briefs, and generates an implementation roadmap.
-  MANDATORY TRIGGER for: "PAA strategy", "People Also Ask", "FAQ SEO", "question SEO",
-  "build FAQ hubs", "PAA questions for [topic]", "harvest questions", "FAQ hub architecture",
-  "question-based SEO", "answer engine optimization", "PAA plan for [site]",
-  "add PAA to my SEO", "question optimization", "FAQ content strategy",
-  "colony linking", "authority funneling", or any request involving People Also Ask
-  optimization, FAQ-based SEO strategy, or question-driven content architecture.
-  Works for any web property. Pairs with seo-rapid-ranker for page-level tactical work.
+description: "Full-pipeline People Also Ask (PAA) SEO strategy builder. Takes a target domain and seed keywords, harvests PAA questions, builds topic clusters, creates FAQ hub architecture, writes content briefs, and generates an implementation roadmap. MANDATORY TRIGGER for: \"PAA strategy\", \"People Also Ask\", \"FAQ SEO\", \"question SEO\", \"build FAQ hubs\", \"PAA questions for [topic]\", \"harvest questions\", \"FAQ hub architecture\", \"question-based SEO\", \"answer engine optimization\", \"PAA plan for [site]\", \"add PAA to my SEO\", \"question optimization\", \"FAQ content strategy\", \"colony linking\", \"authority funneling\", or any request involving People Also Ask optimization, FAQ-based SEO strategy, or question-driven content architecture. Works for any web property. Pairs with seo-rapid-ranker for page-level tactical work."
 ---
 
 # PAA SEO Builder
@@ -301,3 +291,15 @@ Use this to track progress through the methodology:
 - [ ] Save vault markdown note
 - [ ] Deploy to Supabase for sharing
 - [ ] Create 12-week implementation roadmap
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

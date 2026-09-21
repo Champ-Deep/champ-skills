@@ -1,6 +1,6 @@
 ---
 name: reach-engage
-description: REACH Stage E. Write a personalized cold outreach message that proves real research, using 3-layer personalization (company, role, individual). Use when someone says "write a cold email to [name]", "draft outreach to [company]", "personalize this", "write the first touch", or after a prospect brief exists. Part of the Champions Group REACH sales system. Tailor the bracketed values once, then reuse.
+description: "REACH Stage E. Write a personalized cold outreach message that proves real research, using 3-layer personalization (company, role, individual). Use when someone says \"write a cold email to [name]\", \"draft outreach to [company]\", \"personalize this\", \"write the first touch\", or after a prospect brief exists. Part of the Champions Group REACH sales system. Tailor the bracketed values once, then reuse."
 ---
 
 # REACH: Engage (Stage E)
@@ -47,3 +47,15 @@ A ready-to-send email plus one alternate opener. Keep it tight. If the rep asks,
 ## Hand off to
 
 `reach-activate` to turn this into a full multi-channel play, or `reach-cadence` to build the follow-up sequence.
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).

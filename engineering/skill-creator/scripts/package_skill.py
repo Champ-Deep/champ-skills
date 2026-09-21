@@ -3,11 +3,11 @@
 Skill Packager - Creates a distributable .skill file of a skill folder
 
 Usage:
-    python -m scripts.package_skill <path/to/skill-folder> [output-directory]
+    python utils/package_skill.py <path/to/skill-folder> [output-directory]
 
 Example:
-    python -m scripts.package_skill ./my-skill
-    python -m scripts.package_skill ./my-skill ./dist
+    python utils/package_skill.py skills/public/my-skill
+    python utils/package_skill.py skills/public/my-skill ./dist
 """
 
 import fnmatch
@@ -16,11 +16,11 @@ import zipfile
 from pathlib import Path
 from scripts.quick_validate import validate_skill
 
-
+# Patterns to exclude when packaging skills.
 EXCLUDE_DIRS = {"__pycache__", "node_modules"}
 EXCLUDE_GLOBS = {"*.pyc"}
 EXCLUDE_FILES = {".DS_Store"}
-
+# Directories excluded only at the skill root (not when nested deeper).
 ROOT_EXCLUDE_DIRS = {"evals"}
 
 
@@ -29,8 +29,8 @@ def should_exclude(rel_path: Path) -> bool:
     parts = rel_path.parts
     if any(part in EXCLUDE_DIRS for part in parts):
         return True
-
-
+    # rel_path is relative to skill_path.parent, so parts[0] is the skill
+    # folder name and parts[1] (if present) is the first subdir.
     if len(parts) > 1 and parts[1] in ROOT_EXCLUDE_DIRS:
         return True
     name = rel_path.name
@@ -52,7 +52,7 @@ def package_skill(skill_path, output_dir=None):
     """
     skill_path = Path(skill_path).resolve()
 
-
+    # Validate skill folder exists
     if not skill_path.exists():
         print(f"❌ Error: Skill folder not found: {skill_path}")
         return None
@@ -61,13 +61,13 @@ def package_skill(skill_path, output_dir=None):
         print(f"❌ Error: Path is not a directory: {skill_path}")
         return None
 
-
+    # Validate SKILL.md exists
     skill_md = skill_path / "SKILL.md"
     if not skill_md.exists():
         print(f"❌ Error: SKILL.md not found in {skill_path}")
         return None
 
-
+    # Run validation before packaging
     print("🔍 Validating skill...")
     valid, message = validate_skill(skill_path)
     if not valid:
@@ -76,7 +76,7 @@ def package_skill(skill_path, output_dir=None):
         return None
     print(f"✅ {message}\n")
 
-
+    # Determine output location
     skill_name = skill_path.name
     if output_dir:
         output_path = Path(output_dir).resolve()
@@ -86,10 +86,10 @@ def package_skill(skill_path, output_dir=None):
 
     skill_filename = output_path / f"{skill_name}.skill"
 
-
+    # Create the .skill file (zip format)
     try:
         with zipfile.ZipFile(skill_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
-
+            # Walk through the skill directory, excluding build artifacts
             for file_path in skill_path.rglob('*'):
                 if not file_path.is_file():
                     continue
@@ -110,10 +110,10 @@ def package_skill(skill_path, output_dir=None):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python -m scripts.package_skill <path/to/skill-folder> [output-directory]")
+        print("Usage: python utils/package_skill.py <path/to/skill-folder> [output-directory]")
         print("\nExample:")
-        print("  python -m scripts.package_skill ./my-skill")
-        print("  python -m scripts.package_skill ./my-skill ./dist")
+        print("  python utils/package_skill.py skills/public/my-skill")
+        print("  python utils/package_skill.py skills/public/my-skill ./dist")
         sys.exit(1)
 
     skill_path = sys.argv[1]

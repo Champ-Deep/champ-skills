@@ -1,17 +1,6 @@
 ---
 name: clf-meeting-prep
-description: >
-  CLF (Champions Leadership Framework) pitch prep for sales and BD reps across all Champions
-  Group brands: LakeB2B, SGS, Ampliz, and Champions Accelerator. Runs a structured
-  questionnaire, blocks on any gap (zero assumptions), then builds a full enterprise pitch
-  doc: executive summary, problem statement, solution fit, ICP + sample data section,
-  case study/proof, pricing packages, and next steps. Ends with a NotebookLM prompt and
-  full slide-by-slide outline ready to paste. MANDATORY TRIGGER for: "CLF pitch",
-  "meeting prep", "prep a pitch", "build a pitch for", "pitch doc for", "CLF prep",
-  "sales pitch for [company]", "create a pitch for [prospect]", "pitch [brand] to [company]",
-  "build a proposal for", or any rep request to prepare for a client meeting. Also trigger
-  when a rep pastes an email thread or LinkedIn profile and asks "help me pitch this" or
-  "what do I say". If in doubt, trigger.
+description: "CLF (Champions Leadership Framework) pitch prep for sales and BD reps across all Champions Group brands: LakeB2B, SGS, Ampliz, and Champions Accelerator. Runs a structured questionnaire, blocks on any gap (zero assumptions), then builds a full enterprise pitch doc: executive summary, problem statement, solution fit, ICP + sample data section, case study/proof, pricing packages, and next steps. Ends with a NotebookLM prompt and full slide-by-slide outline ready to paste. MANDATORY TRIGGER for: \"CLF pitch\", \"meeting prep\", \"prep a pitch\", \"build a pitch for\", \"pitch doc for\", \"CLF prep\", \"sales pitch for [company]\", \"create a pitch for [prospect]\", \"pitch [brand] to [company]\", \"build a proposal for\", or any rep request to prepare for a client meeting. Also trigger when a rep pastes an email thread or LinkedIn profile and asks \"help me pitch this\" or \"what do I say\". If in doubt, trigger."
 ---
 
 # CLF Meeting Prep — Champions Leadership Framework Pitch Builder
@@ -626,3 +615,15 @@ Read these when needed — do not load all at once:
 - `references/objection-handling.md` — Pre-written responses to the 12 most common
   objections across all four brands (price, data quality, GDPR, competition, accuracy,
   integration, timing, trial, contract, references, niche coverage, freshness)
+
+## Final gate: no AI slop (mandatory before delivery)
+
+Everything this skill produces that a person will read (client, prospect, vendor, partner, public, or the sales team) passes a no-AI-slop check before it is delivered. Load the `no-ai-slop` skill in Gate mode and run its Eval on the final copy. If that skill cannot be loaded, apply this minimum:
+
+- Zero em dashes and en dashes anywhere, including headings, titles, subject lines, and date ranges. Use periods, commas, colons, parentheses, or restructure.
+- Cut binary contrasts ("It's not X, it's Y", "Not because X. Because Y."), throat-clearing openers ("Here's the thing"), faux-insight setups ("What nobody tells you"), colon reveals ("The best part: it learns"), dramatic fragments ("That's it."), rhetorical setups, fake-profound kickers, and recap endings.
+- Cut puffery and weasel attribution ("a testament to", "pivotal moment", "experts agree", "studies show"). Name the source or drop the claim. Never invent a source, stat, or quote.
+- Banned words: delve, foster, leverage, utilize, facilitate, empower, streamline, robust, cutting-edge, seamless, unlock, synergy, game changer, tapestry, realm, beacon, multifaceted, meticulous, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving.
+- Portability test: a sentence that could move unchanged to another company is filler. Replace it with a name, number, date, or mechanism, or cut it.
+- Repeat the right word instead of cycling synonyms. Active voice, human subjects, direct verbs. No decorative bold or emoji headings.
+- This gate governs style only. It never overrides this skill's factual, brand, or client-safety rules (vendor firewall, entity separation, verified numbers).
