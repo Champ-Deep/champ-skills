@@ -31,7 +31,9 @@ Then pick the hook. It is the asset's sharpest reframe, in the reader's language
 Read `references/slide-patterns.md` for slide types, visual blocks and the copy budgets. Then write `<slug>.json` following the shape in `examples/intent-signal-playbook.json`:
 
 - `slug`, `brand` (name, tagline, handle, primary, dark, accent hex from the brand skill; optional `logo_src` as a data URI if the wordmark should be the real logo).
-- `slides`: one `hook`, eight or so `point` slides (each with `n`, `kicker`, `title`, and either `body` or a `visual` block, plus an optional `after` line), one `cta` with `cta` text naming the first comment, `url_display`, and a `pill` for the save ask.
+- `slides`: one `hook` (title plus one object from the buyer's world, usually a `uicard`), eight or so `point` slides (each with `n`, `kicker`, `title`, one or two blocks in `visual` or `visuals`, and an optional `after` line), one `cta` with a `page` mock of the landing page, `cta` text naming the first comment, and a `pill` for the save ask.
+
+Vary the block from slide to slide (tiles, then bars, then columns, then bento, then timeline, then messages, then chart plus account card). Two neighbouring slides with the same block is the structural tell that makes a carousel look generated.
 
 Rules that are not optional: one idea per slide; titles are sentences that carry the argument when read in sequence; 90 words per slide ceiling; no em dashes or en dashes anywhere (the renderer refuses the file); no emojis; no stock imagery; the CTA slide says "link in the first comment" in words.
 
@@ -43,7 +45,7 @@ python3 scripts/render.py <slug>.json out/ --formats=linkedin
 
 Outputs `out/linkedin/slide-01.png` to `slide-NN.png` (1080 x 1350, use these for Instagram too) and `out/linkedin/<slug>-linkedin.pdf` (the LinkedIn document upload). Add `--formats=linkedin,square` when a channel needs 1080 x 1080.
 
-The script checks for dashes, then fits each slide; a warning that a slide was scaled below 85 percent means cut words and render again. Then open the PNGs and look at every slide at phone size (a third of actual). Fix anything that needs a squint. Run `visual-verify` if it is available in the session.
+The script checks for dashes, then fits each slide; a warning that a slide was scaled below 85 percent means cut words and render again. Then run the `visual-verify` audit on `out/<slug>.html` at width 1080 (0 FAIL required; the `default-font` warning on the brand face is accepted), open the PNGs, and look at every slide at phone size (a third of actual). Fix anything that needs a squint. `design-trends` runs after this as the closing design pass; its register for the template lives in `references/design-system.md`, so a run on a new carousel only needs to confirm the slide set still passes the logo-cover test and the two-trend budget.
 
 ### Phase 4: Write the post, the comment, and the replies
 
@@ -77,8 +79,9 @@ Deliver one folder: `<slug>.json`, `out/linkedin/*.png`, `out/linkedin/<slug>-li
 
 Canonical copies of the full folder (template, script, references, examples) live in the shared library at `~/champ-skills/marketing/carousel-funnel/` and in the vault at `Celsus/Other/Skills/carousel-funnel/`. If this SKILL.md is loaded without its folder, read from one of those.
 
-- `templates/carousel.html`: the single-file slide template (Fraunces display, Inter body, brand tokens as CSS variables, nine visual blocks). Edit the CSS here to change the look for every future carousel.
-- `scripts/render.py`: JSON to PNGs and PDF via Playwright. Dash check, overflow fit, lossless PDF.
+- `templates/carousel.html`: the single-file slide template (Montserrat display, Alata labels, brand tokens as CSS variables, twelve blocks: uicard, stats, bars, columns, bento, timeline, messages, account, card, quote, table, list). Edit the CSS here to change the look for every future carousel.
+- `scripts/render.py`: JSON to PNGs and PDF via Playwright. Dash check, overflow fit, lossless PDF, and the rendered HTML kept next to the outputs for `visual-verify`.
+- `references/design-system.md`: the DESIGN.md contract for the template (colour roles, type scale, components, depth, do and do not) and the design-trends register with review dates. Read before changing the template.
 - `references/slide-patterns.md`: slide types, visual blocks, copy budgets, what not to do.
 - `references/post-and-comment.md`: post copy formula, first-comment link, replies, document title, posting routine, timing.
 - `references/tracking-setup.md`: landing page spec, UTM standard and ChampUTM, Factors.ai setup, GA4 events, tracking sheet columns and the weekly read.

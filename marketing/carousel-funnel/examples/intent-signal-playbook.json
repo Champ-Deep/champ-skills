@@ -5,6 +5,7 @@
     "tagline": "Enabling Growth",
     "handle": "lakeb2b.com",
     "primary": "#6D08BE",
+    "primary-2": "#7A76DA",
     "dark": "#011A6B",
     "accent": "#FFB703"
   },
@@ -13,55 +14,71 @@
       "type": "hook",
       "kicker": "The Intent Signal Playbook, in 9 slides",
       "title": "You don't have a lead problem. You have a timing problem.",
-      "sub": "How revenue teams find the 40 accounts worth calling this week, out of thousands that technically fit."
+      "sub": "412 accounts in the saved view. A rule for finding the 40 worth calling this week.",
+      "visual": {
+        "kind": "uicard",
+        "title": "Saved view: ICP accounts",
+        "meta": "412 accounts, sorted by name",
+        "rows": [
+          { "name": "Abbott Field Services", "meta": "Row 1 of 412", "signals": 0, "dim": true, "score": "" },
+          { "name": "Kelso Freight Systems", "meta": "3 signals, 2 families, 4 days old", "signals": 3, "hot": true, "chip": "Tier 1" },
+          { "name": "Acme Logistics Group", "meta": "Row 3 of 412", "signals": 0, "dim": true, "score": "" },
+          { "name": "Cordell Software", "meta": "New CRO, category research resumed", "signals": 3, "hot": true, "chip": "Tier 1" },
+          { "name": "Adler Manufacturing", "meta": "Row 5 of 412", "signals": 1, "dim": true, "score": "" }
+        ]
+      }
     },
     {
       "type": "point",
       "n": "01",
       "kicker": "The problem",
-      "title": "412 accounts in the view. No idea which 40 matter.",
-      "body": "It is 8:40 on a Tuesday. The list is sorted by company name. Nothing in it says who hired a VP of Sales three weeks ago, or who had four people reading about the category last Thursday.",
+      "title": "Static lists bury the accounts that are ready.",
       "visual": {
-        "kind": "stat",
-        "from": "412",
-        "to": "40",
-        "label": "Buying more contacts adds rows to the same undifferentiated pile."
-      }
+        "kind": "stats",
+        "tiles": [
+          { "value": "412", "label": "accounts in the view, all technically in the ICP, sorted by company name" },
+          { "value": "40", "label": "worth a call this week. Nothing in the view says which.", "cls": "gold" }
+        ]
+      },
+      "after": "The company quietly evaluating three vendors sits at row 287, indistinguishable from row 286. Buying more contacts adds rows to the same pile."
     },
     {
       "type": "point",
       "n": "02",
       "kicker": "The framework",
-      "title": "One signal is close to worthless.",
+      "title": "One signal is close to worthless. Independence is the whole trick.",
       "visual": {
-        "kind": "ladder",
-        "rungs": [
-          { "name": "Weak", "pct": 18, "note": "Someone read your blog. One signal, one family." },
-          { "name": "Better", "pct": 38, "note": "They came back for the product page. Two signals, still one family." },
-          { "name": "Strong", "pct": 66, "note": "Category research off-site, product page on-site, a competitor searched. Two families." },
-          { "name": "Very strong", "pct": 100, "note": "Four-plus signals from three families that could not have caused each other." }
+        "kind": "bars",
+        "label_w": 250,
+        "row_h": 100,
+        "rows": [
+          { "label": "Weak", "value": 1, "display": "1 signal", "note": "Someone read your blog. One family." },
+          { "label": "Better", "value": 2, "display": "2 signals", "note": "They came back for the product page. Still one family." },
+          { "label": "Strong", "value": 3, "display": "3 signals", "note": "Category research off-site, product page on-site, a competitor searched. Two families." },
+          { "label": "Very strong", "value": 4, "display": "4+ signals", "note": "Three families that could not have caused each other.", "hi": true }
         ]
       },
-      "after": "Strength comes from independence, not volume."
+      "after": "Four families to combine: first-party, third-party, business triggers, and the relationships already in your CRM."
     },
     {
       "type": "point",
       "n": "03",
       "kicker": "The scorecard",
-      "title": "Six dimensions, scored in ninety seconds.",
+      "title": "Six dimensions, weighted to 100, scored in ninety seconds.",
       "visual": {
-        "kind": "table",
-        "head": ["Dimension", "Weight", "What it answers"],
+        "kind": "bars",
+        "label_w": 270,
+        "row_h": 92,
         "rows": [
-          ["Fit", "x5", "Do they look like a company that buys this?"],
-          ["Intent", "x4", "What do they appear to be researching?"],
-          ["Recency", "x3", "How fresh is the behaviour?"],
-          ["Engagement", "x3", "Are they interacting with us specifically?"],
-          ["Trigger", "x3", "What changed inside the company?"],
-          ["Buyer relevance", "x2", "Are the right roles involved?"]
+          { "label": "Fit", "value": 25, "display": "25", "note": "Do they look like a company that buys this? Weight x5." },
+          { "label": "Intent", "value": 20, "display": "20", "note": "What do they appear to be researching? x4." },
+          { "label": "Recency", "value": 15, "display": "15", "note": "How fresh is the behaviour? x3." },
+          { "label": "Engagement", "value": 15, "display": "15", "note": "Are they interacting with us specifically? x3." },
+          { "label": "Trigger", "value": 15, "display": "15", "note": "What changed inside the company? x3." },
+          { "label": "Buyer relevance", "value": 10, "display": "10", "note": "Are the right roles involved? x2." }
         ]
       },
-      "after": "Score each 0 to 5, apply the weights, and the list sorts itself out of 100. Fit is heaviest because it is the only dimension that does not decay."
+      "after": "Fit is heaviest because it is the only dimension that does not decay."
     },
     {
       "type": "point",
@@ -69,16 +86,17 @@
       "kicker": "Recency",
       "title": "A six-week-old signal describes a moment that has passed.",
       "visual": {
-        "kind": "table",
-        "head": ["Days since newest signal", "Score"],
-        "rows": [
-          ["0 to 7, very recent", "5. Whatever prompted it is still an open topic"],
-          ["8 to 14, recent", "4. Act without hesitating"],
-          ["15 to 30, aging", "3. Act only if another dimension carries weight"],
-          ["31 to 60, weak", "1. Background, unless something new appears"],
-          ["60 plus, expired", "0. History, not a signal"]
+        "kind": "columns",
+        "height": 400,
+        "cols": [
+          { "label": "0 to 7 days", "value": 5, "display": "5", "sub": "Act", "tone": "primary" },
+          { "label": "8 to 14", "value": 4, "display": "4", "sub": "Act", "tone": "primary" },
+          { "label": "15 to 30", "value": 3, "display": "3", "sub": "Only with support", "tone": "soft" },
+          { "label": "31 to 60", "value": 1, "display": "1", "sub": "Background", "tone": "gray" },
+          { "label": "60 plus", "value": 0, "display": "0", "sub": "History", "tone": "gray" }
         ]
-      }
+      },
+      "after": "Recency score by days since the newest signal. Tune the windows to your cycle: a six-month cycle can stretch \"very recent\" to 21 days."
     },
     {
       "type": "point",
@@ -86,12 +104,12 @@
       "kicker": "Prioritisation",
       "title": "Three tiers and one exit ramp.",
       "visual": {
-        "kind": "tiers",
-        "items": [
-          { "cls": "t1", "name": "Tier 1. Contact now", "rule": "70+ and all gates met", "what": "Personalised outreach same day. One written hypothesis. 15 to 25 accounts per SDR per week, no more." },
-          { "cls": "t2", "name": "Tier 2. Research and monitor", "rule": "45 to 69, fit 3+", "what": "Named owner, weekly review, one thing to watch for. Promote the moment a second signal family fires." },
-          { "cls": "t3", "name": "Tier 3. Nurture", "rule": "Under 45, fit 3+", "what": "Marketing's, not an SDR's. Be present and credible when the trigger eventually happens." },
-          { "cls": "x", "name": "Disqualify", "rule": "Fit 2 or below", "what": "Remove it and record why. High intent never overrides poor fit." }
+        "kind": "bento",
+        "cards": [
+          { "cls": "solid", "title": "Tier 1. Contact now", "chip": "70+, all gates met", "chip_cls": "ghost", "text": "Same-day outreach, one written hypothesis. 15 to 25 accounts per SDR per week, never more." },
+          { "cls": "tint", "title": "Tier 2. Research and monitor", "chip": "45 to 69, fit 3+", "text": "Named owner, weekly review. Promote the moment a second signal family fires." },
+          { "cls": "", "title": "Tier 3. Nurture", "chip": "Under 45, fit 3+", "chip_cls": "gray", "text": "Marketing's, not an SDR's. Be credible when the trigger eventually happens." },
+          { "cls": "danger", "title": "Disqualify", "chip": "Fit 2 or below", "chip_cls": "red", "text": "Remove it and record why. High intent never overrides poor fit." }
         ]
       }
     },
@@ -100,17 +118,19 @@
       "n": "06",
       "kicker": "The SDR workflow",
       "title": "Five minutes, five questions, one written hypothesis.",
-      "visual": {
-        "kind": "steps",
-        "items": [
-          { "k": "1", "text": "**Fit.** Name the closest existing customer and the use case." },
-          { "k": "2", "text": "**Intent.** What problem appears to be in play, in the buyer's language?" },
-          { "k": "3", "text": "**Recency.** When, and is it a cluster or a single point?" },
-          { "k": "4", "text": "**Trigger.** What changed in the last 90 days that you are allowed to reference?" },
-          { "k": "5", "text": "**Buyer.** Who owns this problem? A person, not a title." }
-        ]
-      },
-      "after": "Output: \"Because [observable change], and given [area of interest], [role] may be working on [specific problem].\""
+      "visuals": [
+        {
+          "kind": "timeline",
+          "items": [
+            { "label": "Minute 1", "text": "**Fit.** Name the closest existing customer and the use case." },
+            { "label": "Minute 2", "text": "**Intent.** What problem is in play, in the buyer's words?" },
+            { "label": "Minute 3", "text": "**Recency.** When, and is it a cluster or a single point?" },
+            { "label": "Minute 4", "text": "**Trigger.** What changed in the last 90 days that you can reference?" },
+            { "label": "Minute 5", "text": "**Buyer.** Who owns this problem? A person, not a title." }
+          ]
+        },
+        { "kind": "card", "cls": "tint flat", "chip": "Output", "text": "Because **[observable change]**, and given **[area of interest]**, **[role]** may be working on **[specific problem]**." }
+      ]
     },
     {
       "type": "point",
@@ -118,10 +138,10 @@
       "kicker": "Guardrails",
       "title": "Use intent to pick the account. Never to write the message.",
       "visual": {
-        "kind": "compare",
+        "kind": "messages",
         "items": [
-          { "cls": "bad", "tag": "Never write", "text": "\"Hey Dana, I noticed your company has been researching sales engagement software. Do you have 15 minutes Thursday?\"" },
-          { "cls": "good", "tag": "Same account, same signal, better", "text": "\"Dana, you've added nine SDRs since July. Teams usually start looking at how outbound is managed when hiring outpaces the managers who can coach it. Is that the shape of the problem on your side, or something else?\"" }
+          { "cls": "bad", "initial": "SDR", "tag": "Never write", "text": "\"Hey Dana, I noticed your company has been researching sales engagement software. Do you have 15 minutes Thursday?\"" },
+          { "cls": "good", "initial": "SDR", "tag": "Same signal, better", "text": "\"Dana, you've added nine SDRs since July. Teams usually start looking at how outbound is managed when hiring outpaces the managers who can coach it. Is that the shape of the problem on your side?\"" }
         ]
       },
       "after": "The test: would the sentence still make sense if the signal data had never existed?"
@@ -131,27 +151,44 @@
       "n": "08",
       "kicker": "Worked example",
       "title": "100 accounts down to 5, in one week.",
-      "visual": {
-        "kind": "funnel",
-        "rows": [
-          { "n": "100", "label": "Target accounts in the quarter's list" },
-          { "n": "60", "label": "Pass the fit gate" },
-          { "n": "25", "label": "Meaningful intent in the last 60 days" },
-          { "n": "12", "label": "Recency 3 or higher" },
-          { "n": "7", "label": "Two or more signal families agree" },
-          { "n": "5", "label": "Tier 1: nameable buyer, score 70+" }
-        ]
-      },
-      "after": "Two SDRs, five accounts, three contacts each, a four-day week. A smaller number than most teams are comfortable with, and that is the point."
+      "visuals": [
+        {
+          "kind": "bars",
+          "label_w": 110,
+          "row_h": 78,
+          "rows": [
+            { "label": "100", "value": 100, "display": "", "note": "Target accounts in the quarter's list" },
+            { "label": "60", "value": 60, "display": "", "note": "Pass the fit gate" },
+            { "label": "25", "value": 25, "display": "", "note": "Meaningful intent in the last 60 days" },
+            { "label": "12", "value": 12, "display": "", "note": "Recency 3 or higher" },
+            { "label": "7", "value": 7, "display": "", "note": "Two or more signal families agree" },
+            { "label": "5", "value": 5, "display": "", "note": "Tier 1: nameable buyer, score 70+", "hi": true }
+          ]
+        },
+        {
+          "kind": "account",
+          "name": "Kelso Freight Systems",
+          "meta": "Logistics software, 380 employees. Three sales-ops roles posted in six weeks.",
+          "score": 92,
+          "dims": [
+            { "k": "Fit", "v": 5 }, { "k": "Intent", "v": 5 }, { "k": "Recency", "v": 5 },
+            { "k": "Engage", "v": 4 }, { "k": "Trigger", "v": 4 }, { "k": "Buyer", "v": 4 }
+          ]
+        }
+      ]
     },
     {
       "type": "cta",
       "kicker": "What to do next",
       "title": "You can run this in a spreadsheet by Friday.",
-      "body": "Nothing here needs a purchase order. The full 10-page playbook has the scorecard, the gates, the message framework and the cheat sheet.",
-      "cta": "Full playbook, free and ungated: **link in the first comment.**",
-      "url_display": "lakeb2b.com/playbooks/intent-signals",
-      "pill": "Save this for your Monday pipeline review"
+      "body": "Nothing here needs a purchase order. The full playbook has the scorecard, the gates, the message framework and the cheat sheet.",
+      "page": {
+        "url": "lakeb2b.com/playbooks/intent-signals",
+        "title": "The Intent Signal Playbook",
+        "chips": ["8 chapters", "12 min read", "Scorecard template", "Free, no form"]
+      },
+      "cta": "Link in the **first comment.**",
+      "pill": "Save this for Monday's pipeline review"
     }
   ]
 }

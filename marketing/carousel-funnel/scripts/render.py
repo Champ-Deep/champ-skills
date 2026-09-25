@@ -11,7 +11,8 @@ Formats:
   square    1080 x 1080. Use when a channel needs square (some ad placements,
             WhatsApp forwards, X images).
 
-Outputs (per format):
+Outputs:
+  out_dir/<slug>.html                     (the rendered page, for visual-verify audit.py)
   out_dir/<format>/slide-01.png ... slide-NN.png
   out_dir/<format>/<slug>-<format>.pdf   (pages are the PNGs, so fonts can never break)
 
@@ -26,7 +27,6 @@ Requires: playwright (with chromium installed), img2pdf (preferred, lossless) or
 import json
 import re
 import sys
-import tempfile
 from pathlib import Path
 
 from PIL import Image
@@ -65,7 +65,8 @@ def main():
         '<script id="data" type="application/json">{"brand":{},"slides":[]}</script>',
         '<script id="data" type="application/json">' + json.dumps(data).replace("</", "<\\/") + "</script>",
     )
-    tmp = Path(tempfile.mkdtemp()) / "carousel.html"
+    out_root.mkdir(parents=True, exist_ok=True)
+    tmp = out_root / f"{slug}.html"  # kept next to the outputs so visual-verify can audit it
     tmp.write_text(html, encoding="utf-8")
 
     with sync_playwright() as p:
