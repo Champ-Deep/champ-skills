@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Carousel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  /* Brand tokens. render.py overrides these from the JSON "brand" block. */
+  :root {
+    --primary: #6D08BE;
+    --dark: #011A6B;
+    --accent: #FFB703;
+    --ink: #101828;
+    --muted: #5B6472;
+    --paper: #FFFFFF;
+    --paper-2: #F4F1FA;
+    --line: #E4E0EE;
+    --slide-w: 1080px;
+    --slide-h: 1350px;
+    --pad: 88px;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Inter", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  html.square { --slide-h: 1080px; --pad: 76px; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #222; font-family: var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  .slide {
+    width: var(--slide-w); height: var(--slide-h);
+    position: relative; overflow: hidden;
+    background: var(--paper);
+    padding: var(--pad);
+    display: flex; flex-direction: column;
+    margin: 0 auto 24px;
+  }
+  .slide.dark { background: var(--dark); color: #fff; }
+  .slide.brand { background: var(--primary); color: #fff; }
+  .slide.soft { background: var(--paper-2); }
+
+  /* Chrome: wordmark, page counter, progress bar, swipe hint */
+  .top { display: flex; justify-content: space-between; align-items: center; height: 56px; flex: 0 0 auto; }
+  .wordmark { font-weight: 800; font-size: 34px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 14px; }
+  .wordmark img { height: 46px; width: auto; display: block; }
+  .wordmark small { font-weight: 600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; opacity: .7; }
+  .counter { font-weight: 600; font-size: 22px; letter-spacing: 0.08em; opacity: .65; font-variant-numeric: tabular-nums; }
+
+  .body { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; gap: 36px; min-height: 0; }
+
+  .bottom { flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; height: 48px; }
+  .progress { display: flex; gap: 8px; }
+  .progress i { display: block; width: 26px; height: 6px; border-radius: 3px; background: currentColor; opacity: .18; }
+  .progress i.on { opacity: 1; background: var(--accent); }
+  .swipe { font-size: 20px; font-weight: 600; opacity: .7; }
+  .slide.dark .progress i.on, .slide.brand .progress i.on { background: var(--accent); }
+
+  .kicker { font-size: 22px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--primary); }
+  .slide.dark .kicker, .slide.brand .kicker { color: var(--accent); }
+  .num { font-family: var(--display); font-size: 120px; line-height: .9; font-weight: 700; color: var(--primary); opacity: .35; }
+  .slide.dark .num, .slide.brand .num { color: var(--accent); opacity: .9; }
+
+  h1 { font-family: var(--display); font-weight: 700; font-size: 92px; line-height: 1.02; letter-spacing: -0.02em; text-wrap: balance; }
+  h2 { font-family: var(--display); font-weight: 700; font-size: 68px; line-height: 1.06; letter-spacing: -0.015em; text-wrap: balance; }
+  .sub { font-size: 34px; line-height: 1.35; color: var(--muted); max-width: 860px; }
+  .slide.dark .sub, .slide.brand .sub { color: rgba(255,255,255,.82); }
+  .lede { font-size: 38px; line-height: 1.4; max-width: 880px; }
+  .lede b { font-weight: 700; color: var(--primary); }
+  .slide.dark .lede b, .slide.brand .lede b { color: var(--accent); }
+
+  /* Visual blocks */
+  .stat { display: flex; align-items: baseline; gap: 28px; flex-wrap: wrap; }
+  .stat .label { flex: 1 0 100%; max-width: 100%; }
+  .stat .big { font-family: var(--display); font-weight: 700; font-size: 220px; line-height: .9; letter-spacing: -0.04em; color: var(--primary); }
+  .slide.dark .stat .big, .slide.brand .stat .big { color: var(--accent); }
+  .stat .arrow { font-size: 96px; color: var(--muted); }
+  .stat .label { font-size: 32px; color: var(--muted); line-height: 1.3; }
+
+  .ladder { display: flex; flex-direction: column; gap: 26px; }
+  .ladder .rung { display: grid; grid-template-columns: 250px 1fr; gap: 20px; align-items: center; }
+  .ladder .name { font-weight: 800; font-size: 28px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .ladder .bar { height: 22px; border-radius: 11px; background: var(--line); overflow: hidden; }
+  .ladder .bar i { display: block; height: 100%; background: var(--primary); border-radius: 11px; }
+  .ladder .note { grid-column: 2; font-size: 28px; color: var(--muted); margin-top: -8px; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: 31px; }
+  table.t th { text-align: left; font-size: 20px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); padding: 0 24px 14px 0; border-bottom: 3px solid var(--ink); font-weight: 700; white-space: nowrap; }
+  table.t td { padding: 18px 24px 18px 0; border-bottom: 2px solid var(--line); vertical-align: top; }
+  table.t th:last-child, table.t td:last-child { padding-right: 0; }
+  table.t td:first-child { font-weight: 700; color: var(--primary); width: 34%; }
+  table.t td.r, table.t th.r { text-align: right; font-variant-numeric: tabular-nums; }
+  table.t tr.total td { border-bottom: 0; font-weight: 800; }
+
+  ol.steps { list-style: none; display: flex; flex-direction: column; gap: 22px; }
+  ol.steps li { display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: start; font-size: 32px; line-height: 1.3; }
+  ol.steps li .k { font-family: var(--display); font-weight: 700; font-size: 44px; color: var(--primary); line-height: 1; }
+  ol.steps li b { font-weight: 700; }
+
+  .tiers { display: flex; flex-direction: column; gap: 18px; }
+  .tier { border-left: 12px solid var(--primary); background: var(--paper-2); padding: 22px 28px; display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; align-items: center; }
+  .tier .name { font-weight: 800; font-size: 34px; }
+  .tier .rule { font-size: 22px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); font-weight: 700; text-align: right; }
+  .tier .what { grid-column: 1 / -1; font-size: 29px; color: var(--muted); line-height: 1.3; }
+  .tier.t2 { border-color: #7A76DA; } .tier.t3 { border-color: #9AA0AC; } .tier.x { border-color: #C1003C; }
+  .tier.x .rule { color: #C1003C; }
+
+  .compare { display: flex; flex-direction: column; gap: 22px; }
+  .card { border-radius: 18px; padding: 30px 34px; font-size: 30px; line-height: 1.38; }
+  .card .tag { font-size: 20px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 800; margin-bottom: 12px; display: block; }
+  .card.bad { background: #FBEDEF; color: #6B1C2B; } .card.bad .tag { color: #C1003C; }
+  .card.good { background: #EFE8FB; color: #2A0F55; } .card.good .tag { color: var(--primary); }
+
+  .funnel { display: flex; flex-direction: column; gap: 14px; }
+  .funnel .row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 24px; }
+  .funnel .n { font-family: var(--display); font-weight: 700; font-size: 74px; color: var(--primary); text-align: right; line-height: 1; }
+  .funnel .track { display: flex; align-items: center; gap: 18px; }
+  .funnel .bar { height: 46px; background: var(--primary); border-radius: 8px; flex: 0 0 auto; }
+  .funnel .lab { font-size: 27px; font-weight: 600; line-height: 1.2; }
+
+  .quote { font-family: var(--display); font-size: 58px; line-height: 1.15; font-weight: 600; border-left: 12px solid var(--accent); padding-left: 36px; }
+
+  .cta-box { background: rgba(255,255,255,.14); border: 3px solid rgba(255,255,255,.35); border-radius: 22px; padding: 40px 44px; font-size: 36px; line-height: 1.35; }
+  .cta-box .url { display: block; margin-top: 18px; font-weight: 800; font-size: 40px; color: var(--accent); word-break: break-all; }
+  .cta-pill { display: inline-block; background: var(--accent); color: var(--dark); font-weight: 800; font-size: 34px; padding: 22px 40px; border-radius: 999px; }
+
+  ul.list { list-style: none; display: flex; flex-direction: column; gap: 20px; font-size: 32px; line-height: 1.3; }
+  ul.list li { padding-left: 44px; position: relative; }
+  ul.list li::before { content: ""; position: absolute; left: 0; top: 16px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); }
+  .slide.dark ul.list li::before, .slide.brand ul.list li::before { background: var(--accent); }
+</style>
+</head>
+<body>
+<script id="data" type="application/json">{"brand":{},"slides":[]}</script>
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById('data').textContent);
+  const b = data.brand || {};
+  const root = document.documentElement.style;
+  if (b.primary) root.setProperty('--primary', b.primary);
+  if (b.dark) root.setProperty('--dark', b.dark);
+  if (b.accent) root.setProperty('--accent', b.accent);
+  if (b.display_font) root.setProperty('--display', b.display_font);
+  if (b.sans_font) root.setProperty('--sans', b.sans_font);
+  const slides = data.slides || [];
+  const total = slides.length;
+  const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const rich = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+
+  function chrome(i) {
+    const mark = b.logo_src ? `<img src="${b.logo_src}" alt="">` : `${esc(b.name || '')}`;
+    return `<div class="top"><div class="wordmark">${mark}${b.tagline ? `<small>${esc(b.tagline)}</small>` : ''}</div><div class="counter">${String(i+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}</div></div>`;
+  }
+  function foot(i) {
+    const dots = slides.map((_, j) => `<i class="${j===i?'on':''}"></i>`).join('');
+    const hint = i === total - 1 ? (b.handle ? esc(b.handle) : '') : (i === 0 ? 'Swipe &rarr;' : '');
+    return `<div class="bottom"><div class="progress">${dots}</div><div class="swipe">${hint}</div></div>`;
+  }
+  function visual(v) {
+    if (!v) return '';
+    switch (v.kind) {
+      case 'stat':
+        return `<div class="stat"><div class="big">${esc(v.from)}</div>${v.to != null ? `<div class="arrow">&rarr;</div><div class="big">${esc(v.to)}</div>` : ''}${v.label ? `<div class="label">${rich(v.label)}</div>` : ''}</div>`;
+      case 'ladder':
+        return `<div class="ladder">${(v.rungs||[]).map(r => `<div class="rung"><div class="name">${esc(r.name)}</div><div class="bar"><i style="width:${r.pct}%"></i></div>${r.note ? `<div class="note">${rich(r.note)}</div>` : ''}</div>`).join('')}</div>`;
+      case 'table':
+        return `<table class="t"><thead><tr>${(v.head||[]).map((h,k) => `<th class="${k>0 && v.right_align ? 'r' : ''}">${esc(h)}</th>`).join('')}</tr></thead><tbody>${(v.rows||[]).map((row, ri) => `<tr class="${v.total_last && ri === v.rows.length-1 ? 'total' : ''}">${row.map((c,k) => `<td class="${k>0 && v.right_align ? 'r' : ''}">${rich(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+      case 'steps':
+        return `<ol class="steps">${(v.items||[]).map(it => `<li><span class="k">${esc(it.k)}</span><span>${rich(it.text)}</span></li>`).join('')}</ol>`;
+      case 'tiers':
+        return `<div class="tiers">${(v.items||[]).map(t => `<div class="tier ${esc(t.cls||'')}"><div class="name">${esc(t.name)}</div><div class="rule">${esc(t.rule)}</div><div class="what">${rich(t.what)}</div></div>`).join('')}</div>`;
+      case 'compare':
+        return `<div class="compare">${(v.items||[]).map(c => `<div class="card ${esc(c.cls)}"><span class="tag">${esc(c.tag)}</span>${rich(c.text)}</div>`).join('')}</div>`;
+      case 'funnel': {
+        const max = Math.max(...(v.rows||[]).map(r => +r.n || 0)) || 1;
+        return `<div class="funnel">${(v.rows||[]).map(r => `<div class="row"><div class="n">${esc(r.n)}</div><div class="track"><div class="bar" style="width:${Math.max(4, Math.round((+r.n/max)*52))}%"></div><div class="lab">${esc(r.label)}</div></div></div>`).join('')}</div>`;
+      }
+      case 'quote':
+        return `<div class="quote">${rich(v.text)}</div>`;
+      case 'list':
+        return `<ul class="list">${(v.items||[]).map(t => `<li>${rich(t)}</li>`).join('')}</ul>`;
+      default: return '';
+    }
+  }
+  function slide(s, i) {
+    const cls = s.theme || (s.type === 'hook' ? 'dark' : s.type === 'cta' ? 'brand' : '');
+    let inner = '';
+    if (s.type === 'hook') {
+      inner = `${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ''}<h1>${rich(s.title)}</h1>${s.sub ? `<div class="sub">${rich(s.sub)}</div>` : ''}`;
+    } else if (s.type === 'cta') {
+      inner = `${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ''}<h2>${rich(s.title)}</h2>${s.body ? `<div class="lede">${rich(s.body)}</div>` : ''}<div class="cta-box">${rich(s.cta)}${s.url_display ? `<span class="url">${esc(s.url_display)}</span>` : ''}</div>${s.pill ? `<div><span class="cta-pill">${esc(s.pill)}</span></div>` : ''}`;
+    } else {
+      inner = `${s.n ? `<div class="num">${esc(s.n)}</div>` : ''}${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ''}<h2>${rich(s.title)}</h2>${s.body ? `<div class="lede">${rich(s.body)}</div>` : ''}${visual(s.visual)}${s.after ? `<div class="sub">${rich(s.after)}</div>` : ''}`;
+    }
+    return `<section class="slide ${cls}" data-index="${i}">${chrome(i)}<div class="body">${inner}</div>${foot(i)}</section>`;
+  }
+  document.body.insertAdjacentHTML('beforeend', slides.map(slide).join(''));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+{
+  "slug": "lakeb2b-intent-signal-playbook",
+  "brand": {
+    "name": "LakeB2B",
+    "tagline": "Enabling Growth",
+    "handle": "lakeb2b.com",
+    "primary": "#6D08BE",
+    "dark": "#011A6B",
+    "accent": "#FFB703"
+  },
+  "slides": [
+    {
+      "type": "hook",
+      "kicker": "The Intent Signal Playbook, in 9 slides",
+      "title": "You don't have a lead problem. You have a timing problem.",
+      "sub": "How revenue teams find the 40 accounts worth calling this week, out of thousands that technically fit."
+    },
+    {
+      "type": "point",
+      "n": "01",
+      "kicker": "The problem",
+      "title": "412 accounts in the view. No idea which 40 matter.",
+      "body": "It is 8:40 on a Tuesday. The list is sorted by company name. Nothing in it says who hired a VP of Sales three weeks ago, or who had four people reading about the category last Thursday.",
+      "visual": {
+        "kind": "stat",
+        "from": "412",
+        "to": "40",
+        "label": "Buying more contacts adds rows to the same undifferentiated pile."
+      }
+    },
+    {
+      "type": "point",
+      "n": "02",
+      "kicker": "The framework",
+      "title": "One signal is close to worthless.",
+      "visual": {
+        "kind": "ladder",
+        "rungs": [
+          { "name": "Weak", "pct": 18, "note": "Someone read your blog. One signal, one family." },
+          { "name": "Better", "pct": 38, "note": "They came back for the product page. Two signals, still one family." },
+          { "name": "Strong", "pct": 66, "note": "Category research off-site, product page on-site, a competitor searched. Two families." },
+          { "name": "Very strong", "pct": 100, "note": "Four-plus signals from three families that could not have caused each other." }
+        ]
+      },
+      "after": "Strength comes from independence, not volume."
+    },
+    {
+      "type": "point",
+      "n": "03",
+      "kicker": "The scorecard",
+      "title": "Six dimensions, scored in ninety seconds.",
+      "visual": {
+        "kind": "table",
+        "head": ["Dimension", "Weight", "What it answers"],
+        "rows": [
+          ["Fit", "x5", "Do they look like a company that buys this?"],
+          ["Intent", "x4", "What do they appear to be researching?"],
+          ["Recency", "x3", "How fresh is the behaviour?"],
+          ["Engagement", "x3", "Are they interacting with us specifically?"],
+          ["Trigger", "x3", "What changed inside the company?"],
+          ["Buyer relevance", "x2", "Are the right roles involved?"]
+        ]
+      },
+      "after": "Score each 0 to 5, apply the weights, and the list sorts itself out of 100. Fit is heaviest because it is the only dimension that does not decay."
+    },
+    {
+      "type": "point",
+      "n": "04",
+      "kicker": "Recency",
+      "title": "A six-week-old signal describes a moment that has passed.",
+      "visual": {
+        "kind": "table",
+        "head": ["Days since newest signal", "Score"],
+        "rows": [
+          ["0 to 7, very recent", "5. Whatever prompted it is still an open topic"],
+          ["8 to 14, recent", "4. Act without hesitating"],
+          ["15 to 30, aging", "3. Act only if another dimension carries weight"],
+          ["31 to 60, weak", "1. Background, unless something new appears"],
+          ["60 plus, expired", "0. History, not a signal"]
+        ]
+      }
+    },
+    {
+      "type": "point",
+      "n": "05",
+      "kicker": "Prioritisation",
+      "title": "Three tiers and one exit ramp.",
+      "visual": {
+        "kind": "tiers",
+        "items": [
+          { "cls": "t1", "name": "Tier 1. Contact now", "rule": "70+ and all gates met", "what": "Personalised outreach same day. One written hypothesis. 15 to 25 accounts per SDR per week, no more." },
+          { "cls": "t2", "name": "Tier 2. Research and monitor", "rule": "45 to 69, fit 3+", "what": "Named owner, weekly review, one thing to watch for. Promote the moment a second signal family fires." },
+          { "cls": "t3", "name": "Tier 3. Nurture", "rule": "Under 45, fit 3+", "what": "Marketing's, not an SDR's. Be present and credible when the trigger eventually happens." },
+          { "cls": "x", "name": "Disqualify", "rule": "Fit 2 or below", "what": "Remove it and record why. High intent never overrides poor fit." }
+        ]
+      }
+    },
+    {
+      "type": "point",
+      "n": "06",
+      "kicker": "The SDR workflow",
+      "title": "Five minutes, five questions, one written hypothesis.",
+      "visual": {
+        "kind": "steps",
+        "items": [
+          { "k": "1", "text": "**Fit.** Name the closest existing customer and the use case." },
+          { "k": "2", "text": "**Intent.** What problem appears to be in play, in the buyer's language?" },
+          { "k": "3", "text": "**Recency.** When, and is it a cluster or a single point?" },
+          { "k": "4", "text": "**Trigger.** What changed in the last 90 days that you are allowed to reference?" },
+          { "k": "5", "text": "**Buyer.** Who owns this problem? A person, not a title." }
+        ]
+      },
+      "after": "Output: \"Because [observable change], and given [area of interest], [role] may be working on [specific problem].\""
+    },
+    {
+      "type": "point",
+      "n": "07",
+      "kicker": "Guardrails",
+      "title": "Use intent to pick the account. Never to write the message.",
+      "visual": {
+        "kind": "compare",
+        "items": [
+          { "cls": "bad", "tag": "Never write", "text": "\"Hey Dana, I noticed your company has been researching sales engagement software. Do you have 15 minutes Thursday?\"" },
+          { "cls": "good", "tag": "Same account, same signal, better", "text": "\"Dana, you've added nine SDRs since July. Teams usually start looking at how outbound is managed when hiring outpaces the managers who can coach it. Is that the shape of the problem on your side, or something else?\"" }
+        ]
+      },
+      "after": "The test: would the sentence still make sense if the signal data had never existed?"
+    },
+    {
+      "type": "point",
+      "n": "08",
+      "kicker": "Worked example",
+      "title": "100 accounts down to 5, in one week.",
+      "visual": {
+        "kind": "funnel",
+        "rows": [
+          { "n": "100", "label": "Target accounts in the quarter's list" },
+          { "n": "60", "label": "Pass the fit gate" },
+          { "n": "25", "label": "Meaningful intent in the last 60 days" },
+          { "n": "12", "label": "Recency 3 or higher" },
+          { "n": "7", "label": "Two or more signal families agree" },
+          { "n": "5", "label": "Tier 1: nameable buyer, score 70+" }
+        ]
+      },
+      "after": "Two SDRs, five accounts, three contacts each, a four-day week. A smaller number than most teams are comfortable with, and that is the point."
+    },
+    {
+      "type": "cta",
+      "kicker": "What to do next",
+      "title": "You can run this in a spreadsheet by Friday.",
+      "body": "Nothing here needs a purchase order. The full 10-page playbook has the scorecard, the gates, the message framework and the cheat sheet.",
+      "cta": "Full playbook, free and ungated: **link in the first comment.**",
+      "url_display": "lakeb2b.com/playbooks/intent-signals",
+      "pill": "Save this for your Monday pipeline review"
+    }
+  ]
+}

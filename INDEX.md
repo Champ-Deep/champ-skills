@@ -2,7 +2,7 @@
 
 Searchable index of every skill in this repo. Each skill is a self-contained folder with a `SKILL.md` entry point. `skill-creator` can also compose new skills.
 
-**128 skills** across **9 categories**.
+**129 skills** across **9 categories**.
 
 ## All skills (flat)
 
@@ -12,6 +12,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `b2b-visuals` | Design & Creative | Given only a client or prospect website URL, researches the company and produces 12 separate, standalone, presentation-ready visual images (not a slide deck, not a collag |
 | `b2b-visuals-to-deck` | Design & Creative | Client Website to 12 B2B Growth Visuals, combined into a PowerPoint deck |
 | `canvas-design` | Design & Creative | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or  |
+| `carousel-funnel` | Marketing & Content | Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post co |
 | `client-to-12-growth-visuals` | Design & Creative | Turn a client/prospect website URL into 12 separate, premium, client-specific B2B visuals showing how LakeB2B data can support that company's growth. MANDATORY TRIGGER fo |
 | `deck-doctor` | Design & Creative | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `design-trends` | Design & Creative | Phase 3 of the design pipeline. Diagnoses whether a design is dated, overdone, or soulless, then either applies trends as intent rather than costume, or rebuilds visual i |
@@ -191,6 +192,7 @@ Blog, campaign, SEO, copywriting, social, thought leadership.
 | `b2b-blog-writer` | > |
 | `b2b-thought-leader-pulse` | Tue/Thu Span Global Services content intelligence pulse. Scans 7 sectors, applies the Thought Leadership Research Playbook to produce 5 Research Briefs with non-commodity |
 | `blog-enhancer` | > |
+| `carousel-funnel` | Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post co |
 | `case-study-builder` | > |
 | `content-dispatch` | > |
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |

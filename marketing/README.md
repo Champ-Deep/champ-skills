@@ -10,6 +10,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `b2b-blog-writer` | > |
 | `b2b-thought-leader-pulse` | Tue/Thu Span Global Services content intelligence pulse. Scans 7 sectors, applies the Thought Leadership Research Playbook to produce 5 Research Briefs with non-commodity |
 | `blog-enhancer` | > |
+| `carousel-funnel` | Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post co |
 | `case-study-builder` | > |
 | `content-dispatch` | > |
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
