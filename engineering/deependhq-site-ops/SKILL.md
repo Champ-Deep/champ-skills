@@ -123,6 +123,65 @@ One rewrite permitted. If neither a metric nor an artifact can be extracted hone
 
 `arc_color`: green = building and shipping, blue = thinking and exploring, gold = a real outcome, money, something signed.
 
+## A publish that says PUBLISHED may not have deployed (2026-09-26)
+
+Two separate failures looked like successful publishes. Check the live site, not
+the publish output, before believing a deploy landed.
+
+**`package.json` is tracked and esbuild is a RUNTIME dependency.** Cloudflare
+builds may install with `NODE_ENV=production`, which skips devDependencies; if
+esbuild sits in devDependencies, prerender has no bundler and pages publish with
+an empty `#root`. Keep it in `dependencies`. Never delete package.json: the old
+DEPLOY.md told you to.
+
+**`node_modules/` must be in `.assetsignore`.** Cloudflare builds runs
+`npm install` in the checkout, and `node_modules/workerd` alone is 135MB against
+a 25MB per-asset limit. Without the ignore the build dies and nothing deploys,
+while publish.sh still prints PUBLISHED.
+
+**Verify a deploy landed:**
+
+```
+curl -s https://deependhq.com/data.js | sed -n '3p'    # Built <timestamp>
+curl -sI https://deependhq.com/ | grep -i content-security-policy
+```
+
+No CSP header means the Worker did not deploy. A `Built` timestamp older than
+your local `data.js` means the same.
+
+## Gates must fail loudly, and you must prove they do
+
+`publish.sh` now runs guard, build-data, prerender and link-check before
+pushing. A gate nobody has seen fail is a gate nobody knows is armed, so each
+has a self-test that injects the bad input and asserts a non-zero exit:
+
+- `node scripts/guard-selftest.mjs` (6 cases, naming and disclosure)
+- `node scripts/ingest-selftest.mjs` (23 cases, entry schema v2)
+- `node scripts/link-check.mjs` with a link injected into a page
+
+**Assert your injection landed before trusting a pass.** A link-check test
+"passed" once because the python injection used an anchor that no longer existed
+in the file, so nothing was injected and the gate was never exercised. Same class
+of bug as the first naming matcher, where `pip` and `hospitali` matched
+"pipeline" and "hospitality". Both times the fix was to verify the premise, not
+to trust the green. When a gate passes unexpectedly, suspect the test.
+
+## A redirect into a 404 is worse than an ugly URL
+
+The Worker shipped `301 /field-notes -> /mission-log` for a page that was never
+built. Two publishes succeeded and every old link 404'd. Nav and footer point at
+`journey.html`, so the redirect targets `/journey`. When a pretty route does not
+exist yet, redirect to the route that does. `scripts/link-check.mjs` fails the
+build on any link to a missing page, and runs after prerender because it reads
+the built HTML.
+
+## CSP blocks Cloudflare's own analytics beacon
+
+The Worker sets a strict `script-src`, so `static.cloudflareinsights.com` is
+refused and logs a console error on every page. The CSP working, not a defect,
+but it sits awkwardly with the footer claim "no cookies, no trackers". Decide
+which gives way before adding the domain.
+
 ## Known traps
 
 | Trap | What to do |
@@ -132,7 +191,7 @@ One rewrite permitted. If neither a metric nor an artifact can be extracted hone
 | `rsync --delete` clobbers newer remote commits | The worktree mirrors onto the clone. If someone fixed something directly on GitHub, reconcile first. Check `git log origin/main` freshness before publishing. |
 | `pending-entry.json` in scripts/ | A fossil from June 2026, gitignored and rsync-excluded. Misleading clutter, not a signal. Safe to delete. |
 | `ingest-shoutouts.mjs` | Orphaned. Nothing calls it. It writes a review queue that is never auto-published, by design. Wire it into a weekly cadence or delete it. |
-| rsync copies `deependhq-next/node_modules` nightly | Hundreds of MB for nothing. Add `--exclude 'deependhq-next/node_modules'` and `--exclude '**/.next'`. |
+| rsync copies `deependhq-next/node_modules` nightly | Hundreds of MB for nothing. `publish.sh` now excludes `node_modules`, `deependhq-next/node_modules`, `**/.next`, `scripts/.prerender-cache`, `scripts/.shots` and `.wrangler`. The excludes are load-bearing: without them the deploy repo gains hundreds of MB every night. |
 | Documentation drift | `PIPELINE.md`, `DEPLOY.md`, the public `Pipeline.jsx`, and two copies of the `daily-note-recap` skill all describe different schedules and deploy targets. Only the vault copy at `Scheduled/daily-note-recap/SKILL.md` is authoritative. Reconcile before debugging by the docs. |
 
 ## Hardening checklist
@@ -144,7 +203,7 @@ When asked to make this more reliable, these are the fixes that matter, in order
 - [ ] **Independent watchdog.** A separate small task at 09:00 IST that only fetches the live `data.js` and alerts if it is more than 2 weekdays behind. It must share no code, no mount and no state with the publishing task. The current health counter lives inside the daily notes, which is the very thing that breaks.
 - [ ] **Two consecutive "nothing to publish" nights is an alarm**, not a shrug.
 - [ ] Widen `check-gaps.mjs` to 30 days and replace the break-on-first-hit walk with a full-range scan, so holes older than the newest entry are still found.
-- [ ] Add a naming denylist scrubber alongside the existing em-dash scrubber in `build-data.mjs`. Naming rules are currently enforced only by the authoring self-check, with no deterministic backstop.
+- [x] Add a naming denylist scrubber alongside the existing em-dash scrubber in `build-data.mjs`. Naming rules are currently enforced only by the authoring self-check, with no deterministic backstop. **Done 2026-09-26:** `scripts/guard.mjs` plus `scripts/denylist.json`, runs in `publish.sh` and fails the build.
 - [ ] Derive every computed number at build time. Stored counts drift: `weekly_narratives_count` is why the site has rendered "week 38 of 31".
 - [ ] Emit a `health` object into `data.js` on every build: `built`, `newest_entry`, `weekdays_stale`, `missing_days`, and a `stale_sections` list computed from every `*.updated` field. The site's stale banner and per-section age affordances read from it, so the site tells the truth about itself without anyone remembering to update a string.
 - [ ] Delete or wire the hardcoded `status` fields (`weather`, `listening`, `uptime_d`). A fake liveness signal is worse than none.

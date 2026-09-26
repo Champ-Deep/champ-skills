@@ -1,0 +1,10 @@
+{
+  "target": "file:///Users/deep/Celsus/Atlas/Research/Jev%20Operator%20Card.html",
+  "shots": [
+    ".verify/light-390-fold.png",
+    ".verify/light-390-full.png",
+    ".verify/light-1440-fold.png",
+    ".verify/light-1440-full.png"
+  ],
+  "console_errors": []
+}
