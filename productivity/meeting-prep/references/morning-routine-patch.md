@@ -1,4 +1,4 @@
-# Morning Routine — Phase 5 Addition
+# Morning Routine, Phase 5 Addition
 
 ## Where to Insert
 
@@ -8,7 +8,7 @@ Add the following Phase 5 block AFTER Phase 4 (Day Planner) and BEFORE the "Adap
 
 ### Phase 5: Meeting Prep (Meeting Prep Skill)
 
-**Goal:** Ensure Sreedeep walks into every meeting prepared — with continuity from previous meetings, relevant context, and strategic questions ready.
+**Goal:** Ensure Sreedeep walks into every meeting prepared, with continuity from previous meetings, relevant context, and strategic questions ready.
 
 **Steps:**
 
@@ -93,7 +93,7 @@ Add the following Phase 5 block AFTER Phase 4 (Day Planner) and BEFORE the "Adap
 
 Add this row to the existing table:
 
-| **Meeting Prep** | `.skills/skills/meeting-prep/` | Phase 5 — scan calendar, classify meetings, generate prep docs |
+| **Meeting Prep** | `.skills/skills/meeting-prep/` | Phase 5, scan calendar, classify meetings, generate prep docs |
 
 ## Updated Adaptive Behavior Table
 

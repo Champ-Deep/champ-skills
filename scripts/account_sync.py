@@ -26,8 +26,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SYNC = os.path.join(ROOT, ".sync")
 ACCOUNT = os.path.join(SYNC, "account.json")
 MANIFEST = os.path.join(SYNC, "account-manifest.json")
-SKILL_ROOTS = ["design/skills", "design/brand-guidelines", "marketing", "sales", "research",
-               "documents", "engineering", "software-development", "productivity", "vault"]
+SKILL_ROOTS = ["design/skills", "design/brand-guidelines", "branded-docs", "marketing", "sales",
+               "documents", "engineering", "productivity", "science", "personal"]
+# Skills the repo now owns (merged or retired on 2026-09-30). Account copies of these are
+# ignored: they are stale by design and must never be re-added or overwrite the repo.
+MANAGED = os.path.join(SYNC, "repo-managed.json")
 
 
 def load(p, default):
@@ -73,9 +76,13 @@ def plan():
         print(json.dumps({"error": "missing .sync/account.json"}))
         return 2
     man = load(MANIFEST, {})
+    managed = set(load(MANAGED, {}).get("skills", []))
     repo = repo_skills()
-    res = {"new": [], "update": [], "conflict": [], "repo_ahead": [], "unchanged": 0, "excluded": []}
+    res = {"new": [], "update": [], "conflict": [], "repo_ahead": [], "unchanged": 0, "excluded": [], "repo_managed": 0}
     for skill, info in sorted(acct.get("skills", {}).items()):
+        if skill in managed:
+            res["repo_managed"] += 1
+            continue
         if info.get("excluded"):
             res["excluded"].append({"skill": skill, "reason": info["excluded"]})
             continue

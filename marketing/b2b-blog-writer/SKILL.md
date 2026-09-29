@@ -1,7 +1,12 @@
 ---
 name: b2b-blog-writer
-description: "Full-pipeline B2B blog writing skill that transforms trending topics into authoritative, thought-leadership blog posts for any entity. Use this skill whenever the user wants to write a blog post, create B2B content, draft an article, write a thought-leadership piece, create content marketing, write for a company blog, or turn a trending topic into a blog. Also trigger for: \"write a blog about\", \"blog post on\", \"content piece about\", \"article about\", \"trending topic\", \"turn this into a blog\", \"write up on\", \"thought leadership on\", \"draft content about\", \"blog for [company]\", \"write about [topic] for [entity]\", or any request that involves researching a topic and producing long-form B2B content. MANDATORY TRIGGER for all blog writing tasks. This skill works across all entities -- it is methodology-focused, not brand-specific. Brand voice comes from the entity's own brand skill loaded alongside this one."
+description: >-
+  Full-pipeline B2B blog writing that turns trending topics into authoritative thought-leadership posts for any entity, then optionally enhances the post into a visual content experience: branded infographics (Gemini gems, NotebookLM), interactive AI tools as lead magnets (Google AI Studio), and page design upgrades. MANDATORY TRIGGER for all blog writing and blog enhancement: "write a blog about", "blog post on", "article about", "thought leadership on", "turn this into a blog", "blog for [company]", "trending topic", "draft content about", "enhance blog", "blog infographic", "blog lead magnet", "beautify blog", "blog looks plain", "create a gem", "AI studio tool", "upgrade blog page", or a published blog URL that needs visual enrichment. Methodology-focused and brand-neutral: load the entity's brand skill alongside it. Replaces blog-enhancer.
 ---
+
+## Phase 7: ENHANCE (absorbed from blog-enhancer)
+
+After Phase 6, or when the user brings an existing post or blog URL, offer the enhancement pass: read `modes/blog-enhancer/MODE.md`. It turns the post into infographics, an interactive lead magnet and a page upgrade. Skip it when the user wants text only.
 
 # B2B Blog Writer
 

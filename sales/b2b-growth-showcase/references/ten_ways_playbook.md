@@ -1,6 +1,6 @@
 # The "10 Ways [Client] Can Use B2B Data" Methodology
 
-Purpose: not to explain LakeB2B's capabilities in the abstract, but to show a specific, named client exactly what their campaigns, insights, and platforms could look like — before they buy. Every section below is a slide (or report page) with the same five parts:
+Purpose: not to explain LakeB2B's capabilities in the abstract, but to show a specific, named client exactly what their campaigns, insights, and platforms could look like, before they buy. Every section below is a slide (or report page) with the same five parts:
 
 1. Client-specific opportunity (one sentence, in their language, not ours)
 2. Visual sample or mock-up
@@ -26,17 +26,17 @@ Visual headline pattern: *"We identified [N] decision-makers who match your idea
 
 **Show:** the same intelligence activated on LinkedIn and Meta.
 
-- **LinkedIn connection request** — references the client's real growth/industry context, one sentence.
-- **LinkedIn follow-up** — references a comparable company's outcome, offers to share the approach.
-- **LinkedIn sponsored ad** — headline poses the buyer's pain as a question, body positions the client's solution, CTA is a specific asset ("Download the Executive Guide"), not "Learn more."
-- **Meta/Facebook ad** — only relevant when the client's buyers are SMB owners, clinicians, real-estate investors, retailers, hospitality, or education — i.e. audiences reachable on consumer-adjacent platforms. Headline + body + CTA, branded with the client's own logo in the mock-up.
+- **LinkedIn connection request**, references the client's real growth/industry context, one sentence.
+- **LinkedIn follow-up**, references a comparable company's outcome, offers to share the approach.
+- **LinkedIn sponsored ad**, headline poses the buyer's pain as a question, body positions the client's solution, CTA is a specific asset ("Download the Executive Guide"), not "Learn more."
+- **Meta/Facebook ad**, only relevant when the client's buyers are SMB owners, clinicians, real-estate investors, retailers, hospitality, or education, i.e. audiences reachable on consumer-adjacent platforms. Headline + body + CTA, branded with the client's own logo in the mock-up.
 
-## 3. Customer Acquisition — Telemarketing / AI Agents
+## 3. Customer Acquisition, Telemarketing / AI Agents
 
 **Show:** how data becomes a qualified conversation, not just a dial list.
 
 - AI voice-agent opening line referencing the real industry + outcome.
-- 4–6 qualification questions (current process, biggest gap, evaluation timeline, decision team, budget, willingness to meet).
+- 4-6 qualification questions (current process, biggest gap, evaluation timeline, decision team, budget, willingness to meet).
 - Call outcomes taxonomy: Interested / Not interested / Call later / Wrong contact / Referred / Qualified opportunity / Meeting booked.
 
 Visual headline pattern: *"From [N] contacts to [N] conversations, [N] qualified prospects, and [N] meetings."* **Always label funnel projections as illustrative until validated against real call data.**
@@ -47,7 +47,7 @@ Visual headline pattern: *"From [N] contacts to [N] conversations, [N] qualified
 
 Search patterns to use: "best providers of [category]", "top [industry] software companies", "best alternatives to [competitor]", "how to solve [customer problem]", "recommended companies for [service]".
 
-Layout: the search question → brands appearing → **[Client Name] — missing**.
+Layout: the search question → brands appearing → **[Client Name], missing**.
 
 Recommended action list: industry comparison pages, buyer guides, FAQ content, use-case pages, original research, expert commentary, structured data, case studies, AI-readable company profiles, third-party brand mentions.
 
@@ -61,9 +61,9 @@ Visual headline pattern: *"Your competitors are being recommended where your buy
 
 Comparison table: Regular job boards (active applicants, high competition, application-led, limited senior talent, candidates approach employers) vs. Passive-candidate intelligence (employed & experienced, direct personalized access, skill/profile-led, access to specialist/leadership talent, employers approach candidates).
 
-Sample pitch: references the candidate's specific current company and skill, frames the message as *not* mass recruitment, lists 2–3 specific matched skills/achievements, closes with a confidential-conversation ask.
+Sample pitch: references the candidate's specific current company and skill, frames the message as *not* mass recruitment, lists 2-3 specific matched skills/achievements, closes with a confidential-conversation ask.
 
-Visual headline pattern: *"We identified [N] qualified professionals — including [N] passive candidates not actively applying on job boards."*
+Visual headline pattern: *"We identified [N] qualified professionals, including [N] passive candidates not actively applying on job boards."*
 
 ## 6. KOL & Buying-Committee Identification
 
@@ -99,7 +99,7 @@ Executive profile fields: name, designation, background, areas of responsibility
 
 Visual headline pattern: *"Understand the account, identify the stakeholders, and personalize every interaction."*
 
-**Guardrail:** don't name a real target company in this mock-up unless the person supplies one — use a generic descriptor ("a mid-market prospect in [client's ICP industry]").
+**Guardrail:** don't name a real target company in this mock-up unless the person supplies one, use a generic descriptor ("a mid-market prospect in [client's ICP industry]").
 
 ## 9. B2B Dataset Powering LLMs & APIs
 
@@ -109,21 +109,21 @@ Use cases: CRM enrichment, AI sales assistants, account research, lead scoring, 
 
 Workflow diagram: Client application → LakeB2B company/contact API → firmographic + professional + market intelligence → client's AI model/workflow → personalized recommendation or next action.
 
-Sample natural-language query pattern: *"Find [industry] companies with [N–N] employees that use [tech], recently appointed a new [role], and are expanding [function]."*
+Sample natural-language query pattern: *"Find [industry] companies with [N-N] employees that use [tech], recently appointed a new [role], and are expanding [function]."*
 
 Sample output fields: company name, website, industry, employee count, revenue range, technologies, locations, decision-makers, intent signal, growth trigger, recommended message.
 
-**Guardrail:** any claim about database size, coverage, accuracy, or refresh frequency must use the latest figures the person actually confirms — never invent these numbers.
+**Guardrail:** any claim about database size, coverage, accuracy, or refresh frequency must use the latest figures the person actually confirms, never invent these numbers.
 
 ## 10. Client-Owned B2B or Industry Platform
 
 **Show:** turning data into a branded platform connecting the client to their total addressable market.
 
-Platform concepts (pick the one closest to the client's actual industry): supplier–buyer marketplace, investor–startup platform, hospital–vendor platform, manufacturer–distributor network, real-estate investor network, education–employer platform, healthcare-professional community, industry association portal, partner-discovery platform, recruitment marketplace.
+Platform concepts (pick the one closest to the client's actual industry): supplier-buyer marketplace, investor-startup platform, hospital-vendor platform, manufacturer-distributor network, real-estate investor network, education-employer platform, healthcare-professional community, industry association portal, partner-discovery platform, recruitment marketplace.
 
-Platform capabilities: searchable directory, executive profiles, AI-powered recommendations, buyer–seller matchmaking, campaign activation, content/community, event invitations, lead capture, subscription access, premium intelligence, CRM integration, API connectivity.
+Platform capabilities: searchable directory, executive profiles, AI-powered recommendations, buyer-seller matchmaking, campaign activation, content/community, event invitations, lead capture, subscription access, premium intelligence, CRM integration, API connectivity.
 
-Positioning pattern: *"[Client Industry] Connect — a client-owned platform connecting [Client Name] with buyers, partners, experts, and opportunities across its total addressable market."*
+Positioning pattern: *"[Client Industry] Connect, a client-owned platform connecting [Client Name] with buyers, partners, experts, and opportunities across its total addressable market."*
 
 Revenue opportunities to list: subscriptions, sponsored listings, advertising, lead-gen packages, premium reports, event sponsorship, data licensing, partnership commissions, marketplace transaction fees.
 
@@ -133,10 +133,10 @@ Visual headline pattern: *"Do not just market to your industry. Build the platfo
 
 **Show:** turning a webinar, plant-tour lunch, or executive roundtable from a generic invite blast into a buyer-committee-matched guest list with a predictable RSVP lift.
 
-**Visual elements:** an invite mockup (subject/headline, format, personalized opening line referencing the recipient's trigger event) and a two-bar comparison — "House list (generic invite)" vs. "ICP-matched invite list" RSVP rate. Both rates are illustrative unless the person supplies real historical event data.
+**Visual elements:** an invite mockup (subject/headline, format, personalized opening line referencing the recipient's trigger event) and a two-bar comparison, "House list (generic invite)" vs. "ICP-matched invite list" RSVP rate. Both rates are illustrative unless the person supplies real historical event data.
 
 Sample pattern:
-> "You're invited: [Event Title] — [format: webinar / in-person, city] / {{Date}}. Hi {{First Name}} — as {{Company Name}} [trigger context], we're hosting a small group of [ICP title] to discuss [primary pain]. Seats are limited."
+> "You're invited: [Event Title], [format: webinar / in-person, city] / {{Date}}. Hi {{First Name}}, as {{Company Name}} [trigger context], we're hosting a small group of [ICP title] to discuss [primary pain]. Seats are limited."
 
 Why it works: same firmographic + intent layer feeds the invite list as every other channel (not a static house list); personalization by role/trigger; built-in no-show follow-up; post-event engagement (attended / no-show / requested follow-up) feeds back into lead scoring.
 
@@ -157,13 +157,13 @@ A single "Your immediate opportunities" table:
 | Buying committee | priority accounts | Top 100 accounts | Enterprise conversion |
 | Platform | total market size | MVP | Recurring revenue |
 
-Closing statement pattern: *"LakeB2B does not only provide data. We show how your organization can activate data across marketing, sales, recruitment, intelligence, AI, and platform development — turning market information into measurable business growth."*
+Closing statement pattern: *"LakeB2B does not only provide data. We show how your organization can activate data across marketing, sales, recruitment, intelligence, AI, and platform development, turning market information into measurable business growth."*
 
 ---
 
-## Guardrails (repeat of SKILL.md — the ones most often skipped under deadline pressure)
+## Guardrails (repeat of SKILL.md, the ones most often skipped under deadline pressure)
 
-- No fabricated live screenshots (SEO/AEO slide) — real & dated, or clearly labeled conceptual.
-- No illustrative number presented as verified — always flag projections/estimates as such.
+- No fabricated live screenshots (SEO/AEO slide), real & dated, or clearly labeled conceptual.
+- No illustrative number presented as verified, always flag projections/estimates as such.
 - No real named company used as the "target account" mock-up unless the person supplied it.
-- No invented database size / coverage / accuracy / refresh-rate claims — use only figures the person confirms.
+- No invented database size / coverage / accuracy / refresh-rate claims, use only figures the person confirms.

@@ -1,13 +1,17 @@
 ---
 name: meeting-followup
-description: >
-  Executes the follow-up on a meeting or discussion for Sreedeep (Deep). Distinct from meeting-intake,
-  which FILES a meeting; this skill ACTS on it. MANDATORY TRIGGER for: "follow up on this", "help me follow
-  up", "follow up on this discussion/meeting/call", "what do I owe from this meeting", "get me ready for the
-  next call with [person/vendor/client]", a pasted meeting summary accompanied by any request for action, or
-  a scheduled nightly sweep of the day's Zoom meetings. If the user pastes meeting content with no instruction
-  at all, run meeting-intake first, then offer this skill. If they ask for any action on it, run this.
+description: >-
+  Everything after a meeting, in one skill. Intake: file meeting notes, summaries, transcripts or recordings into structured vault knowledge and tasks. Follow-up: act on the meeting for Deep, building the commitment ledger, drafting every deliverable he owes, a prepared-plus extra and a logistics check. Send kit: assemble ready-to-send packages for external meetings (cleaned follow-up email, committed docs, one-pager) staged as drafts. MANDATORY TRIGGER for: pasted meeting notes, summaries or Zoom transcripts, "here are my notes from", "just got out of a call", uploaded meeting audio or video, a wall of text with names, decisions and next steps, "follow up on this", "help me follow up", "what do I owe from this meeting", "get me ready for the next call with [person]", "send kit", "grab the send kit", "documentation emails for my meetings", and the nightly Zoom sweep. Pasted content with no instruction: file it, then offer the follow-up. Replaces meeting-intake and send-kit.
 ---
+
+## Absorbed modes
+
+| Mode | Use when | Read |
+|---|---|---|
+| **meeting-intake** | Pasted or uploaded meeting content with no action asked: file it, extract tasks. Step 6 below also calls this | `modes/meeting-intake/MODE.md` |
+| **send-kit** | External meeting needs a documentation package staged as drafts, or the weekly follow-up review asks for kits | `modes/send-kit/MODE.md` |
+
+Where the text below says "run meeting-intake" or "file via meeting-intake", read `modes/meeting-intake/MODE.md`. Before appending any task to TASKS.md, dedupe it (vault-keeper, celsus-task-dedupe mode).
 
 # Meeting Follow-up
 

@@ -1,4 +1,4 @@
-# Deep Prep Template — SPIN-Driven Client Dossier
+# Deep Prep Template, SPIN-Driven Client Dossier
 
 > This template produces meeting preps in Sreedeep's signature style: mildly irreverent,
 > consultative, client-first, and pain-point driven. Every section earns its place by
@@ -32,7 +32,7 @@ between "nice to meet you again" and "here's exactly where we left off."
 ```markdown
 ## Previous Meeting Continuity
 
-**Last Meeting:** [Date] — [1 sentence: what was the vibe? productive? exploratory? tense?]
+**Last Meeting:** [Date], [1 sentence: what was the vibe? productive? exploratory? tense?]
 
 ### What We Committed To
 | # | Commitment | Owner | Status | Evidence/Notes |
@@ -68,12 +68,12 @@ middle phases create urgency (Implication), and later phases unlock value (Need-
 
 | Time | Phase | SPIN Stage | Activity |
 |------|-------|------------|----------|
-| 0-5 min | Opening | — | Relationship context, rapport, "what's new since last time" |
+| 0-5 min | Opening |, | Relationship context, rapport, "what's new since last time" |
 | 5-15 min | Discovery | S+P | Client shares their current state and what's not working |
 | 15-25 min | Deepening | P+I | Explore the cost/risk of those problems continuing |
-| 25-35 min | Value Framing | N | "Here's what becomes possible..." — solutions as outcomes |
+| 25-35 min | Value Framing | N | "Here's what becomes possible...", solutions as outcomes |
 | 35-45 min | Specifics | N | Pilot structure, timeline, scope, pricing |
-| 45-50 min | Next Steps | — | Action items with owners and dates |
+| 45-50 min | Next Steps |, | Action items with owners and dates |
 
 ---
 
@@ -89,13 +89,13 @@ middle phases create urgency (Implication), and later phases unlock value (Need-
 
 For each external attendee:
 
-**[Name] — [Title], [Company]**
+**[Name], [Title], [Company]**
 - **Background:** Career arc, education, notable wins (LinkedIn, web research)
 - **Current Focus:** What they're building/solving right now
-- **What Drives Them:** Beyond the job — their mission, what gets them animated
+- **What Drives Them:** Beyond the job, their mission, what gets them animated
 - **SPIN Lens:** What Situation are THEY in? What Problem is on THEIR plate?
   What Implications keep THEM up at night? What would a win look like for THEM personally?
-- **Talking Point:** Something specific that shows you prepared — a podcast they did,
+- **Talking Point:** Something specific that shows you prepared, a podcast they did,
   a conference talk, a LinkedIn post. Not "I saw you went to IISc" but "Your point about
   democratizing diagnostics in your Unboxing AI episode really resonated."
 
@@ -120,36 +120,36 @@ a specific attendee and follows the SPIN progression deliberately.
 
 ### SPIN Sequence for [CEO/Founder Name]
 
-**Situation Questions** (establish baseline — show you've done homework, don't ask what
+**Situation Questions** (establish baseline, show you've done homework, don't ask what
 you can Google):
-1. "Post-[milestone], what does your [market] playbook look like today — [option A],
-   [option B], or [option C]?" [*Already know the answer partially — this validates*]
+1. "Post-[milestone], what does your [market] playbook look like today, [option A],
+   [option B], or [option C]?" [*Already know the answer partially, this validates*]
 2. "Of your [X] installations, what's the split between [segment A] and [segment B]?"
    [*Maps to ICP data delivery*]
 
-**Problem Questions** (surface pain — let THEM say it, don't tell them):
-3. "Where do deals stall most — awareness, evaluation, procurement, or integration?"
+**Problem Questions** (surface pain, let THEM say it, don't tell them):
+3. "Where do deals stall most, awareness, evaluation, procurement, or integration?"
    [*Identifies pipeline bottleneck → maps to specific solution*]
 4. "How does your team currently identify and reach decision-makers at scale?"
    [*If the answer is "manually" or "it's hard" → that's the pain*]
 
-**Implication Questions** (make the pain expensive — what happens if they DON'T fix it):
+**Implication Questions** (make the pain expensive, what happens if they DON'T fix it):
 5. "With [competitor] at [X countries/installations], what happens to your market
    position if the [specific market] entry takes 12 months instead of 3?"
    [*Creates urgency without being alarmist*]
-6. "What's the cost of a 6-month delay in building pipeline infrastructure —
+6. "What's the cost of a 6-month delay in building pipeline infrastructure , 
    in terms of market share, not just revenue?"
    [*Forces them to quantify inaction*]
 
-**Need-Payoff Questions** (let THEM articulate the value — don't pitch, ask):
+**Need-Payoff Questions** (let THEM articulate the value, don't pitch, ask):
 7. "What if you could go from [current state] to [5,000 qualified leads] in
-   [4 weeks] — without hiring a single person?"
+   [4 weeks], without hiring a single person?"
    [*Uses real numbers from research*]
 8. "Would a joint [specific initiative] move the needle for your [specific goal]?"
    [*Lets them sell the solution internally*]
 
 ### SPIN Sequence for [Director/VP Name]
-[Same structure, different lens — operational, not strategic]
+[Same structure, different lens, operational, not strategic]
 
 ### Pitch-Driving Questions (conversation closers)
 2-3 questions that use concrete data to create "aha moments":
@@ -160,7 +160,7 @@ you can Google):
 
 ## 4. Situation Analysis (Company Research)
 
-### [Company Name] — The Reality Check
+### [Company Name], The Reality Check
 
 **Company Overview:** 2-3 paragraphs that read like a briefing, not a Wikipedia entry.
 Include what's going well, what's at a crossroads, and what's missing. The tone should
@@ -187,7 +187,7 @@ Every metric should connect to a potential Problem or Implication.
 
 ## 5. Problem & Implication Analysis (Pain Points)
 
-This is the CORE of the prep. Not a generic "challenges" section — a prosecutorial
+This is the CORE of the prep. Not a generic "challenges" section, a prosecutorial
 case for why the status quo is unacceptable.
 
 ### Pain Points & Implication Matrix
@@ -229,7 +229,7 @@ Every solution is framed as what the client GAINS, not what we SELL.
 
 **The reframing principle:**
 - "We offer email marketing services" = feature dump
-- "Go from zero U.S. pipeline to 5,000 qualified radiology leads in 4 weeks —
+- "Go from zero U.S. pipeline to 5,000 qualified radiology leads in 4 weeks , 
   without hiring a single marketing person" = need-payoff
 
 Every row should pass the "so what" test from the client's perspective.
@@ -251,7 +251,7 @@ Frame it as context that makes the client's situation more urgent or more promis
 The "Our Angle" column connects the competitive analysis back to SPIN Need-Payoff.
 
 ### Client's Competitive Moat
-1-2 paragraphs that respect the client's position. This isn't flattery — it's strategic
+1-2 paragraphs that respect the client's position. This isn't flattery, it's strategic
 validation that shows you understand what makes them worth partnering with. If you can't
 articulate why they're special, you haven't researched hard enough.
 
@@ -272,7 +272,7 @@ to a problem the client actually has, it's academic noise.
 Every content idea should address a specific Implication or support a Need-Payoff:
 
 **Video Content:** 3-4 concepts with titles that a prospect would click on.
-**Product Bundles:** 2-3 packaged offerings — immediate, medium-term, aspirational.
+**Product Bundles:** 2-3 packaged offerings, immediate, medium-term, aspirational.
 **Thought Leadership:** 4-5 SEO article titles targeting the client's industry keywords.
 
 ### 6-Month Content Calendar
@@ -304,13 +304,13 @@ challenge, or target market.
 | [Aspirational] | ... | ... | 6-12 months | Co-investment |
 
 Range from quick wins (prove value fast) to big bets (long-term partnership).
-The client picks what resonates — we're not prescribing, we're presenting a menu.
+The client picks what resonates, we're not prescribing, we're presenting a menu.
 
 ---
 
 ## 10. Strategic Positioning & Differentiation
 
-### SWOT Analysis — Dual-Sided
+### SWOT Analysis, Dual-Sided
 
 **Client SWOT:**
 
@@ -326,7 +326,7 @@ The client picks what resonates — we're not prescribing, we're presenting a me
 | **Internal** | Strengths: ... | Weaknesses: ... |
 | **External** | Opportunities: ... | Threats: ... |
 
-Including our weaknesses isn't self-sabotage — it's preparation. If the client asks
+Including our weaknesses isn't self-sabotage, it's preparation. If the client asks
 "but you're not a healthcare company, are you?" Sreedeep already has the response ready.
 
 ### The Management Narrative
@@ -334,8 +334,8 @@ Including our weaknesses isn't self-sabotage — it's preparation. If the client
 This is the section that gets forwarded to the client's board. Write it accordingly.
 
 **Structure:**
-1. **Acknowledge** where the client is today — with specific data, not puffery
-2. **Quantify** the cost of the status quo — make inaction feel expensive
+1. **Acknowledge** where the client is today, with specific data, not puffery
+2. **Quantify** the cost of the status quo, make inaction feel expensive
 3. **Position** the partnership as strategic infrastructure, not a vendor relationship
 4. **Close** with the "with vs. without" comparison table
 
@@ -372,10 +372,10 @@ All citations from the document, numbered and linked. Every factual claim earns 
 
 After generating a deep prep, ensure the client context folder is updated:
 
-- [ ] `Atlas/Clients/{ClientName}/{ClientName}.md` — Master profile created/updated
-- [ ] `Atlas/Clients/{ClientName}/meeting-history.md` — This meeting added
-- [ ] `Atlas/Clients/{ClientName}/pain-points.md` — Pain inventory updated
-- [ ] `Atlas/Clients/{ClientName}/solution-mapping.md` — Proposals logged
-- [ ] `Atlas/Clients/{ClientName}/context-docs/` — Any new research docs saved
+- [ ] `Atlas/Clients/{ClientName}/{ClientName}.md`, Master profile created/updated
+- [ ] `Atlas/Clients/{ClientName}/meeting-history.md`, This meeting added
+- [ ] `Atlas/Clients/{ClientName}/pain-points.md`, Pain inventory updated
+- [ ] `Atlas/Clients/{ClientName}/solution-mapping.md`, Proposals logged
+- [ ] `Atlas/Clients/{ClientName}/context-docs/`, Any new research docs saved
 - [ ] NotebookLM notebook created/updated (if available)
 - [ ] `[[Clients MOC]]` updated with new client link (if first meeting)

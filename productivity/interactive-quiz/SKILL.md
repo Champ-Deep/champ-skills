@@ -1,16 +1,12 @@
 ---
 name: interactive-quiz
-description: >
-  Create beautiful, interactive single-file HTML quizzes, surveys, and intake forms with diverse,
-  creative interaction patterns that make people actually enjoy answering questions. Use this skill
-  whenever the user wants to turn questions into something interactive — quizzes, surveys,
-  questionnaires, intake forms, onboarding flows, feedback collectors, assessments, ICP alignment
-  forms, client intake, team pulse checks, event RSVPs, self-assessments, or any scenario where
-  someone needs to collect answers from others. Also trigger when the user says "make this fun",
-  "turn these questions into a quiz", "interactive form", "collect feedback", or wants to gather
-  information in a way that feels engaging rather than boring. This skill works with any AI agent
-  that can write HTML files — no special tools, frameworks, or dependencies required.
+description: >-
+  Create beautiful, interactive single-file HTML quizzes, surveys, questionnaires and intake forms with diverse interaction patterns people enjoy answering, including the extended library for relational, spatial and nuanced capture (timeline, card sort, constellation, venn, sentence builder, confidence slider, before and after, relationship map, workflow sequence, bucket categorize). Use whenever questions need to become something interactive: quizzes, surveys, onboarding flows, feedback collectors, assessments, ICP alignment forms, client intake, team pulse checks, event RSVPs, self-assessments, the daily-start morning interview. Trigger on "make this fun", "turn these questions into a quiz", "interactive form", "collect feedback", "card sort", "timeline", "relationship map", "categorize", "sort into buckets". No frameworks or dependencies needed. Replaces interactive-quiz-v2.
 ---
+
+## Extended patterns (absorbed from interactive-quiz-v2)
+
+The core library below covers most questions. For relational, spatial or nuanced capture, the 8 extra patterns are in `modes/interactive-quiz-v2/MODE.md`. Read it when a question is about order, grouping, relationships, confidence or change over time.
 
 # Interactive Quiz & Survey Builder
 
@@ -23,7 +19,7 @@ tap-to-cycle tiles, tag builders, and animated concept cards gets genuine, thoug
 
 This skill produces a single `.html` file with zero external dependencies (Google Fonts are the
 only exception, and they degrade gracefully). The output works in any browser, on any device,
-opened from a file URL or a web server. No build tools, no npm, no React — just vanilla HTML/CSS/JS.
+opened from a file URL or a web server. No build tools, no npm, no React, just vanilla HTML/CSS/JS.
 
 Any AI agent that can write files can use this skill. No special tools required beyond file creation.
 
@@ -43,20 +39,20 @@ each question feels like a fresh mini-experience.
 
 For every question the user provides, identify three things:
 
-1. **Answer shape** — Is this a multi-select, single-select, ranking, free-text, allocation, or scale?
-2. **Required or optional** — Does blocking submission on this question make sense?
-3. **Best interaction fit** — Which pattern from the catalog below matches this answer shape?
+1. **Answer shape**, Is this a multi-select, single-select, ranking, free-text, allocation, or scale?
+2. **Required or optional**, Does blocking submission on this question make sense?
+3. **Best interaction fit**, Which pattern from the catalog below matches this answer shape?
 
 ### Step 2: Choose a Layout
 
 | Questions | Layout | Why |
 |-----------|--------|-----|
-| 1–8 | **Scrollable** (all visible) | User sees everything upfront, feels fast, avoids nav bugs |
-| 9–15 | **Sectioned** (groups of 3–4) | Groups related questions, progress per section |
+| 1-8 | **Scrollable** (all visible) | User sees everything upfront, feels fast, avoids nav bugs |
+| 9-15 | **Sectioned** (groups of 3-4) | Groups related questions, progress per section |
 | 16+ | **Paginated** (one at a time) | Prevents overwhelm |
 
 Scrollable is almost always the right call for quizzes with 8 or fewer questions. The user glances
-at the page and thinks "oh that's quick" — which means they actually start filling it out instead
+at the page and thinks "oh that's quick", which means they actually start filling it out instead
 of abandoning it.
 
 ### Step 3: Map Questions to Interaction Patterns
@@ -72,7 +68,7 @@ and CSS/JS snippets for each pattern.
 | **Priority Ranking Tiles** | When order/importance matters, not just selection | Tap-to-cycle: Skip → 🔥 Must Have → ⚡ Nice to Have |
 | **Concept Cards** | Single-select from richly described options | Illustrated cards with icon + subtitle |
 | **Scope Radar Cards** | Geographic/scope selection with visual metaphor | Horizontal cards with visual scope indicator |
-| **Animated Radio Cards** | Single choice from 2–5 descriptive options | Expand/glow on selection, icon per option |
+| **Animated Radio Cards** | Single choice from 2-5 descriptive options | Expand/glow on selection, icon per option |
 
 #### Input Patterns (creating/entering data)
 
@@ -100,12 +96,12 @@ and CSS/JS snippets for each pattern.
 
 **The diversity rule:** If your quiz has N questions, aim for at least `ceil(N * 0.6)` different
 patterns. A 6-question quiz should use at least 4 different patterns. If you catch yourself
-reusing the same pattern three times, rethink — there's almost certainly a better fit for one of
+reusing the same pattern three times, rethink, there's almost certainly a better fit for one of
 those questions.
 
 ### Step 4: Build the HTML
 
-Create a single self-contained HTML file. Everything inline — CSS in a `<style>` block, JS in a
+Create a single self-contained HTML file. Everything inline, CSS in a `<style>` block, JS in a
 `<script>` block. The only allowed external resource is Google Fonts (Outfit, Space Mono, Inter),
 which degrades gracefully to system fonts if unavailable.
 
@@ -122,7 +118,7 @@ which degrades gracefully to system fonts if unavailable.
 │   ├── Animations (@keyframes)
 │   └── Responsive breakpoints
 ├── <body>
-│   ├── Ambient glow elements (2–3 fixed blurred circles)
+│   ├── Ambient glow elements (2-3 fixed blurred circles)
 │   ├── Header (title, subtitle, time estimate)
 │   ├── Progress bar with counter
 │   ├── Question cards (each with number, title, subtitle, priority tag, interaction widget)
@@ -140,21 +136,21 @@ which degrades gracefully to system fonts if unavailable.
 
 #### The Premium Visual Feel (Impeccable Design Principles)
 
-The quiz should look like a polished product — not generic AI output. Apply these principles from the Impeccable design language to avoid "AI slop":
+The quiz should look like a polished product, not generic AI output. Apply these principles from the Impeccable design language to avoid "AI slop":
 
-**Typography** — Choose distinctive fonts, not Inter/Roboto/Arial. Good alternatives: Instrument Sans, Plus Jakarta Sans, Outfit, Figtree. Pair a display font with a body font only when you need genuine contrast. Use a modular type scale with `clamp()` for fluid headings. Use `font-variant-numeric: tabular-nums` for any numerical displays.
+**Typography**, Choose distinctive fonts, not Inter/Roboto/Arial. Good alternatives: Instrument Sans, Plus Jakarta Sans, Outfit, Figtree. Pair a display font with a body font only when you need genuine contrast. Use a modular type scale with `clamp()` for fluid headings. Use `font-variant-numeric: tabular-nums` for any numerical displays.
 
-**Color** — Use OKLCH for perceptually uniform palettes. Tint neutrals toward your brand hue (even chroma 0.01 creates subconscious cohesion). Never use pure gray on colored backgrounds — use a shade of the background color. Never use pure black (#000) or pure white (#fff). Follow the 60-30-10 rule: 60% neutral backgrounds, 30% secondary, 10% accent. Avoid the AI palette: cyan-on-dark, purple-to-blue gradients, neon accents on dark backgrounds.
+**Color**, Use OKLCH for perceptually uniform palettes. Tint neutrals toward your brand hue (even chroma 0.01 creates subconscious cohesion). Never use pure gray on colored backgrounds, use a shade of the background color. Never use pure black (#000) or pure white (#fff). Follow the 60-30-10 rule: 60% neutral backgrounds, 30% secondary, 10% accent. Avoid the AI palette: cyan-on-dark, purple-to-blue gradients, neon accents on dark backgrounds.
 
-**Spatial design** — Use a 4pt spacing base (not 8pt). Create visual rhythm through varied spacing — tight groupings and generous separations. Don't wrap everything in cards; use spacing and alignment for grouping. Never nest cards inside cards. Use `gap` instead of margins for sibling spacing.
+**Spatial design**, Use a 4pt spacing base (not 8pt). Create visual rhythm through varied spacing, tight groupings and generous separations. Don't wrap everything in cards; use spacing and alignment for grouping. Never nest cards inside cards. Use `gap` instead of margins for sibling spacing.
 
-**Motion** — Focus on one well-orchestrated page load with staggered reveals (50ms per item, cap total at 500ms). Use exponential easing (`cubic-bezier(0.25, 1, 0.5, 1)` for ease-out-quart). Animate only `transform` and `opacity`. For accordions, use `grid-template-rows: 0fr → 1fr`. Never use bounce/elastic easing. Always respect `prefers-reduced-motion`.
+**Motion**, Focus on one well-orchestrated page load with staggered reveals (50ms per item, cap total at 500ms). Use exponential easing (`cubic-bezier(0.25, 1, 0.5, 1)` for ease-out-quart). Animate only `transform` and `opacity`. For accordions, use `grid-template-rows: 0fr → 1fr`. Never use bounce/elastic easing. Always respect `prefers-reduced-motion`.
 
-**Grain overlay** — A subtle noise texture over the entire page at very low opacity (0.03). Adds tactile quality.
+**Grain overlay**, A subtle noise texture over the entire page at very low opacity (0.03). Adds tactile quality.
 
-**Priority tags** — Color-coded pills on each question: red for "Critical", amber for "Important", cyan for "Nice to Have". Tells respondents where to focus energy.
+**Priority tags**, Color-coded pills on each question: red for "Critical", amber for "Important", cyan for "Nice to Have". Tells respondents where to focus energy.
 
-**The AI Slop Test** — If you showed this quiz to someone and said "AI made this," would they believe you immediately? If yes, that's the problem. Review: no glassmorphism-for-its-own-sake, no gradient text on metrics, no identical card grids, no rounded rectangles with generic drop shadows.
+**The AI Slop Test**, If you showed this quiz to someone and said "AI made this," would they believe you immediately? If yes, that's the problem. Review: no glassmorphism-for-its-own-sake, no gradient text on metrics, no identical card grids, no rounded rectangles with generic drop shadows.
 
 #### Theming with CSS Custom Properties
 
@@ -215,7 +211,7 @@ Show a brief toast notification on copy success.
 
 Include a "Start Over" button that clears all state, resets all UI elements to default, hides
 the summary, and re-enables the generate button. Test that every interaction pattern properly
-resets — this is a common source of bugs.
+resets, this is a common source of bugs.
 
 ### Step 5: Deliver
 
@@ -227,29 +223,29 @@ and why.
 
 These bugs have been found in production quizzes. Understanding *why* they happen prevents them:
 
-**DOM reference before append** — If you create an element and try to reference its children
+**DOM reference before append**, If you create an element and try to reference its children
 before appending it to the DOM, those references will be null. Always `container.appendChild(el)`
 first, then query its children.
 
-**Variable shadowing in loops** — Using the same variable name (`card`) in an outer scope and
+**Variable shadowing in loops**, Using the same variable name (`card`) in an outer scope and
 inside a `.forEach()` creates ambiguity about which `card` event listeners reference. Use
 distinct names (`card` outer, `optCard` inner).
 
-**Navigation button multiplication** — In paginated layouts, if you rebuild navigation buttons
+**Navigation button multiplication**, In paginated layouts, if you rebuild navigation buttons
 inside the content area that gets cleared and re-rendered, buttons multiply with each render.
 Solution: put navigation in a static container that never gets cleared.
 
-**Overlapping absolutely-positioned elements** — Concentric circles, stacked cards, or layered
+**Overlapping absolutely-positioned elements**, Concentric circles, stacked cards, or layered
 elements can intercept click events intended for elements underneath. If an inner element sits
 on top of an outer element's center, clicks on the outer element's center hit the inner one
 instead. Use non-overlapping layouts (horizontal cards, grids) when click targeting matters.
 
-**`innerHTML +=` in loops** — This re-parses the entire DOM on every iteration. Build elements
+**`innerHTML +=` in loops**, This re-parses the entire DOM on every iteration. Build elements
 with `createElement` or collect HTML fragments and insert once.
 
 ## Reference Files
 
-- `references/interaction-patterns.md` — Full CSS/JS implementation for every interaction pattern.
+- `references/interaction-patterns.md`, Full CSS/JS implementation for every interaction pattern.
   Read this when you need the actual code for a specific pattern.
-- `assets/VertexGrid_ICP_Quiz.html` — A complete, tested example quiz with 6 different interaction
+- `assets/VertexGrid_ICP_Quiz.html`, A complete, tested example quiz with 6 different interaction
   patterns. Use as a reference for structure, styling, and state management patterns.

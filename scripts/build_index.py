@@ -19,16 +19,16 @@ WIDTH = 170
 
 # folder -> (category label, one-line blurb). Order here is the order in INDEX.md.
 CATEGORIES = [
-    ("design/skills", "Design & Creative", "UI/UX, frontend design, decks, visuals, infographics, art"),
-    ("design/brand-guidelines", "Brand Guidelines", "Official brand systems for Champions Group companies"),
+    ("design/skills", "Design & Creative", "UI/UX, frontend design and design pro, decks, visuals, infographics, art"),
+    ("design/brand-guidelines", "Brand Guidelines", "Official brand systems for Champions Group companies, one skill per brand"),
+    ("branded-docs", "Branded Documents", "Print-ready branded PDF documents per company (LakeB2B, Champions Ranch)"),
     ("marketing", "Marketing & Content", "Blog, campaign, SEO, copywriting, social, thought leadership"),
-    ("sales", "Sales & Outreach", "REACH stages, prospecting, negotiation, lead gen, outreach"),
-    ("research", "Research & Science", "Literature review, papers, bioinformatics (AlphaFold/Boltz etc.)"),
-    ("documents", "Documents & Contracts", "NDAs, docs co-authoring, one-pagers, ranch docs, reports"),
-    ("engineering", "Engineering & Dev", "MCP, compute, testing, frontend build, site ops, webapps"),
-    ("software-development", "Software Development", "Workspace builds, release and integration engineering"),
-    ("productivity", "Productivity & Meetings", "Daily notes, meetings, planners, onboarding, interviews, quizzes"),
-    ("vault", "Vault & KM", "Celsus knowledge management, memory, linking, habits"),
+    ("sales", "Sales & Outreach", "REACH, growth showcase, prospecting, negotiation, lead gen, outreach"),
+    ("documents", "Documents & Contracts", "NDAs, docs co-authoring, one-pagers, writing quality"),
+    ("engineering", "Engineering & Dev", "MCP, testing, frontend build, auth, scraping, codebase tools"),
+    ("productivity", "Productivity & Meetings", "Meetings, quizzes, onboarding, interviews, leaderboards"),
+    ("science", "Science & Research (champ-science plugin)", "Bio models, literature, figures, Claude Science platform skills"),
+    ("personal", "Personal Ops (champ-science plugin)", "Champ's vault, daily start, site ops, agent runtime and workspace skills"),
 ]
 SKIP_TOP = {".git", "scripts", ".marketplace"}
 
@@ -156,8 +156,10 @@ def main():
     # Category READMEs: regenerate only the skill table, keep the prose above it
     for folder, lab, _ in CATEGORIES:
         p = os.path.join(ROOT, folder, "README.md")
-        if not os.path.isfile(p) or not found.get(folder):
+        if not found.get(folder):
             continue
+        if not os.path.isfile(p):
+            open(p, "w", encoding="utf-8").write(f"# {lab} (`{folder}/`)\n\n{dict((c[0], c[2]) for c in CATEGORIES)[folder]}.\n\n| Skill | What it does |\n|---|---|\n")
         txt = open(p, encoding="utf-8").read()
         new_tbl = table(found[folder])
         txt2 = re.sub(r"\| Skill \| What it does \|\n\|---\|---\|\n(?:\|.*\|\n?)*", new_tbl + "\n", txt, count=1)

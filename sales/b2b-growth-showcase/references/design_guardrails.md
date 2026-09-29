@@ -1,4 +1,4 @@
-# Design Guardrails — No AI Slop
+# Design Guardrails, No AI Slop
 
 Derived from impeccable.style's detector rules and anti-patterns, adapted for this skill's three surfaces: PPTX decks, HTML artifacts, and Higgsfield image prompts. Read fully before generating anything. These rules exist because every model trained on the same SaaS templates produces the same tells; a client-facing sales asset that looks AI-generated undercuts the exact "precision" story we are selling.
 

@@ -1,0 +1,99 @@
+{
+ "note": "Consolidated 2026-09-30. The repo is the source of truth for these; account copies are ignored by the daily sync. Delete them from the Claude account once the champ-skills plugin is live.",
+ "merged_into": {
+  "b2b-growth-showcase": [
+   "b2b-visuals",
+   "b2b-visuals-to-deck",
+   "client-to-12-growth-visuals",
+   "vk-b2b-visuals",
+   "meeting-growth-visuals"
+  ],
+  "vault-keeper": [
+   "vault-linker",
+   "celsus-cortex",
+   "celsus-task-dedupe"
+  ],
+  "reach": [
+   "champions-hour",
+   "reach-research",
+   "reach-engage",
+   "reach-activate",
+   "reach-cadence",
+   "reach-hold",
+   "champions-growth-profiler"
+  ],
+  "frontend-design-pro": [
+   "landing-page",
+   "page-refresh",
+   "ui-polish",
+   "design-trends"
+  ],
+  "seo-toolkit": [
+   "paa-seo-builder",
+   "seo-rapid-ranker",
+   "search-intent-audit"
+  ],
+  "b2b-blog-writer": [
+   "blog-enhancer"
+  ],
+  "meeting-prep": [
+   "clf-meeting-prep"
+  ],
+  "meeting-followup": [
+   "meeting-intake",
+   "send-kit"
+  ],
+  "daily-start": [
+   "morning",
+   "morning-routine",
+   "day-planner",
+   "dashboard-refresh"
+  ],
+  "interactive-quiz": [
+   "interactive-quiz-v2"
+  ]
+ },
+ "skills": [
+  "b2b-blog-writer",
+  "b2b-growth-showcase",
+  "b2b-visuals",
+  "b2b-visuals-to-deck",
+  "blog-enhancer",
+  "celsus-cortex",
+  "celsus-task-dedupe",
+  "champions-growth-profiler",
+  "champions-hour",
+  "clf-meeting-prep",
+  "client-to-12-growth-visuals",
+  "daily-start",
+  "dashboard-refresh",
+  "day-planner",
+  "design-trends",
+  "frontend-design-pro",
+  "interactive-quiz",
+  "interactive-quiz-v2",
+  "landing-page",
+  "meeting-followup",
+  "meeting-growth-visuals",
+  "meeting-intake",
+  "meeting-prep",
+  "morning",
+  "morning-routine",
+  "paa-seo-builder",
+  "page-refresh",
+  "reach",
+  "reach-activate",
+  "reach-cadence",
+  "reach-engage",
+  "reach-hold",
+  "reach-research",
+  "search-intent-audit",
+  "send-kit",
+  "seo-rapid-ranker",
+  "seo-toolkit",
+  "ui-polish",
+  "vault-keeper",
+  "vault-linker",
+  "vk-b2b-visuals"
+ ]
+}

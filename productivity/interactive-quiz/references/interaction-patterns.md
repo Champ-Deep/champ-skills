@@ -22,7 +22,7 @@ specific pattern. Patterns are organized by category.
 
 ## Icon Chip Cards
 
-**When to use:** Multi-select from 4–20 predefined categories (industries, tools, skills, topics).
+**When to use:** Multi-select from 4-20 predefined categories (industries, tools, skills, topics).
 
 **Structure:** Grid of rounded cards, each with an emoji icon and a label. Tapping toggles
 selection with a satisfying scale + glow animation. Shows a count badge ("3 selected") and
@@ -262,7 +262,7 @@ input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefau
 ## Split Drop Zones
 
 **When to use:** When you need two parallel lists. Example: "Who do you want as attendees?"
-and "Who should be sponsors?" — same question concept, two buckets.
+and "Who should be sponsors?", same question concept, two buckets.
 
 **Structure:** Two side-by-side zones, each with its own colored header (e.g., 🎯 Attendee
 Targets in green, 💎 Sponsor Targets in amber), tag input, and tag wall with count.
@@ -313,7 +313,7 @@ Use an array of labels that map to slider positions. Update the floating label o
 
 ## Mixer Sliders
 
-**When to use:** Allocating a total (100%) across categories — budget splits, time distribution,
+**When to use:** Allocating a total (100%) across categories, budget splits, time distribution,
 priority weighting.
 
 **Behavior:** Multiple horizontal sliders linked together. Moving one up proportionally adjusts
@@ -391,7 +391,7 @@ Satisfying "fling" animation when released past threshold. Show remaining count.
 
 ## Styled Textarea
 
-**When to use:** Open-ended responses — this is your fallback for questions that genuinely
+**When to use:** Open-ended responses, this is your fallback for questions that genuinely
 need free-form text. One per quiz is fine; more than two starts feeling lazy.
 
 ```css

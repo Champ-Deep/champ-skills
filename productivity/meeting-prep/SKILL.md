@@ -1,33 +1,27 @@
 ---
 name: meeting-prep
-description: >
-  SPIN-driven meeting preparation skill. Scans calendar, retrieves meeting history from
-  Google Calendar, Notion, Celsus vault and Google Drive, auto-creates/updates persistent
-  client context folders (Atlas/Clients/{name}/), and generates tiered prep docs: DEEP for
-  external/sales/partnership meetings (SPIN question sequences, SWOT, ICPs, competitor
-  analysis, management narrative), MEDIUM for internal reviews, LIGHT for recurring syncs.
-  Optionally integrates notebooklm-py as a persistent client brain. Runs as Phase 5 of the
-  morning-routine after the Day Planner. MANDATORY TRIGGER for any meeting prep request.
-  Use when user says "prep me for my meeting", "meeting prep", "get me ready for [meeting]",
-  "what do I need for the [name] call", "prep for today's meetings", "SPIN prep for [company]",
-  "prep for [person]", or any variation of preparing for an upcoming meeting. Also offer
-  proactively whenever a meeting is mentioned in passing.
+description: >-
+  SPIN-driven meeting preparation, plus CLF (Champions Leadership Framework) pitch prep for sales and BD reps. Scans the calendar, pulls meeting history from Google Calendar, Notion, the Celsus vault and Google Drive, maintains client context folders (Atlas/Clients/{name}/), and builds tiered prep: DEEP for external, sales and partnership meetings (SPIN sequences, SWOT, ICPs, competitors), MEDIUM for internal reviews, LIGHT for recurring syncs. CLF mode runs a zero-assumption questionnaire and builds a full enterprise pitch doc plus a NotebookLM prompt and slide outline, for LakeB2B, SGS, Ampliz or Champions Accelerator. MANDATORY TRIGGER for: "prep me for my meeting", "meeting prep", "prep for today's meetings", "SPIN prep", "CLF pitch", "prep a pitch", "pitch doc for", "sales pitch for [company]", "pitch [brand] to [company]", "build a proposal for", or a rep pasting a thread or profile asking "help me pitch this". Replaces clf-meeting-prep.
 ---
 
-# Meeting Prep — SPIN-Driven, Client-First Preparation
+## CLF pitch mode (absorbed from clf-meeting-prep)
+
+When a sales or BD rep needs a pitch document rather than a meeting brief (the ask says pitch, CLF, proposal, or "what do I say" with a pasted thread or profile), read `modes/clf-meeting-prep/MODE.md` and run it. It blocks on missing inputs instead of assuming. Use the client context folder and SPIN material below as inputs to it.
+
+# Meeting Prep, SPIN-Driven, Client-First Preparation
 
 > "Nobody ever lost a deal because they were too prepared. They lost it because
 > they showed up talking about themselves instead of the client's problems."
 
 ## Philosophy
 
-This skill exists because Sreedeep's meetings aren't product demos — they're consultative
+This skill exists because Sreedeep's meetings aren't product demos, they're consultative
 conversations. The tone is **mildly irreverent, consultative, client-first, and pain-point
 driven**. Every prep document should read like it was written by someone who spent a week
 embedded in the client's business, not someone who skimmed their website 10 minutes before
 the call.
 
-The SPIN framework (Situation → Problem → Implication → Need-payoff) isn't a rigid script —
+The SPIN framework (Situation → Problem → Implication → Need-payoff) isn't a rigid script , 
 it's a thinking structure that ensures every question, every slide, every talking point serves
 the client's reality first and our capabilities second. If it sounds like a pitch, rewrite it.
 If it sounds like consulting, you're on the right track.
@@ -52,7 +46,7 @@ If it sounds like consulting, you're on the right track.
 │  PERSISTENT CONTEXT                                              │
 │  ┌──────────────────────────────────────────────────┐           │
 │  │ Atlas/Clients/{ClientName}/                       │           │
-│  │ ├── {ClientName}.md (profile — auto-created)      │           │
+│  │ ├── {ClientName}.md (profile, auto-created)      │           │
 │  │ ├── meeting-history.md (rolling log)              │           │
 │  │ ├── pain-points.md (evolving, cross-meeting)      │           │
 │  │ ├── solution-mapping.md (what we've proposed)     │           │
@@ -76,21 +70,21 @@ If it sounds like consulting, you're on the right track.
 
 ---
 
-## The SPIN Framework — How It Threads Through Everything
+## The SPIN Framework, How It Threads Through Everything
 
-SPIN isn't just for the "questions" section — it's the structural backbone of the entire prep.
+SPIN isn't just for the "questions" section, it's the structural backbone of the entire prep.
 Every section of the document should reflect this progression:
 
-### S — Situation (Where are they now?)
+### S, Situation (Where are they now?)
 Research-backed understanding of the client's current state. Not surface-level ("they're a
 healthcare company") but operational-level ("they have FDA clearance but zero U.S. pipeline,
 ~$100K ARR, and a 50-person team trying to crack a market where Qure.ai has a 90-country
 head start"). The Situation section proves you've done your homework.
 
 **Where it shows up:** Company Research section, Participant Insights, Client Profile in
-the context folder. This is the foundation — get it wrong and the whole prep collapses.
+the context folder. This is the foundation, get it wrong and the whole prep collapses.
 
-### P — Problem (What's broken or at risk?)
+### P, Problem (What's broken or at risk?)
 Specific, evidence-backed pain points. Not generic ("they need better marketing") but
 pointed ("their U.S. market entry is stalled because they have no pipeline infrastructure,
 no brand awareness among hospital CIOs, and their website doesn't rank for a single
@@ -100,8 +94,8 @@ gets it."
 **Where it shows up:** Pain Points & Solution Mapping table, Strategic Questions (discovery),
 SWOT weaknesses. The problems should feel urgent, not academic.
 
-### I — Implication (What happens if they don't fix it?)
-The cost of inaction — time, money, competitive position, market window. This is what
+### I, Implication (What happens if they don't fix it?)
+The cost of inaction, time, money, competitive position, market window. This is what
 creates urgency. "Without U.S. pipeline infrastructure, the 12-month window between FDA
 clearance and competitor catch-up closes while you're still building an in-house team."
 Implications make problems feel expensive.
@@ -109,10 +103,10 @@ Implications make problems feel expensive.
 **Where it shows up:** Management Narrative ("cost of the status quo"), the "Without
 LakeB2B" column in the comparison table, Competitive Landscape (where the threats live).
 
-### N — Need-Payoff (What does the solution unlock?)
+### N, Need-Payoff (What does the solution unlock?)
 Not "here's what we do" but "here's what becomes possible." Frame solutions as capabilities
 the client gains, not services we sell. "Go from FDA clearance to 5,000 qualified U.S.
-radiology leads in 4 weeks — without hiring a single marketing person" is a need-payoff.
+radiology leads in 4 weeks, without hiring a single marketing person" is a need-payoff.
 "We offer email marketing services" is a feature dump.
 
 **Where it shows up:** The "With LakeB2B" column, Solution Portfolio, ICP tables (why they
@@ -120,7 +114,7 @@ buy → what they gain), Content & Campaign Suggestions (what their brand become
 
 ---
 
-## Client Context Management — The Living Client Brain
+## Client Context Management, The Living Client Brain
 
 This is what makes the second meeting 10x better than the first. Every time this skill
 runs for a client, it creates or updates a persistent context folder in the vault.
@@ -142,17 +136,17 @@ Atlas/Clients/{ClientName}/
 
 When prepping for a client that already has a context folder:
 
-1. **Read the existing context** before doing ANY research — know what you already know
+1. **Read the existing context** before doing ANY research, know what you already know
 2. **Update `meeting-history.md`** with the upcoming meeting entry (pre-filled, completed after)
 3. **Update `pain-points.md`** with any new intelligence from research or previous meeting notes
 4. **Update `solution-mapping.md`** if new solutions are being proposed this time
-5. **Cross-reference** — if previous meeting notes mention concerns, objections, or open
+5. **Cross-reference**, if previous meeting notes mention concerns, objections, or open
    questions, surface them in the continuity section
 
 ### Why This Matters
 
-The context folder means that ANY future task involving this client — drafting an email,
-building a proposal, creating a pitch deck, brainstorming campaign ideas — can pull from
+The context folder means that ANY future task involving this client, drafting an email,
+building a proposal, creating a pitch deck, brainstorming campaign ideas, can pull from
 accumulated, structured intel instead of starting from scratch. It's not just meeting prep
 infrastructure; it's the client relationship memory.
 
@@ -163,20 +157,20 @@ infrastructure; it's the client relationship memory.
 
 ## NotebookLM Integration (Optional Enhancement)
 
-NotebookLM creates source-grounded research — answers that cite only YOUR uploaded documents,
+NotebookLM creates source-grounded research, answers that cite only YOUR uploaded documents,
 not the open web. This is especially powerful for DEEP preps where you need to synthesise
 from many sources without hallucination risk.
 
 In Cowork, NotebookLM is accessed via the **Claude in Chrome** MCP tools
-(`mcp__Claude_in_Chrome__navigate`, `form_input`, `get_page_text`, `computer`, etc.) —
+(`mcp__Claude_in_Chrome__navigate`, `form_input`, `get_page_text`, `computer`, etc.) , 
 no Python library, no install, no local Chrome required. Just a Google account already
 logged in on the user's browser.
 
 ### When to Use It
 
-Use for DEEP preps only — new external clients, high-stakes partnerships, first meetings.
+Use for DEEP preps only, new external clients, high-stakes partnerships, first meetings.
 Skip for LIGHT/MEDIUM preps (overkill) and internal meetings (no external research value).
-Also skip if the meeting is < 2 hours away — not enough runway.
+Also skip if the meeting is < 2 hours away, not enough runway.
 
 ### How It Works in Cowork
 
@@ -204,7 +198,7 @@ Also skip if the meeting is < 2 hours away — not enough runway.
 5. Query for evolution: "What's changed since the earliest sources were added?"
 
 **Graceful fallback:** If Chrome tools aren't available, Google isn't logged in, or
-NotebookLM is unreachable — skip this step entirely and rely on the standard
+NotebookLM is unreachable, skip this step entirely and rely on the standard
 4-source data retrieval. NotebookLM is an enhancement layer, not a hard dependency.
 The prep document should never block on it.
 
@@ -212,28 +206,28 @@ The prep document should never block on it.
 
 ## Phase 5: Morning Routine Integration
 
-When invoked via the morning routine (after Phase 4 — Day Planner):
+When invoked via the morning routine (after Phase 4, Day Planner):
 
 1. **Scan today's calendar** using `gcal_list_events` for today's date range
 2. **Classify each meeting** into prep tiers (see Meeting Classification below)
-3. **Check client context folders** — for each meeting, check if `Atlas/Clients/{name}/`
+3. **Check client context folders**, for each meeting, check if `Atlas/Clients/{name}/`
    exists. If not, flag it for creation.
 4. **Present a summary** to the user:
    ```
    Today's Meetings:
 
    DEEP PREP (new/external):
-   * 4:00 PM — Aikenist Technologies x LakeB2B (Sales pitch, first meeting)
-     [!] No client context folder — will create one
+   * 4:00 PM, Aikenist Technologies x LakeB2B (Sales pitch, first meeting)
+     [!] No client context folder, will create one
 
    MEDIUM PREP (internal review with history):
-   * 5:30 PM — Marketing Performance Review (weekly, last met Mar 9)
+   * 5:30 PM, Marketing Performance Review (weekly, last met Mar 9)
 
    LIGHT PREP (recurring sync):
-   * 3:30 PM — Gary Weekly Pipeline Sync (recurring, last met Mar 9)
+   * 3:30 PM, Gary Weekly Pipeline Sync (recurring, last met Mar 9)
 
    NO PREP NEEDED:
-   * 6:00 PM — Team standup (15 min, status-only)
+   * 6:00 PM, Team standup (15 min, status-only)
 
    I'll auto-generate light/medium preps now. Which deep preps should I run?
    ```
@@ -268,7 +262,7 @@ When classification is ambiguous, err toward the deeper tier.
 
 For every meeting that needs prep, pull context from all sources in parallel:
 
-### 0. Client Context Folder (FIRST — before anything else)
+### 0. Client Context Folder (FIRST, before anything else)
 
 ```
 -> Check Atlas/Clients/{ClientName}/ for existing context
@@ -276,7 +270,7 @@ For every meeting that needs prep, pull context from all sources in parallel:
 -> Read meeting-history.md for what's happened before
 -> Read pain-points.md for known/suspected pains
 -> Read solution-mapping.md for what's been proposed
--> This is your head start — don't re-research what you already know
+-> This is your head start, don't re-research what you already know
 ```
 
 ### 1. Google Calendar (`gcal_list_events`)
@@ -302,7 +296,7 @@ For every meeting that needs prep, pull context from all sources in parallel:
 ```
 -> Search Calendar/Meetings/ for files matching attendee names or company names
 -> Read the most recent matching meeting note
--> Cross-reference with Efforts/Active/ — which active efforts involve these people?
+-> Cross-reference with Efforts/Active/, which active efforts involve these people?
 -> Check Atlas/People/ for attendee profiles and relationship context
 -> Extract: previous prep docs, effort linkages, relationship history
 ```
@@ -344,10 +338,10 @@ After pulling from all sources:
 ### LIGHT Prep (Recurring Syncs)
 
 For meetings like Gary's weekly pipeline sync or team standups. Consultative even when
-it's internal — Sreedeep doesn't do lazy status updates.
+it's internal, Sreedeep doesn't do lazy status updates.
 
 ```markdown
-# Quick Prep: [Meeting Title] — [Date]
+# Quick Prep: [Meeting Title], [Date]
 
 **Last Meeting:** [Date] | **Cadence:** [Weekly/Biweekly]
 **Attendees:** [[Person 1]], [[Person 2]]
@@ -355,25 +349,25 @@ it's internal — Sreedeep doesn't do lazy status updates.
 
 ## The Story Since Last Time
 [2-3 sentences narrating what's moved, what hasn't, and what's surprising.
-Not a list — a story. "The pipeline is warmer than last week — 3 responses came in
+Not a list, a story. "The pipeline is warmer than last week, 3 responses came in
 from the Lake B2B campaign, but Gary's budget approval is still in purgatory.
 Meanwhile, ChampIQ just hit Day 19 and the experiment metrics need a reality check."]
 
 ## Open Action Items from Last Time
-- [ ] @Gary — Send updated pipeline numbers -> Status: ?
-- [ ] @Sreedeep — Review ChampIQ dashboard mockup -> Status: Done
-- [!] @Murugan — Follow up with 3 warm leads -> OVERDUE (7 days)
+- [ ] @Gary, Send updated pipeline numbers -> Status: ?
+- [ ] @Sreedeep, Review ChampIQ dashboard mockup -> Status: Done
+- [!] @Murugan, Follow up with 3 warm leads -> OVERDUE (7 days)
 
 ## Suggested Talking Points
-1. Pipeline update — any movement on the 3 warm leads?
-2. ChampIQ experiment progress — Day 19 metrics review
-3. Budget approval status — escalation needed?
+1. Pipeline update, any movement on the 3 warm leads?
+2. ChampIQ experiment progress, Day 19 metrics review
+3. Budget approval status, escalation needed?
 ```
 
 ### MEDIUM Prep (Internal Reviews)
 
 ```markdown
-# Meeting Prep: [Meeting Title] — [Date]
+# Meeting Prep: [Meeting Title], [Date]
 
 **Meeting Type:** [Review/Strategy/Planning]
 **Attendees:** [[Person 1]], [[Person 2]]
@@ -384,7 +378,7 @@ Meanwhile, ChampIQ just hit Day 19 and the experiment metrics need a reality che
 What's working, what's stuck, what nobody wants to talk about but should?]
 
 ## Continuity from Last Meeting
-**Last meeting:** [Date] — [Summary]
+**Last meeting:** [Date], [Summary]
 
 ### Decisions Made & Their Status
 | Decision | Status | Notes |
@@ -418,24 +412,24 @@ What's working, what's stuck, what nobody wants to talk about but should?]
 ### DEEP Prep (External/Sales/Partnership Meetings)
 
 This is the full SPIN-driven dossier. The structure reflects Sreedeep's signature
-style — mildly irreverent, never boring, always grounded in the client's reality.
+style, mildly irreverent, never boring, always grounded in the client's reality.
 
 See `references/deep-prep-template.md` for the full template and section-by-section guidance.
 
 **Key structural elements:**
 
-1. **[Continuity Section]** — If follow-up: what we committed to, what they asked, what's changed
-2. **Meeting Goal & Agenda** — Outcome-driven, minute-by-minute, SPIN-sequenced
-3. **Participant Insights** — Deep profiles, what drives them, SPIN-tailored talking points
-4. **SPIN Question Sequences** — Per-attendee, per-phase question maps (replaces generic "discovery questions")
-5. **Company Research & Situation Analysis** — The "S" deep dive: where they are, with evidence
-6. **Pain Points & Implication Analysis** — The "P" and "I": what's broken and what it costs them
-7. **Need-Payoff Framing & Solution Mapping** — The "N": capabilities framed as outcomes
-8. **Market Landscape & Competitor Analysis** — Context that sharpens the SPIN narrative
-9. **Sales & Marketing Enablement** — ICPs, content ideas, campaign calendar, SEO audit
-10. **Custom Solution Portfolio** — Innovation opportunities, bundled offerings
-11. **Strategic Positioning & Differentiation** — Dual SWOT + Management Narrative
-12. **Source Reference Index** — Every claim footnoted
+1. **[Continuity Section]**, If follow-up: what we committed to, what they asked, what's changed
+2. **Meeting Goal & Agenda**, Outcome-driven, minute-by-minute, SPIN-sequenced
+3. **Participant Insights**, Deep profiles, what drives them, SPIN-tailored talking points
+4. **SPIN Question Sequences**, Per-attendee, per-phase question maps (replaces generic "discovery questions")
+5. **Company Research & Situation Analysis**, The "S" deep dive: where they are, with evidence
+6. **Pain Points & Implication Analysis**, The "P" and "I": what's broken and what it costs them
+7. **Need-Payoff Framing & Solution Mapping**, The "N": capabilities framed as outcomes
+8. **Market Landscape & Competitor Analysis**, Context that sharpens the SPIN narrative
+9. **Sales & Marketing Enablement**, ICPs, content ideas, campaign calendar, SEO audit
+10. **Custom Solution Portfolio**, Innovation opportunities, bundled offerings
+11. **Strategic Positioning & Differentiation**, Dual SWOT + Management Narrative
+12. **Source Reference Index**, Every claim footnoted
 
 ---
 
@@ -447,7 +441,7 @@ Sreedeep doesn't sound like a vendor. He sounds like a strategic advisor who hap
 have solutions. The prep documents should reflect this:
 
 **Mildly irreverent:** Don't be afraid to call out an elephant in the room. If the client's
-website hasn't been updated since 2019, say it — diplomatically, but say it. "Their SEO
+website hasn't been updated since 2019, say it, diplomatically, but say it. "Their SEO
 footprint is... aspirational" is fine. Dry humor is welcome. Corporate-speak is not.
 
 **Consultative:** Frame every interaction as "we're figuring this out together" not "let me
@@ -455,7 +449,7 @@ tell you what you need." The SPIN questions should feel like a conversation betw
 not an interrogation.
 
 **Client-first:** The client's name should appear in the prep 3x more than "LakeB2B" or
-"Ampliz." Their problems, their market, their competitors, their opportunity — that's the
+"Ampliz." Their problems, their market, their competitors, their opportunity, that's the
 main character. Our solutions are the supporting cast.
 
 **Pain-point driven:** If a section doesn't connect back to a specific client pain point,
@@ -465,7 +459,7 @@ it shouldn't be there. Every ICP, every content idea, every solution should trac
 ### Style Rules
 
 1. **SPIN Over Features:** Never lead with capabilities. Situation first, then problems,
-   then implications, then — and only then — "here's what becomes possible."
+   then implications, then, and only then, "here's what becomes possible."
 
 2. **The Management Narrative:** Every deep prep includes a 2-3 paragraph persuasive narrative
    addressing the client's leadership. Structure: acknowledge position -> cost of status quo ->
@@ -506,7 +500,7 @@ Last Meeting (Mar 9)          This Meeting (Mar 16)
 | corporate focus       |     | pivot progressing?           |
 |                       |     |                             |
 | Open Q: Budget        |---->| Escalation: Still pending    |
-| approval pending      |     | after 7 days — flag it      |
+| approval pending      |     | after 7 days, flag it      |
 +-----------------------+     +-----------------------------+
 ```
 
@@ -532,7 +526,7 @@ First Meeting (Feb 17)        Follow-Up (Mar 16)
 ```
 
 The continuity engine also updates the client context folder, so each interaction builds
-on the last — across meetings, across months, across team members.
+on the last, across meetings, across months, across team members.
 
 ---
 
@@ -550,7 +544,7 @@ on the last — across meetings, across months, across team members.
   - Lighter format but still vault-linked
 
 - **Light preps:** Inject directly into today's daily note under Meetings section
-  - No separate file needed — keeps the vault clean
+  - No separate file needed, keeps the vault clean
 
 ### Client Context Folder Updates
 
