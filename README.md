@@ -2,27 +2,28 @@
 
 Shared agent skills for the Champions Group teams. Published for collaborators to clone and drop into any Claude Code / Cursor / Gemini / agent-skill runtime.
 
-**129 skills** across 8 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
+**137 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
 
 ## Categories
 
 | Category | Folder | What's inside | Count |
 |---|---|---|---|
 | Design & Creative | `design/skills/` | UI/UX, frontend design, decks, visuals, infographics, art | 26 |
-| Brand Guidelines | `design/brand-guidelines/` | Official brand systems for Champions Group companies | 5 |
+| Brand Guidelines | `design/brand-guidelines/` | Official brand systems for Champions Group companies | 7 |
 | Marketing & Content | `marketing/` | Blog, campaign, SEO, copywriting, social, thought leadership | 17 |
 | Sales & Outreach | `sales/` | REACH stages, prospecting, negotiation, lead gen, outreach | 16 |
 | Research & Science | `research/` | Literature review, papers, bioinformatics (AlphaFold/Boltz etc.) | 19 |
 | Documents & Contracts | `documents/` | NDAs, docs co-authoring, one-pagers, ranch docs, reports | 7 |
-| Engineering & Dev | `engineering/` | MCP, compute, testing, frontend build, site ops, webapps | 18 |
+| Engineering & Dev | `engineering/` | MCP, compute, testing, frontend build, site ops, webapps | 21 |
+| Software Development | `software-development/` | Workspace builds, release and integration engineering | 2 |
 | Productivity & Meetings | `productivity/` | Daily notes, meetings, planners, onboarding, interviews, quizzes | 17 |
-| Vault & KM | `vault/` | Celsus knowledge management, memory, linking, habits | 4 |
+| Vault & KM | `vault/` | Celsus knowledge management, memory, linking, habits | 5 |
 
 ## Layout
 
 ```
 champ-skills/
-  INDEX.md                searchable index of all 129 skills
+  INDEX.md                searchable index of all 137 skills
   design/
     skills/               design skills (frontend-design, impeccable, power-design, ...)
     brand-guidelines/     Champions Group, Lake B2B, Ampliz, SPAN Global, DeepEnd HQ brand systems

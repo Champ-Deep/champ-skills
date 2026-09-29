@@ -7,3 +7,5 @@
 .deploy_key.pub
 .obsidian/
 __pycache__/
+.sync/account.json
+.marketplace/

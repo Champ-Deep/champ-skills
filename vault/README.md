@@ -7,8 +7,9 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | Skill | What it does |
 |---|---|
 | `anniversary-gift` | Build a personalized, single-file HTML gift page for a work anniversary or birthday. Use this skill whenever someone wants to create a digital gift for a colleague, emplo |
-| `celsus-cortex` | The thinking layer of the Celsus vault — proactive knowledge management, daily note generation, inbox triage, auto-linking, and MOC maintenance. Use this skill for any va |
-| `vault-keeper` | > |
+| `celsus-cortex` | The thinking layer of the Celsus vault, proactive knowledge management, daily note generation, inbox triage, auto-linking, and MOC maintenance. Use this skill for any vau |
+| `celsus-task-dedupe` | Use before appending to TASKS.md. Search, then append. |
+| `vault-keeper` | Unified Celsus vault maintenance skill, merges vault-linker and celsus-cortex. Handles ALL vault hygiene: wikilink scanning, orphan elimination, inbox triage, client/pros |
 | `vault-linker` | Safe wikilink hygiene for the Celsus Obsidian vault. Audits link health, repairs broken and corrupted links, and resolves entity aliases, under a dry-run-first gate with  |
 
 See the master [INDEX.md](../INDEX.md) for every skill.
