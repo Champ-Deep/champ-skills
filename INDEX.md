@@ -70,7 +70,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `skill-creator` | Engineering & Dev | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing sk |
 | `webapp-testing` | Engineering & Dev | Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser scre |
 | `anniversary-gift` | Productivity & Meetings | Build a personalized, single-file HTML gift page for a work anniversary or birthday. Use this skill whenever someone wants to create a digital gift for a colleague, emplo |
-| `interactive-quiz` | Productivity & Meetings | Create beautiful, interactive single-file HTML quizzes, surveys, questionnaires and intake forms with diverse interaction patterns people enjoy answering, including the e |
+| `interactive-quiz` | Productivity & Meetings | Create beautiful, interactive single-file HTML quizzes, surveys, questionnaires and intake forms with diverse, dopamine-designed interaction patterns people enjoy answeri |
 | `intern-onboarding-planner` | Productivity & Meetings | Generate a day-by-day first-month onboarding plan for a new hire or intern from resume plus role brief, as a single-file HTML dashboard that answers on screen one: what d |
 | `interview-prep` | Productivity & Meetings | Build interview prep materials for a job candidate before you talk to them, a prep note (candidate snapshot, role-fit analysis, real risks/tensions to probe, must-ask que |
 | `leaderboard` | Productivity & Meetings | Create beautiful internal leaderboards that rank people and teams across any metric. Produces screen-ready and print-friendly HTML with podium heroes, ranking tables, tre |
@@ -107,7 +107,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `browser-agent-automation` | Personal Ops (champ-science plugin) | Use when driving a browser with a model, not selectors. |
 | `champions-b2b-workspace-development` | Personal Ops (champ-science plugin) | Use when building Champions B2B Workspace features. |
 | `daily-note-recap` | Personal Ops (champ-science plugin) | Generate a comprehensive daily note in the Celsus Obsidian vault recapping activity, PLUS a visual HTML executive report in Lake B2B branding, PLUS the nightly BearDrive  |
-| `daily-start` | Personal Ops (champ-science plugin) | Deep's daily start in one skill: the morning routine orchestrator (link and triage yesterday through vault-keeper, analyze wins and follow-ups, the interactive morning in |
+| `daily-start` | Personal Ops (champ-science plugin) | Deep's daily start in one skill: the morning routine (vault-keeper context and inbox, the dashboard.html morning wizard, the time-blocked day plan from TASKS.md, then the |
 | `deependhq-design-system` | Personal Ops (champ-science plugin) | The locked design system for deependhq.com (Deep's personal build-in-public site). MANDATORY TRIGGER for any work touching deependhq.com or The Deep End: building or edit |
 | `deependhq-site-ops` | Personal Ops (champ-science plugin) | Operate, diagnose and repair the deependhq.com nightly build-in-public publishing pipeline. MANDATORY TRIGGER for: "the site is stale", "deependhq hasn't updated", "publi |
 | `hermes-gateway-ops` | Personal Ops (champ-science plugin) | Use when the Hermes gateway or a messaging platform fails. |
@@ -116,7 +116,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `schedule` | Personal Ops (champ-science plugin) | Create a scheduled task that can be run on demand or automatically on an interval. |
 | `skill-repo-sync` | Personal Ops (champ-science plugin) | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
 | `sprint-mode` | Personal Ops (champ-science plugin) | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
-| `vault-keeper` | Personal Ops (champ-science plugin) | Unified Celsus vault maintenance: inbox triage, client and prospect capture, daily note generation, note creation from templates, weekly review, MOC coverage, orphan and  |
+| `vault-keeper` | Personal Ops (champ-science plugin) | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
 | `weekly-review` | Personal Ops (champ-science plugin) | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |
 
 ## Design & Creative (`design/skills/`)
@@ -236,7 +236,7 @@ Meetings, quizzes, onboarding, interviews, leaderboards.
 | Skill | What it does |
 |---|---|
 | `anniversary-gift` | Build a personalized, single-file HTML gift page for a work anniversary or birthday. Use this skill whenever someone wants to create a digital gift for a colleague, emplo |
-| `interactive-quiz` | Create beautiful, interactive single-file HTML quizzes, surveys, questionnaires and intake forms with diverse interaction patterns people enjoy answering, including the e |
+| `interactive-quiz` | Create beautiful, interactive single-file HTML quizzes, surveys, questionnaires and intake forms with diverse, dopamine-designed interaction patterns people enjoy answeri |
 | `intern-onboarding-planner` | Generate a day-by-day first-month onboarding plan for a new hire or intern from resume plus role brief, as a single-file HTML dashboard that answers on screen one: what d |
 | `interview-prep` | Build interview prep materials for a job candidate before you talk to them, a prep note (candidate snapshot, role-fit analysis, real risks/tensions to probe, must-ask que |
 | `leaderboard` | Create beautiful internal leaderboards that rank people and teams across any metric. Produces screen-ready and print-friendly HTML with podium heroes, ranking tables, tre |
@@ -287,7 +287,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `browser-agent-automation` | Use when driving a browser with a model, not selectors. |
 | `champions-b2b-workspace-development` | Use when building Champions B2B Workspace features. |
 | `daily-note-recap` | Generate a comprehensive daily note in the Celsus Obsidian vault recapping activity, PLUS a visual HTML executive report in Lake B2B branding, PLUS the nightly BearDrive  |
-| `daily-start` | Deep's daily start in one skill: the morning routine orchestrator (link and triage yesterday through vault-keeper, analyze wins and follow-ups, the interactive morning in |
+| `daily-start` | Deep's daily start in one skill: the morning routine (vault-keeper context and inbox, the dashboard.html morning wizard, the time-blocked day plan from TASKS.md, then the |
 | `deependhq-design-system` | The locked design system for deependhq.com (Deep's personal build-in-public site). MANDATORY TRIGGER for any work touching deependhq.com or The Deep End: building or edit |
 | `deependhq-site-ops` | Operate, diagnose and repair the deependhq.com nightly build-in-public publishing pipeline. MANDATORY TRIGGER for: "the site is stale", "deependhq hasn't updated", "publi |
 | `hermes-gateway-ops` | Use when the Hermes gateway or a messaging platform fails. |
@@ -296,7 +296,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `schedule` | Create a scheduled task that can be run on demand or automatically on an interval. |
 | `skill-repo-sync` | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
-| `vault-keeper` | Unified Celsus vault maintenance: inbox triage, client and prospect capture, daily note generation, note creation from templates, weekly review, MOC coverage, orphan and  |
+| `vault-keeper` | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
 | `weekly-review` | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |
 
 ## Install from a skill folder

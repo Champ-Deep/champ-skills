@@ -23,13 +23,14 @@ Inputs:                              Output:
 
 The Day Planner accepts context from multiple sources, adapting based on what's available:
 
-### When Used via Morning Routine (Phase 4)
+### When Used via Morning Routine (Phase 3)
 All inputs come pre-populated from earlier phases:
 - **Calendar:** Pulled from calendar integration (if available)
-- **Energy:** From quiz response (Phase 3)
-- **Priorities:** From cortex analysis (Phase 2) + quiz ranking (Phase 3)
-- **Time Budget:** From quiz response (Phase 3)
-- **Focus Mode:** From quiz response (Phase 3)
+- **Energy:** From quiz response (Phase 2)
+- **Priorities:** From vault-keeper analysis (Phase 1) + quiz ranking (Phase 2)
+- **Time Budget:** From quiz response (Phase 2)
+- **Focus Mode:** From quiz response (Phase 2)
+- **Tasks:** Parsed from `TASKS.md` at vault root (same source the dashboard reads)
 
 ### When Used Standalone
 Ask the user directly:
@@ -148,10 +149,37 @@ Present a concise plan in the conversation, then offer to save it.
 
 The Day Planner understands the Celsus vault structure and uses it:
 
-- **Active Efforts:** Reads `Efforts/Active/` to understand the project landscape
-- **People:** Links people to their efforts so the user sees "call Gary" mapped to "ChampIQ Experiment"
+- **TASKS.md (primary task source):** Read from vault root. This is the same file the Celsus
+  dashboard (`dashboard.html`) reads to populate its task board. Tasks in TASKS.md use three
+  sections: `Active`, `Waiting On`, and `Someday`. Tags: `[e:EffortName]` links a task to an
+  effort, `[c:CompanyName]` links to a company, `[u:must|nice|skip]` sets urgency. Parse these
+  tags when building the priority matrix and time blocks.
+
+- **Active Efforts:** Reads `Efforts/Active/` for project context. Cross-reference with TASKS.md
+  so a task tagged `[e:ChampGraph Build]` maps to the right effort description and status.
+
+- **People:** Links people to their efforts so the user sees "call [[Gary]]" mapped to "[[ChampIQ Experiment]]"
+
 - **Products:** Maps tasks to products when relevant
+
 - **Yesterday:** If yesterday's daily note exists, checks for carried-forward tasks
+
+**TASKS.md format reference:**
+
+```markdown
+## Active
+- [ ] Task text [e:EffortName] [c:CompanyName] [u:must]
+- [ ] Another task [e:EffortName] [u:nice]
+
+## Waiting On
+- [ ] Blocked task, waiting on Gary since April 15 [e:ChampIQ Experiment]
+
+## Someday
+- [ ] Low-priority idea [u:skip]
+```
+
+When the planner references tasks in its output, use the exact task text from TASKS.md so the
+user can cross-reference with the dashboard task board without confusion.
 
 ## Adaptation Rules
 
