@@ -5,6 +5,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | Skill | What it does |
 |---|---|
 | `algorithmic-art` | Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, al |
+| `campaign-visualization` | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like the Virtusa and Epi |
 | `canvas-design` | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or  |
 | `deck-doctor` | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `frontend-design` | Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data vis |
