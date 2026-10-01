@@ -31,19 +31,46 @@ Mode boundaries use one of two devices only: a 1px `--line` hairline with a 48px
 
 Not doing: gold everywhere, terminal everywhere, a light mode, or a visible accent-theme switcher. The theme switcher stays as a terminal easter egg only.
 
+## The identity kit (Deep, 2026-10-01)
+
+Source of truth is `Efforts/Active/DeependHQ Site/identity/`. Marks are true
+vectors (single `<path>`, zero raster embeds, C2PA manifest retained). Every
+value below was measured, not eyeballed.
+
+```css
+/* identity palette. Lamp on Paper is 1.72:1, so never pair them. */
+--ink:#0E1A33;    /* Night Ink, the ground */
+--paper:#F4EBD9;  /* Paper, the light text and the cream tile */
+--lamp:#F4A62A;   /* Lamp, the single accent. 8.51:1 on ink */
+--mare:#A9ABA6;   /* the grey mare. 7.46:1 on ink, 5.82:1 on card */
+```
+
+Hard rules:
+
+- **Lamp never sits on Paper.** 1.72:1. On light grounds use Ink text on a Lamp fill instead (8.51:1).
+- **One accent, so meaning moves to words.** The old system leaned on three arc hues (green building, gold outcome, blue thinking). With a single accent those collapse, so every arc keeps a **text tag**. Colour is never the only carrier of state, and here it cannot be.
+- **The brandmark had a generation speck.** `marks.py` mapped one stray source-red path (a 78x40 rectangle inside the D counter) to cream, shipping a stray block in the letter. Fixed in source and in both built variants. When recolouring generated SVG, drop source colours that are not part of the intended palette rather than mapping them somewhere.
+- **The marks are AI-generated, so they are not registrable as-is.** Redraw before any trademark filing. Rules differ by country.
+
+The D-under-water brandmark and the flame-terminal wordmark split one tagline:
+"Go deep" sinks the D below the waterline, "stay lit" ends the p in a flame. The
+mare's face blaze is the same idea in the mascot.
+
 ## Tokens
 
 Copy these verbatim. Do not invent new values. If something needs a value not on a scale, the design is wrong.
 
 ```css
-/* surfaces */
---bg:#0D0F14; --surface:#12151D; --card:#181C26; --card-2:#1E2330;
---line:#2A2E3A; --line-2:#3A3F50;
+/* surfaces. Night Ink from the Deep identity kit (identity/assets). The
+   ramp moves toward Slate #24314F, never toward cream, or the surfaces go
+   light and every text token collapses. */
+--bg:#0E1A33; --surface:#1A2742; --card:#212E4B;
+--line:#24314F;
 
-/* text: three tiers. all AA on bg, card and card-2. */
---text:#E8E4DC;   /* 15.12:1 on bg, 13.43:1 on card */
---muted:#A8A8A2;  /*  8.02:1 on bg,  7.13:1 on card */
---dim:#8A8A92;    /*  5.60:1 on bg,  4.97:1 on card, 4.58:1 on card-2 */
+/* text: three tiers. every pair verified AA on bg, surface AND card. */
+--text:#F4EBD9;   /* 14.60 on bg, 12.55 on surface, 11.39 on card */
+--muted:#B4B0AB;  /*  8.02 on bg,  6.89 on surface,  6.25 on card */
+--dim:#999998;    /*  6.07 on bg,  5.21 on surface,  4.73 on card */
 
 /* accents, by meaning */
 --build:#30E060;   /* shipped, running, live. 9.70:1 on card */
