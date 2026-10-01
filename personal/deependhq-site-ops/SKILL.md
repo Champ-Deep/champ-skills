@@ -166,6 +166,44 @@ of bug as the first naming matcher, where `pip` and `hospitali` matched
 "pipeline" and "hospitality". Both times the fix was to verify the premise, not
 to trust the green. When a gate passes unexpectedly, suspect the test.
 
+## One file per entity, or Google indexes one page for all of them (2026-10-01)
+
+`post.html` was prerendered once with `search: ''` in the sandbox, so
+`params.get('slug')` was null at build time and `posts[0]` was baked into the
+HTML for **every** post URL. All fifteen essays served the newest one's body,
+title and H1. `week-44-the-discipline-arc` returned week 45's headline. The
+prerender now renders one file per record at `post/<slug>/index.html` and
+`company/<slug>/index.html`, each with its own `<title>`, description,
+self-referencing canonical and JSON-LD.
+
+Four things that fix had to get right, each of which failed first:
+
+- **The component must read the slug from the path too.** `PostPage.jsx` read
+  only `?slug=`, so at `/post/<slug>/` it fell back to `posts[0]`: correct
+  title in the served HTML, then React overwrote it on hydration. The bug was
+  invisible in a curl and only showed up in a screenshot. Same fix in
+  `CompanyPage.jsx`.
+- **Nested pages need `<base href="/">`.** Two directories deep, every relative
+  href resolved against `post/<slug>/` and 404'd, styling included.
+- **`link-check.mjs` must honour `<base>`,** or it reports 996 false
+  failures. And when computing the base directory use `resolvePath(root, '.'+href)`,
+  never `dirname(join(root, href))`: the latter keeps a trailing slash and
+  `dirname` of that is the *parent* of root.
+- **`link-check.mjs` treated `/` as broken.** It appended `.html`, looked for
+  `/.html`, and failed all 27 entity pages. `/` is served by `index.html`.
+
+Verify this class of bug in a browser, not with curl. Hydration is the whole
+point of the prerender, and curl cannot see it.
+
+## Entity links must be rewritten too, or the fix is invisible to a crawler
+
+Moving pages to `/post/<slug>/` while every internal link still pointed at
+`post.html?slug=` leaves the new paths orphaned: correct, indexable, linked by
+nobody. Eight JSX files build those hrefs (Footer, Ecosystem, Home,
+WritingPage, CompanyPage, PostPage, ShippingNow, JourneyPage, SecondCTA,
+PillarsPage). A worker 301 keeps old external links alive, so legacy URLs are
+fine to leave, but internal ones should be canonical.
+
 ## A redirect into a 404 is worse than an ugly URL
 
 The Worker shipped `301 /field-notes -> /mission-log` for a page that was never
@@ -175,12 +213,27 @@ exist yet, redirect to the route that does. `scripts/link-check.mjs` fails the
 build on any link to a missing page, and runs after prerender because it reads
 the built HTML.
 
-## CSP blocks Cloudflare's own analytics beacon
+## CSP blocked Cloudflare's own analytics beacon: resolved 2026-10-01
 
-The Worker sets a strict `script-src`, so `static.cloudflareinsights.com` is
-refused and logs a console error on every page. The CSP working, not a defect,
-but it sits awkwardly with the footer claim "no cookies, no trackers". Decide
-which gives way before adding the domain.
+`static.cloudflareinsights.com` was missing from `script-src` and was refused on
+every page. It is now allowed, in both the `/showcase` branch and the plain
+asset pass-through, because a domain missing from the first header and present
+in the second is the kind of thing that silently half-works.
+
+The footer's "no cookies, no trackers" line was reconciled with this in the same
+publish. Cloudflare Web Analytics is cookieless and does not set identifiers, so
+the claim stays true. Do not re-add a tracker that needs consent without
+revisiting that sentence.
+
+## `node_modules/.bin/esbuild` was a Linux binary on this Mac
+
+The local `node_modules` had been installed on Linux, so both
+`node_modules/.bin/esbuild` and `node_modules/@esbuild/darwin-arm64/bin/esbuild`
+were ELF executables. Symptom: `ENOENT` or `Exec format error` from prerender,
+which reads as "esbuild is not installed" and sends you down the wrong path.
+Fixed by fetching the real darwin-arm64 build and swapping it in. Cloudflare
+builds on Linux and was never affected. Check with
+`file node_modules/.bin/esbuild` before reinstalling anything.
 
 ## Known traps
 
