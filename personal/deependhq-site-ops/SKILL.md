@@ -225,6 +225,59 @@ publish. Cloudflare Web Analytics is cookieless and does not set identifiers, so
 the claim stays true. Do not re-add a tracker that needs consent without
 revisiting that sentence.
 
+## A new page class must be added to four places, or it half-exists (2026-10-02)
+
+Adding `/privacy` needed all four on the same day. Missing any one of them
+produces a page that looks fine locally and fails in a different way:
+
+1. `PAGES` in `scripts/prerender.mjs`, or it is never prerendered (empty root).
+2. `ALL_PAGES` in the same file, or the bundle has no component.
+3. `window.ThePage = ThePage` at the bottom of the new `.jsx`, or the render
+   dies with `X is not defined`. Every page file does this and it is easy to miss.
+4. `run_worker_first` in `wrangler.jsonc`, or the page is served straight from
+   the asset store with **no CSP and no security headers**.
+
+Plus: the `.jsx` must load before `page.jsx` in the HTML, and the shell's script
+order must match the other shells exactly (Sys, Nav, Footer, page body,
+Palette, page.jsx, widgo-gate, analytics).
+
+## Analytics: first-party, and how to prove it works
+
+The site collects its own events via `analytics.js` to `/api/collect`, stored in
+Workers Analytics Engine. **PostHog was considered and rejected:** a third-party
+script on a site whose footer says "no cookies, no trackers", needing a wide CSP
+relaxation, and unverifiable from the vault. If PostHog is ever wanted, forward
+the existing payload from `/api/collect` rather than adding a script tag.
+
+The dataset `deependhq_events` **must exist in the Cloudflare dashboard before
+the `analytics` binding is added to wrangler.jsonc**, or the deploy fails on the
+binding. The endpoint answers 204 when the binding is absent, so once the
+dataset exists it starts recording with no code change.
+
+`scripts/query-analytics.mjs` reads it back. It exits 2 with setup instructions
+when `CLOUDFLARE_API_TOKEN` and `CF_ACCOUNT_ID` are absent, and never prints
+placeholder numbers. Analytics Engine indexes are **exactly 20 bytes**, so
+queries must truncate with the same rule the write path uses.
+
+### Proving a beacon works needs CDP, not a screenshot
+
+`sendBeacon` returning `true` proves nothing: the browser queues the request and
+discards it silently if the response lacks CORS headers, and a Blob with
+`type: application/json` triggers an OPTIONS preflight that must be answered.
+Headless `--screenshot` and `--dump-dom` never flush these, so events appear to
+"not work" when the code is correct. The reliable check is
+`scripts/`-adjacent CDP with `Fetch.enable` intercepting the collect URL, which
+removes CORS, server timing and beacon flush timing from the equation entirely.
+Verified that way: 7 events, correct path, scroll marks, outbound click labelled
+`book_a_call`, and the easter egg.
+
+### A module-scope `root` collides with the prerender sandbox
+
+`analytics.js` is bundled into the prerender sandbox, which already has a
+module-scope `root` for the site directory. A second `const root` is a
+SyntaxError that kills the whole bundle, and it surfaces only as a browser-side
+exception. Name it `dhRoot`.
+
 ## `node_modules/.bin/esbuild` was a Linux binary on this Mac
 
 The local `node_modules` had been installed on Linux, so both
@@ -234,6 +287,12 @@ which reads as "esbuild is not installed" and sends you down the wrong path.
 Fixed by fetching the real darwin-arm64 build and swapping it in. Cloudflare
 builds on Linux and was never affected. Check with
 `file node_modules/.bin/esbuild` before reinstalling anything.
+
+This **recururs**. It came back after a publish, because a `.linux.bak` left in
+the tree got restored. If `prerender: FAILED ... ENOEXEC` appears again, check
+`file` first and delete any `*.linux.bak`. Note `workerd` has the same problem,
+which is why `wrangler` cannot run locally on this machine; the CF API is still
+reachable with curl if a token is exported.
 
 ## Known traps
 
