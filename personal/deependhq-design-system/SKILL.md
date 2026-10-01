@@ -68,6 +68,17 @@ Copy these verbatim. Do not invent new values. If something needs a value not on
 --font-ui:'Inter',system-ui,sans-serif;        /* operator headings, all UI, editorial body */
 --font-mono:'JetBrains Mono',ui-monospace,monospace;  /* operator body, all data */
 
+/* Fraunces is variable with four axes. Setting one static weight wastes the
+   whole reason to pick it over a generic serif. Verified by rendering all four
+   axes side by side: WONK rewrites the g, h, y and k, it does not just add
+   weight. Below 32px every axis except opsz must return to 0 or the wonk turns
+   to mush. Serve the axes, not one instance:
+   family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1 */
+--fv-display:'opsz' 144,'wght' 800,'SOFT' 40,'WONK' 1;  /* 32px and up */
+--fv-text:'opsz' 14,'wght' 700,'SOFT' 0,'WONK' 0;       /* below 32px */
+/* no script face. A display serif plus script plus mono trio is the 2019 to 2023
+   indie coffee-roaster formula and reads as a period reference in 2026. */
+
 --text-hero:clamp(2.5rem,5vw,4.25rem);
 --text-h1:clamp(1.875rem,3.2vw,2.75rem);
 --text-h2:clamp(1.375rem,2.4vw,1.875rem);
