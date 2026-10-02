@@ -106,6 +106,22 @@ New scope from a call changes three artifacts, and missing any one leaves an int
 
 Re-verify KRA weights sum to 100 after every edit, by parsing `PEOPLE` rather than reading it.
 
+## The month map must be a real calendar
+
+An earlier build laid the map out as five columns, one per working week, and padded short weeks with cells labelled "holiday". That is wrong twice over: it hid Saturdays and Sundays entirely, and it labelled padding as "holiday" so a reader saw 5 Oct as a holiday when it is an ordinary Monday. Deep caught it: *"why is the 5th a holiday?"*
+
+Rules for any month map:
+
+1. **Walk the real calendar, not the `WEEKS` array.** `WEEKS` only contains working days, so it has no weekends to render. Iterate 1..N and derive each day's weekday.
+2. **Three distinct day states, never two.** `working` (clickable, has tasks), `public holiday` (named, tinted, costs a working day), `weekend` (dashed, muted, says Sat or Sun). A fourth, `no plan`, is a working day the plan has not filled yet.
+3. **Pad the first row with empty cells** when the month does not start on Monday. October 2026 starts Thursday, so Mon-Wed of row 1 are blank. Without this, 1 Oct renders under MON.
+4. **The header row must have exactly as many children as grid columns.** An extra spacer cell in a `repeat(7, ...)` grid pushes SUN onto a second row. This passed a DOM count assertion and still rendered wrong; the screenshot caught it.
+5. **Derive the working-day count, never hand-count it.** `weekdays - public holidays`. 22 - 3 = 19 for October 2026. If a holiday is added or removed the number follows.
+6. **Today is a ring, not a fill,** so it stays visible on a day that is also a holiday or weekend.
+7. **Demo Day markers need a `data-` attribute that the JS actually sets.** The CSS defined `.cell[data-state="demo"]` and the legend promised `*`, but no code ever assigned that state, so the asterisk never appeared. A legend entry with no renderer behind it is a silent lie.
+
+Verify with a weekday-column assertion: for every cell, `column index == real weekday of that date in that month`. Compare with Python's `datetime`, not with the same helper the generator uses, or a shared bug passes twice. Then screenshot it and look, because column alignment is a visual property.
+
 ## Verify (mandatory)
 
 `verify-person-dashboards.py` (Playwright + chromium, both verified working on this machine):
@@ -121,7 +137,10 @@ Re-verify KRA weights sum to 100 after every edit, by parsing `PEOPLE` rather th
 10. Zero em and en dashes across `packs/` including `.md` and `.txt`, not just the HTML
 11. Assert each person's KRA weights sum to 100, parsed from `PEOPLE`
 
-A screenshot read can produce false alarms: month-map tiles legitimately end in an ellipsis, and content below the fold is not clipped. Confirm a suspected clip against the gate's `clipped` counter before changing layout.
+11. Assert each person's KRA weights sum to 100, parsed from `PEOPLE`
+12. Month-map calendar assertion: 31 cells, header equals Mon-Sun, and every cell's grid column matches its real weekday. Derive the expected weekday in Python, never with the generator's own helper.
+
+A screenshot read can produce false alarms, and the reverse is worse: month-map tiles legitimately end in an ellipsis, and content below the fold is not clipped. Confirm a suspected clip against the gate's `clipped` counter. But a screenshot also catches things DOM assertions cannot, such as a grid child count that is correct in isolation and wrong once an extra cell shifts the row. Read the screenshot every time.
 
 Checks 6 and 7 are the ones that catch real defects. In the first build they caught an unescaped apostrophe that broke every file, a `let t = clean(t)` shadowing bug, a day-one BEHIND chip, and mid-word ellipses in the month map. Add new assertions as defects appear rather than trusting the visual once.
 
