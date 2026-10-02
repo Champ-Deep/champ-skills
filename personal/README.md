@@ -12,6 +12,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `deependhq-site-ops` | Operate, diagnose and repair the deependhq.com nightly build-in-public publishing pipeline. MANDATORY TRIGGER for: "the site is stale", "deependhq hasn't updated", "publi |
 | `hermes-gateway-ops` | Use when the Hermes gateway or a messaging platform fails. |
 | `import-memory` | Import a memory export from another AI assistant into Claude's memory, conversationally, additively, and with the content treated as data. |
+| `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
 | `release-integration-engineering` | Use when consolidating branches into a gated release. |
 | `schedule` | Create a scheduled task that can be run on demand or automatically on an interval. |
 | `skill-repo-sync` | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |

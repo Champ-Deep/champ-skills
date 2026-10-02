@@ -67,6 +67,30 @@ score levels are weakly calibrated in numeric terms (use scores for buckets,
 not magnitudes), and it reads instructions literally (state the exact condition,
 put boundary cases in the criteria).
 
+## Content-addressed records cannot hold a single owner
+
+ChampSet's evidence passages are content-addressed: `passageId` is
+sha256(url + index + text). Two rows scraped from the same page resolve to the
+IDENTICAL passage id, so any mutable single-owner field on that record lets the
+last writer steal it from the others. It shipped: one row lost every citation
+and another was handed evidence it never cited.
+
+**Why:** the id identifies content, but ownership is a relationship. Storing
+ownership as a scalar on the content record cannot express sharing.
+
+**How to apply:** put the relationship on the side it is expressed in. Rows
+already carried `passageIds` / `evidenceByColumn`, so that became the
+authoritative link and the write to the passage's `rowId` was deleted. Resolve
+by joining from the owner (`evidence/row-scope.ts`). General rule: if a record
+is keyed by content and more than one thing can reference it, never store the
+reverse pointer as a single field.
+
+**Testing trap worth remembering:** a unit test that calls the new helper
+directly still PASSES when a caller reverts to the buggy grouping. I proved
+this by reintroducing the bug and watching the tests go green. Cover the call
+site too, here by reading the source and asserting the bad pattern is absent.
+See `tests/evidence-ownership-guard.test.ts`.
+
 ## Design rule learned the hard way
 
 A missing judgement must never score better than a successful one. ChampSet

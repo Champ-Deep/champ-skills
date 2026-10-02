@@ -123,6 +123,100 @@ From `frontend/`, run the scripts present in `package.json`, including lint and 
 
 Work on a `feat/...` branch. Do not commit, push, or open a PR unless Deep asks. If API behavior changes, update the repository's API and deployment documentation in the same change.
 
+## A real key is already on this machine, and the mock is the real risk
+
+`$HOME/.hermes/.env` holds a working `OPENROUTER_API_KEY`. Copy it into
+`backend/.env` before concluding that "no LLM call has ever run" (G7 in
+AUDIT.md) is still true. Verified 2026-10-01: real runs serve on
+`deepseek/deepseek-v4.1-flash` and `z-ai/glm-5.3-flash` through
+`openrouter/auto`.
+
+Two traps that cost real time, both worth checking before debugging the app:
+
+- **A stale `OPENROUTER_API_KEY` in the Hermes runtime env silently wins.**
+  `app/__init__.py` deliberately never overwrites a real environment variable,
+  so a server launched from this agent inherits the runtime's key, not
+  `backend/.env`. Symptom: health says `OpenRouter HTTP 401` and a direct
+  `httpx` call with the `backend/.env` key returns 200. Compare with
+  `ps eww -p <pid>` (hash the value, never print it). Fix: start the server
+  with `env -u OPENROUTER_API_KEY ...`.
+- **Port 3000 is OrbStack, not the workspace.** Something else on this machine
+  already serves 3000, and it answers 200, so a naive curl check passes while
+  you screenshot a completely different application. Use 3100, and confirm
+  `document.title` before trusting any visual result. `npx next dev` also
+  pulls a *different* Next major than the installed one; run
+  `node node_modules/next/dist/bin/next dev` instead.
+
+**Lost `node_modules/.bin` and `.venv` mid-session, with disk at 47 GB free.**
+Both had their packages present and only the executables missing. `npm install`
+is unnecessary: recreate the shims (`ln -sf ../next/dist/bin/next
+node_modules/.bin/next`, same for `../typescript/bin/tsc`) and
+`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r
+requirements-dev.txt`. Check whether the packages still exist before assuming
+you must reinstall.
+
+## Only a real run finds the bugs 1,055 green tests cannot
+
+Mock LLM responses are well-formed. Real ones are not. Two failures in the
+first live ticket, both invisible to the suite:
+
+- `llm.chat` returned `content: null` (OpenRouter does this for
+  reasoning-only and token-capped responses), and the first thing most callers
+  do is `text.strip()`, so it surfaced as `'NoneType' object has no attribute
+  'strip'` three frames from the HTTP payload that said null. Fixed once in
+  `llm._content_of` for both `chat` and `chat_messages`, with
+  `tests/test_llm_content_none.py` pinning it.
+- Ad creatives crashed the whole design stage on that null, so the ticket
+  never reached Gate 2. After the fix a full run produced 8 artifacts (plan,
+  3 newsletters, 3 ad creatives, canvas) and stopped at Gate 2 correctly.
+
+Rule: a green suite proves the mock world works. Only a real run proves the
+product works. Run one end to end before calling anything done.
+
+## Pixel office: the layout trap that hides every fix
+
+The office already animates properly (a 140 ms master clock in `useAnimationClock`,
+real walk cycles, and seats derived in `backend/app/office.py` from the same rows
+the Kanban reads). When a change to it "does nothing", check render order before
+touching motion.
+
+`app/page.tsx` used to render InFlightStrip, NeedsYou, WorkloadStrip and
+LatestAssets BEFORE `{view === "office" && <PixelOffice .../>}`. The office
+therefore sat below the fold and got cropped by the viewport, and a screenshot of
+it looked "static" when the floor was animating correctly all along.
+
+The office answers "what is happening right now", so it renders above the
+obligation strips, and the view switcher travels with it: a switcher placed below
+the view it controls is its own bug. When you change the ordering, move the
+`<div className="mb-4 flex flex-wrap items-center gap-3">` switcher block too.
+
+Three aliveness defects worth knowing, all fixed 2026-10-01:
+
+1. Idle agents were placed by array index into fixed `IDLE_SPOTS` and never
+   reassigned, so the lounge stood still for a whole session. The fix is an epoch
+   state bumped every `WANDER_MS` (9 s) plus a DETERMINISTIC shuffle,
+   `shuffled(spots, epoch)`. Never `Math.random`: the 6 s poll would reshuffle
+   the room and bodies would teleport mid-walk.
+2. A crashed run empties every seat, so a `failed_designing` ticket reads as a
+   quiet day. `office.py` now also queries `PipelineTask.status == "failed"` and
+   seats those agents with `failed: True`, drawn as a full red STUCK bar. A red
+   outline on an empty track reads as "no data", not "stopped".
+3. Per-agent progress comes from `_agent_progress()`, which credits an agent only
+   for ITS OWN artifact kind through `AGENT_KIND`. Do not count artifacts per
+   ticket: a revision re-runs a stage, so counting rows reports three newsletters
+   where one current newsletter exists.
+
+Seat overflow used to add a constant x bump, which dropped the third body on the
+same tile as a seat three rows further along. That is how two identical sprites
+ended up standing on each other. Overflow rows now step back into the room
+(`x - overflow * 16`, `y + overflow * 30`), and each working sprite carries a
+name plate lifted by `tier * 15` so plates at one station stack instead of
+overlapping.
+
+SVG gotcha that cost a round trip: a CSS `transform` on the same element as an SVG
+`transform` ATTRIBUTE wins and discards the attribute. `AgentPlate` nests an outer
+animated group around an inner translated group for exactly this reason.
+
 ## Pitfalls
 
 - Do not use the Champbeam skill or `/Users/deep/Apps&Projects/ChampUTM`; that is a different product.

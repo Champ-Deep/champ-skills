@@ -413,13 +413,19 @@ This skill is Step 1 of the `daily-start` skill's morning routine.
 2. Run vault-linker `audit` on yesterday's notes + any new files and report link issues. No link writes during the morning routine
 3. Run Workflow 2 (Inbox Triage) on anything in Inbox/
 4. Generate today's daily note (Workflow 4) if it doesn't exist
-5. Produce the context summary for the user:
+5. Report the Celsus OS Decide deck depth: open `http://localhost:3043/api/state?sort=unsure`, read
+   `deckSize` and the `run` date, and name the single most uncertain card as one line for Deep. This
+   is the only system that reports what the vault does not know, so it belongs in the routine. Do
+   not answer cards on his behalf: the deck is the human-in-the-loop surface, and a model-supplied
+   answer is exactly the gap he is trying to close.
+6. Produce the context summary for the user:
    - Yesterday's Wins (from yesterday's daily note)
    - Needs Follow-Up (incomplete tasks, unflagged meetings)
    - From Your Inbox (urgent items from email digest)
    - Effort status snapshot table
 
-**Handoff to Step 2 (dashboard wizard):** Link issues are reported, today's daily note exists, the context summary is ready.
+**Handoff to Step 2 (dashboard wizard):** Link issues are reported, today's daily note exists, the
+context summary is ready, and the Decide deck depth is on the record.
 
 ---
 
@@ -490,6 +496,7 @@ Sensitive files flagged: [list if any]
 | Called by daily-start (morning routine) | Workflow 0 + link audit (report only) + Workflows 2+4 + context summary |
 | "vault update" | Workflows 0+1+2 (sweep + scan + triage) |
 | "connect my notes" / "link audit" / "broken links" | vault-linker audit, then repair after dry run |
+| "what am I unsure about" / "where are the gaps in my context" / "correct my context" / "what am I missing" / "fix my vault" | **Celsus OS Decide deck** at `http://localhost:3043`, not a hand-rolled grep. It is the only tool here that reports a confidence per judgement and queues the uncertain ones as cards for Deep. `celsus doctor` if it looks wrong |
 | About to append to TASKS.md | celsus-task-dedupe mode first |
 
 ---

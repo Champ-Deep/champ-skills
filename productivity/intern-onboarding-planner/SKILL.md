@@ -7,6 +7,17 @@ description: "Generate a day-by-day first-month onboarding plan for a new hire o
 
 Two readers, two jobs. The **intern** opens the dashboard every morning and needs, in five seconds: what do I do today, where am I in the month, what is due Friday, who do I ask. The **sponsor** (usually Deep) opens it once a week and needs, in ten seconds: is this person on track. The page is a map with today pinned, not a list of collapsed rows.
 
+## Space utilization is a hard rule
+
+A page where most of the content sits collapsed behind accordions the reader will never open reads as blank with a few headings. This is the most common way a dense dashboard fails, and it is never acceptable here.
+
+Rules:
+1. Collapsed by default is only allowed when the collapsed state is still worth looking at: it must carry a real one-line summary the reader can act on.
+2. Measure it, do not eyeball it. Hidden content behind collapsed sections must stay under about a third of the page. Print the ratio at verification.
+3. If hiding most of the content, show it instead. A taller page costs far less than an empty-looking one.
+4. Never build 20+ identical collapsed rows. That exact failure shipped before (see below) and it looked like a blank page.
+5. When a section must collapse for length, put it at the bottom, and put dense visible content above it.
+
 Plan content follows tried and tested practice: light immersion first, real ownership by Week 3, fully productive by Week 4, and no new joiner ever aimless when their manager is busy.
 
 ## What went wrong before (do not repeat)
@@ -126,7 +137,7 @@ Single self-contained HTML file built through `frontend-design` with the company
 4. **Next Friday callout.** The upcoming demo or report, with days remaining, inside the month map.
 5. **Who to ask as cards**, not a table: name, role, ask them for, channel. At most six. Sticky rail on desktop, a horizontal scroll row on phone.
 6. **Deliverable strip.** One node per deliverable on a horizontal line, filled when shipped, with the count beside it.
-7. **Week tabs with day cards.** One week open at a time; inside it, today's card open and the rest collapsed. Collapsed cards show weekday, date, focus, task count, and deliverable name.
+7. **Week sections, all open by default.** Every week renders expanded so the intern sees the whole month in one pass; each is still a `<details>` so they can close one while working. Do NOT ship one-open-rest-collapsed: with five weeks that hides over half the page behind four bare summary bars. Today's day card may be emphasised, but no week is collapsed on load.
 8. **Sponsor strip.** One line at the top: ON TRACK, WATCH, or BEHIND, computed from working days elapsed versus deliverables shipped (behind when shipped falls two or more below elapsed days), with a "Sponsor view" tab listing success criteria, deliverable status, and any deliverable that slipped past its ETA. This is the ten-second answer for the manager.
 9. **No wide tables on the dashboard.** Glossary renders as tap-to-reveal chips or a two-column definition list; skills mapping is a collapsed two-column list; everything becomes single-column cards below 540px. Any table wider than two columns is a build error.
 10. **Persistence.** localStorage keyed per person (`{name}-onboarding-v1`) plus "Copy progress code" and "Restore from code" (base64 JSON) for device moves. Server sync is bring-your-own backend if ever needed.
@@ -147,7 +158,8 @@ Run the `visual-verify` gate at 390 and 1440, open the screenshots with the Read
 4. **Completeness count.** Every day has two to four tasks, one deliverable, a hint on every task, and a "What good looks like" on every deliverable. Print the counts.
 5. **No clipped tables.** At 390px, no element has a scrollWidth larger than the viewport; the audit names the culprit if one does.
 6. **Names.** Every person named on the page appears in a Deep-confirmed source.
-7. `node --check` on the extracted script; zero console errors; zero em or en dashes (`grep -cP '\xe2\x80[\x93\x94]' <output.html>` must print 0).
+7. **Space utilization.** Measure `scrollHeight` with every week open, then with the default load state. Hidden content behind collapsed sections must be under a third of the page. If it is more, the accordions are hiding the product, not decluttering it. Zero em or en dashes (`grep -cP '\xe2\x80[\x93\x94]' <output.html>` must print 0).
+8. `node --check` on the extracted script; zero console errors; zero em or en dashes.
 
 Zero FAILs before delivery. If no browser is available, say so and label the output unverified.
 

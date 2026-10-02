@@ -520,6 +520,14 @@ slots.forEach(slot => {
 `getBoundingClientRect()` relative to the canvas container, not absolute page coordinates.
 Recalculate on every node reposition to keep lines attached.
 
+**Guard `scrollIntoView` and `window.scrollTo`**: jsdom implements neither, and some embedders stub them. Wrap both in a `typeof === "function"` check plus try/catch, or a headless test run dies on an unrelated line.
+
+**Two counts that will drift apart**: if a hero says "8 questions" while the progress meter says "0 / 7 answered", a reviewer will read it as a contradiction. State the truth in one phrase ("8 questions, 7 required") and have the meter read "0 / 7 required done" so the numbers cannot be misread as disagreeing.
+
+**Contrast: `#D94F0A` fails as body text on every light surface.** It is 3.80:1 on #F5F5F5 and 4.14:1 on white, both under the 4.5:1 text floor. Keep it for borders and fills only and add a separate text-grade token: `#A63506` passes at 5.50:1 on #F5F5F5 and 6.42:1 on #FAFAFA. Large decorative numerals only need 3:1, so `#D97A2E` is a usable step lighter.
+
+**Verify headlessly, not by reading**: `npm install jsdom` in the scratch dir, load the file with `runScripts: 'dangerously'`, and click every widget. This catches typos in element ids that a static read never will (a reset handler referencing `$("pitch")` when the element is `#pitchText` throws only on click). Then run `visual-verify` audit plus a screenshot pass; a screenshot you did not open verifies nothing.
+
 ## Reference Files
 
 - `references/interaction-patterns.md`: Full CSS/JS implementation for every interaction pattern
