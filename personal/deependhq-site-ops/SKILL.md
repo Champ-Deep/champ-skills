@@ -278,7 +278,55 @@ module-scope `root` for the site directory. A second `const root` is a
 SyntaxError that kills the whole bundle, and it surfaces only as a browser-side
 exception. Name it `dhRoot`.
 
+## A property and a method with the same name blanked the whole site (2026-10-02)
+
+The costliest bug in this repo's history, and the pattern to check first if the
+site ever returns 200 with a body of about sixteen bytes.
+
+`Personalize` stored its classification on `this.segment` and also defined a
+method called `segment(el)`. The prototype method shadowed the property. The
+HTMLRewriter handler called `p.segment(el)`, got a string, and threw partway
+through the response stream. Every page on the site served `<!doctype html>`
+and nothing else: the homepage, every essay, every company page.
+
+Why it was so hard to see: the status was 200, the CSP was present, the
+security headers were right, and the deploy reported success. Nothing in the
+response said "broken". A browser shows a blank page, not an error.
+
+The fix is a renamed field, `this.seg`. The lasting part is
+`scripts/selftest-worker.mjs`, which constructs the real class and asserts two
+things: that calling `p.segment(el)` does not throw, and that no constructor
+property shares a name with a method in that class.
+
+**After any Worker change, run the selftests before publishing.** All five must
+pass:
+
+```
+node scripts/selftest-worker.mjs
+node scripts/selftest-segment.mjs
+node scripts/selftest-copy.mjs
+node scripts/selftest-digest.mjs
+node scripts/selftest-privacy.mjs
+```
+
+**To tell a blank site from a working one, check the body length, not the
+status:**
+
+```
+curl -s https://deependhq.com/ | wc -c     # healthy homepage is about 87000
+```
+
+A `200` with a small number is a broken site. A `200` with a normal number and
+no content in the browser is a script error, and the console log is where to look.
+
 ## `node_modules/.bin/esbuild` was a Linux binary on this Mac
+
+**Publishing blind is how the outage shipped.** A patch tool call reported
+success, the fix was never written to disk, and I read the success message
+instead of grepping the file. A patch is not applied until the file on disk
+shows it. After any fix to `worker/index.js`, run
+`grep -n 'this.seg\|this.segment' worker/index.js` and confirm the change is
+actually there before publishing.
 
 The local `node_modules` had been installed on Linux, so both
 `node_modules/.bin/esbuild` and `node_modules/@esbuild/darwin-arm64/bin/esbuild`
