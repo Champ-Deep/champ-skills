@@ -130,3 +130,48 @@ class of bug: a foreign key or alias that only exists in one of two code paths.
 Benchmark each facet case in its own process with a hard timeout. A Python
 `signal.alarm` does not interrupt a blocking SQLite call, so one slow query
 silently eats the whole run and the remaining cases never report.
+
+## A UI that no test ever paints ships broken
+
+88 facet-key assertions, 98 end-to-end assertions and a UI-contract suite all
+went green while the shipped page had no pagination, a blank filter sidebar on
+first paint, and a one-line regex that made the most-used suggested query return
+zero. Every suite had asserted `/api/*`. None had asserted the page.
+
+It happens because the environment has no browser, so rendering feels impossible
+and asserting the markup exists feels like the next best thing. It is not:
+markup that exists has still never been painted.
+
+Headless substitute, no browser required:
+1. **Execute the page's own JS against the live API.** Extract the real
+   filter-construction function (a natural-language parser), run it in node,
+   assert the output is a filter the API accepts. This is the highest-risk code
+   in the UI and it is pure logic, so it is fully testable without a browser.
+2. **Assert the arithmetic a buyer reads**, not just that a query succeeds:
+   page 2 must not repeat page 1's rows, and the total must stay stable across
+   pages.
+3. **Walk the DOM in user order**: boot, then click each suggestion, then read
+   the result. A boot call like `run(false)` that skips first-paint facet
+   rendering is invisible to per-function tests.
+4. **Assert absence of failure text**: no bare `no records matched` empty state,
+   no raw placeholder where a real value belongs.
+
+Pulling JS out of HTML: never regex to the first `}`. A body containing braces
+yields a silently truncated function, which is a `SyntaxError` far from the
+cause. Count braces to match, re-attach the signature, and remember `.mjs`
+forbids top-level `return`, so export a wrapper rather than the bare body.
+
+Language-level bug classes (acronym casing, word boundaries, `sap` inside
+`GSAP`) belong in a table-driven test listing raw and expected side by side.
+
+## Facet geography: a city is not a state
+
+Check what the column actually stores before trusting a UI's location list.
+`hq_state` holds `Maharashtra`; the list also offers `Pune` and `Bengaluru`, so
+`states=["Pune"]` matched nothing while 25,050 companies sat in that city. A
+location filter must resolve a city against the city column, and the city set
+belongs in one shared module with the other vocabularies, not typed into a JS
+list where it drifts from the data.
+
+Zero results from a location facet is a vocabulary mismatch before it is a data
+gap.
