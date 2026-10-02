@@ -122,23 +122,52 @@ Rules for any month map:
 
 Verify with a weekday-column assertion: for every cell, `column index == real weekday of that date in that month`. Compare with Python's `datetime`, not with the same helper the generator uses, or a shared bug passes twice. Then screenshot it and look, because column alignment is a visual property.
 
+## Space utilization: no collapsed walls
+
+Deep's rule, and it is a rule not a preference: *when most of the accordions aren't going to be expanded, most of the page is left blank and empty. That's never ideal.*
+
+The October build violated it. Five week panels, only the current week open on load, so **2,400 of the page's 4,682px sat hidden behind four bare summary bars**. It rendered without error and passed every assertion in the gate; it simply looked like an empty page with five headings.
+
+Rules:
+
+1. **All week panels render open by default.** They stay `<details>` so the intern can close the weeks they are not working in. Never one-open-rest-collapsed.
+2. **Measure the hidden ratio, do not eyeball it.** `hidden / (hidden + visible)` across every `<details>` body. Must stay under about a third. Print the number at verification.
+3. Opening everything cost only a few hundred px, because the space was already allocated. Height was never the real constraint; perceived emptiness was.
+4. Collapsed-by-default is allowed only where the collapsed state is still worth looking at, meaning it carries a real one-line summary the reader can act on.
+
+## The pack gate exists because a JS typo is invisible
+
+`build-packs.js` shipped `First sit-down: undefined` and `October Plan - undefined.md` into all 8 packs for several hours. Cause: it read `p.first` where the parsed field is `p.name`. Nothing threw, so nothing flagged it.
+
+`pack_check.py` asserts the words, not just the exit code. It caught four classes at once: the wrong field name, the literal string `he or she` from a template never filled per person, duplicate agenda items, and lowercase names in the combined email note.
+
+**Prove a new assertion fails before trusting it.** Seed the bug, rerun, confirm the gate exits 1. The first version of this gate searched for the literal word `undefined` while the real bug emitted the bare expression `p.first`, so it passed a knowingly broken build. A gate that has never been seen to fail is not a gate.
+
+Generalise the check: look for code fragments (`\bp\.\w+`, `{{...}}`, `<%...%>`) rather than a fixed list of placeholder words, because a generator bug leaks as whatever the bad expression was.
+
+Keep the combined email note generated, never hand-edited: `build-combined-emails.js` rebuilds it from the 8 split drafts in `emails/`, so it cannot drift from what actually gets pasted into a mail. A hand-splice of that file once duplicated a section and, when retrying, truncated the whole file to 0 bytes.
+
+## Regeneration order
+
+`build-person-dashboards.js`, then `build-packs.js`, then `build-combined-emails.js`. Then `verify.py` and `pack_check.py`. The pack build throws if a dashboard is missing rather than silently shipping an empty folder.
+
 ## Verify (mandatory)
 
-`verify-person-dashboards.py` (Playwright + chromium, both verified working on this machine):
+`verify.py` (Playwright + chromium, both verified working on this machine) for the dashboards, and `pack_check.py` for the packs, emails and combined note:
 
 1. `node --check` on the extracted script for every file
 2. Zero em and en dashes across all output
 3. First-screen test at 1440: Today panel and month map both above the fold
 4. Today resolver at a pre-start, mid-plan, holiday, weekend and post-plan date
 5. Tick a task, confirm it lands in localStorage
-6. Zero console errors
+7. **Zero console errors**
 8. **Zero horizontal overflow at 390** and **zero clipped text** (scrollWidth/scrollHeight vs clientWidth/clientHeight)
 9. `node --check` on both generators, then run them and confirm all eight appear
 10. Zero em and en dashes across `packs/` including `.md` and `.txt`, not just the HTML
 11. Assert each person's KRA weights sum to 100, parsed from `PEOPLE`
-
-11. Assert each person's KRA weights sum to 100, parsed from `PEOPLE`
 12. Month-map calendar assertion: 31 cells, header equals Mon-Sun, and every cell's grid column matches its real weekday. Derive the expected weekday in Python, never with the generator's own helper.
+13. **Space utilization: hidden content under collapsed sections stays under a third of the page.** See the section below.
+14. `pack_check.py`: zero template leakage in any pack prose. See the section below.
 
 A screenshot read can produce false alarms, and the reverse is worse: month-map tiles legitimately end in an ellipsis, and content below the fold is not clipped. Confirm a suspected clip against the gate's `clipped` counter. But a screenshot also catches things DOM assertions cannot, such as a grid child count that is correct in isolation and wrong once an extra cell shifts the row. Read the screenshot every time.
 
@@ -169,7 +198,7 @@ Say these plainly. Do not imply the messages were sent.
 
 ## Files
 
-- `build-person-dashboards.js`, `build-packs.js` and `verify-person-dashboards.py` live in the vault at `Efforts/Active/<Team> <Month>/handover/` so they survive for the next month.
+- `build-person-dashboards.js`, `build-packs.js`, `build-combined-emails.js`, `verify.py` and `pack_check.py` live in the vault at `Efforts/Active/<Team> <Month>/handover/` so they survive for the next month. `build-combined-emails.js` and `pack_check.py` arrived Oct 2026 after the undefined-fields incident and are not optional.
 - Per-person packs in `Efforts/Active/<Team> <Month>/handover/packs/`, one folder per intern plus an index `README.md`.
 - Dashboards in `Efforts/Active/<Team> <Month>/dashboards/`, plus a `manifest.json` with per-person task counts.
 
