@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interlink Architecture Report</title>
+<style>
+:root{
+  --bg:#0b1020; --panel:#121a2e; --panel2:#18223a; --line:#26314d;
+  --fg:#eef2fb; --mut:#a8b4cd; --dim:#8492ad;
+  --acc:#5b9dff; --ok:#3ddc97; --warn:#ffc65c; --bad:#ff6b81; --info:#b58cff;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);
+  font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+.wrap{max-width:1500px;margin:0 auto;padding:20px 22px 64px}
+
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;
+  border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:18px}
+h1{margin:0;font-size:23px;letter-spacing:-.2px;font-weight:650}
+.sub{color:var(--mut);font-size:13px;margin-top:5px}
+.sub b{color:var(--fg);font-weight:600}
+
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{background:var(--panel2);color:var(--mut);border:1px solid var(--line);
+  border-radius:999px;padding:9px 17px;font:inherit;font-size:13.5px;cursor:pointer;
+  min-height:44px;transition:background .13s,color .13s,border-color .13s}
+nav button:hover{background:#1f2b47;color:var(--fg)}
+nav button:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+nav button[aria-selected="true"]{background:var(--acc);color:#08111c;border-color:var(--acc);font-weight:650}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:11px;margin-bottom:18px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.kpi b{display:block;font-size:25px;font-weight:680;letter-spacing:-.6px;line-height:1.15}
+.kpi span{display:block;font-size:12px;color:var(--mut);margin-top:3px}
+.kpi small{display:block;font-size:11.5px;color:var(--dim);margin-top:2px}
+.kpi.g b{color:var(--bad)} .kpi.w b{color:var(--warn)} .kpi.i b{color:var(--info)}
+.kpi.k b{color:var(--ok)}
+
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:0 0 14px;
+  font-size:12.5px;color:var(--mut)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;
+  vertical-align:-1px}
+.legend .it{display:inline-flex;align-items:center}
+.legend .ramp{display:inline-block;width:96px;height:11px;border-radius:3px;
+  background:linear-gradient(90deg,rgb(96,52,150),rgb(150,42,116),rgb(255,42,96))}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+h2{font-size:15px;margin:0 0 3px;font-weight:640;letter-spacing:-.1px}
+.note{color:var(--mut);font-size:13px;margin:0 0 14px}
+section[hidden]{display:none}
+
+.mapbox{position:relative;background:#0d1426;border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden}
+#map{position:relative;width:100%;height:min(66vh,660px)}
+.tile{position:absolute;border:1px solid rgba(255,255,255,.14);border-radius:4px;
+  padding:6px 8px;overflow:hidden;cursor:pointer;transition:filter .12s}
+.tile:hover{filter:brightness(1.18)}
+.tile:focus-visible{outline:2px solid #fff;outline-offset:1px;z-index:5}
+.tile .tn{font-size:12.5px;font-weight:640;line-height:1.24;word-break:normal;overflow-wrap:normal;hyphens:none}
+.tile .tm{font-size:11px;margin-top:2px;font-weight:600}
+.tile .tp{font-weight:700;opacity:.95}
+.tile.dim{opacity:.14;pointer-events:none}
+.tstrip{position:absolute;left:0;right:0;bottom:0;height:4px;display:flex;opacity:.85}
+.tstrip i{display:block;height:100%}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;
+  letter-spacing:.5px;padding:0 9px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px;border-bottom:1px solid #1d2740;vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#161f36}
+.pill{display:inline-block;font-size:11px;font-weight:650;padding:2px 8px;border-radius:999px;
+  letter-spacing:.2px;white-space:nowrap}
+.pill.TOFU{background:rgba(91,157,255,.16);color:#9cc6ff}
+.pill.MID{background:rgba(61,220,151,.15);color:#7df0c0}
+.pill.BOFU{background:rgba(255,198,92,.16);color:#ffd68a}
+.pill.HUB{background:rgba(181,140,255,.16);color:#cfb4ff}
+.pill.THIN{background:rgba(255,107,129,.16);color:#ff9aa9}
+.z{color:var(--bad);font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+
+.split{display:grid;grid-template-columns:1.35fr .95fr;gap:16px;align-items:start}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.ent{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:9px;
+  background:var(--panel2)}
+.enth{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:5px}
+.enth b{font-size:14.5px}
+.entmeta{font-size:12px;color:var(--mut);display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.bar{height:5px;border-radius:3px;background:#1e2942;overflow:hidden;margin-top:7px;display:flex}
+.bar i{display:block;height:100%}
+.emptymsg{color:var(--dim);font-size:13px;padding:10px 0}
+
+.wa{display:flex;align-items:flex-start;gap:11px;padding:11px 4px;border-bottom:1px solid #1d2740}
+.wa:last-child{border-bottom:0}
+.wa input{margin-top:2px;width:24px;height:24px;font-size:16px;
+  accent-color:var(--ok);cursor:pointer;flex:none}
+.wab{flex:1;min-width:0}
+.wat{font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.wam{font-size:12px;color:var(--mut);margin-top:3px;overflow-wrap:anywhere}
+.wal{font-size:12.5px;margin-top:7px;display:flex;flex-direction:column;gap:5px}
+.wal div{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.wal .why{color:var(--dim);font-size:11.5px}
+.wab.done .wat,.wab.done .wal{opacity:.42;text-decoration:line-through}
+.prog{display:flex;align-items:center;gap:11px;margin:0 0 13px;font-size:13px;color:var(--mut)}
+.prog .track{flex:1;height:7px;background:#1e2942;border-radius:4px;overflow:hidden;max-width:320px}
+.prog .track i{display:block;height:100%;background:var(--ok);transition:width .2s}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{background:var(--panel2);color:var(--mut);border:1px solid var(--line);
+  border-radius:8px;padding:8px 13px;font:inherit;font-size:12.5px;cursor:pointer;min-height:44px}
+.filters button:hover{background:#1f2b47;color:var(--fg)}
+.filters button[aria-pressed="true"]{background:var(--acc);color:#08111c;border-color:var(--acc);font-weight:650}
+.sr{position:absolute;left:-9999px;top:0;width:auto;min-height:44px;padding:12px 18px;
+  background:var(--acc);color:#08111c;border-radius:8px;font-weight:650;white-space:nowrap;
+  z-index:99;text-decoration:none}
+.sr:focus{left:14px;top:14px;position:fixed}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:640px){
+  .wrap{padding:15px 14px 56px} h1{font-size:19px}
+  #map{height:min(56vh,440px)} td{padding:8px 6px} th,td{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#main">Skip to content</a>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Interlink Architecture</h1>
+    <div class="sub" id="hostline"></div>
+  </div>
+  <nav role="tablist" aria-label="Report views">
+    <button role="tab" aria-selected="true" data-view="map">Site map</button>
+    <button role="tab" aria-selected="false" data-view="ents">Entities</button>
+    <button role="tab" aria-selected="false" data-view="work">Worklist</button>
+  </nav>
+</header>
+
+<div class="kpis" id="kpis"></div>
+
+<section id="v-map">
+  <div class="legend" id="legend"></div>
+  <div class="mapbox"><div id="map"></div></div>
+</section>
+
+<section id="v-ents" hidden>
+  <div class="split">
+    <div class="panel">
+      <h2>Entities the site has pages for</h2>
+      <p class="note">Each row is a topic the site already owns a page for. The bar shows the
+        funnel layers present: research (TOFU), supporting (MID), commercial (BOFU). A row with
+        only one bar is a page with nowhere to send a reader next.</p>
+      <div id="ents"></div>
+    </div>
+    <div class="panel">
+      <h2>Competitive sets</h2>
+      <p class="note">Entities grouped because they share a section and both own a hub page.
+        These are the cross-link sets a competitor page should point at.</p>
+      <div id="clusters"></div>
+    </div>
+  </div>
+</section>
+
+<section id="v-work" hidden>
+  <div class="panel">
+    <div class="prog"><span id="ptxt">0 of 0</span>
+      <span class="track"><i id="pbar" style="width:0"></i></span>
+      <button id="reset" style="background:var(--panel2);color:var(--mut);border:1px solid var(--line);
+        border-radius:8px;padding:8px 13px;font:inherit;font-size:12.5px;cursor:pointer;min-height:44px">Clear</button>
+    </div>
+    <h2>Ranked edits</h2>
+    <p class="note">One row is one editing pass. The source page discusses the target entity in
+      prose but does not link to it. Tick as you go.</p>
+    <div class="filters" id="filters"></div>
+    <div id="work"></div>
+  </div>
+</section>
+</div>
+
+<script id="payload" type="application/json">__PAYLOAD__</script>
+<script>
+const D = JSON.parse(document.getElementById('payload').textContent);
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ROLE_C = {TOFU:'#5b9dff',MID:'#3ddc97',BOFU:'#ffc65c',HUB:'#b58cff',THIN:'#ff6b81'};
+const byId = {}; D.pages.forEach(p => byId[p.i] = p);
+
+/* ---------- header + kpis ---------- */
+$('#hostline').innerHTML =
+  `<b>${esc(D.host)}</b> &middot; crawled ${esc((D.fetched||'').slice(0,10))} &middot; ` +
+  `${D.summary.pages} pages, ${D.summary.edges.toLocaleString()} links`;
+
+const S = D.summary, zr = S.zero_in, pct = x => Math.round(100*x/S.pages);
+$('#kpis').innerHTML = [
+  ['', S.pages, 'pages crawled', ''],
+  ['', D.entities.length, 'entity hubs found', ''],
+  ['w', zr, 'pages with no inbound link', pct(zr)+'% of site'],
+  ['w', S.zero_out, 'pages with no outbound link', pct(S.zero_out)+'% of site'],
+  ['g', S.no_tofu, 'commercial pages with no research page', 'missing TOFU layer'],
+  ['i', S.work_links, 'links to add', S.work_pages+' pages to edit'],
+  ['k', S.in_sitemap, 'pages in the XML sitemap', 'of '+S.pages+' crawled'],
+].map(([c,b,l,s])=>`<div class="kpi ${c}"><b>${b.toLocaleString()}</b><span>${l}</span>`+
+  (s?`<small>${s}</small>`:'')+`</div>`).join('');
+
+$('#legend').innerHTML =
+  `<span class="it" style="gap:7px"><span class="ramp"></span>` +
+  `<span>fewer pages with no inbound link &rarr; more</span></span>` +
+  `<span style="color:var(--dim)">tile area = page count &middot; % stranded = share of ` +
+  `that section with zero inbound links</span>` +
+  `<span style="color:var(--dim)">funnel mix per tile: ` +
+  Object.entries(ROLE_C).map(([k,v]) =>
+    `<i style="background:${v};width:9px;height:9px;border-radius:2px;display:inline-block;`+
+    `margin:0 3px 0 7px"></i>${k}`).join('') + `</span>`;
+
+/* ---------- view switch ---------- */
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected', x===b));
+  ['map','ents','work'].forEach(v => $('#v-'+v).hidden = (v !== b.dataset.view));
+  if (b.dataset.view === 'map') requestAnimationFrame(drawMap);
+});
+
+/* Measure real text width rather than guessing a per-character factor. */
+let _ctx = null;
+function textW(str, fs){
+  if(!_ctx){ _ctx = document.createElement('canvas').getContext('2d'); }
+  _ctx.font = `650 ${fs}px "Segoe UI", system-ui, sans-serif`;
+  return _ctx.measureText(str).width;
+}
+function fit0(s){ return s; }
+
+/* ---------- treemap (geometry computed in python, verified exact) ---------- */
+const SHORT = {professionals:'prof', professional:'prof', healthcare:'health',
+  health:'health', technology:'tech', targeted:'target', testimonials:'quotes',
+  testimonial:'quotes', directories:'dirs', directory:'dirs', infographics:'info',
+  corporate:'corp', capability:'capab', capabilities:'capab', management:'mgmt',
+  intelligence:'intel', development:'dev', enrichment:'enrich', appointment:'appt',
+  marketing:'mktg', acquisition:'acq', recruitment:'recruit', financial:'fin',
+  operational:'ops', engineering:'eng', telephone:'tel', geographic:'geo',
+  specialists:'spec', contractors:'contr', laboratory:'lab', manufacturing:'mfg',
+  distributors:'distrib', associations:'assoc', nonprofits:'nonprofit',
+  dealerships:'dealers', restaurants:'rest', attorneys:'attys', lists:'lists',
+  telephone:'tel', insights:'insights', magazine:'magazine', academy:'academy',
+  compare:'compare', versus:'vs', alternatives:'alts', reviews:'reviews'};
+let tiles = [];
+function drawMap(){
+  const box = $('#map'); box.innerHTML = '';
+  const boxW = box.clientWidth, boxH = box.clientHeight;
+  if(!boxW || !boxH) return;
+  const kFit = Math.min(boxW / D.mapw, boxH / D.maph);
+  const kx = Math.max(kFit, boxW / D.mapw);
+  const ky = Math.max(kFit, boxH / D.maph);
+  const k = kFit;                       // used for the fold thresholds (aspect matters)
+  const SX = kx, SY = ky;               // actual per-axis scale
+  const ox = (boxW - D.mapw*SX)/2, oy = (boxH - D.maph*SY)/2;
+
+  // On a narrow screen only the largest sections can carry a readable label. Fold the
+  // smallest into the synthetic bucket so no tile is an 18px sliver. Decide from the
+  // RENDERED size, not the design-space area, since k is what makes tiles small.
+  const MIN_W = 58, MIN_H = 30;
+  let shown = D.groups.slice();
+  const fits = g => g._rect && (g._rect[2]*SX) >= MIN_W && (g._rect[3]*SY) >= MIN_H;
+  const keep = shown.filter(fits);
+  if (keep.length < 4) {
+    // nothing qualifies: keep the 4 largest by rendered area
+    shown.slice().sort((a,b)=> (b._rect[2]*b._rect[3]) - (a._rect[2]*a._rect[3]))
+         .slice(0,4).forEach(g => { if (!keep.includes(g)) keep.push(g); });
+  }
+  if (keep.length && keep.length < shown.length) {
+    const fold = shown.filter(g => !keep.includes(g));
+    if (fold.length) {
+      const boxRect = fold.reduce((acc,g)=>{
+        if(!acc) return g._rect.slice();
+        const x2 = Math.max(acc[0]+acc[2], g._rect[0]+g._rect[2]);
+        const y2 = Math.max(acc[1]+acc[3], g._rect[1]+g._rect[3]);
+        acc[0] = Math.min(acc[0], g._rect[0]); acc[1] = Math.min(acc[1], g._rect[1]);
+        acc[2] = x2 - acc[0]; acc[3] = y2 - acc[1];
+        return acc;
+      }, null);
+      keep.push({sec:'other sections',
+                 n: fold.reduce((a,g)=>a+g.n,0),
+                 z: fold.reduce((a,g)=>a+g.z,0), tail:true, _rect: boxRect});
+    }
+    shown = keep;
+  }
+
+  tiles = [];
+  shown.forEach(g => {
+    if(!g._rect) return;
+    const [gx,gy,gw,gh] = g._rect;
+    const share = g.n ? g.z / g.n : 0;
+    const r = Math.round(255*(1-share*0.86)), gr = 42, b = Math.round(96 + 56*(1-share));
+    const bg = g.tail ? '#3d4a68' : `rgb(${r},${gr},${b})`;
+    // Pick ink by WCAG contrast, not by a luminance threshold: the strand ramp spans
+    // dark red to pale pink and neither fixed colour passes everywhere.
+    const ink = (function(){
+      function L(R,G,B){ const f = c => { c/=255; return c<=.03928 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4); };
+        return .2126*f(R)+.7152*f(G)+.0722*f(B); }
+      const lb = L(r,gr,b);
+      const dark = L(8,17,28), light = L(243,247,255);
+      const cd = (Math.max(lb,dark)+.05)/(Math.min(lb,dark)+.05);
+      const cl = (Math.max(lb,light)+.05)/(Math.min(lb,light)+.05);
+      return cd >= cl ? '#08111c' : '#f3f7ff';
+    })();
+    const W = gw*SX, H = gh*SY;
+    if(W < 3 || H < 3) return;
+    // inset by 1px on the right/bottom so adjacent tiles never share a border pixel
+    const IW = Math.max(2, W - 1), IH = Math.max(2, H - 1);
+    const el = document.createElement('div');
+    el.className = 'tile';
+    el.style.cssText = `left:${ox+gx*SX}px;top:${oy+gy*SY}px;width:${IW}px;height:${IH}px;`+
+                       `background:${bg};color:${ink}`;
+    el.tabIndex = 0;
+    // Fit the label to the tile. A short word, then an abbreviation, then an ellipsis:
+    // a terse name is better than a clipped one.
+    const name = String(g.sec).replace(/-/g,' ');
+    const fs = IW < 74 ? 10 : IW < 130 ? 11 : 12.5;
+    const avail = IW - 12;
+    // Try progressively terser renderings until one actually fits the measured width.
+    const words = name.split(' ');
+    const cands = [words.join(' ')];
+    const short = words.map(x => SHORT[x] || x).join(' ');
+    if (short !== cands[0]) cands.push(short);
+    words.forEach(x => { if (!SHORT[x]) cands.push(x); });
+    cands.push(words[0]);
+    cands.push((words[0] || 'x').slice(0, 4));
+    let fit = null;
+    for (const c of cands) {
+      if (textW(c, fs) <= avail) { fit = c; break; }
+      // last resort: hard-truncate the best candidate to the measured width
+      if (!fit) {
+        let t = c;
+        while (t.length > 1 && textW(t + '\u2026', fs) > avail) t = t.slice(0, -1);
+        fit = t.length > 1 ? t + '\u2026' : c.slice(0, 1);
+      }
+    }
+    if (!fit) fit = (words[0] || '?').slice(0, 2);
+    // Put the stranded share on the SAME line as the page count, at the bottom. A corner
+    // badge collided with the title on narrow tiles.
+    const showCount = IH >= 26 && IW >= 52;
+    const showPct   = IH >= 40 && IW >= 52;
+    el.innerHTML = `<div class="tn" style="font-size:${fs}px">${esc(fit)}</div>` +
+      (showCount || showPct
+        ? `<div class="tm">${showCount ? g.n.toLocaleString()+' pages' : ''}` +
+          (showCount && showPct ? ' &middot; ' : '') +
+          (showPct ? `<span class="tp">${Math.round(share*100)}% stranded</span>` : '') +
+          `</div>`
+        : '');
+    el.title = `${name}: ${g.n} pages, ${g.z} with no inbound link` +
+      (g.roles ? Object.entries(g.roles).map(([k,v])=>`${k} ${v}`).join(', ') : '');
+
+    // funnel mix strip, so the legend's role colours appear in the map itself
+    if (g.roles && IW >= 66 && IH >= 46) {
+      const tot = Object.values(g.roles).reduce((a,b)=>a+b,0) || 1;
+      const strip = document.createElement('div');
+      strip.className = 'tstrip';
+      Object.entries(g.roles).sort((a,b)=>b[1]-a[1]).forEach(([k,v]) => {
+        if (!ROLE_C[k]) return;
+        const i = document.createElement('i');
+        i.style.cssText = `width:${v/tot*100}%;background:${ROLE_C[k]}`;
+        i.title = `${k}: ${v} pages`;
+        strip.appendChild(i);
+      });
+      el.appendChild(strip);
+    }
+    const go = () => { activeSec = (activeSec === g.sec) ? null : g.sec; renderWork(); };
+    el.onclick = go;
+    el.onkeydown = e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} };
+    box.appendChild(el);
+    tiles.push({el, sec:g.sec});
+  });
+}
+addEventListener('resize', () => { if(!$('#v-map').hidden) drawMap(); });
+
+let activeSec = null;
+
+
+/* ---------- entities ---------- */
+$('#ents').innerHTML = D.entities.length ? D.entities.map(e => {
+  const tot = Math.max(1, e.tofu+e.mofu+e.bofu);
+  const b = (n,c) => n ? `<i style="width:${n/tot*100}%;background:${c}"></i>` : '';
+  return `<div class="ent">
+    <div class="enth"><b>${esc(e.entity)}</b>
+      <span class="pill ${e.bofu&&!e.tofu?'TOFU':'HUB'}">${e.pages} page${e.pages===1?'':'s'}</span>
+      ${e.inbound===0?'<span class="pill THIN">no inbound</span>':''}</div>
+    <div class="entmeta">
+      <span>research ${e.tofu}</span><span>supporting ${e.mofu}</span>
+      <span>commercial ${e.bofu}</span><span>FAQ ${e.faq}</span>
+      <span class="num">${e.mentions.toLocaleString()} mentions</span>
+      <span class="num">${e.inbound.toLocaleString()} inbound</span></div>
+    <div class="bar">${b(e.tofu,ROLE_C.TOFU)}${b(e.mofu,ROLE_C.MID)}${b(e.bofu,ROLE_C.BOFU)}</div>
+  </div>`;
+}).join('') : '<div class="emptymsg">No entity hubs detected.</div>';
+
+$('#clusters').innerHTML = D.clusters.length ? D.clusters.map(c =>
+  `<div class="ent"><div class="enth"><b>${esc(c.label)}</b>
+   <span class="pill HUB">${c.members.length}</span></div>
+   <div class="entmeta">${c.members.slice(0,14).map(m=>esc(m)).join(' &middot; ')}</div></div>`
+).join('') : '<div class="emptymsg">No competitive sets found.</div>';
+
+/* ---------- worklist ---------- */
+const LS = 'ilw:' + D.host;
+let done = new Set();
+try { done = new Set(JSON.parse(localStorage.getItem(LS)||'[]')); } catch(e) {}
+
+const roleF = ['ALL'];
+D.work.forEach(w => roleF.includes(w.r) || roleF.push(w.r));
+let fRole = 'ALL';
+
+$('#filters').innerHTML = roleF.map(r =>
+  `<button data-r="${r}" aria-pressed="${r===fRole}">${r==='ALL'?'All':r}</button>`).join('') +
+  `<button data-r="SEC" aria-pressed="false">Highlighted section</button>`;
+$('#filters').onclick = e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if (b.dataset.r === 'SEC') { activeSec = activeSec ? null : (tiles[0]&&tiles[0].sec); }
+  else fRole = b.dataset.r;
+  if (b.dataset.r==='SEC' && activeSec) fRole='ALL';
+  renderWork();
+};
+
+function renderWork(){
+  let rows = D.work.slice();
+  if (activeSec) rows = rows.filter(w => w.s === activeSec);
+  else if (fRole !== 'ALL') rows = rows.filter(w => w.r === fRole);
+  $('#work').innerHTML = rows.length ? rows.map((w,i) => {
+    const key = w.u; const d = done.has(key);
+    return `<div class="wa"><input type="checkbox" id="c${i}" ${d?'checked':''} data-k="${esc(key)}"
+       aria-label="Mark edit to ${esc(w.t||'page')} as done">
+      <div class="wab ${d?'done':''}">
+        <div class="wat">${esc(w.t||w.u.split('/').pop())}</div>
+        <div class="wam"><span class="pill ${w.r}">${w.r}</span> &middot; ${w.i} in &middot;
+          ${w.o} out &middot; <a href="${esc(w.u)}" target="_blank" rel="noopener">${esc(w.u)}</a></div>
+        <div class="wal">${w.links.map(l =>
+          `<div><a href="${esc(l.url)}" target="_blank" rel="noopener">&rarr; ${esc(l.target)}</a>
+           <span class="why">${esc(l.why)}</span></div>`).join('')}</div>
+      </div></div>`;
+  }).join('') : '<div class="emptymsg">Nothing in this filter.</div>';
+
+  $('#work').querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.onchange = () => {
+      const k = cb.dataset.k;
+      cb.checked ? done.add(k) : done.delete(k);
+      try { localStorage.setItem(LS, JSON.stringify([...done])); } catch(e){}
+      cb.closest('.wa').querySelector('.wab').classList.toggle('done', cb.checked);
+      progress();
+    };
+  });
+  progress();
+}
+function progress(){
+  const n = done.size, t = D.work.length;
+  $('#ptxt').textContent = `${n} of ${t} edits done`;
+  $('#pbar').style.width = (t? 100*n/t : 0) + '%';
+}
+$('#reset').onclick = () => { done = new Set(); try{localStorage.removeItem(LS);}catch(e){} renderWork(); };
+
+drawMap(); renderWork();
+</script>
+</body>
+</html>
