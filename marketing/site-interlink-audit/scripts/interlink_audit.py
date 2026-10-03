@@ -49,8 +49,36 @@ def main():
 
     print(f"=== interlink audit: {host} ===\n")
 
+    # 0. reachability. A wrong domain or a DNS failure otherwise produces an EMPTY report
+    # that looks like a real (terrible) finding set. Fail here, with the actual cause.
+    import socket
+    bare = host.split("/")[0].split(":")[0]
+    try:
+        socket.getaddrinfo(bare, None)
+    except Exception as e:
+        sys.exit(f"interlink-audit: cannot resolve {bare} ({e}).\n"
+                 f"  Check the domain is correct and public, or pass the full URL.")
+    try:
+        import urllib.request
+        req = urllib.request.Request(f"https://{host}/", method="HEAD",
+                                     headers={"User-Agent": "Mozilla/5.0 interlink-audit"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            print(f"  reachable: HTTP {r.status} at https://{host}/")
+    except Exception as e:
+        print(f"  WARNING: HEAD https://{host}/ failed ({e}); continuing anyway\n")
+
     # 1. crawl
     run([sys.executable, "-B", "pipeline.py", host, "--cap", str(args.cap)], "crawl")
+
+    # 1b. an empty crawl is a failed audit, never a finding. Say so plainly.
+    import glob
+    _b = json.load(open(os.path.join(HERE, bundle)))
+    _n = len(_b.get("nodes", []))
+    if _n < 10:
+        sys.exit(f"interlink-audit: crawl found only {_n} pages for {host}.\n"
+                 f"  Common causes: the domain is wrong, robots.txt blocks all crawlers, "
+                 f"the site has no XML sitemap, or it is a client-side app with no static "
+                 f"HTML. Nothing was written.")
 
     # 2. plan
     run([sys.executable, "-B", "plan.py", bundle], "plan")

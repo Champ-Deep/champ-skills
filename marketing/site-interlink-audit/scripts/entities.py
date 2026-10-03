@@ -132,13 +132,20 @@ VERB = {
     "options", "features", "advantages", "challenges", "solutions", "examples",
     "levels", "factors", "reasons", "steps", "ideas", "goals", "plans",
     "services", "solutions", "products", "packages", "pricing", "rates",
+    # bare verbs / gerunds that marketing copy uses constantly
+    "active", "complete", "getting", "manage", "future", "message", "cases",
+    "landing", "skills", "reporting", "quality", "clicks", "mobile", "sending",
+    "alternatives", "conversion", "pipeline", "segmentation", "nurture",
     "details", "overview", "summary", "guide", "guides", "reports", "reviews",
 }
 
 # a candidate that STARTS with a numeral or a how/what/why word is an article title
+# Each alternative must match a WHOLE leading token. A bare "a" alternative matches every
+# slug starting with the letter a, which threw away Adobe, Amazon, Apple, Asana, Atlassian
+# and Alibaba. `(?:a|an)\b` anchors the article to the full word.
 ARTICLE_START = re.compile(
-    r"^(\d|how|what|why|when|where|which|who|top|best|new|simple|easy|free|"
-    r"the|a|an|my|our|your)", re.I)
+    r"^(?:\d+|how|what|why|when|where|which|who|top|best|new|simple|easy|free|"
+    r"the|a|an|my|our|your|guide|what's|whats|whats)\b", re.I)
 
 
 def is_generic(name):
@@ -402,8 +409,15 @@ def build_clusters(bundle, text_by_id=None):
             stack.extend(co.get(cur, ()))
         seen |= comp
         members = sorted(comp, key=lambda m: -len(entities[m]))
-        if not members or len(members) > 14:
-            continue        # too broad to be a competitive set; keep entities standalone
+        if not members:
+            continue
+        if len(members) > 14:
+            # Too broad to be ONE competitive set, but the entities are still real and
+            # still need to appear as link targets. Dropping the component silently lost
+            # 34 of 60 entities on a real site. Emit each member as its own singleton.
+            for m in members:
+                clusters.append((m.title(), [m], {m: entities[m]}))
+            continue
         label = members[0].title()
         if len(members) > 1:
             label += f" +{len(members)-1}"
