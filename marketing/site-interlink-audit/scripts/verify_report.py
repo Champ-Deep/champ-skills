@@ -6,8 +6,11 @@ checkboxes work, persistence works. Measure the DOM, do not trust a screenshot.
 import sys, json, os
 from playwright.sync_api import sync_playwright
 
-URL = sys.argv[1] if len(sys.argv) > 1 else \
-    "file:///Users/deep/Apps%26Projects/span-interlink-report.html"
+_arg = sys.argv[1] if len(sys.argv) > 1 else \
+    "/Users/deep/Apps&Projects/span-interlink-report.html"
+if not _arg.startswith(("file://", "http://", "https://")):
+    _arg = "file://" + os.path.abspath(_arg).replace("&", "%26")
+URL = _arg
 WIDE, NARROW = 1440, 390
 fails, notes = [], []
 seen_err = set()
@@ -36,6 +39,13 @@ with sync_playwright() as pw:
         kpi = pg.eval_on_selector_all(".kpi b", "els => els.map(e => e.textContent.trim())")
         check(len(kpi) == 7, f"kpis @{w}", f"{len(kpi)} shown")
 
+        nf = pg.eval_on_selector_all(".find", "els => els.length")
+        check(nf > 0, f"findings @{w}", f"{nf} shown")
+        empty = pg.eval_on_selector_all(".find span", "els => els.filter(e=>!e.textContent.trim()).length")
+        check(empty == 0, f"findings have body @{w}", f"{empty} empty")
+        ofl = pg.eval_on_selector_all(".find", "els => els.filter(e => {const r=e.getBoundingClientRect(); return getComputedStyle(e).overflow!=='visible';}).length")
+        check(ofl == 0, f"findings not clipped @{w}")
+
         # treemap
         tiles = pg.eval_on_selector_all(".tile", """els => {
             const box = document.getElementById('map').getBoundingClientRect();
@@ -56,6 +66,9 @@ with sync_playwright() as pw:
         bad = [t for t in tiles if t["clipped"]]
         check(not bad, f"tile labels clipped @{w}",
               "; ".join(f"{t['sec']}({t['w']:.0f}x{t['h']:.0f})" for t in bad[:4]))
+        eli = [t["sec"] for t in tiles if "\u2026" in (t["sec"] or "")]
+        check(not eli, f"no ellipsised tile labels @{w}", "; ".join(eli[:4]))
+
         tiny = [t for t in tiles if t["w"] < 26 or t["h"] < 20]
         check(not tiny, f"tiles too small @{w}",
               "; ".join(f"{t['sec']}({t['w']:.0f}x{t['h']:.0f})" for t in tiny[:4]))

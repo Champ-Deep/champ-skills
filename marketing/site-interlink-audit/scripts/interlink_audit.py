@@ -14,7 +14,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def slugify(host):
-    return re.sub(r"[^a-z0-9]+", "-", host.lower().replace("www.", ""))
+    """Mirror of pipeline.bundle_path so the two can never disagree."""
+    return re.sub(r"[^a-z0-9]+", "-", host.lower().replace("www.", "")).strip("-")
 
 
 

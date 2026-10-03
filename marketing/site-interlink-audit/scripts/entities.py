@@ -121,9 +121,18 @@ KNOWN_VERTICALS = {
 VERB = {
     "ways", "convert", "learn", "build", "built", "grow", "get", "make", "use",
     "find", "choose", "compare", "improve", "increase", "reduce", "save", "scale",
-    "write", "reads", "reads?", "understand", "know", "start", "stop", "boost",
-    "drive", "follow", "engaging", "engage", "convert", "track", "close",
+    "write", "reads", "understand", "know", "start", "stop", "boost",
+    "drive", "follow", "engaging", "engage", "track", "close",
     "generate", "target", "reach", "sell", "sellers", "working", "work", "works",
+    # gerunds and abstract nouns: real words, never link targets
+    "delivering", "expanding", "helping", "targeting", "managing", "creating",
+    "building", "driving", "growing", "leading", "scaling", "solving",
+    "beyond", "impact", "point", "points", "precise", "opportunities", "types",
+    "benefits", "results", "outcomes", "insights", "trends", "tips", "tools",
+    "options", "features", "advantages", "challenges", "solutions", "examples",
+    "levels", "factors", "reasons", "steps", "ideas", "goals", "plans",
+    "services", "solutions", "products", "packages", "pricing", "rates",
+    "details", "overview", "summary", "guide", "guides", "reports", "reviews",
 }
 
 # a candidate that STARTS with a numeral or a how/what/why word is an article title
@@ -303,9 +312,12 @@ def build_clusters(bundle, text_by_id=None):
     for name, pages in mention.items():
         if not entity_like(name):
             continue
-        # A term on more than a third of the crawled site is the brand or the theme, not a
-        # link target: it is either already linked everywhere or too generic to be useful.
-        if share.get(name, 1.0) > 0.34:
+        # A single common word appearing on a large share of the site is the theme or the
+        # brand, not a link target. Multi-word proper nouns ("sage 100", "fortune 500") are
+        # never the site theme, so they are exempt.
+        if len(name.split()) == 1 and share.get(name, 1.0) > 0.40:
+            continue
+        if len(name.split()) == 2 and share.get(name, 1.0) > 0.60:
             continue
         owned = slug_index.get(name.strip(), [])
         if not owned:

@@ -20,6 +20,64 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # ------------------------------------------------------------------ payload
 
+def derive_findings(plan, bundle):
+    """
+    Turn the measurements into the sentences a client actually wants to hear.
+    Every finding quotes the number it came from, so it cannot drift from the data.
+    """
+    s = plan["summary"]
+    out = []
+    pages = max(1, s["pages"])
+
+    zi, zo = s["zero_in"], s["zero_out"]
+    if zi / pages > 0.25:
+        frac = round(100 * zi / pages)
+        word = ("nearly all" if frac >= 90 else "most" if frac >= 60 else
+                "over half" if frac >= 50 else "over a third" if frac >= 33 else "a quarter")
+        out.append({
+            "sev": "high", "t": f"{frac}% of the site is invisible to crawlers and readers",
+            "b": f"{zi:,} of {s['pages']:,} pages have no inbound link from anywhere on the "
+                 f"site. They cannot rank for anything, and a reader can only reach them by "
+                 f"typing the address."})
+    if zo / pages > 0.4:
+        out.append({
+            "sev": "high", "t": "Most pages are dead ends",
+            "b": f"{zo:,} pages ({round(100*zo/pages)}%) contain no links out to related "
+                 f"content. Every one of those is a reader who leaves instead of going deeper."})
+    if s.get("no_tofu"):
+        out.append({
+            "sev": "high", "t": "No research layer feeding the commercial pages",
+            "b": f"{s['no_tofu']} entities have a commercial page but no research page to "
+                 f"earn the visit first. Competitors ranking for the research terms win "
+                 f"the traffic those pages never see."})
+    if s.get("work_links"):
+        out.append({
+            "sev": "mid", "t": "Existing mentions that never became links",
+            "b": f"{s['work_links']} links across {s['work_pages']} pages are already "
+                 f"warranted in the copy but missing from the markup. These are the cheapest "
+                 f"wins on the list: no new writing required."})
+    insm = s.get("in_sitemap", 0)
+    if insm and insm / pages < 0.9:
+        out.append({
+            "sev": "mid", "t": "Sitemap does not describe the site",
+            "b": f"{insm:,} of {s['pages']:,} crawled pages ({round(100*insm/pages)}%) "
+                 f"appear in the XML sitemap."})
+    elif insm:
+        out.append({
+            "sev": "low", "t": "Submission is not the problem here",
+            "b": f"{insm:,} of {s['pages']:,} pages ({round(100*insm/pages)}%) are in the "
+                 f"sitemap, so these pages can be discovered. What is missing is internal "
+                 f"linking: a page in a sitemap with no inbound link still gets almost no "
+                 f"traffic."})
+    st = bundle.get("stats", {})
+    if st.get("truncated"):
+        out.append({
+            "sev": "low", "t": "Crawl was capped",
+            "b": f"This run fetched {st.get('pages')} of {st.get('candidates')} candidate "
+                 f"URLs. The figures below cover what was fetched."})
+    return out
+
+
 def make_payload(bundle, plan, cap_entities=60, cap_work=400):
     nodes = bundle["nodes"]
     edges = bundle["edges"]
@@ -66,7 +124,7 @@ def make_payload(bundle, plan, cap_entities=60, cap_work=400):
     big, tail = groups[:11], groups[11:]
     items = list(big)
     if tail:
-        items.append({"sec": "other sections",
+        items.append({"sec": "all other sections",
                       "n": sum(g["n"] for g in tail),
                       "z": sum(g["z"] for g in tail),
                       "tail": True})
@@ -80,6 +138,7 @@ def make_payload(bundle, plan, cap_entities=60, cap_work=400):
         "base": bundle.get("base", ""),
         "fetched": bundle.get("fetched_at", ""),
         "summary": plan["summary"],
+        "findings": derive_findings(plan, bundle),
         "groups": items,
         "pages": pages,
         "edges": [[e[0], e[1]] for e in edges if e[0] in live and e[1] in live],

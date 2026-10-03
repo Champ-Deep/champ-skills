@@ -47,6 +47,15 @@ nav button[aria-selected="true"]{background:var(--acc);color:#08111c;border-colo
 .legend .ramp{display:inline-block;width:96px;height:11px;border-radius:3px;
   background:linear-gradient(90deg,rgb(96,52,150),rgb(150,42,116),rgb(255,42,96))}
 
+.finds{display:grid;gap:10px;margin-bottom:18px}
+.find{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--dim);
+  border-radius:10px;padding:12px 15px}
+.find.high{border-left-color:var(--bad)}
+.find.mid{border-left-color:var(--warn)}
+.find.low{border-left-color:var(--dim)}
+.find b{display:block;font-size:14.5px;margin-bottom:3px}
+.find span{font-size:13px;color:var(--mut);line-height:1.55}
+
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
 h2{font-size:15px;margin:0 0 3px;font-weight:640;letter-spacing:-.1px}
 .note{color:var(--mut);font-size:13px;margin:0 0 14px}
@@ -59,7 +68,8 @@ section[hidden]{display:none}
   padding:6px 8px;overflow:hidden;cursor:pointer;transition:filter .12s}
 .tile:hover{filter:brightness(1.18)}
 .tile:focus-visible{outline:2px solid #fff;outline-offset:1px;z-index:5}
-.tile .tn{font-size:12.5px;font-weight:640;line-height:1.24;word-break:normal;overflow-wrap:normal;hyphens:none}
+.tile .tn{font-size:12.5px;font-weight:640;line-height:1.24;word-break:normal;
+  overflow-wrap:normal;hyphens:none;max-width:100%}
 .tile .tm{font-size:11px;margin-top:2px;font-weight:600}
 .tile .tp{font-weight:700;opacity:.95}
 .tile.dim{opacity:.14;pointer-events:none}
@@ -138,6 +148,7 @@ tbody tr:hover{background:#161f36}
   </nav>
 </header>
 
+<div class="finds" id="finds"></div>
 <div class="kpis" id="kpis"></div>
 
 <section id="v-map">
@@ -204,6 +215,10 @@ $('#kpis').innerHTML = [
 ].map(([c,b,l,s])=>`<div class="kpi ${c}"><b>${b.toLocaleString()}</b><span>${l}</span>`+
   (s?`<small>${s}</small>`:'')+`</div>`).join('');
 
+$('#finds').innerHTML = (D.findings && D.findings.length) ? D.findings.map(f =>
+  `<div class="find ${f.sev}"><b>${esc(f.t)}</b><span>${esc(f.b)}</span></div>`).join('')
+  : '';
+
 $('#legend').innerHTML =
   `<span class="it" style="gap:7px"><span class="ramp"></span>` +
   `<span>fewer pages with no inbound link &rarr; more</span></span>` +
@@ -258,16 +273,16 @@ function drawMap(){
   // On a narrow screen only the largest sections can carry a readable label. Fold the
   // smallest into the synthetic bucket so no tile is an 18px sliver. Decide from the
   // RENDERED size, not the design-space area, since k is what makes tiles small.
-  const MIN_W = 58, MIN_H = 30;
+  const MIN_W = 66, MIN_H = 34;   // below this a tile cannot hold a readable name
   let shown = D.groups.slice();
   const fits = g => g._rect && (g._rect[2]*SX) >= MIN_W && (g._rect[3]*SY) >= MIN_H;
-  const keep = shown.filter(fits);
+  let keep = shown.filter(fits);
   if (keep.length < 4) {
     // nothing qualifies: keep the 4 largest by rendered area
     shown.slice().sort((a,b)=> (b._rect[2]*b._rect[3]) - (a._rect[2]*a._rect[3]))
          .slice(0,4).forEach(g => { if (!keep.includes(g)) keep.push(g); });
   }
-  if (keep.length && keep.length < shown.length) {
+  if (keep.length && keep.length < shown.length) {   // fold unnamed slivers at any width
     const fold = shown.filter(g => !keep.includes(g));
     if (fold.length) {
       const boxRect = fold.reduce((acc,g)=>{
@@ -278,7 +293,7 @@ function drawMap(){
         acc[2] = x2 - acc[0]; acc[3] = y2 - acc[1];
         return acc;
       }, null);
-      keep.push({sec:'other sections',
+      keep.push({sec:'remaining sections',
                  n: fold.reduce((a,g)=>a+g.n,0),
                  z: fold.reduce((a,g)=>a+g.z,0), tail:true, _rect: boxRect});
     }
@@ -289,23 +304,32 @@ function drawMap(){
   shown.forEach(g => {
     if(!g._rect) return;
     const [gx,gy,gw,gh] = g._rect;
+    const W = gw*SX, H = gh*SY;
     const share = g.n ? g.z / g.n : 0;
-    const r = Math.round(255*(1-share*0.86)), gr = 42, b = Math.round(96 + 56*(1-share));
-    const bg = g.tail ? '#3d4a68' : `rgb(${r},${gr},${b})`;
-    // Pick ink by WCAG contrast, not by a luminance threshold: the strand ramp spans
-    // dark red to pale pink and neither fixed colour passes everywhere.
+    // MORE stranded = hotter and brighter. Low share is a calm slate, full strand is a
+    // hot red, so the worst sections are the ones that catch the eye.
+    const bg = (function(){
+      // Calibrated so white text clears WCAG AA (4.5:1) at every point on the ramp:
+      // darker through the low/mid range, hot only at the top end.
+      const r = Math.round(40 + share * 175);
+      const gr = Math.round(48 - share * 14);
+      const b = Math.round(84 - share * 42);
+      // A synthetic bucket still has a real stranded share, so colour it from the ramp
+      // like any other tile rather than with a fixed neutral.
+      return `rgb(${r},${gr},${b})`;
+    })();
+    // Pick ink by WCAG contrast: the ramp spans slate to hot red, so neither fixed
+    // colour passes everywhere.
     const ink = (function(){
       function L(R,G,B){ const f = c => { c/=255; return c<=.03928 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4); };
         return .2126*f(R)+.7152*f(G)+.0722*f(B); }
-      const lb = L(r,gr,b);
+      const m = bg.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      const lb = m ? L(+m[1], +m[2], +m[3]) : L(61,74,104);
       const dark = L(8,17,28), light = L(243,247,255);
       const cd = (Math.max(lb,dark)+.05)/(Math.min(lb,dark)+.05);
       const cl = (Math.max(lb,light)+.05)/(Math.min(lb,light)+.05);
       return cd >= cl ? '#08111c' : '#f3f7ff';
     })();
-    const W = gw*SX, H = gh*SY;
-    if(W < 3 || H < 3) return;
-    // inset by 1px on the right/bottom so adjacent tiles never share a border pixel
     const IW = Math.max(2, W - 1), IH = Math.max(2, H - 1);
     const el = document.createElement('div');
     el.className = 'tile';
@@ -315,38 +339,75 @@ function drawMap(){
     // Fit the label to the tile. A short word, then an abbreviation, then an ellipsis:
     // a terse name is better than a clipped one.
     const name = String(g.sec).replace(/-/g,' ');
-    const fs = IW < 74 ? 10 : IW < 130 ? 11 : 12.5;
-    const avail = IW - 12;
+    let fs = IW < 74 ? 10 : IW < 130 ? 11 : 12.5;
+    // content width = tile width minus padding (6px 8px) and border (1px each side)
+    const avail = IW - 18;
     // Try progressively terser renderings until one actually fits the measured width.
     const words = name.split(' ');
+    const wrapOK = IH >= 62;                 // tall enough for two lines
+    const fitsW = (c, size) => wrapOK
+      ? words0(c).every(w => textW(w, size) <= avail)
+      : textW(c, size) <= avail;
+    function words0(c){ return c.split(' '); }
     const cands = [words.join(' ')];
     const short = words.map(x => SHORT[x] || x).join(' ');
     if (short !== cands[0]) cands.push(short);
     words.forEach(x => { if (!SHORT[x]) cands.push(x); });
     cands.push(words[0]);
     cands.push((words[0] || 'x').slice(0, 4));
+    // A single long word ("infographic") cannot wrap, so decide its font size BEFORE the
+    // candidate loop ellipsises it. Shrink first, then fall back to an ellipsis only if
+    // even the smallest allowed size cannot fit.
+    if (words.length === 1) {
+      while (fs > 8.5 && textW(words[0], fs) > avail) fs -= 0.5;
+    }
+
     let fit = null;
     for (const c of cands) {
-      if (textW(c, fs) <= avail) { fit = c; break; }
-      // last resort: hard-truncate the best candidate to the measured width
-      if (!fit) {
-        let t = c;
-        while (t.length > 1 && textW(t + '\u2026', fs) > avail) t = t.slice(0, -1);
-        fit = t.length > 1 ? t + '\u2026' : c.slice(0, 1);
-      }
+      if (fitsW(c, fs)) { fit = c; break; }
+      // hard-truncate this candidate to the measured width; keep the first that survives
+      let t = c;
+      while (t.length > 1 && textW(t + '\u2026', fs) > avail) t = t.slice(0, -1);
+      const cut = t.length > 1 ? t + '\u2026' : c.slice(0, 1);
+      if (textW(cut, fs) <= avail) { fit = cut; break; }
     }
-    if (!fit) fit = (words[0] || '?').slice(0, 2);
+    if (!fit) {
+      // guaranteed last resort: shrink the font until the shortest word fits
+      let f2 = fs;
+      while (f2 > 7.5 && textW(words[0] || '?', f2) > avail) f2 -= 0.5;
+      fit = words[0] || '?';
+      fs = f2;
+    }
+
+    // Belt and braces: the canvas metric is close but not exact for this font. Write the
+    // label, then shrink until the DOM reports no overflow. This is the only check that
+    // is guaranteed correct because it measures what actually rendered.
+    el.innerHTML = `<div class="tn" style="font-size:${fs}px">${esc(fit)}</div>`;
+    let guard = 0;
+    while (el.querySelector('.tn').scrollWidth > el.querySelector('.tn').clientWidth + 1
+           && fs > 7.5 && guard++ < 14) {
+      fs -= 0.5;
+      el.querySelector('.tn').style.fontSize = fs + 'px';
+      if (textW(fit, fs) <= el.querySelector('.tn').clientWidth) break;
+      fit = fit.length > 1 ? fit.slice(0, -1) : fit;
+      el.querySelector('.tn').textContent = fit;
+    }
     // Put the stranded share on the SAME line as the page count, at the bottom. A corner
     // badge collided with the title on narrow tiles.
+    const twoLines = IH >= 62;
+    const tnEl = el.querySelector('.tn');
+    if (twoLines) tnEl.style.whiteSpace = 'normal';
     const showCount = IH >= 26 && IW >= 52;
     const showPct   = IH >= 40 && IW >= 52;
-    el.innerHTML = `<div class="tn" style="font-size:${fs}px">${esc(fit)}</div>` +
-      (showCount || showPct
+    const _tail = (showCount || showPct
         ? `<div class="tm">${showCount ? g.n.toLocaleString()+' pages' : ''}` +
           (showCount && showPct ? ' &middot; ' : '') +
           (showPct ? `<span class="tp">${Math.round(share*100)}% stranded</span>` : '') +
           `</div>`
         : '');
+    // append the count/pct line AFTER the fit loop so the verification loop only ever
+    // measures the label
+    el.insertAdjacentHTML('beforeend', _tail);
     el.title = `${name}: ${g.n} pages, ${g.z} with no inbound link` +
       (g.roles ? Object.entries(g.roles).map(([k,v])=>`${k} ${v}`).join(', ') : '');
 

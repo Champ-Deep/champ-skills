@@ -56,8 +56,14 @@ def extract_links(raw, base):
     return out
 
 
+def bundle_path(host):
+    """The one canonical bundle filename for a host. Everything else derives from it."""
+    stem = re.sub(r"[^a-z0-9]+", "-", host.lower().replace("www.", "")).strip("-")
+    return f"bundle-{stem}.json"
+
+
 def build(base, cap=6000, workers=12, use_sitemap=True, verbose=True,
-         keep_text=False, text_limit=6000):
+         keep_text=True, text_limit=6000):
     base = base if base.startswith("http") else "https://" + base
     base = base.rstrip("/") + "/"
     host = urlparse(base).netloc
@@ -178,10 +184,10 @@ def build(base, cap=6000, workers=12, use_sitemap=True, verbose=True,
             "zero_in": sum(1 for n in nodes if n["in"] == 0),
             "zero_out": sum(1 for n in nodes if n["out"] == 0),
             "boilerplate": len(boiler),
-        "chrome_lines": len(chrome_lines),
-        "cap": cap,
-        "candidates": len(targets),
-        "truncated": len(targets) < candidates,
+            "chrome_lines": len(chrome_lines),
+            "cap": cap,
+            "candidates": candidates,
+            "truncated": len(targets) < candidates,
             "secs": round(time.time() - t0, 1),
         },
     }
@@ -201,8 +207,26 @@ if __name__ == "__main__":
                     help="max pages to fetch (default 6000)")
     ap.add_argument("--workers", type=int, default=12)
     ap.add_argument("--no-sitemap", action="store_true")
+    ap.add_argument("--no-text", action="store_true",
+                    help="skip storing body text (breaks entity analysis)")
     a = ap.parse_args()
     host = re.sub(r"^https?://", "", a.domain.strip()).strip("/")
     bundle = build(host, cap=a.cap, workers=a.workers,
-                   use_sitemap=not a.no_sitemap)
-    print(f"  stats: {json.dumps(bundle['stats'], indent=None)[:400]}")
+                   use_sitemap=not a.no_sitemap, keep_text=not a.no_text)
+    if not a.no_text:
+        missing = sum(1 for n in bundle["nodes"] if not n.get("text"))
+        if missing:
+            print(f"  WARNING {missing} pages stored no body text; entity analysis "
+                  f"will be incomplete", file=sys.stderr)
+    out = bundle_path(host)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(bundle, f)
+    st = bundle["stats"]
+    no_text = sum(1 for n in bundle["nodes"] if not n.get("text"))
+    if no_text > len(bundle["nodes"]) * 0.5 and not a.no_text:
+        raise SystemExit(f"only {len(bundle['nodes'])-no_text} pages carry body text; "
+                         f"entity analysis needs it. Re-run without --no-text.")
+    print(f"  roles: {st['roles']}")
+    print(f"  zero_in={st['zero_in']} zero_out={st['zero_out']} "
+          f"truncated={st['truncated']}")
+    print(f"-> {out} ({os.path.getsize(out)//1024} KB)")
