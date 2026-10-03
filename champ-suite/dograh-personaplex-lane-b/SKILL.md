@@ -151,6 +151,96 @@ own cache at `~/Library/Caches/qwen3-speech/models/<org>/<repo>/`. Pre-seed
 that path (copy the files in) or it re-downloads 9GB. The CLI binary is
 `huggingface-cli`, not `hf`.
 
+## Provider landscape (verified from vendor docs, 2026-10-03)
+
+**We already run ElevenLabs ConvAI + Twilio in production.** Found in
+`Champ-Deep/Champ-Voice-Agent` -> `docs/CHAMP Call Initiator.json`, an n8n
+workflow (Salesforce lead poll -> ElevenLabs outbound call). Real ids there:
+- `agent_id` = `agent_3501kf4e3ak0eqkrxg1rttttk881`
+- `agent_phone_number_id` = `phnum_4901kg4yjvgpetqbeknvhgm1stk4` (and a second
+  `phnum_0001kfb01hv9f3e901kr4kgskqjm` in the code node)
+- Dynamic vars used: `lead_name`, `leadId`, `company`, `email`
+- Endpoint: `POST https://api.elevenlabs.io/v1/convai/twilio/outbound-call`
+
+**ElevenLabs outbound-call requires THREE fields**, not two: `agent_id`,
+`agent_phone_number_id`, `to_number`. Omitting any yields 422.
+`conversation_initiation_client_data.dynamic_variables` is optional.
+`call_recording_enabled` is optional and turns on Twilio recording.
+ElevenLabs data-residency hosts exist and INCLUDE INDIA:
+`https://api.in.residency.elevenlabs.io` (also US/EU/SG).
+
+**Twilio outbound to India** (docs.twilio.com/voice/pricing/in):
+- India mobile: **$0.0496/min**
+- India local / major cities: **$0.0699/min**
+- US local/toll-free: $0.0140/min (so India is ~4-5x US cost)
+- BYOC trunking / SIP: $0.0040/min
+
+**Sarvam AI** (Indian, rupee-priced, best fit for India volumes):
+- Voice Agents platform: BYO telephony OR rent a number from Sarvam;
+  campaigns with calling schedules; 11 languages; console at indus.sarvam.ai/samvaad
+- STT Rs30/hr, TTS (Bulbul v3) Rs30/10k chars, Sarvam 105B LLM Rs29.28/1M input tokens
+- Voice modality is ASR -> LLM -> TTS (cascaded, not S2S)
+
+**Dograh's own outbound API** (our fork) - no UI needed:
+`POST /api/v1/public/agent/{uuid}` body `{phone_number, initial_context, telephony_configuration_id?, from_phone_number_id?}`.
+Prompt vars are addressable as `{{initial_context.<name>}}`; reserved key
+`greeting_override` rewrites the opening line. Reserved keys that external
+callers may NOT set: workflow_run_id, call_id, provider,
+runtime_configuration, MPS correlation id.
+
+## BYO IP + SIP: what Dograh actually supports (verified in our fork)
+
+Dograh has NO raw-SIP ingest. The only SIP path is **Asterisk ARI**
+(`api/services/telephony/providers/ari/`), and ARI is an Asterisk control API,
+not a signalling protocol. So "use our own IP" means running Asterisk as a media
+gateway and letting it bridge into the ARI provider.
+
+Media path: carrier SIP -> Asterisk -> ARI `externalMedia` (chan_websocket) ->
+`run_pipeline_telephony`. Inbound calls arrive on an ARI WebSocket event
+listener, not an HTTP webhook (`can_handle_webhook` returns False for ARI).
+
+**THE LATENCY TRAP: `transport_sample_rate=8000`** (hardcoded at
+`ari/__init__.py:236`). Classic telephony narrowband. That costs vocoder
+quality and adds resampling overhead versus Twilio's 8k too, but it means the
+ARI path can never use a wideband native S2S model end to end. PersonaPlex is
+24 kHz; routing it through ARI forces 8k -> 24k resampling and back. This is
+the single biggest argument for the Twilio/Exotel media path over BYO-SIP when
+latency is the priority.
+
+ARI also cannot report call cost, and needs a real Asterisk instance plus
+`websocket_client.conf` connection naming (e.g. `dograh_staging`).
+
+Dograh telephony providers present: ari, cloudonix, exotel, plivo, telnyx,
+twilio, vobiz, vonage. Both Exotel and Twilio are already first-class.
+
+## getdial.ai as the benchmark (Dial platform)
+
+`dial` CLI is NOT installed on this machine (as of 2026-10-03).
+Bootstrapping: `curl -fsSL https://getdial.ai/skills.md`, then `dial doctor`,
+`dial auth login`, `dial auth verify-otp`, `dial listen install`.
+
+Capabilities that matter as our bar: one-shot outbound AI voice call via
+`dial call --to +1... --outbound-instruction "..."`, `--voice-gender`,
+`--max-duration`, per-turn transcripts with `startMs`/`endMs` offsets for
+pacing analysis, WhatsApp+iMessage+RCS on the same number, transfer to human,
+campaigns, and a local webhook target (`dial local-target add url
+http://127.0.0.1:8787/dial`). Docs index: `https://docs.getdial.ai/llms-full.txt`.
+
+**Dial publishes NO latency figures** (grepped the full docs corpus for
+latency / turn-taking / time-to-first and found nothing). So "Dial is the gold
+standard" is a quality/UX judgement, not a measured number. If latency is our
+edge, we should publish ours.
+
+Free-tier limits (lift on first top-up): 5 min/call, 2 concurrent; over-limit
+call returns 429 `call_limit_reached`.
+
+## Test console (built 2026-10-03)
+
+`/Users/deep/Celsus/voice-test/` - `index.html` + `voice_test_proxy.py`.
+Run the proxy, open http://localhost:8787, enter E.164 number + instruction.
+Proxy exists because browsers cannot call api.elevenlabs.io (CORS) and the API
+key must stay server-side. Secrets come from env only, never the HTML.
+
 ## Gotchas that cost time
 
 - **`registry.py` is not pyright-clean.** Baseline 259 diagnostics (96
