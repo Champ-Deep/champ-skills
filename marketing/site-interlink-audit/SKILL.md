@@ -83,6 +83,55 @@ Then run the contrast/a11y audit at 1440, 1024 and 390 and require `0 fail 0 war
 State the crawl cap and whether the crawl was truncated. Never present a suggestion as
 certain when it came from a heuristic. When the tool cannot infer entities for a site
 (e.g. a site with no entity pages at all), say so as a finding rather than forcing output.
+## Hard-won lessons (each one cost a debug cycle)
+
+**Crawl**
+- `build()` MUST be called with `keep_text=True`. Without it the bundle has zero body
+  text, the entity layer finds 0 entities, and the report silently degrades to a link
+  graph. `plan.py` now asserts text is present, so this fails loudly.
+- A `keep_text` bundle is ~17 MB for 3,218 pages. Fine on disk; don't inline it in a
+  report payload.
+- Rewrite `pipeline.py` only between runs. Editing it while a crawl is in flight leaves
+  the running process on stale code and its output bundle is lost.
+
+**Entity extraction**
+- Body extraction must anchor on PROSE DENSITY, not on `<h1>`. On list pages the nav
+  mega-menu renders *before* the h1, so a h1-anchored extractor keeps the menu and
+  destroys every mention count.
+- Strip `<form>` controls before extracting text. A hidden subscribe checkbox sits at
+  char ~475 of a Zendesk page and truncates a 2,964-word page to 72 words.
+- A brand is a product name, not a lowercase-word test. `netsuite`, `hubspot` and
+  `adobe` are single lowercase words. Invert the rule: GENERIC is a curated bad-word
+  list, and a bare year is never an entity.
+- A term on most pages is noise as a LINK TARGET even if it is a real brand (the footer
+  brand turns up on 430 pages). Require targets to be distinctive.
+- Rank by specificity as a MULTIPLIER, not additively. Additive weighting can never
+  overcome mention counts that are two orders of magnitude larger.
+
+**Treemap / labels**
+- The `SHORT` map is the ONLY source of abbreviations. Adding a name to a different map
+  silently falls through to the 4-char fallback, which renders `r` for "remaining".
+- Design space is 1200 units wide. Convert to rendered px (`boxW / 1200`) before
+  comparing any size floor, or a 23px sliver passes a 44px floor and fails the gate.
+- Never pad a short tile list back to N with groups that FAILED the size floor. A sliver
+  is worse than a missing tile; the tail bucket already accounts for what was folded.
+- Fold tiny sections SERVER-side (a 1-page section beside an 800-page one cannot hold a
+  label at any scale). Fold further CLIENT-side on rendered size.
+- A synthetic tail tile built from the union of scattered rects is often a thin column.
+  If the union is narrower than the floor, drop the tile rather than label it badly.
+- A single long word cannot wrap: shrink its font BEFORE the candidate loop ellipsises it.
+- Colour ramps must be CALIBRATED IN CODE, not by eye. Compute WCAG contrast for every
+  step and check the worst point. A ramp that looks right tops out near 4.2:1.
+
+**Verification**
+- `verify_report.py` thresholds are smoke tests, not requirements. A site with 5 real
+  sections is correct at 6 tiles. Assert "the map is populated and covers its canvas"
+  rather than a magic tile count.
+- A site with zero suggestions legitimately renders zero rows. Assert rows OR an empty
+  state, never rows alone.
+- Add an explicit "no ellipsised tile label" assertion. An ellipsis reads to a client as
+  broken text even though the verifier's own clip check passes.
+
 ## Files
 
 All code lives in `scripts/`. Run from that directory so the relative imports resolve:
