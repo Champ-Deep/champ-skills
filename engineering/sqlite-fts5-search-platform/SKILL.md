@@ -164,6 +164,62 @@ forbids top-level `return`, so export a wrapper rather than the bare body.
 Language-level bug classes (acronym casing, word boundaries, `sap` inside
 `GSAP`) belong in a table-driven test listing raw and expected side by side.
 
+## A chart and the search beside it must quote the same number
+
+A dashboard added on top of a working search introduced a disagreement that no
+API test could see: the bar showed 1,435 companies running WooCommerce, clicking
+through gave 294. The chart counted *held* companies; the search counts
+companies *reachable by a contact*. Both defensible, both true, and a bar whose
+number moves when you click it loses the deal in the room.
+
+Store both counts and draw on the one the buyer can act on. Label the gap rather
+than dropping it, because the gap is the finding: the 1,141-company difference
+was real firms we hold no person for.
+
+Then assert the agreement: for the top N chart rows, the chart's number must
+equal the search's number for the same filter. This is the single highest-value
+assertion in a product whose output gets quoted to customers.
+
+The same trap with a word. The funnel said "callable people 442,498" meaning
+grade A plus a phone, while the search's equivalent filter returned 43,956
+(phone, LinkedIn and a corporate email together). One meaning per number, and
+the note beside each step must state the definition in full.
+
+## Chart data comes from precomputed aggregates, not live GROUP BY
+
+`SELECT fn, COUNT(*) FROM contacts GROUP BY fn` over 675k rows took 8.3s. A
+chart cannot wait for that on every paint. Build small aggregate tables once
+(api/viz_build.py, ~4s for all seven) and have both the API and the page read
+them. Rebuild them from the same `run.sh` guard that checks the store exists, so
+a missing build step reads as a build step rather than as empty panels.
+
+## Axis labels are the distinct values, not the rows
+
+The bubble chart's x-axis was built by iterating rows, producing 65 slots for 9
+functions, so every bubble was positioned against its own private column and the
+grid rendered empty. It was genuinely empty. Build axes from
+`set(values)`, and assert `0 <= index < len(axis)` for every point. This is the
+visual twin of "a filter that returns 0 on data you can see".
+
+## Plain-language parsers need table-driven tests run in node
+
+A natural-language-to-filter parser in a page is pure logic, so it is fully
+testable without a browser: extract the real function out of the shipped file,
+run it in node, assert the filter it produces returns rows. Two traps when
+slicing JS out of HTML:
+
+- Never regex to the first `}`. Count braces, and include the signature. A
+  truncated body is a `SyntaxError` far from the cause; a body without its
+  header is an `Illegal return statement`.
+- Slicing a `const X = {...};` needs brace AND bracket depth plus a stop at a
+  semicolon at depth zero. Parens alone walk straight past an object literal
+  whose values are arrays and emit the next statement as data.
+
+Assert the *absence* of bad inference, not just the presence of good: "CTO does
+not add a cloud category". The bug that mattered was a single regex mapping a
+job title onto a technology category, which made the most-used suggested query
+return zero while real matching records sat in the store.
+
 ## Facet geography: a city is not a state
 
 Check what the column actually stores before trusting a UI's location list.
