@@ -164,7 +164,70 @@ forbids top-level `return`, so export a wrapper rather than the bare body.
 Language-level bug classes (acronym casing, word boundaries, `sap` inside
 `GSAP`) belong in a table-driven test listing raw and expected side by side.
 
-## A chart and the search beside it must quote the same number
+## A regex `||` chain tests only the LAST alternative
+
+```js
+if (/a/ || /b/ || /c/.test(t)) { ... }   // WRONG
+```
+
+`.test()` binds to `/c/` only. `/a/` and `/b/` are RegExp OBJECTS, which are
+always truthy, so the branch fires on **every input**. It reads as a compound
+condition and behaves as a constant.
+
+This shipped in a query parser as `if (/it (people|team)/ || /tech (people|team)/ || /info tech/.test(t))`,
+which pinned **every** query to the IT department and silently deleted 6 of 12
+companies from a headline suggestion. No error, no empty state — just a
+plausible wrong answer, which is the hardest kind to catch.
+
+`.test(t)` must be on **every** alternative. Prefer:
+
+```js
+if (RX_A.test(t) || RX_B.test(t)) { ... }
+```
+
+Sweep for the shape rather than trusting a review to catch it: for each line,
+count regex literals and `.test(`/`.match(` calls; `literals >= 2 && calls <
+literals` is the bug. Skip comment lines, or the fix's own explanatory comment
+gets flagged. Always verify the sweep against a hand-written reproduction
+before trusting it to pass.
+
+## Assert on what runs, never on what the source contains
+
+A suite that greps `app.js` for a token proves the token exists. It does not
+prove the function runs, the route accepts the verb, or the DOM updates. That
+gap shipped four separate bugs in one round: a POST to a GET-only route (every
+chart panel stayed a skeleton), a pager with no wrapper element, a sort control
+wired to nothing, and a filter rail that scrolled away from its table. All four
+passed every string assertion.
+
+Run the page. jsdom plus a real `fetch` against the live API is enough to catch
+this whole class, and it needs no browser backend:
+
+- inline `styles.css` into the DOM, because jsdom will not fetch a linked
+  stylesheet and every `getComputedStyle` assertion is otherwise vacuous
+- assert each panel's *rendered child count* (`svg`/`bar`/`bubble`), not that a
+  container div exists, and that nothing is left holding a skeleton class
+- assert the HTTP method that was actually sent
+- assert `querySelector` can find the control, not that its class name is in
+  the file. A component with no wrapper element fails this and passes a grep.
+
+This is the single highest-value test in any project whose output is a web page.
+
+## A parser's leftover free text must be a word SET
+
+Deciding what to send to full-text search by joining the consumed values into a
+string and testing `consumed.includes(word)` is a substring test: `cto` is not
+in `c_suite`, so it survived into the search box and matched nobody, while `it`
+was dropped for appearing inside `IT & Technology`. Build a real `Set` of
+tokens.
+
+Then strip structure words. `shops`, `with`, `companies`, `team` match zero
+records, so leaving them in the query guarantees an empty result on a filter
+that is otherwise correct.
+
+Assert the *negative* too: for each canned query, assert the function filter is
+exactly what was asked for. A parser that quietly adds a plausible filter looks
+identical to one that works until you count companies.
 
 A dashboard added on top of a working search introduced a disagreement that no
 API test could see: the bar showed 1,435 companies running WooCommerce, clicking

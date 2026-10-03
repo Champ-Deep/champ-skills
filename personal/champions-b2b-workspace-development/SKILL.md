@@ -173,6 +173,34 @@ first live ticket, both invisible to the suite:
 Rule: a green suite proves the mock world works. Only a real run proves the
 product works. Run one end to end before calling anything done.
 
+## Verify by pressing the buttons, not by calling the functions
+
+Four real defects shipped green through the module-level suite and were found in
+one pass by driving the loop over HTTP the way a person would. All four needed a
+*request sequence* rather than a function call, which is exactly what a unit test
+does not supply:
+
+1. `llm.chat` refuses in mock mode unless the CALLER supplies a `mock=`.
+   A new agent that omits it is not degraded, it is dead, and every test that
+   stubs `llm.chat` hides that. Pass one, following the convention in
+   `app/agents/*`.
+2. A `as_dict()` that forgets a field is invisible until the moment somebody
+   needs it. `provider_message_id` was omitted, so "the client says they never
+   got it" had no answer.
+3. An integration missing from `/api/health` looks identical to one that has
+   not tried. This is what `mailbox.provider_status()` exists to prevent; apply it
+   to every new integration.
+4. Two lanes that enforce the same rule will drift. The vendor draft refused to
+   run without citations and the client draft did not, so a client message could
+   be built from nothing behind a guard that was protecting nothing.
+
+Method that worked: write a script that plays the role (health, ingest, brief,
+draft, approve, send, passback, record, review), run it against a real server,
+then run the abuse cases where every call *should* fail. Then render the page in
+headless Chrome and measure the DOM for overflow, clipping, and empty state
+tiles. A 200 with the right HTML shell proves nothing; the data arrives
+client-side.
+
 ## Pixel office: the layout trap that hides every fix
 
 The office already animates properly (a 140 ms master clock in `useAnimationClock`,

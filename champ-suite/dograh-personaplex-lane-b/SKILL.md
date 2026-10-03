@@ -234,6 +234,59 @@ edge, we should publish ours.
 Free-tier limits (lift on first top-up): 5 min/call, 2 concurrent; over-limit
 call returns 429 `call_limit_reached`.
 
+## Our ElevenLabs account (VERIFIED LIVE 2026-10-03)
+
+Key works; account `Sreedeep`, **free tier**, workspace_admin. 9 agents
+including `agent_3501kf4e3ak0eqkrxg1rttttk881` (Champ Qualifier) and
+`agent_8301kn3pcntvfrb94mxhhsqjjarj` (Sreedeep's personal assistant).
+
+Two connected numbers:
+- `phnum_4901kg4yjvgpetqbeknvhgm1stk4` - "+165****4291" Lake B2B SDR Line,
+  provider **twilio**, agent Champ Qualifier. **DEAD**: belongs to Twilio
+  subaccount `AC...c720` in **status 4 (suspended)**.
+  Outbound returns "account ... with status 4 is not active".
+- `phnum_0001kj85j8w7eqr9df1b5a8ep02t` - "12133586858" IPM Demo, provider
+  **sip_trunk** -> `176.9.190.89` UDP, media_encryption disabled,
+  has_outbound_trunk true. **Trunk host is OFFLINE**: ping = 100% loss,
+  SIP OPTIONS to UDP 5060 = no response. Call reaches ElevenLabs
+  (conversation created, cost 0) then dies "0 intermediate responses".
+
+**So our own company IP IS already connected to ElevenLabs as a live SIP
+trunk.** Dograh's 8 kHz ARI path is therefore NOT required to keep our own IP -
+we can stay on ElevenLabs' native path. Revisit that tradeoff.
+
+ElevenLabs endpoints (verified in their API reference):
+- `POST /v1/convai/phone-numbers` - import a number (Twilio/Exotel/SIP).
+  Twilio body: `phone_number, label, sid (AC... or SK...), token, provider`.
+- `POST /v1/convai/twilio/outbound-call` - twilio numbers ONLY.
+- `POST /v1/convai/sip-trunk/outbound-call` - sip_trunk numbers ONLY.
+  Sending one kind of number to the other's endpoint = 422.
+- A **GET with a JSON body returns HTTP 400**. Only serialise a body on
+  non-GET. (Cost me a false "not found" in duplicate detection.)
+
+## Test number for our own use
+
+`+1 (971) 405-8440`, PN `PNdd5bf15107aefd6267ef56f27fc60954`, account
+`AC...3cad`, region US1, voice-capable. Purely a
+test line. NOT yet imported into ElevenLabs - import needs the Twilio
+**Auth Token**, which was never supplied (and must not be pasted into chat).
+Get it: Twilio Console -> Account -> Auth Token, then
+
+```bash
+export TWILIO_ACCOUNT_SID=AC...3cad
+export TWILIO_AUTH_TOKEN=...      # from console, keep out of chat
+export TWILIO_TO_NUMBER=+19714058440
+python3 import_twilio_number.py   # idempotent: imports, binds, places a call
+```
+
+Import is verified working end-to-end: with a placeholder token ElevenLabs
+returns twilio_error 20003 "auth token is not valid", which proves the request
+shape is right and only the secret is missing.
+
+Exotel India host `https://api.in.exotel.com` is live (HTTP 400 unauth, so
+the endpoint exists). ElevenLabs' Exotel import needs account_sid, api_key,
+api_token, api_subdomain and an applet_id.
+
 ## Test console (built 2026-10-03)
 
 `/Users/deep/Celsus/voice-test/` - `index.html` + `voice_test_proxy.py`.
