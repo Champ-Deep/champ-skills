@@ -10,7 +10,7 @@ One self-contained HTML file. Three views:
 Design constraints that came out of earlier audits: 4.5px+ tap targets, no em dashes, WCAG
 AA contrast on every computed pair, and a single dense JSON payload with no network calls.
 """
-import json, os, sys, math, collections, html as _h
+import json, sys, os, sys, math, collections, html as _h
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from squarify import squarify
@@ -163,6 +163,11 @@ if __name__ == "__main__":
     ap.add_argument("plan")
     ap.add_argument("-o", "--out", required=True)
     a = ap.parse_args()
+    # Never exit 0 on a missing or unreadable input: a caller that discards stderr would
+    # see success and keep serving the PREVIOUS output file, mistaking it for a fresh build.
+    for f in (a.bundle, a.plan):
+        if not os.path.exists(f):
+            sys.exit(f"report.py: input not found: {f}")
     bundle = json.load(open(a.bundle))
     plan = json.load(open(a.plan))
     p = make_payload(bundle, plan)
