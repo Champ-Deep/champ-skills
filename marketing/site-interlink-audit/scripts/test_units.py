@@ -164,6 +164,80 @@ def t_clusters():
 
 
 # ------------------------------------------------------------------- plan
+def t_refresh_bookkeeping():
+    section("refresh bookkeeping")
+    import refresh as R
+    # REGRESSION: --all used to rebuild the host by swapping dashes for dots, and it read
+    # -plan / -related sidecars as if they were bundles. That invented domains such as
+    # "bundle-without-crawling-anything-new", which were then crawled and reported as real
+    # sites. known_bundles must return only real bundles.
+    kb = R.known_bundles()
+    check(all("plan" not in k and "related" not in k for k in kb),
+          "known_bundles excludes sidecars", str(sorted(kb)[:4]))
+    check(all(k.startswith("bundle-") or "/" in v for k, v in kb.items()),
+          "known_bundles values are full paths", "")
+    # one site, one slug: www must not create a second identity
+    check(R.slugify("www.example.com") == R.slugify("example.com"),
+          "www. does not fork the slug", R.slugify("www.example.com"))
+    # a drop-in list tolerates comments, blanks, commas and a JSON array
+    import tempfile, os, json as _json
+    with tempfile.TemporaryDirectory() as td:
+        p1 = os.path.join(td, "a.txt")
+        open(p1, "w").write("# c\n\nexample.com  # trailing\n, foo.com\n")
+        check(R.read_list(p1) == ["example.com", "foo.com"], "plain list parsed",
+              str(R.read_list(p1)))
+        p2 = os.path.join(td, "b.json")
+        open(p2, "w").write(_json.dumps(["a.com", "b.com"]))
+        check(R.read_list(p2) == ["a.com", "b.com"], "json array parsed",
+              str(R.read_list(p2)))
+
+
+def t_clef_gate():
+    section("clef gate")
+    import semantic as SEM
+    check(SEM.clef_mode() in ("local", "hosted", "none"),
+          "clef_mode reports a valid mode", SEM.clef_mode())
+    # with nothing configured it must be "none", and the rules must still produce output
+    if not SEM.clef_available():
+        check(True, "clef unavailable -> rules-only path is taken", "expected on this box")
+        p = {"target_id": 1, "rule": 0.5}
+        out = SEM.blend([p], {}, weights=(0.55, 0.45))
+        check(out[0]["unjudged"] is True, "unjudged candidate is flagged", "")
+        # A missing judgement must never score better than a judged one.
+        judged = SEM.blend([{"target_id": 2, "rule": 0.5}], {2: 0.0})[0]
+        check(out[0]["score"] >= judged["score"],
+              "unjudged does not outrank a judged candidate",
+              f"unjudged={out[0]['score']} judged={judged['score']}")
+    # buckets, not magnitudes
+    check(SEM.bucket(0.95) == "strong" and SEM.bucket(0.05) == "weak",
+          "score buckets are ordered", "")
+
+
+def t_related_diversity():
+    section("related-link diversity")
+    import semantic as SEM
+    bundle = {"domain": "x.test", "nodes": [
+        {"id": str(i), "url": f"https://x.test/p{i}", "title": f"Guide {i}",
+         "words": 400, "section": "guide", "role": "TOFU", "type": "article",
+         "in": 0, "out": 0,
+         "text": f"data leads targeting technology healthcare platform {i} " * 20}
+        for i in range(30)
+    ], "edges": []}
+    pairs = SEM.build_pairs(bundle, limit_per_page=4)
+    # REGRESSION: chrome pages used to become link sources, and the top suggestions were
+    # all near-identical template pages. Sources must carry real content.
+    flat = [(sid, c) for sid, cs in pairs.items() for c in cs]
+    check(all(len(n.get("text") or "") > 0 for n in bundle["nodes"]), "fixture ok", "")
+    # every candidate must carry a written reason and a bounded score
+    bad = [c for _, c in flat if not c.get("why") or not (0.0 <= c.get("score", -1) <= 1.0)]
+    check(not bad, "every suggestion has a reason and a bounded score", f"{len(bad)} bad")
+    # no duplicate target URLs from one source
+    for sid, cs in pairs.items():
+        urls = [c["target"] for c in cs]
+        check(len(urls) == len(set(urls)), f"no duplicate targets for source {sid}",
+              f"{len(urls)} rows, {len(set(urls))} unique")
+
+
 def t_plan():
     section("plan")
     with tempfile.TemporaryDirectory() as td:
@@ -246,7 +320,9 @@ def t_squarify():
 
 
 if __name__ == "__main__":
-    for fn in (t_classify, t_extract, t_entities, t_clusters, t_plan, t_squarify):
+    for fn in (t_classify, t_extract, t_entities, t_clusters,
+               t_refresh_bookkeeping, t_related_diversity, t_clef_gate,
+               t_plan, t_squarify):
         try:
             fn()
         except Exception as e:

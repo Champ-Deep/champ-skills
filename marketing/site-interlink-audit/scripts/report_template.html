@@ -281,7 +281,10 @@ function drawMap(){
   // thing the verifier measures. A 23px sliver is 81 design units, which would wrongly pass
   // a 40px floor if the units were mixed.
   const UNIT = boxW / 1200;
-  const MIN_W = Math.max(44, boxW / 9), MIN_H = 30;   // rendered px
+  // A tile must be wide enough to hold its SHORT form at the minimum font. "solutions"
+  // abbreviates to "solu" (4 chars) which needs ~30px at 9px, plus padding: so require
+  // room for a 4-char abbreviation plus the tile chrome, not a round number of pixels.
+  const MIN_W = Math.max(58, boxW / 8), MIN_H = 34;   // rendered px
   let shown = D.groups.slice();
   const fits = g => g._rect && (g._rect[2]*UNIT) >= MIN_W && (g._rect[3]*UNIT) >= MIN_H;
   let keep = shown.filter(fits);
@@ -290,19 +293,39 @@ function drawMap(){
   if (keep.length && keep.length < shown.length) {   // fold unnamed slivers at any width
     const fold = shown.filter(g => !keep.includes(g));
     if (fold.length) {
-      const boxRect = fold.reduce((acc,g)=>{
-        if(!acc) return g._rect.slice();
-        const x2 = Math.max(acc[0]+acc[2], g._rect[0]+g._rect[2]);
-        const y2 = Math.max(acc[1]+acc[3], g._rect[1]+g._rect[3]);
-        acc[0] = Math.min(acc[0], g._rect[0]); acc[1] = Math.min(acc[1], g._rect[1]);
-        acc[2] = x2 - acc[0]; acc[3] = y2 - acc[1];
-        return acc;
-      }, null);
-      // The tail's label must be renderable even when its rect is a narrow column, so
-      // give it a dedicated one-word form the fitting logic can use as-is.
-      keep.push({sec:'rest', short:'rest',
-                 n: fold.reduce((a,g)=>a+g.n,0),
-                 z: fold.reduce((a,g)=>a+g.z,0), tail:true, _rect: boxRect});
+      // Place the synthetic tail in the LARGEST FREE RECTANGLE of the map box. A union
+      // box over the folded rects can contain a kept tile whenever the folded set spans
+      // more than one column, which is how "rest" came to overlap "solu...".
+      function freeRects(boxW, boxH, rects) {
+        const taken = rects.filter(g => g._rect).map(g => g._rect);
+        let best = null;
+        // candidate strips: each x edge and y edge of every taken rect, plus the borders
+        const xs = new Set([0, boxW]);
+        const ys = new Set([0, boxH]);
+        taken.forEach(r => { xs.add(r[0]); xs.add(Math.min(r[0]+r[2], boxW));
+                             ys.add(r[1]); ys.add(Math.min(r[1]+r[3], boxH)); });
+        const X = [...xs].filter(v => v >= 0 && v <= boxW).sort((a,b)=>a-b);
+        const Y = [...ys].filter(v => v >= 0 && v <= boxH).sort((a,b)=>a-b);
+        for (let i = 0; i + 1 < X.length; i++) {
+          for (let j = 0; j + 1 < Y.length; j++) {
+            const cx0 = X[i], cy0 = Y[j], cw = X[i+1]-X[i], ch = Y[j+1]-Y[j];
+            if (cw <= 0 || ch <= 0) continue;
+            const mx = cx0 + cw/2, my = cy0 + ch/2;
+            const hit = taken.some(r => mx > r[0] && mx < r[0]+r[2] &&
+                                         my > r[1] && my < r[1]+r[3]);
+            if (hit) continue;
+            const area = cw * ch;
+            if (!best || area > best.area) best = {rect:[cx0, cy0, cw, ch], area};
+          }
+        }
+        return best;
+      }
+      const free = freeRects(D.mapw, D.maph, keep);
+      if (free) {
+        keep.push({sec:'rest', short:'rest',
+                   n: fold.reduce((a,g)=>a+g.n,0),
+                   z: fold.reduce((a,g)=>a+g.z,0), tail:true, _rect: free.rect});
+      }
     }
     // If the folded union is itself too narrow to label, drop the synthetic tile rather
     // than render a 23px sliver with a meaningless label.

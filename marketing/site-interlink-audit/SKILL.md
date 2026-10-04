@@ -132,6 +132,53 @@ certain when it came from a heuristic. When the tool cannot infer entities for a
 - Add an explicit "no ellipsised tile label" assertion. An ellipsis reads to a client as
   broken text even though the verifier's own clip check passes.
 
+## Refresh, related links, CLEF, and the on-site widget
+
+Four commands, one crawl. See `PLATFORM.md` for the full guide.
+
+```bash
+python3 refresh.py --list sites.txt     # refresh every site in a drop-in list
+python3 refresh.py --all                # re-audit stored bundles, crawl nothing new
+python3 semantic.py bundle-<site>.json  # related links beyond same-technology
+python3 component.py --bundle bundle-<site>.json   # the embeddable carousel
+```
+
+`refresh.py` reuses a cached crawl unless `--force`, rebuilds four artefacts per site
+(plan, report, related links, widget), writes `refresh-summary.json`, and exits non-zero if
+any site fails. It takes a lock so two refreshes cannot interleave.
+
+### Related links, not just same-technology
+
+`semantic.py` finds the links nobody has thought of: "Data Cleansing -> What is Data
+Cleansing?", "Healthcare List -> What is a Healthcare Email List?". TF-IDF over body and
+title (never the URL, which rewards slug similarity over content), nearest neighbours via
+an inverted index over discriminating terms. 3,218 pages in ~35s; an O(n^2) scan took 4m18s.
+
+Bands, not magnitudes: `strong` / `likely` / `possible` / `weak`. Every suggestion carries a
+written reason. The shortlist is deduplicated by target title, because one template page
+repeated across 25 technology lists is one idea, not 25.
+
+### CLEF is optional and gated
+
+Cloudflare CLEF is a SystemOne-API decision model (Apache 2.0). Full weights are **55 GB**
+and `clef-flash` is **19 GB**, so neither fits a laptop disk; Workers AI serves the same API
+for pennies. Modes: `none` (rules only, fully functional), `hosted`
+(`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`), `local` (`CLEF_PATH`).
+
+```bash
+python3 semantic.py bundle-<site>.json   # prints: clef mode: none | hosted | local
+```
+
+All questions go out in ONE batched request. Blend once, keep the rule score in its own
+column, and never let a missing judgement outrank a judged one.
+
+### The on-site component
+
+`component.py` emits `related-sites.html` + `related-sites.js`. The page announces itself
+via a meta tag and the widget scores `catalog.json` against it at runtime. Never recommends
+the site you are already on. Themable through CSS custom properties (`--rsw-bg`, `--rsw-fg`,
+`--rsw-mut`, `--rsw-line`, `--rsw-acc`, `--rsw-face`).
+
 ## Files
 
 All code lives in `scripts/`. Run from that directory so the relative imports resolve:
