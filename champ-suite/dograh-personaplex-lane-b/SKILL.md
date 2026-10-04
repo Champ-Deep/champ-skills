@@ -199,6 +199,126 @@ the logged-in user, not from a sandboxed helper. Long runs go via
 `terminal(background=True, notify=True)`; poll `/voicechat/status` rather than
 sleeping in a loop.
 
+### HEADLESS MEASURED: VoiceChat 11B on M1 Pro 32GB (2026-10-05)
+
+`voice-chat --input <16k wav>` runs the whole duplex pipeline from a FILE -
+no microphone, no TTY needed. This unblocks throughput measurement on our
+hardware, which was previously stuck on a human-only live-mic test.
+
+```
+you     Can you guarantee
+soniqo  I cannot guarantee a Thursday callback, but I can offer one if you would like.
+        Would you like me to schedule it?
+frames 200, total p50 166.3 ms, p95 260.6 ms, real time NO
+live-frame RTF normal 2.62x   behind 0.0s   last 164 ms for 80 ms audio
+RNN-T forced starts 1   barge-ins 0   speaker gaps 0
+```
+
+Reply audio written: 22.05 kHz mono, 16.0 s, RMS 0.0091, peak 0.149, 9.8%
+non-silent. A real spoken answer, and the reply is on-point (it refuses to
+guarantee an unconfirmed callback, which is exactly the prompt rule).
+
+**Verdict: NOT real time on an M1 Pro.** RTF 2.62x means it needs ~2.6 s of
+compute per second of audio, ~3x too slow. p50 166 ms/frame against an 80 ms
+budget. It holds no backlog ("behind 0.0 s") only because file input has no
+real-time deadline.
+
+So: earlier "GPU host required" was RIGHT for VoiceChat, and my later
+"model loading fits so it may be fine" was WRONG - loading fine says nothing
+about streaming throughput. Both PersonaPlex (RTF 1.54) and VoiceChat
+(RTF 2.62) miss realtime on this Mac. Do not repeat the second claim.
+
+**MCP tool-calling works** - that is the capability PersonaPlex lacks, and
+`--mcp-config` is the hook for booking a real callback.
+
+Input must be **16 kHz mono**; the repo test clip is 24 kHz, so resample.
+
+### BIGGEST LOCAL WIN: `--no-rnnt-turn-taking` (measured)
+
+| flags | RTF | p50 | p95 |
+|---|---:|---:|---:|
+| default | 2.62x | 166.3 ms | 260.6 ms |
+| `--prebuffer-frames 1` | 2.33x | 152.9 ms | 284.6 ms |
+| `--prebuffer-frames 4` | 2.29x | 149.1 ms | 283.2 ms |
+| **`--no-rnnt-turn-taking`** | **1.44x** | **112.9 ms** | **125.3 ms** |
+
+That single flag removes ~45% of the per-frame cost. **Turn-taking runs a
+greedy RNN-T decode per 80 ms frame, interleaved with the 11B decode, and it
+dominates the budget.** p95 also improves hugely (260 -> 125 ms) because the
+spiky interleave disappears.
+
+**What you give up:** RNN-T is the turn detector - it decides when the caller has
+finished speaking so the agent replies. Docs: the checkpoint has no standalone
+VAD head, so without RNN-T you lose turn detection and must rely on silence
+timing. That is fine for **file-in/file-out** and for benchmark throughput, but
+it is NOT acceptable for a live phone agent: you would talk over the customer.
+
+So: use `--no-rnnt-turn-taking` for offline generation, quality passes and any
+throughput measurement. Keep it ON for live duplex. Do not ship it in a
+production voice path on the strength of these numbers.
+
+`--no-transcript` hides captions only and does not affect speed.
+
+### `--prebuffer-frames` is a real dial (measured)
+
+Same int5 bundle, file input:
+- default (8 frames): live-frame **RTF 2.62x**, p50 166.3 ms, p95 260.6 ms
+- `--prebuffer-frames 1`: **RTF 2.33x**, p50 152.9 ms, p95 284.6 ms
+
+Lower prebuffer buys ~11% throughput but worsens p95 (more underrun risk on a
+real mic). For a phone agent under load prefer throughput - a dropped frame is
+worse than 200 ms of extra latency. Never raise it: the docs warn that raising
+chunk size inflates prefill sync badly.
+
+### DEAD END: `mlx-community/NemotronLabs-VoiceChat-11B-4bit` cannot be used
+
+Looked like the obvious latency lever (4-bit = less bandwidth = faster step)
+and it is **not loadable**. Verified against the HF API before wasting disk:
+
+- Layout is **wrong**: a flat `model-00001-of-00002.safetensors` pair at the repo
+  root, **no `encoder/`, `llm/` or `tts/` dirs at all**.
+- `speech voice-chat` requires `encoder/` + `llm/` + `tts/`, so it fails at
+  load with `no model.safetensors at .../llm/model.safetensors`.
+- It is also **9.17 GB, LARGER than the 8.56 GB int5 bundle** we use, so even if
+  the layout matched it was not the smaller model.
+- No EAR-TTS weights, so it cannot speak regardless.
+
+**Lesson: check layout compatibility against the loader BEFORE downloading.**
+A 9 GB pull costs ~30 min and 9 GB of disk to learn something one API call tells
+you. The only bundles that work are the `aufklarer/*`-style ones with the
+`encoder/ llm/ tts/` split.
+
+Net effect on the latency question: **there is no local quantization lever left.**
+The int5 bundle is the fastest loadable option, and it measures RTF 2.29-2.62x.
+Real-time on this hardware needs an NVIDIA GPU, not more tuning.
+
+### `--plain` is mandatory when capturing output
+
+`voice-chat` uses the **alternate screen** and redraws a live dashboard in
+place. Piping it or running under a non-TTY yields only the startup lines, so a
+run looks like it "produced nothing" even though it was conversing. Always pass
+`--plain` for append-only output intended to be captured or grepped.
+
+That dashboard is also why a 20 s run can exit 0 with a transcript that never
+appears in captured output. Do not conclude the run failed. From a backgrounded
+tool process it exits 0 having loaded the model and never spoken - the live
+conversation has to be run by the human in their own Terminal.
+
+### VERIFIED: the INT5 bundle loads clean on an M1 Pro 32 GB
+
+`aufklarer/VoiceChat-11B-Perception-MLX-int5`, 8.56 GB (encoder 518 MB,
+llm 6.5 GB, tts 1.0 GB), all four load stages pass:
+```
+[  8%] perception encoder and RNN-T
+[ 28%] 11B language model
+[ 72%] EAR-TTS and audio codec
+[ 90%] Verifying and warming the audio codec
+[100%] VoiceChat model ready
+```
+Peak load was ~10 with 27% system-wide memory free. Docs require ~15.64 GB
+physical; the M1 32 GB clears it. **Model loading on this Mac is therefore not
+the constraint** - only live conversational throughput is still unmeasured.
+
 ## Dograh's realtime seam (three narrow touchpoints)
 
 1. `api/services/configuration/registry.py` - `ServiceProviders` enum,
@@ -411,7 +531,8 @@ we can stay on ElevenLabs' native path. Revisit that tradeoff.
 
 ElevenLabs endpoints (verified in their API reference):
 - `POST /v1/convai/phone-numbers` - import a number (Twilio/Exotel/SIP).
-  Twilio body: `phone_number, label, sid (AC... or SK...), token, provider`.
+  Twilio body: `phone_number, label, sid (AC-prefixed account SID or SK-prefixed
+  API key SID), token, provider`.
 - `POST /v1/convai/twilio/outbound-call` - twilio numbers ONLY.
 - `POST /v1/convai/sip-trunk/outbound-call` - sip_trunk numbers ONLY.
   Sending one kind of number to the other's endpoint = 422.
