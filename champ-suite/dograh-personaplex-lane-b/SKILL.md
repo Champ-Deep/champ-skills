@@ -294,6 +294,66 @@ real mic). For a phone agent under load prefer throughput - a dropped frame is
 worse than 200 ms of extra latency. Never raise it: the docs warn that raising
 chunk size inflates prefill sync badly.
 
+### FINAL CLEAN NUMBERS, both engines (median of 3, load recorded)
+
+`bench_voicechat.py` and `bench_personaplex.py`, both in `pp-local/`:
+
+| engine | config | n | RTF median | p50 | p95 |
+|---|---|---:|---:|---:|---:|
+| VoiceChat 11B | rnnt_on (live) | 3 | 1.75x | 120 ms | 183 ms |
+| VoiceChat 11B | rnnt_off | 3 | 1.73x | 126 ms | 178 ms |
+| VoiceChat 11B | rnnt_off_pb1 | 3 | **1.66x** | 119 ms | 171 ms |
+| PersonaPlex 7B | baseline | 3 | **1.36x** | - | - |
+
+Spreads are tight (1.36-1.39x PersonaPlex, 0.04-0.10x VoiceChat), so these are
+trustworthy. **PersonaPlex is the FASTER engine here (1.36x vs 1.66x)** - which
+inverts the usual assumption that the duplex model is the heavier one.
+
+Every dial across both engines spans well under 20%. **Real time needs RTF < 1.0,
+so we are ~1.4x (PersonaPlex) to ~1.7x (VoiceChat) short.** That is raw compute.
+No flag closes it.
+
+Selection is therefore by capability, not speed:
+- **VoiceChat** - MCP tool-calling, so it can book a callback. RTF 1.66x.
+- **PersonaPlex** - faster, better interruption (240 ms published). RTF 1.36x.
+Both sit ~1.5x off real time, so **the GPU host is required either way**; that
+choice is unaffected by which engine you pick.
+
+Both scripts print the transcript and verify the written WAV, so "the process
+exited0" is never mistaken for "it spoke". PersonaPlex emits JSON on stdout
+*after* progress lines - slice from the first `{` or `json.loads` throws
+`Expecting value` on a perfectly good run.
+
+### CORRECTION: `--no-rnnt-turn-taking` is ~1%, NOT the 45% I claimed
+
+I previously reported RTF 2.62x -> 1.44x from that flag and called it the
+biggest local win. **That was contention noise, not the flag.** Properly
+measured, median of 3 runs each at load ~6-7 (`bench_voicechat.py`):
+
+| config | RTF median | p50 | p95 | spread |
+|---|---:|---:|---:|---:|
+| `rnnt_on` (live duplex) | 1.75x | 120 ms | 183 ms | 0.08x |
+| `rnnt_off` | 1.73x | 126 ms | 179 ms | 0.04x |
+| `rnnt_off_pb1` | **1.66x** | 119 ms | 171 ms | 0.10x |
+
+`rnnt_on` -> `rnnt_off` is **1%**, not 45%. The entire spread across every dial
+is ~5%, and all three sit **~1.7x short of the RTF < 1.0 real-time bar.**
+
+So do NOT sell RNN-T removal as a latency optimisation, and do not expect
+prebuffer tuning to matter. Neither is a bottleneck. The gap is raw compute.
+
+**This was the same mistake twice**: quoting one contended run as truth. Never
+report a single run on this machine. Use `pp-local/bench_voicechat.py` - median
+of N, load average recorded per sample, waits for the box to settle between
+runs, prints `THIN DATA` when samples are missing. Also note the box is often
+busy with the user's own projects (champ-workspace, node, other agents), so a
+genuinely quiet machine is the exception; always state the load average.
+
+Also: my first version of that script set `MAX_LOAD=6.0`, below the cost of its
+own 8.5 GB model load, so it **skipped 8 of 9 of its own runs**. A guard that
+self-skips produces a median of 1 that looks like data. Thresholds must sit
+above the script's own footprint.
+
 ### DEAD END: `mlx-community/NemotronLabs-VoiceChat-11B-4bit` cannot be used
 
 Looked like the obvious latency lever (4-bit = less bandwidth = faster step)
