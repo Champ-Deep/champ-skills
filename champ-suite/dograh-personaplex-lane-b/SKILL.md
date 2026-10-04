@@ -259,6 +259,30 @@ production voice path on the strength of these numbers.
 
 `--no-transcript` hides captions only and does not affect speed.
 
+### Both local engines share the SAME 12.5 Hz frame budget
+
+- PersonaPlex: `--max-steps` docs say 200 steps = ~16 s => **12.5 Hz**
+- VoiceChat: one 80 ms input frame => **12.5 Hz**
+
+So they are not different problems. Both need **< 80 ms/frame** to be real time,
+and both miss it on an M1 Pro. Switching between them buys quality and
+tool-calling, never latency. Do not present a model swap as a latency fix.
+
+### PersonaPlex streaming flags (verified working)
+
+```
+speech respond --stream --chunk-frames 5 ... --json --transcript
+```
+-> RTF **1.62**, output 24.8 s of real speech (24 kHz, RMS 0.0347, peak 0.459),
+and `--json` confirms `"system_prompt": "custom (37 tokens)"` - proving a custom
+brief reaches the model rather than a preset.
+
+The flag is `--chunk-frames`, **not** `--stream-chunk-size` (that name is
+rejected). Smaller chunks cut time-to-first-audio, which matters for perceived
+latency even when RTF is unchanged. Also present: `--full-duplex` (ring-buffer
+input), `--debug-dir`. RTF is unaffected by streaming - it is a chunking dial,
+not a speed dial.
+
 ### `--prebuffer-frames` is a real dial (measured)
 
 Same int5 bundle, file input:
