@@ -80,7 +80,24 @@ the rules run standalone and every score keeps its rationale.
 |---|---|---|
 | `none` | default | Rules only. Fully functional. |
 | `hosted` | `export CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=...` | Workers AI, same SystemOne API. Cheap. **Recommended.** |
-| `local` | `export CLEF_PATH=<snapshot dir> CLEF_PY=<python>` | Full `clef` weights are **55 GB**; `clef-flash` is **19 GB**. Only for a machine with room. |
+| `local` | `export CLEF_PATH=<snapshot dir> CLEF_PY=<python>` | Full `clef` weights are **55 GB**; `clef-flash` is **19 GB**. Only for a machine with room. Uses MPS on Apple silicon. |
+
+Local setup, if you have the disk:
+
+```bash
+python3 -m venv clefenv
+clefenv/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu
+clefenv/bin/pip install transformers huggingface_hub
+clefenv/bin/python -c "from huggingface_hub import snapshot_download; snapshot_download('Cloudflare/clef')"
+
+export CLEF_PATH=~/.cache/huggingface/hub/models--Cloudflare--clef/snapshots/<hash>
+export CLEF_PY=$PWD/clefenv/bin/python
+python3 semantic.py bundle-<site>.json
+```
+
+`CLEF_PY` must be the interpreter that has torch. The main pipeline never needs torch, so
+the two stay separate. The runner `scripts/_clef_run.py` is invoked as a subprocess, which
+is why this works without polluting the toolkit's environment.
 
 All questions go out in **one batched request**. A decision model evaluates each question
 against the same state in isolation, so N candidates cost one round trip, not N. That is
@@ -199,7 +216,7 @@ self-referential CSS variable that erased every border, and a similarity cap tha
 of candidates tie at the same score.
 
 ```bash
-python3 -B test_units.py          # 86 checks on the logic
+python3 -B test_units.py          # 97 checks on the logic
 python3 -B verify_report.py <report.html>   # 29 checks on a rendered report
 ```
 

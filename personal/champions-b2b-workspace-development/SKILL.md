@@ -203,6 +203,62 @@ Two rules from the same round, both about who may decide:
 - **Prefer a database fact to a re-derived one.** Vendor identity comes from
   `ClientVendor`, not from asking the model who wrote the message.
 
+## Never return a computed result you did not hand back
+
+The ranker sorted by band, called the model, built the correct ordered list, and
+then returned the unsorted original, because `reorder_within_bands()` put its
+result in a local variable instead of in the dict it returns. Every model
+ordering was computed correctly and silently discarded, and no test failed
+because the deterministic path and the discarded path produced the same answer
+whenever the model was absent.
+
+Every return path of a helper that computes an order must carry that order,
+including the refusals. A refusal that returns no order forces the caller to
+invent one, and the caller will.
+
+## Read the column names before writing the query
+
+Three attributes on this schema did not exist and each one became an
+`AttributeError` swallowed by an `except` that reported it as a skip:
+
+- `SendApproval.origin` (the column is `audience`)
+- `SendApproval.citations` (no such column)
+- `SendApproval.due_at` (no such column)
+- `ClientVendor.vendor_key` (it is keyed by `client_key` plus `name`)
+
+Read the model class before writing a line that touches it. An `except` that
+records only `type(exc).__name__` turns a typo into a silent skip, which is the
+worst possible place for one.
+
+## Enabled is not running
+
+A background thread that was never wired to the startup hook reported
+`enabled: true, running: false`, which reads as working. The manual tick route
+worked either way and health said nothing about the loop, so nothing noticed.
+
+For anything that runs on a timer or a thread: assert the startup hook calls the
+start function, and make the status route report the thread's real state rather
+than the configuration flag. A test that greps the startup hook for the start
+call is worth more than a health field, because health cannot tell you the
+thread was never created.
+
+## A refusal is 200 with ok:false, not a 4xx
+
+Deliberate here: a refusal is a normal answer, not a client error. The cost is
+that a consumer checking only the status code reads a refusal as a success.
+Assert on `ok` in every client and in `verify-instance.sh`, never on the status
+code alone.
+
+## Config as code, and the two mistakes that ship secrets
+
+- **`NEXT_PUBLIC_*` is read at build time.** Setting it under compose
+  `environment:` yields an image that builds cleanly and then talks to
+  `localhost` from inside the user's browser. It must be a build arg.
+- **Check the root `.env` is gitignored, not just `backend/.env`.** It was not,
+  so `make setup && git add -A` would have committed a live key. Verify with
+  `git check-ignore -q .env` after creating a filled one, and confirm
+  `.env.example` is still tracked.
+
 ## Verify a page by geometry, not by screenshot
 
 `vision_analyze` on a full-page screenshot returns prose about colours and

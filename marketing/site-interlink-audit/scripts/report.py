@@ -29,6 +29,24 @@ def derive_findings(plan, bundle):
     out = []
     pages = max(1, s["pages"])
 
+    # Coverage first, and honestly. The figures below describe what was FETCHED, so the
+    # reader must know how much of the site that was. A crawl can be partial because the
+    # page cap was hit, or because the sitemap lists more URLs than the crawler reached.
+    sm_urls = s.get("sitemap_urls") or 0
+    cov = s.get("coverage")
+    if cov is not None and cov < 90:
+        out.append({
+            "sev": "mid",
+            "t": f"This audit covers {cov}% of the pages the sitemap lists",
+            "b": f"{s['pages']:,} pages were fetched against {sm_urls:,} in the XML "
+                 f"sitemap. The figures here describe what was fetched, not the whole "
+                 f"site. Re-run with a higher page cap for full coverage."})
+    elif s.get("truncated"):
+        out.append({
+            "sev": "mid", "t": "Crawl was capped",
+            "b": f"This run fetched {s['pages']:,} of {sm_urls:,} candidate URLs. "
+                 f"The figures below cover what was fetched."})
+
     zi, zo = s["zero_in"], s["zero_out"]
     if zi / pages > 0.25:
         frac = round(100 * zi / pages)
@@ -69,12 +87,6 @@ def derive_findings(plan, bundle):
                  f"sitemap, so these pages can be discovered. What is missing is internal "
                  f"linking: a page in a sitemap with no inbound link still gets almost no "
                  f"traffic."})
-    st = bundle.get("stats", {})
-    if st.get("truncated"):
-        out.append({
-            "sev": "low", "t": "Crawl was capped",
-            "b": f"This run fetched {st.get('pages')} of {st.get('candidates')} candidate "
-                 f"URLs. The figures below cover what was fetched."})
     return out
 
 

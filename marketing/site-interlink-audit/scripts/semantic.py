@@ -397,15 +397,25 @@ def clef_judge(pairs, source_text, max_items=40):
                 except OSError:
                     pass
 
+    # Accept either shape: the hosted API wraps answers in {"answer": x}, while the local
+    # runner returns a bare float per question id. Normalise here so both paths blend.
     scores = {}
     for i, p in enumerate(pairs[:max_items]):
         a = res.get(f"link_{i}")
         if a is None:
             continue
-        v = a.get("answer")
-        if isinstance(v, list):
-            v = v[0]
-        scores[p["target_id"]] = float(v)
+        if isinstance(a, dict):
+            v = a.get("answer", a.get("probability"))
+            if isinstance(v, list):
+                v = v[0]
+            if isinstance(v, dict):          # choice question: take the top option
+                v = max(v.get("probs", [0.0]))
+        else:
+            v = a
+        try:
+            scores[p["target_id"]] = float(v)
+        except (TypeError, ValueError):
+            continue
     return scores, None
 
 

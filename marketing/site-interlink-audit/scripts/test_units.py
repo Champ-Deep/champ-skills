@@ -238,6 +238,60 @@ def t_related_diversity():
               f"{len(urls)} rows, {len(set(urls))} unique")
 
 
+def t_clef_runner():
+    section("clef runner")
+    import os, json, subprocess, tempfile, sys as _s
+    import semantic as SEM
+    # REGRESSION: semantic.py invoked _clef_run.py in local mode but the file did not
+    # exist, so local CLEF could never run. Assert the runner is present and that it
+    # accepts BOTH answer shapes the pipeline may receive.
+    runner = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_clef_run.py")
+    check(os.path.exists(runner), "_clef_run.py exists", runner)
+    src = open(runner, encoding="utf-8").read()
+    for sym in ("collate_records", "encode_record", "load_release_model"):
+        check(sym in src, f"runner imports {sym}", "")
+    check("inference_mode" in src, "runner uses inference_mode (memory)", "")
+
+    # the runner emits a bare float; the hosted API wraps in {"answer": x}. Both must
+    # blend, or one of the two modes silently loses every judgement.
+    bare = SEM.blend([{"target_id": 1, "rule": 0.4}], {1: 0.72})[0]
+    check(abs(bare["score"] - (0.55 * 0.4 + 0.45 * 0.72)) < 0.002,
+          "bare-float judgement blends", str(bare["score"]))
+
+
+def t_coverage_disclosed():
+    section("crawl coverage is disclosed")
+    import plan as PLAN, report as REP
+    # REGRESSION: the plan carried no coverage field and the report only warned on the page
+    # cap. A crawl capped by the REST API rather than the cap (LakeB2B: 2,533 of 5,438
+    # sitemap URLs, truncated=False) reported with no disclaimer at all.
+    def plan_for(n_pages, sitemap_urls, truncated):
+        b = {"domain": "x.test", "edges": [], "stats": {"truncated": truncated},
+             "sitemap_urls": sitemap_urls,
+             "nodes": [{"id": str(i), "url": f"https://x.test/{i}", "title": f"P{i}",
+                        "section": "guides", "role": "THIN", "type": "page",
+                        "in": 0, "out": 0, "in_sitemap": 1,
+                        "text": "data leads targeting healthcare technology " * 60}
+                       for i in range(n_pages)]}
+        return PLAN.build_plan(b)
+
+    p = plan_for(100, 213, False)
+    s = p["summary"]
+    check(s.get("sitemap_urls") == 213, "plan carries sitemap_urls", str(s.get("sitemap_urls")))
+    check(s.get("coverage") == 47, "coverage is a percentage", str(s.get("coverage")))
+
+    def cov_note(pl):
+        f = REP.derive_findings(pl, {"stats": {}, "nodes": [], "edges": []})
+        return [x for x in f if "audit covers" in x["t"] or "capped" in x["t"].lower()]
+
+    check(len(cov_note(p)) == 1, "partial crawl is disclosed once", str(len(cov_note(p))))
+    full = plan_for(100, 100, False)
+    check(not cov_note(full), "a complete crawl claims nothing", str(len(cov_note(full))))
+    capped = plan_for(100, 5000, True)
+    check(len(cov_note(capped)) == 1, "a capped crawl is disclosed once",
+          str(len(cov_note(capped))))
+
+
 def t_plan():
     section("plan")
     with tempfile.TemporaryDirectory() as td:
@@ -322,7 +376,7 @@ def t_squarify():
 if __name__ == "__main__":
     for fn in (t_classify, t_extract, t_entities, t_clusters,
                t_refresh_bookkeeping, t_related_diversity, t_clef_gate,
-               t_plan, t_squarify):
+               t_clef_runner, t_coverage_disclosed, t_plan, t_squarify):
         try:
             fn()
         except Exception as e:

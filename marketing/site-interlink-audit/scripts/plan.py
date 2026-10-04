@@ -292,6 +292,14 @@ def build_plan(bundle, max_links_per_page=3):
         "work_links": sum(len(w["links"]) for w in work),
         "no_tofu": sum(1 for r in rows if r["tofu"] == 0 and r["bofu"] > 0),
         "faq_unsold": sum(r["faq"] for r in rows),
+        # Coverage. `truncated` only covers the page cap; a crawl can also be partial
+        # because the REST API exposes fewer objects than the sitemap lists. LakeB2B
+        # fetched 2,533 of 5,438 sitemap URLs and nothing in the report said so.
+        "sitemap_urls": bundle.get("sitemap_urls") or 0,
+        "cap": bundle.get("cap") or 0,
+        "truncated": bool(bundle.get("truncated")),
+        "coverage": (round(100 * len(nodes) / bundle["sitemap_urls"])
+                     if bundle.get("sitemap_urls") else None),
     }
     return {"summary": summary, "entities": rows, "work": work,
             "clusters": [{"label": l, "members": m} for l, m, _ in clusters]}

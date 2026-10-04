@@ -311,6 +311,63 @@ stylesheet is not checked.
 `#6E8894 -> #A0B1B9` and `#E8415A -> #F7A0AA` cleared 4.5:1 on both `--navy-2`
 and `--navy-3`.
 
+## A job ad is not a technology install
+
+A careers page lists every tool a company has *ever bought*, plus every tool the
+role might use. In one store, 244 companies carried 5-23 phantom technologies
+from a single such page, and the worst held 23: a company appeared to run
+Workday, SAP, Salesforce and ServiceNow simultaneously.
+
+The failure is easy to miss because the rows are labelled `intent` and nothing
+downstream read that column. A technology filter built as
+`EXISTS (... i.tech IN (?))` returned those companies for a query about a system
+they may not own, so every count, chart and shortlist described a stack that
+does not exist.
+
+**Evidence class belongs in the WHERE clause, not only in the response.**
+
+    i.tech IN (?) AND i.evidence_class = 'install'
+
+A hiring signal is real signal, so keep the rows and expose them as intent. But
+never let them satisfy an install query. Assert it with a real known-bad case:
+pick the company with the most intent rows and require that it does not appear
+in an install filter for any technology it holds only as intent. A generic
+"filter works" test passed for months while this was broken.
+
+## Invalid CSS renders unstyled and raises nothing
+
+`var(var(--x))` and `var(--token-that-was-never-declared)` both render as
+nothing. The page loads, the DOM is correct, the numbers are right, the tests
+pass, and the design is simply absent. 22 invalid declarations shipped this way.
+
+Three checks, all cheap, all of which belong in the suite:
+
+- every `var(--x)` is declared somewhere in the file (exempt any set inline by
+  JS via a `style` attribute)
+- no `var(var(` and no self-referential `--x: var(--x)`
+- a bulk rename must not rewrite a value that is *already* `var(...)`
+
+When mapping invented tokens onto an existing palette, replace the whole
+`var(fake)` expression. Replacing the bare name rewrites `var(--paper)` into
+`var(var(--ink))` and silently breaks every rule it touched.
+
+## A subject line must identify its own trigger
+
+Two angles can share a display name: "Commerce operations" is triggered by both
+Shopify and WooCommerce. Rendering the angle name alone produced two identical
+subjects derived from different stacks, and a draft whose headline technology
+was chosen by highest confidence rather than by the angle's own trigger put
+"Oracle NetSuite" in the subject of a Shopify pitch.
+
+**Rule: the technology named in any customer-facing string must be the one the
+argument actually rested on.** Pick it from the trigger, never from a parallel
+`max(confidence)`. Then assert the relationship in the test: parse the tech out
+of `facts_used` and require it appears in the subject.
+
+Corollary for tests: an assertion of the form `a is None or b` passes when `a`
+is None, so it verifies nothing on the exact case you added it for. Build the
+lookup, require it to be found, then compare.
+
 ## Chart data comes from precomputed aggregates, not live GROUP BY
 
 `SELECT fn, COUNT(*) FROM contacts GROUP BY fn` over 675k rows took 8.3s. A

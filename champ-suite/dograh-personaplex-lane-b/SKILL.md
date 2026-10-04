@@ -343,7 +343,24 @@ Peak load was ~10 with 27% system-wide memory free. Docs require ~15.64 GB
 physical; the M1 32 GB clears it. **Model loading on this Mac is therefore not
 the constraint** - only live conversational throughput is still unmeasured.
 
-## Dograh's realtime seam (three narrow touchpoints)
+### VERIFIED Dograh deployment shape for self-hosted PersonaPlex
+
+`verify_personaplex_provider.py` runs 17 checks against the REAL registry and
+passes (`python3` on this box has pydantic 2.10.4; the pp-local venv does NOT).
+Two requirements it proved, both of which are silent-failure traps:
+
+1. **`is_realtime` must be True.** Set it False and the whole realtime block is
+   silently DROPPED with no error.
+2. **`BYOKRealtimeAIModelConfiguration` requires an `llm` field** even though
+   PersonaPlex has no function calling - see
+   `api/schemas/ai_model_configuration.py:74`. That llm is Dograh's **tool
+   channel**, so a PersonaPlex deployment still needs one (OpenAILLMService is
+   what the repo uses). Do not assume the S2S model handles tools.
+
+Also confirmed PersonaPlex is the only realtime provider exposing `base_url`;
+all others return `[]`. And `service_factory.py:1281` dispatches per provider
+(`elif provider == ...`), with `AWS_NOVA_SONIC` the closest analogue for a
+self-hosted binary-audio transport.
 
 1. `api/services/configuration/registry.py` - `ServiceProviders` enum,
    `ServiceType.REALTIME` bucket, `@register_service(ServiceType.REALTIME)`.
