@@ -62,6 +62,11 @@ Rules:
 - When an output is the wrong length, print the exact `-t` value before touching
   the filter graph. The duration argument is one read away; the filter chain is
   a hypothesis.
+- When you split one `cmd` into a second pass, build the second command from
+  scratch rather than appending to the first. Reusing it kept stale input
+  indices, which pointed the music bed at an overlay that had no audio stream.
+- Check `ffprobe -show_entries stream=codec_type` on the muxed output, not just
+  its duration and size. An audio-only mux was the right length at 2.0 MB.
 - Change one thing at a time when fixing a render. I changed the overlay mode and
   re-rendered, which made it look like the fix landed when it had not.
 
@@ -118,6 +123,93 @@ empty for the whole clip. Start and end are different numbers:
 
 Also: each element on a timeline needs its own `data-track-index`. Reusing the
 progress bar's track (5) for the strip was a lint **error**, not a warning.
+
+## A music bed that is present but inaudible is a silent failure
+
+A bed authored at -34 dB RMS and then trimmed by a further -34 dB in the mix
+lands ~47 dB under the voice: in the file, silent on a phone. Every other check
+passed, because a whole-mix RMS is dominated by the voice and cannot see it.
+
+Two lessons:
+- **A trim is not a level.** Decide whether `BED_DB` is an absolute target or an
+  offset on the authored file, and say so in the comment. Here it was documented
+  as "34 dB under the voice" while being applied to an already-quiet file.
+- **Measure the thing you care about.** Compare the delivered mix against
+  voice-only audio from the same source window; the difference is the bed's real
+  contribution.
+
+And do NOT try to isolate the bed with a low-pass. Speech carries most of its
+energy below 400 Hz, so a low-pass measures the voice. A band-split check
+"measured" the bed at -21.4 dB in the broken file and came within 1.3 dB of the
+voice - it would have passed the exact file it was written to catch.
+
+## Reconsider the crop when one tile must fill the frame
+
+A Meet tile is ~416 px wide. Filling 1080 with one tile is a **4.27x upscale** -
+that is why the face filled the frame and looked soft, and no amount of unsharp
+fixes it. Laying both tiles side by side uses 825 source px and needs only
+**1.31x**.
+
+Prefer the two-up whenever the source has more than one usable tile. It fixes the
+softness, keeps both speakers visible (so the edit reads as a conversation), and
+removes the listener-PiP class of bugs entirely - with both people on screen, an
+inset of the listener is redundant, so replace it with an active-speaker ring
+drawn as a **border**, never a fill.
+
+## Captions are the floor, not the ceiling
+
+A talking head with karaoke captions, a progress bar and a pull quote still reads
+as "talking head with captions". What separates a clip from a top B2B podcast
+clip is that it **DRAWS the argument**.
+
+Mine the transcript for the concrete, drawable claim in every clip, then cue a
+diagram to the exact words it illustrates:
+
+    network collapsing to one hub | before/after state change | stat callout
+    ($100/yr vs $15/mo)           | workflow arrow change
+
+Get the cue times from the transcript, never by hand: locate the phrase that
+should trigger the beat, resolve it to its token index, and use that token's
+timestamp. A diagram a beat late reads as decoration.
+
+Rules that mattered:
+- **Fill the shapes.** Outline-only boxes read as a wireframe; vision called them
+  "thin, flat, basic" and "sparse". Give panels a filled body.
+- **Trim connectors to node edges.** A line drawn centre-to-centre pierces the
+  label. Shorten the segment by the node half-size along its own direction.
+- **Own a band and a paint order.** Put diagrams on their own timeline track and
+  an explicit `z-index`. The overlay composites to one PNG per frame, so a quote
+  drawn later appears ON TOP and reads as ghosting behind the graphic.
+- Animate only **transform aliases** (`scale`, `x`, `y`, `opacity`, `rotate`) -
+  never `width`/`height`/`top`/`left`.
+- **Watch CSS specificity in SVG.** A generic `.dg-svg rect { fill: ... }`
+  overrode `.dg-svg .d-panel rect { fill: ... }` in practice and every panel
+  rendered as a hollow wireframe. Declare generic type rules FIRST, class rules
+  after, and prove it by sampling the rendered pixels - not by reading the CSS.
+- **Keep diagram styling in ONE file.** The rules existed in both the spec and
+  the emitter and drifted: authored in one, never emitted, so the source claimed
+  the panels were filled while the render showed outlines. Add a check that every
+  selector in the spec is present in the emitted composition.
+- **Do not stack two full-band graphics on one timeline track by z-index.**
+  HyperFrames stacks by `data-track-index`, so CSS `z-index` did nothing. When
+  two elements share a band, remove the overlap at build time (drop the quote
+  that collides with a diagram) rather than trying to layer them.
+
+## A check that cannot fail is not a check
+
+Three separate "is the diagram there?" checks all passed a file that had no
+diagram, because each measured the wrong thing:
+
+1. bright-pixel fraction - a pull quote alone puts 2.7% ink in the band.
+2. peak minus median baseline - the quote IS the peak, so the lift was the same
+   on both files.
+3. "brighter than 170" - the purple scrim's BLUE channel is 188, so 98% of the
+   background counted as ink. Keyed on **saturation** instead (scrim is deeply
+   saturated, strokes are not), and on **solid-row coverage** rather than total
+   ink, because text is thin and a diagram is a block.
+
+Always prove a new check against a **known-bad** file before trusting it on the
+good one.
 
 ## Compositing insets: scale in the SHARED chain, not per-branch
 

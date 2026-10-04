@@ -85,6 +85,120 @@ Reference perf from the repo (M2 Max 64GB): RTF ~0.94, full-duplex ~80-95ms per
 step. Gapless audio needs <80ms/step. M1 Pro is slower than M2 Max; measure,
 do not assume.
 
+## THE BIG LATENCY FIND: use `speech voice-chat`, not `speech respond`
+
+`speech` (soniqo/speech-swift) has MORE than PersonaPlex. `speech voice-chat`
+runs **Nemotron VoiceChat 11B** with TRUE live duplex:
+https://huggingface.co/aufklarer/VoiceChat-11B-Perception-MLX-int5
+- 8.6 GB, ungated, licence `openmdw-1.1`
+- `--system-prompt` override, `--greet`
+- live microphone capture, **Apple acoustic echo cancellation** (`--no-aec` to
+  disable), **NVIDIA RNN-T turn-taking** safety fallback
+- `--prebuffer-frames` (80ms each, default 3) tunes the interruption/latency
+  tradeoff directly: lower = faster turn but more clipped interruptions
+- `--input` to use a WAV instead of the mic, then exit
+- **MCP tool-calling** (`--mcp-config`, `--mcp-server`, write-policy) - the
+  thing PersonaPlex and Moshi cannot do at all
+
+This is the correct local target for a phone agent: it is the only local engine
+with live mic + turn-taking + AEC + tools. `speech respond` is file-in/file-out
+inference, useful for measuring ms/step, NOT for a conversation.
+
+Other useful subcommands: `vad-stream` (32ms chunks), `turn` (Smart Turn v3.2
+turn detection), `transcribe`, `speak`, `audio-translate`.
+
+### Model recommendation by job (latency is the priority)
+
+Human perception threshold is ~250 ms end-to-end (Inworld's benchmark calls
+anything under it "instantaneous"). Published figures:
+
+| model | avg latency | interruption | notes |
+|---|---|---|---|
+| PersonaPlex (NVIDIA, 7B) | 170-205 ms | **240 ms** | 100% interruption success; best open full-duplex quality |
+| Moshi (Kyutai, 7B) | ~160-205 ms | ~257 ms | fastest; CC-BY-4.0 |
+| Qwen2.5-Omni | ~257 ms | 1.3 s | near-duplex, not full duplex |
+| Gemini Live | 953 ms | 1.4 s | far too slow |
+| OpenAI Realtime | ~320 ms | - | API cost |
+| ElevenLabs ConvAI | (not published) | - | what we use today |
+
+So: **PersonaPlex or Moshi for latency**, and both are native audio full-duplex
+(Moshi/PersonaPlex 0.99-1.00 turn-taking vs Qwen 0.00, and 100% vs 60.6% vs
+43.9% interruption success). Cascaded STT->LLM->TTS adds ~200-400 ms and is
+the wrong architecture when latency is the goal.
+
+**Dial (getdial.ai) publishes NO latency numbers at all** - grepped the full
+docs corpus. That is our opening: publish measured numbers.
+
+### MLX can hit the macOS GPU watchdog under load (real crash, 2026-10-05)
+
+A local run aborted with exit -6 / SIGABRT:
+```
+libc++abi: terminating due to uncaught exception of type std::runtime_error:
+[METAL] Command buffer execution failed: Caused GPU Timeout Error (00000002:***)
+```
+Crash report confirms `EXC_CRASH / Abort trap: 6`, blocked in
+`semaphore_wait_trap` -> `_dispatch_semaphore_wait_slow` -> `RespondCommand.run`,
+dying during **Mimi codec load** (~80%), after weights had loaded fine.
+
+This is the **macOS GPU watchdog killing a long-running Metal command buffer**,
+not a model or flag bug. Trigger: concurrent heavy I/O/GPU work (it happened
+while an 8.6 GB model download was saturating the box). It leaves no partial
+output, so the run just vanishes.
+
+**Rule: never run local MLX inference while something else is loading models or
+building.** The console now retries once with a5s backoff and reports
+`note: recovered from a GPU timeout on retry`. If a local run dies with no
+output, check `~/Library/Library/Logs/DiagnosticReports/speech-*.ips` - these
+are JSON: first line is metadata, remainder is the body with `usedImages` and
+`threads` to walk the frames.
+
+Also: a *missing* output file does not mean the flag was rejected - read the
+exit code and stderr before concluding anything.
+
+### THE 80 ms FRAME FLOOR (from speech-swift's own docs)
+
+`docs/inference/voicechat.md`: the engine consumes **one 80 ms input frame**
+(1,280 samples @ 16 kHz) at a time and emits **one 1,764-sample output frame**
+per frame. Audio cadence is therefore capped at **80 ms / 12.5 fps**, no matter
+how fast the Mac is. This is the architectural floor, not a tuning target.
+
+**Its reference numbers are from an M5 Pro 48 GB, not our M1 Pro 32 GB:**
+- mic actor service 118 ms p95 / 172 ms max
+- accumulated lateness past the 80 ms deadlines: 139 ms p95 / 231 ms max
+- first speech after a tool result: 472 ms; full post-tool speech ~3.5 s
+- INT5 bundle: **8.56 GB on disk**, ~8.70 GB RSS, 15.64 GB macOS physical memory
+- tool calls: 1,425-1,793 ms to native call start (JSON emitted in ~27 steps)
+
+Note the deadline-overrun metric is the honest one: RTF and per-call time look
+fine while real queues still slip 139-231 ms past the 80 ms budget.
+
+Docs also warn: **do not raise the token chunk size.** A 32-token schedule cut
+prefills from 3 to 2 but pushed sync 291 -> 658 ms and worst mic stall 146 ->
+465 ms. The bounded 16-token schedule is deliberate. Do not "optimise" this.
+
+### Bundle completeness is all-or-nothing
+
+`speech voice-chat` requires `encoder/`, `llm/`, and `tts/` complete. A partial
+download fails at load with `Error: no model.safetensors at .../llm/model.safetensors`
+even though the encoder loaded fine. Check
+`find <bundle> -name '*.incomplete'` returns nothing before trying to load - the
+presence of a directory or a config.json proves nothing.
+
+- **`--greet` and `--system-prompt` are MUTUALLY EXCLUSIVE.** Passing both exits
+  immediately with `Error: use either --greet or --system-prompt, not both`.
+  To greet *and* use a custom prompt, put the greeting instruction in the
+  prompt text instead of passing the flag.
+- The bundle must contain `encoder/model.safetensors`. A partially downloaded
+  directory fails with `Error: no model.safetensors at .../encoder/model.safetensors`
+  - so do not treat "the directory exists" as "the model is ready".
+- `--model` accepts a local directory or an HF repo id.
+- Progress prints `Loading VoiceChat bundle: <path>` then percentages.
+
+**Launching it needs mic permissions**, so it must run in a real terminal as
+the logged-in user, not from a sandboxed helper. Long runs go via
+`terminal(background=True, notify=True)`; poll `/voicechat/status` rather than
+sleeping in a loop.
+
 ## Dograh's realtime seam (three narrow touchpoints)
 
 1. `api/services/configuration/registry.py` - `ServiceProviders` enum,
@@ -120,8 +234,21 @@ uv pip install 'mlx==0.31.1'   # match version.h, not "latest"
 cp .venv/lib/python3.12/site-packages/mlx/lib/mlx.metallib .build/release/
 ```
 
-This is documented MLX behaviour: "the built mlx.metallib file should be either
-at the same directory as the executable... or METAL_PATH defined at build time".
+**Verify the metallib is real, not a stub** - speech-swift's AGENTS.md warns
+that without a compiled metallib "inference runs ~5x slower due to JIT shader
+compilation", so a fallback that merely loads is not good enough:
+
+```bash
+file .build/release/mlx.metallib       # expect: MetalLib executable (MacOS)
+strings -a .build/release/mlx.metallib | grep -cE 'kernel|mlx'   # expect: thousands
+```
+
+Ours: 131 MB, `MetalLib executable`, 6,486 kernel strings. It is the genuine
+optimisation.
+
+The repo's own `scripts/build_mlx_metallib.sh` cannot run without full Xcode
+(`xcrun: unable to find utility "metal"`), which is why the wheel route matters
+on a Command Line Tools machine.
 
 Sanity-check the GPU independently before blaming the model:
 `python -c "import mlx.core as mx; a=mx.random.normal((512,512)); mx.eval(a); print(a.sum())"`.
@@ -139,12 +266,39 @@ Two runs, both coherent customer-service dialogue, real 24kHz audio
 | voice prompt | 51 frames, 0.35s |
 | transcript decode | 81.55s (!) |
 
-The repo's own benchmark is RTF ~0.94 / 80-95ms per step on an **M2 Max 64GB**.
-So the M1 Pro is ~4.7x slower than realtime and ~1.7x slower per step.
+### REPEATED MEASUREMENT: run-to-run variance is huge (2026-10-05)
 
-Conclusion: quality and mechanics are PROVEN locally. Real-time voice on an
-M1 Pro is not reachable at 8-bit, and the gap is compute, not code. Do not sell
-this as a latency result - sell it as a correctness result.
+Six runs now, in two batches of three, all with identical config:
+
+| batch | samples (ms/step) | median |
+|---|---|---|
+| A | 131.2, 158.3, 194.5 | 158.3 |
+| B | 148.5, 128.6, **783.0** | 148.5 |
+
+Clean samples (excluding the contended one): **126.6 - 194.5 ms/step**,
+median ~150. The **783 ms/step** sample is RTF 9.83 - a 6x outlier caused by
+concurrent load, almost certainly the 8.6 GB `huggingface-cli` VoiceChat
+download saturating the machine while the benchmark ran.
+
+**Therefore: never benchmark while anything else is running on the box.**
+Check `uptime` load average first; a load average above ~10 makes every
+number meaningless. This also retroactively invalidates comparing runs taken
+at different times of day. Quote the median of >=3 clean runs and state the
+load average alongside it.
+
+**`--compile` is SLOWER, not faster**: 184.3 vs 160.0 ms/step in a paired run.
+Do not reach for it expecting a win on Apple Silicon.
+
+Best clean observation: **126.6 ms/step, RTF 1.63**. Gapless full-duplex needs
+< 80 ms/step, so an M1 Pro is still ~1.6x too slow. That gap is compute, not
+code. A GPU host is the fix, not more tuning.
+
+**Benchmarking discipline learned twice the hard way:** a polling loop inside
+`execute_code` that waits on an artifact WILL hit the 300s cell timeout and
+kill the child process. But note: `terminal(background=True)` children can
+OUTLIVE an `execute_code` kernel death and still deliver a completion
+notification - so "I killed it" is not always true. Check for the process and
+read the notification before reporting a job as dead.
 
 Gotcha: `--model-id` ignores a `--local-dir` you downloaded; the CLI uses its
 own cache at `~/Library/Caches/qwen3-speech/models/<org>/<repo>/`. Pre-seed

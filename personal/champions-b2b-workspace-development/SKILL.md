@@ -173,6 +173,61 @@ first live ticket, both invisible to the suite:
 Rule: a green suite proves the mock world works. Only a real run proves the
 product works. Run one end to end before calling anything done.
 
+## Silent-failure traps that survive a green suite
+
+Each of these shipped green and was caught by pressing the button over HTTP. All
+four produced a plausible response rather than a crash, which is exactly why a
+unit test does not find them. Check for them first when a new agent "does
+nothing".
+
+- **`str.format` on a prompt containing JSON.** `{"origin"` reads as a named
+  placeholder, so `.format(guidelines=...)` raises `KeyError` and the agent
+  silently degrades to "unavailable" on every call. Substitute a sentinel
+  (`__GUIDELINES__`), never `format`.
+- **Double-encoded mock JSON.** If the mock helper already returns
+  `json.dumps(...)`, wrapping it in `json.dumps` again yields a quoted escaped
+  string no parser accepts. The endpoint returns 200 and the agent has done
+  nothing. Assert the mock's output is parseable in a test.
+- **`bool(x, True)`.** `bool` takes one argument, so a default applied to a
+  request field is a 500 on exactly the input a human would type.
+- **One state variable doing two jobs.** A textarea value that is also the
+  result message means the result is never rendered and every action looks
+  inert. Split input from feedback, and give background refreshes a `quiet` flag
+  so they cannot overwrite the message the user's own action produced.
+
+Two rules from the same round, both about who may decide:
+
+- **Never read a client or account identity out of a model reply.** Take it from
+  the caller or the database only. A hallucinated client name files real work
+  against an account that does not exist and nothing downstream catches it.
+- **Prefer a database fact to a re-derived one.** Vendor identity comes from
+  `ClientVendor`, not from asking the model who wrote the message.
+
+## Verify a page by geometry, not by screenshot
+
+`vision_analyze` on a full-page screenshot returns prose about colours and
+layout but does not reliably catch a 2px overflow or a clipped label, and on
+this machine it has come back with the same paragraph repeated. Measure instead,
+and screenshot for the human.
+
+Drive the real page over CDP and read the DOM after clicking:
+
+1. Set the textarea value through the native setter and dispatch `input`, or
+   React never sees the change and the click posts an empty box.
+2. Wait for the fetch, then read `[role=status]` or wherever the outcome lands.
+   A 200 with the right shell proves nothing.
+3. Sweep viewport widths and assert `scrollWidth <= clientWidth`, no element's
+   `right` exceeds the viewport, no control's `scrollWidth > clientWidth`, and
+   no text under 10.5px.
+4. Assert the safety property too: count buttons whose label matches a send
+   verb and expect zero on any screen that must not send.
+
+Distinguish your script's bugs from the product's. Several apparent failures were
+the harness posting JSON in a body to a route that reads query params, reading a
+list where the API returns an object, or feeding both clients identical text so a
+leak check passed by construction. Re-verify against a clean database before
+believing a failure is the product's.
+
 ## Verify by pressing the buttons, not by calling the functions
 
 Four real defects shipped green through the module-level suite and were found in

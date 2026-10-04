@@ -248,6 +248,69 @@ grade A plus a phone, while the search's equivalent filter returned 43,956
 (phone, LinkedIn and a corporate email together). One meaning per number, and
 the note beside each step must state the definition in full.
 
+## Two <script> tags share a scope; window.eval() does not
+
+Testing a multi-file page with jsdom, each `window.eval(src)` is its OWN function
+scope. A `const get = ...` in the first file is invisible to the second, so the
+second throws `get is not defined` on every call and its view stays a skeleton.
+Concatenate the files into ONE eval so the harness matches a browser.
+
+The same harness caught two bugs that make this permanent:
+
+- **A duplicate top-level `const` is a SyntaxError that kills the entire
+  script**, not just that line. A new file re-declaring `$`, `esc` or `fmt`
+  renders nothing at all while the page still looks like it loaded. Declare
+  shared helpers once, in one file, and have the others use them.
+- **Script order is load-bearing**, not cosmetic. The file that DECLARES the
+  helpers must load before the file that CALLS them.
+
+Also assert that assets are *served*, not that their filenames appear in the
+HTML. A `<script src="/views.js">` with no matching route 404s silently, and
+"views.js is in the page" passes. Parse the HTML for the assets it references
+and fetch each one. A hand-written route per asset guarantees the next file is
+forgotten; mount the directory instead.
+
+## A ratio, not a count, is the insight
+
+"X and Y appear on 180 companies" is a fact that means little. "That is 40x more
+often than chance" is the finding. Divide the observed count by the expected one
+from the independent margins: `expected = total[a] * total[b] / n`. Rank
+relations by lift, not by count.
+
+Three failure modes, all of which shipped as confident nonsense:
+
+- **Alias pairs dominate.** Before collapsing product aliases, the two strongest
+  "relations" in an entire landscape were `NetSuite + Oracle NetSuite` (lift
+  271) and `Tally + TallyPrime` (140) — one product spelled two ways. Tell a
+  buyer that Salesforce's biggest co-occurrence is itself and they stop
+  believing every other number on the page. Normalise to a product family
+  BEFORE any co-occurrence maths.
+- **The family map must be explicit.** A fuzzy substring rule merges Svelte
+  with SvelteKit and Dynamics GP with Dynamics CRM, erasing exactly the
+  distinctions a seller is paid to notice. Aliases means vendor prefixes and
+  marketing editions, never separate products or separate editions.
+- **Concentration must be a union.** Dividing the leader's company count by the
+  LARGEST single technology in a category is dividing a number by itself, which
+  yields exactly 1.00 for every category and therefore measures nothing. A
+  company can run several products in one category, so the denominator is the
+  union of those company sets. Assert the values DIFFER across categories;
+  equal values everywhere is a bug signature, not a finding.
+
+## Text tokens must clear 4.5:1, and the check must be numeric
+
+A palette token that clears 2.8:1 is a fine chart fill and unreadable in a
+sentence. Two tokens shipped at 2.86:1 and 2.72:1 while being used as body text
+on card surfaces.
+
+Split the token rather than moving it: keep the saturated brand value for marks
+and fills (`--rose-mark`) and add a lifted value for text (`--rose`). Then assert
+the ratios IN THE TEST SUITE, computed from the CSS, for every text token
+against every surface it appears on. A design-system rule checked by reading the
+stylesheet is not checked.
+
+`#6E8894 -> #A0B1B9` and `#E8415A -> #F7A0AA` cleared 4.5:1 on both `--navy-2`
+and `--navy-3`.
+
 ## Chart data comes from precomputed aggregates, not live GROUP BY
 
 `SELECT fn, COUNT(*) FROM contacts GROUP BY fn` over 675k rows took 8.3s. A
