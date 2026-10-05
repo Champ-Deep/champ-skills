@@ -155,8 +155,22 @@ title (never the URL, which rewards slug similarity over content), nearest neigh
 an inverted index over discriminating terms. 3,218 pages in ~35s; an O(n^2) scan took 4m18s.
 
 Bands, not magnitudes: `strong` / `likely` / `possible` / `weak`. Every suggestion carries a
-written reason. The shortlist is deduplicated by target title, because one template page
-repeated across 25 technology lists is one idea, not 25.
+written reason.
+
+Three rules keep the shortlist honest:
+
+- **One direction per pair.** "A links to B" and "B links to A" are one editorial decision.
+  19% of candidate rows were the mirror of another row (1,393 on LakeB2B), which crowded the
+  top of the list with mirrors of itself. Keep the higher-scoring direction and flag the rest
+  `link_back_too`.
+- **`link_back_too` is built from source counts, not the score.** The rule score is symmetric
+  in A and B by construction, so "the reverse also scored well" was true for every mirrored
+  pair and carried no information. It now means both pages are suggested from three or more
+  different sources.
+- **A conversion page can be a target but never a source.** `/free-trial`, `/demo`,
+  `/contact` and `corporate_brochure` pages are legitimate link destinations and terrible
+  places to host an editorial reference. `usable()` gates targets; `can_host()` gates
+  sources.
 
 ### CLEF is optional and gated
 

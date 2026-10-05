@@ -216,7 +216,7 @@ self-referential CSS variable that erased every border, and a similarity cap tha
 of candidates tie at the same score.
 
 ```bash
-python3 -B test_units.py          # 97 checks on the logic
+python3 -B test_units.py          # 104 checks on the logic
 python3 -B verify_report.py <report.html>   # 29 checks on a rendered report
 ```
 

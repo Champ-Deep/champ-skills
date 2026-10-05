@@ -311,6 +311,62 @@ stylesheet is not checked.
 `#6E8894 -> #A0B1B9` and `#E8415A -> #F7A0AA` cleared 4.5:1 on both `--navy-2`
 and `--navy-3`.
 
+## One sqlite connection per thread, never one shared connection
+
+`check_same_thread=False` does not make a connection thread-safe. It silences
+the guard and nothing else. Sharing one connection across request threads
+produces BOTH of these, from the same bug:
+
+- crashes: `InterfaceError: bad parameter or other API misuse`, `IndexError` on a
+  half-consumed row, `fetchone()` returning `None`
+- **silently empty results**, when one thread consumes a cursor another is
+  reading. No exception, just a wrong answer that looks like real data.
+
+Measured on this store, 10 threads x 30 queries: 14 failures in 23.8s shared,
+0 failures in 9.5s per-thread. Per-thread is 2.5x FASTER, because a shared
+connection serialises and thrashes its statement cache. WAL exists precisely so
+many connections can read one database concurrently.
+
+Two mistakes that make the fix look like it worked when it did not:
+
+- **Assigning the connection in `__init__` is not per-thread.** The module builds
+  `S = Store()` once at import on the main thread, so every request thread
+  reuses the MAIN thread's connection no matter how the constructor is written.
+  It must be a property that resolves per call.
+- **Any collaborator that snapshots `store.con` re-pins it.** A chart class that
+  cached the connection in its own `__init__` silently restored the original bug
+  on a second code path.
+
+Why this survives a long time: every test makes one request at a time, and a
+single-user demo is the worst possible shape of load to catch it in. It appears
+as an intermittent flake when a boot request overlaps another call.
+
+The test must assert BOTH halves, or the wrong half passes:
+
+    12 concurrent searches -> every status is 200
+    and every response total equals the single-threaded answer, with facets
+    populated. Stopping the 500s while leaving cursors shared still yields
+    confidently wrong numbers.
+
+## A test that sleeps is a test that passes by luck
+
+`await window.eval(f())` returns `undefined` when `f` returns a promise, because
+eval does not adopt it. A harness that then `setTimeout(400)` passes on a fast
+machine and fails on a slow one. `await` the eval directly, or poll for the
+rendered node:
+
+    for (let i = 0; i < 60 && !document.querySelector('.result'); i++)
+      await new Promise(r => setTimeout(r, 500));
+
+## Test dependencies belong in the repo, not in /tmp
+
+jsdom lived in `/tmp/domtest/node_modules`. This machine prunes `/tmp`, so one
+day three suites died with a bare `MODULE_NOT_FOUND` and no other symptom. Put
+test dependencies in the project's own `package.json` under
+`devDependencies` and gitignore `node_modules`. The shipped app should still
+have zero runtime JS dependencies, but the tests must not depend on a machine's
+temp directory surviving.
+
 ## A job ad is not a technology install
 
 A careers page lists every tool a company has *ever bought*, plus every tool the

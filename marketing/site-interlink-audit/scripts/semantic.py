@@ -155,6 +155,26 @@ def usable(n):
     return True
 
 
+# Pages that are legitimate link TARGETS but should never be link SOURCES. A /free-trial
+# or /contact page is a conversion asset: pointing editorial links at it is fine, hosting
+# a contextual link inside it is not, because there is no editorial context to sit in.
+CONVERSION_TYPE = {"corporate_brochure"}
+CONVERSION_PATH = ("/free-trial", "/free_trial", "/trial", "/demo", "/contact",
+                   "/get-started", "/signup", "/pricing", "/request")
+
+
+def can_host(n):
+    """Can this page host a contextual link? Stricter than being a valid target."""
+    if not usable(n):
+        return False
+    if (n.get("type") or "").lower() in CONVERSION_TYPE:
+        return False
+    u = (n.get("url") or "").lower().rstrip("/")
+    if any(u.endswith(p) or p + "/" in u for p in CONVERSION_PATH):
+        return False
+    return True
+
+
 def pair_shape(a, b):
     """Role compatibility. Linking two commercial pages is weaker than linking a research
     page to a commercial one, because the research page is where the buyer starts."""
@@ -237,7 +257,10 @@ def build_pairs(bundle, limit_per_page=6, min_sim=0.12):
 
     out = {}
     for i, src in enumerate(nodes):
-        if not usable(src):
+        # Sources must be able to HOST a contextual link, which is stricter than being a
+        # valid target: a /free-trial page is a fine link destination but a poor place to
+        # put an editorial reference.
+        if not can_host(src):
             continue
 
         # candidates: pages sharing a discriminating term, weighted by how many
@@ -504,8 +527,23 @@ def main():
     # target title so the shortlist stays distinct and is actually reviewable.
     flat = [(sid, c) for sid, cs in pairs.items() for c in cs]
     flat.sort(key=lambda t: -t[1]["score"])
-    seen_title, shortlist = Counter(), []
+
+    # "A -> B" and "B -> A" are ONE editorial decision, not two. 19% of all candidate rows
+    # were the reverse of another row, and they crowded the top of the list with mirrors
+    # of each other. Keep the higher-scoring direction and record that the reverse exists.
+    best, reverse_of = {}, {}
     for sid, c in flat:
+        key = frozenset((sid, c["target_id"]))
+        if key in best:
+            reverse_of.setdefault(id(c), True)
+            continue
+        best[key] = (sid, c)
+    mirrored = [v for v in best.values()]
+
+    # A template page repeated across 25 lists is one idea, not 25. Cap per target title
+    # so the shortlist stays distinct and is actually reviewable.
+    seen_title, shortlist = Counter(), []
+    for sid, c in mirrored:
         key = c["target_title"].strip().lower()
         if seen_title[key] >= 2:
             continue
@@ -514,12 +552,23 @@ def main():
         if len(shortlist) >= 15:
             break
 
+    # The rule score is symmetric in A and B by construction, so "the reverse also scored
+    # well" was true for all 1,393 mirrored pairs and carried no information. A genuinely
+    # two-sided opportunity is one where BOTH pages are already suggested from several
+    # different sources, which is a real signal rather than a restatement.
+    src_count = Counter(sid for sid, _ in flat)
+
+    def _reverse_exists(sid, c):
+        return src_count.get(c["target_id"], 0) >= 3 and src_count.get(sid, 0) >= 3
+
     result["shortlist"] = [{
         "source": by_id[sid]["url"],
         "source_title": clean_title(by_id[sid].get("title")),
+        "link_back_too": _reverse_exists(sid, c),
         **{k: c[k] for k in ("target", "target_title", "score", "band", "rule",
                              "semantic", "clef", "why")},
     } for sid, c in shortlist]
+    result["mirrored_pairs_collapsed"] = len(flat) - len(mirrored)
 
     json.dump(result, open(out, "w"), indent=1)
     print(f"  -> {out}  ({len(shortlist)} distinct in the shortlist)")

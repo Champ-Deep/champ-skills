@@ -259,6 +259,50 @@ def t_clef_runner():
           "bare-float judgement blends", str(bare["score"]))
 
 
+def t_related_direction_and_host():
+    section("related links: direction and hosting")
+    import semantic as SEM
+    # REGRESSION 1: 19% of candidate rows were the reverse of another row (1,393 mirrored
+    # pairs on LakeB2B), so the top of the list was mirrors of itself.
+    # REGRESSION 2: the score is symmetric in A and B, so "the reverse also scored well" was
+    # true for EVERY mirrored pair and carried no information.
+    # REGRESSION 3: /free-trial was proposed as a link SOURCE. A conversion asset can be a
+    # fine target but a poor host for an editorial reference.
+    article = {"id": "a", "url": "https://x.test/guide-a", "title": "Guide A",
+               "words": 500, "section": "guides", "role": "TOFU", "type": "article",
+               "in": 0, "out": 0, "in_sitemap": 1,
+               "text": "data leads targeting healthcare technology " * 40}
+    trial = {"id": "t", "url": "https://x.test/free-trial", "title": "Free Trial",
+             "words": 400, "section": "free-trial", "role": "HUB", "type": "pages",
+             "in": 0, "out": 0, "in_sitemap": 1,
+             "text": "start your free trial today contact us get started " * 40}
+
+    check(SEM.usable(trial), "a trial page is still a valid TARGET", "")
+    check(not SEM.can_host(trial), "a trial page cannot host a contextual link", "")
+
+    b = {"domain": "x.test", "nodes": [article, trial], "edges": []}
+    pairs = SEM.build_pairs(b, limit_per_page=3)
+    srcs = {sid for sid in pairs}
+    check("t" not in srcs, "a conversion page is never a link source", str(sorted(srcs)))
+    for n in (article, trial):
+        n2 = dict(n); n2["type"] = "corporate_brochure"
+        check(not SEM.can_host(n2), "corporate_brochure cannot host", n2["url"])
+
+    # symmetry: A->B and B->A score identically (both terms are direction-independent),
+    # so any direction flag MUST be built from something else or it is always true.
+    fwd, _ = SEM.pair_shape(article, trial)
+    rev, _ = SEM.pair_shape(trial, article)
+    check(fwd == rev, "pair_shape is symmetric in A and B", f"{fwd} vs {rev}")
+    def toks(n):
+        return SEM.tokens(f"{n['title']} {n['text']}")
+    docs = [toks(n) for n in (article, trial)]
+    idf = SEM.idf_weights(docs)
+    vecs = [SEM.tfidf_vector(t, idf) for t in docs]
+    svs = SEM.to_sparse(vecs, len(vecs[0]) if vecs else 0)
+    check(SEM.sparse_cosine(svs[0], svs[1]) == SEM.sparse_cosine(svs[1], svs[0]),
+          "cosine is symmetric, so the rule score cannot distinguish direction", "")
+
+
 def t_coverage_disclosed():
     section("crawl coverage is disclosed")
     import plan as PLAN, report as REP
@@ -375,7 +419,8 @@ def t_squarify():
 
 if __name__ == "__main__":
     for fn in (t_classify, t_extract, t_entities, t_clusters,
-               t_refresh_bookkeeping, t_related_diversity, t_clef_gate,
+               t_refresh_bookkeeping, t_related_diversity,
+               t_related_direction_and_host, t_clef_gate,
                t_clef_runner, t_coverage_disclosed, t_plan, t_squarify):
         try:
             fn()
