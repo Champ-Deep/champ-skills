@@ -135,7 +135,7 @@ All code is in `scripts/`. Run commands from that directory.
 | `squarify.py` | Exact treemap geometry. |
 | `report.py` + `report_template.html` | Renders the client report. |
 | `verify_report.py` | 29 DOM assertions on the built report. |
-| `test_units.py` | 44 unit tests on the logic. |
+| `test_units.py` | 86 unit tests on the logic. |
 
 ---
 

@@ -47,14 +47,37 @@ def mention_strength(url, name):
     return MENTION_CACHE[key]
 
 
-def is_editorial(anchor):
-    """An anchor that names its target is editorial; a generic one is navigation."""
+def is_editorial(anchor, is_chrome=None):
+    """
+    Is this an in-body link rather than a menu entry?
+
+    The authoritative signal is DOM position, captured at crawl time as the fourth field of
+    an edge. Anchor TEXT was the old test and it is wrong in both directions: it called the
+    menu link "Data Enrichment" editorial because it is two capitalised words, and it called a
+    real in-body citation reading "Read more" navigation. When DOM position is unavailable
+    (an older bundle) fall back to the text heuristic rather than dropping the link.
+    """
+    if is_chrome is not None:
+        return not is_chrome
     a = (anchor or "").strip()
     if not a:
         return False
     if NAV_ANCHOR.match(a):
         return False
     return len(a.split()) >= 2 or bool(re.search(r"[A-Z]", a))
+
+
+def edge_is_content(edge):
+    """
+    Is this edge an in-body link?
+
+    Edge layout is [src, dst, anchor, is_chrome]. Bundles crawled before the DOM-position
+    change have only 3 fields, so fall back to the anchor-text heuristic for those instead
+    of silently counting every menu link as an editorial one.
+    """
+    if len(edge) > 3:
+        return not edge[3]
+    return is_editorial(edge[2])
 
 
 def norm_url(u):
@@ -99,8 +122,45 @@ TEXT_BY_URL = {}
 
 # ---------------------------------------------------------------- the plan
 
-def build_plan(bundle, max_links_per_page=3):
+# A page's URL is a stronger signal of what it is than its body copy. "Aviation Industry
+# Mailing List" and "Zoho CRM Users List" are product pages that happen to be phrased like
+# questions, so the text classifier called them TOFU and the Entities funnel bars were
+# built on that. These overrides are path rules, not content rules.
+ROLE_BY_PATH = (
+    # a page that sells a list IS the commercial offer, whatever its copy sounds like
+    (re.compile(r"/(technology-lists|healthcare-lists|industry-wise-lists|"
+                r"geo-targeted-lists|professional-lists)/"), "BOFU"),
+    (re.compile(r"-(users?-list|customers-list|email-list|email-database|"
+                r"business-contacts|customers-list)$"), "BOFU"),
+    (re.compile(r"/(services|solutions)/"), "BOFU"),
+    # the blog is the research layer
+    (re.compile(r"/blog/"), "TOFU"),
+    (re.compile(r"/(guides?|white-paper|infographics?|case-studies)/"), "MID"),
+)
+
+
+def role_from_url(url, fallback):
+    """Funnel role from URL shape. Falls back to the text classifier."""
+    u = (url or "").lower()
+    for pat, role in ROLE_BY_PATH:
+        if pat.search(u):
+            return role
+    return fallback
+
+
+def build_plan(bundle, max_links_per_page=3, redirects=None):
+    """redirects: {normalized_url -> final_url} from the crawl. A proposed link that
+    301s is wasted work and a canonical smell, so any target in that map is dropped and
+    recorded in "redirecting_targets" for the report to show."""
     nodes = bundle["nodes"]
+    # Normalise the redirect keys on the way in. Comparing a normalised hub URL against a
+    # raw key silently never matched, so every redirecting target still reached the
+    # worklist and the check looked like it was working.
+    redirects = {norm_url(k): v for k, v in (redirects or {}).items()}
+    bad_targets = set()
+    for n in nodes:
+        n["role"] = role_from_url(n.get("url"), n.get("role"))
+        n["role_text"] = n.get("role")
     global TEXT_BY_URL
     TEXT_BY_URL = {n["url"]: (n.get("text") or "") for n in nodes}
     by_norm = {}
@@ -243,9 +303,20 @@ def build_plan(bundle, max_links_per_page=3):
         scored.sort(reverse=True)
 
         picks = []
+        redirected = []
         for val, name, hub in scored[:max_links_per_page]:
             if norm_url(hub["url"]) == norm_url(n["url"]):
                 continue
+            # A proposed link that 301s is wasted editor time and a canonical smell.
+            if norm_url(hub["url"]) in redirects:
+                redirected.append(hub["url"])
+                continue
+            # An adversarial review found the worklist feeding pages that were already well
+            # linked (median 51 inbound) while the real orphans got nothing. Prefer a target
+            # nobody links to: adding a link to a page with 200 inbound changes almost
+            # nothing, and one to an orphan is the whole point.
+            hub_in = hub.get("in", 0)
+            val = val * (3.0 if hub_in == 0 else (1.0 if hub_in <= 10 else 0.35))
             picks.append({
                 "target": name,
                 "url": hub["url"],
@@ -255,7 +326,10 @@ def build_plan(bundle, max_links_per_page=3):
                         if hub.get("section") == sec else "entity already discussed here"),
                 "val": round(val, 2),
             })
+        if redirected:
+            bad_targets.update(redirected)
         if picks:
+            picks.sort(key=lambda p: -p["val"])
             work.append({
                 "url": n["url"],
                 "title": n.get("title", ""),
@@ -279,10 +353,26 @@ def build_plan(bundle, max_links_per_page=3):
     summary = {
         "pages": len(nodes),
         "edges": len(bundle["edges"]),
-        "contextual_edges": sum(
-            1 for e in bundle["edges"]
-            if not NAV_ANCHOR.match((e[2] or "").strip()) if e[2]),
+        # An edge's 4th field is 1 when the link sits in nav/header/footer. Older bundles
+        # have only 3 fields, so fall back to the anchor-text heuristic for those.
+        "contextual_edges": sum(1 for e in bundle["edges"] if edge_is_content(e)),
+        # Two different facts, previously conflated into one scary number.
+        #   zero_in        = nobody links it at all, from anywhere
+        #   zero_in_content = linked only from a menu, so no in-body path to it
         "zero_in": sum(1 for n in nodes if n["in"] == 0),
+        # An adversarial review of the Span report found the "76% of the site is invisible"
+        # headline was almost entirely /faq/ pages: 2,036 of 2,434 orphans were FAQ, and
+        # Ahrefs showed the folder with zero organic traffic. Quoting 76% invited a plan to
+        # "fix" 2,036 pages that should not exist. Report the all-pages figure AND the
+        # figure with the low-value folder removed, so the headline cannot mislead.
+        "redirecting_targets": sorted(bad_targets),
+        "faq_pages": sum(1 for n in nodes if "/faq/" in n["url"]),
+        "zero_in_ex_faq": sum(1 for n in nodes
+                               if n["in"] == 0 and "/faq/" not in n["url"]),
+        "pages_ex_faq": sum(1 for n in nodes if "/faq/" not in n["url"]),
+        "zero_in_content": sum(
+            1 for n in nodes if n.get("in_content", n["in"]) == 0),
+        "menu_linked": sum(1 for n in nodes if n.get("in_menu", 0) > 0),
         "zero_out": sum(1 for n in nodes if n["out"] == 0),
         "in_sitemap": sum(1 for n in nodes if n.get("in_sitemap")),
         "roles": dict(roles),
@@ -292,6 +382,14 @@ def build_plan(bundle, max_links_per_page=3):
         "work_links": sum(len(w["links"]) for w in work),
         "no_tofu": sum(1 for r in rows if r["tofu"] == 0 and r["bofu"] > 0),
         "faq_unsold": sum(r["faq"] for r in rows),
+        # Coverage. `truncated` only covers the page cap; a crawl can also be partial
+        # because the REST API exposes fewer objects than the sitemap lists. LakeB2B
+        # fetched 2,533 of 5,438 sitemap URLs and nothing in the report said so.
+        "sitemap_urls": bundle.get("sitemap_urls") or 0,
+        "cap": bundle.get("cap") or 0,
+        "truncated": bool(bundle.get("truncated")),
+        "coverage": (round(100 * len(nodes) / bundle["sitemap_urls"])
+                     if bundle.get("sitemap_urls") else None),
     }
     return {"summary": summary, "entities": rows, "work": work,
             "clusters": [{"label": l, "members": m} for l, m, _ in clusters]}

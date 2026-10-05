@@ -29,8 +29,58 @@ def derive_findings(plan, bundle):
     out = []
     pages = max(1, s["pages"])
 
+    # Coverage first, and honestly. The figures below describe what was FETCHED, so the
+    # reader must know how much of the site that was. A crawl can be partial because the
+    # page cap was hit, or because the sitemap lists more URLs than the crawler reached.
+    sm_urls = s.get("sitemap_urls") or 0
+    cov = s.get("coverage")
+    if cov is not None and cov < 90:
+        out.append({
+            "sev": "mid",
+            "t": f"This audit covers {cov}% of the pages the sitemap lists",
+            "b": f"{s['pages']:,} pages were fetched against {sm_urls:,} in the XML "
+                 f"sitemap. The figures here describe what was fetched, not the whole "
+                 f"site. Re-run with a higher page cap for full coverage."})
+    elif s.get("truncated"):
+        out.append({
+            "sev": "mid", "t": "Crawl was capped",
+            "b": f"This run fetched {s['pages']:,} of {sm_urls:,} candidate URLs. "
+                 f"The figures below cover what was fetched."})
+
+    # "76% of the site is invisible" was the single most damaging claim in the report. It was
+    # true arithmetically and misleading in substance: 2,036 of those pages were /faq/ entries,
+    # and the right response to an unlinked FAQ page is a decision about the FAQ layer, not
+    # 2,036 link insertions. Split the figure by page type before drawing any conclusion.
     zi, zo = s["zero_in"], s["zero_out"]
-    if zi / pages > 0.25:
+    zic = s.get("zero_in_content")
+    faq_orphans = sum(1 for n in bundle.get("nodes", [])
+                      if n.get("in", 1) == 0 and n.get("type") == "faq")
+    nonfaq_orphans = zi - faq_orphans
+    total_faq = sum(1 for n in bundle.get("nodes", []) if n.get("type") == "faq")
+
+    if faq_orphans:
+        pct_all = round(100 * zi / pages)
+        pct_real = round(100 * nonfaq_orphans / pages)
+        sev = "mid" if pct_real < 25 else "hi"
+        out.append({
+            "sev": sev,
+            "t": f"{pct_all}% of pages get no in-body link, but {faq_orphans:,} of "
+                 f"those {zi:,} are FAQ answers",
+            "b": f"Excluding the {total_faq:,} /faq/ pages, the unlinked rate is "
+                 f"{pct_real}%, and that is the number worth acting on. "
+                 f"{faq_orphans:,} FAQ answers have no internal link pointing at them, which "
+                 f"is a decision about the FAQ layer: index it, fold the answers into the "
+                 f"matching list pages, or drop it. Adding links to them individually is "
+                 f"not a fix."})
+    if zic is not None and zic > zi:
+        out.append({
+            "sev": "mid",
+            "t": f"{zic - zi:,} pages are linked only from the navigation",
+            "b": f"{zi:,} pages have no link at all. A further {zic - zi:,} are reachable "
+                 f"from the header or footer but have no in-body path, so a reader and a "
+                 f"crawler see the menu but not a reference from the content."})
+
+    if zi / pages > 0.25 and not faq_orphans:
         frac = round(100 * zi / pages)
         word = ("nearly all" if frac >= 90 else "most" if frac >= 60 else
                 "over half" if frac >= 50 else "over a third" if frac >= 33 else "a quarter")
@@ -69,12 +119,6 @@ def derive_findings(plan, bundle):
                  f"sitemap, so these pages can be discovered. What is missing is internal "
                  f"linking: a page in a sitemap with no inbound link still gets almost no "
                  f"traffic."})
-    st = bundle.get("stats", {})
-    if st.get("truncated"):
-        out.append({
-            "sev": "low", "t": "Crawl was capped",
-            "b": f"This run fetched {st.get('pages')} of {st.get('candidates')} candidate "
-                 f"URLs. The figures below cover what was fetched."})
     return out
 
 

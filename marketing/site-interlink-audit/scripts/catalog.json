@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "note": "Catalogue for the related-sites carousel. One entry per site you want the widget to be able to recommend. Add a site here and it becomes eligible everywhere; refresh.py re-scores without any rebuild of the widget.",
+  "how_scoring_works": "A catalogue entry surfaces on a page when its tags match that page's topic vocabulary, or when it is tagged for the site profile (data_broker / consultancy / saas). Every suggestion carries a written reason so a human can check it.",
+  "sites": [
+    {
+      "domain": "spanglobalservices.com",
+      "name": "Span Global Services",
+      "url": "https://www.spanglobalservices.com",
+      "blurb": "B2B sales and marketing data lists across technology, healthcare, finance and industrial verticals.",
+      "tags": ["data", "leads", "email-list", "targeting", "technology", "healthcare", "industries", "salestech", "martech"]
+    },
+    {
+      "domain": "lakeb2b.com",
+      "name": "LakeB2B",
+      "url": "https://www.lakeb2b.com",
+      "blurb": "AI-powered B2B intelligence and campaign data for investor, healthcare exit and growth teams.",
+      "tags": ["data", "intelligence", "healthcare", "investors", "campaign", "insights", "industries"]
+    },
+    {
+      "domain": "deependhq.com",
+      "name": "DeepEnd HQ",
+      "url": "https://deependhq.com",
+      "blurb": "Operator-led growth and revenue systems for B2B teams that need a working playbook, not a list.",
+      "tags": ["strategy", "growth", "consulting", "revenue", "operations", "pipeline"]
+    },
+    {
+      "domain": "apollo.io",
+      "name": "Apollo",
+      "url": "https://www.apollo.io",
+      "blurb": "Sales intelligence and sequencing platform for outbound teams and data enrichment workflows.",
+      "tags": ["sales", "data", "enrichment", "outbound", "pipeline", "platform", "automation"]
+    },
+    {
+      "domain": "activecampaign.com",
+      "name": "ActiveCampaign",
+      "url": "https://www.activecampaign.com",
+      "blurb": "Marketing automation for email, CRM and funnel journeys, with deep tagging and attribution.",
+      "tags": ["automation", "email", "crm", "funnel", "campaign", "platform", "nurture"]
+    },
+    {
+      "domain": "hubspot.com",
+      "name": "HubSpot",
+      "url": "https://www.hubspot.com",
+      "blurb": "CRM and inbound marketing platform covering content, lead capture and lifecycle automation.",
+      "tags": ["crm", "platform", "automation", "funnel", "campaign", "sales"]
+    }
+  ]
+}

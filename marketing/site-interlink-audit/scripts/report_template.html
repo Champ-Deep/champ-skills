@@ -36,23 +36,45 @@ nav button[aria-selected="true"]{background:var(--acc);color:#08111c;border-colo
 .kpi b{display:block;font-size:25px;font-weight:680;letter-spacing:-.6px;line-height:1.15}
 .kpi span{display:block;font-size:12px;color:var(--mut);margin-top:3px}
 .kpi small{display:block;font-size:11.5px;color:var(--dim);margin-top:2px}
-.kpi.g b{color:var(--bad)} .kpi.w b{color:var(--warn)} .kpi.i b{color:var(--info)}
-.kpi.k b{color:var(--ok)}
+/* Severity tint, not identity. The treemap owns the colour scale for funnel stages, and
+   the ramp owns it for stranded share. Reusing those hues on the KPI numbers made a
+   reader ask whether orange meant "BOFU" or "warning". */
+.kpi b{color:var(--fg)}
+.kpi.w .swatch{box-shadow:0 0 0 3px rgb(255 198 92/.14)}
+.kpi .swatch{width:26px;height:3px;border-radius:2px;background:var(--dim);margin-bottom:8px}
+.kpi.g .swatch{background:var(--bad)} .kpi.w .swatch{background:var(--warn)}
+.kpi.k .swatch{background:var(--ok)}
 
-.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:0 0 14px;
-  font-size:12.5px;color:var(--mut)}
+/* Two independent colour scales were crammed onto one line with no separation. */
+.legend{display:grid;gap:7px;margin:0 0 16px;font-size:12.5px;color:var(--mut)}
+.legend .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.legend .cap{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);min-width:104px}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;
   vertical-align:-1px}
 .legend .it{display:inline-flex;align-items:center}
 .legend .ramp{display:inline-block;width:96px;height:11px;border-radius:3px;
   background:linear-gradient(90deg,rgb(96,52,150),rgb(150,42,116),rgb(255,42,96))}
 
-.finds{display:grid;gap:10px;margin-bottom:18px}
+/* Findings are the report's headline, so they lead and sit side by side. Stacked
+   full-width banners left most of each card empty and pushed the treemap below the fold. */
+.finds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));
+  gap:12px;margin-bottom:20px}
 .find{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--dim);
-  border-radius:10px;padding:12px 15px}
+  border-radius:12px;padding:15px 17px;display:grid;gap:7px;align-content:start;
+  min-width:0}
+.find h3{margin:0;font-size:15.5px;font-weight:650;line-height:1.32;letter-spacing:-.1px;
+  text-wrap:balance}
+.find p{margin:0;font-size:13.5px;color:var(--mut);line-height:1.52}
+/* Every card carries its severity, and the word is printed. A card whose accent was a
+   dim grey read as disabled rather than as "this is fine". */
 .find.high{border-left-color:var(--bad)}
 .find.mid{border-left-color:var(--warn)}
-.find.low{border-left-color:var(--dim)}
+.find.low{border-left-color:var(--ok)}
+.find .sev{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:1px}
+.find.high .sev{color:var(--bad)} .find.mid .sev{color:var(--warn)}
+.find.low .sev{color:var(--ok)}
 .find b{display:block;font-size:14.5px;margin-bottom:3px}
 .find span{font-size:13px;color:var(--mut);line-height:1.55}
 
@@ -212,22 +234,26 @@ $('#kpis').innerHTML = [
   ['g', S.no_tofu, 'commercial pages with no research page', 'missing TOFU layer'],
   ['i', S.work_links, 'links to add', S.work_pages+' pages to edit'],
   ['k', S.in_sitemap, 'pages in the XML sitemap', 'of '+S.pages+' crawled'],
-].map(([c,b,l,s])=>`<div class="kpi ${c}"><b>${b.toLocaleString()}</b><span>${l}</span>`+
+].map(([c,b,l,s])=>`<div class="kpi ${c}"><i class="swatch"></i>`+
+  `<b>${b.toLocaleString()}</b><span>${l}</span>`+
   (s?`<small>${s}</small>`:'')+`</div>`).join('');
 
 $('#finds').innerHTML = (D.findings && D.findings.length) ? D.findings.map(f =>
-  `<div class="find ${f.sev}"><b>${esc(f.t)}</b><span>${esc(f.b)}</span></div>`).join('')
+  `<article class="find ${f.sev}"><span class="sev">${esc(f.sev)}</span>`+
+  `<h3>${esc(f.t)}</h3><p>${esc(f.b)}</p></article>`).join('')
   : '';
 
+/* Two independent scales. They used to share one cramped line, which made a reader
+   wonder whether a colour meant "BOFU" or "warning". Each gets its own labelled row. */
 $('#legend').innerHTML =
+  `<div class="row"><span class="cap">Stranded</span>` +
   `<span class="it" style="gap:7px"><span class="ramp"></span>` +
   `<span>fewer pages with no inbound link &rarr; more</span></span>` +
   `<span style="color:var(--dim)">tile area = page count &middot; % stranded = share of ` +
-  `that section with zero inbound links</span>` +
-  `<span style="color:var(--dim)">funnel mix per tile: ` +
+  `that section with zero inbound links</span></div>` +
+  `<div class="row"><span class="cap">Funnel stage</span>` +
   Object.entries(ROLE_C).map(([k,v]) =>
-    `<i style="background:${v};width:9px;height:9px;border-radius:2px;display:inline-block;`+
-    `margin:0 3px 0 7px"></i>${k}`).join('') + `</span>`;
+    `<span class="it"><i style="background:${v}"></i>${k}</span>`).join('') + `</div>`;
 
 /* ---------- view switch ---------- */
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
@@ -281,7 +307,10 @@ function drawMap(){
   // thing the verifier measures. A 23px sliver is 81 design units, which would wrongly pass
   // a 40px floor if the units were mixed.
   const UNIT = boxW / 1200;
-  const MIN_W = Math.max(44, boxW / 9), MIN_H = 30;   // rendered px
+  // A tile must be wide enough to hold its SHORT form at the minimum font. "solutions"
+  // abbreviates to "solu" (4 chars) which needs ~30px at 9px, plus padding: so require
+  // room for a 4-char abbreviation plus the tile chrome, not a round number of pixels.
+  const MIN_W = Math.max(58, boxW / 8), MIN_H = 34;   // rendered px
   let shown = D.groups.slice();
   const fits = g => g._rect && (g._rect[2]*UNIT) >= MIN_W && (g._rect[3]*UNIT) >= MIN_H;
   let keep = shown.filter(fits);
@@ -290,19 +319,39 @@ function drawMap(){
   if (keep.length && keep.length < shown.length) {   // fold unnamed slivers at any width
     const fold = shown.filter(g => !keep.includes(g));
     if (fold.length) {
-      const boxRect = fold.reduce((acc,g)=>{
-        if(!acc) return g._rect.slice();
-        const x2 = Math.max(acc[0]+acc[2], g._rect[0]+g._rect[2]);
-        const y2 = Math.max(acc[1]+acc[3], g._rect[1]+g._rect[3]);
-        acc[0] = Math.min(acc[0], g._rect[0]); acc[1] = Math.min(acc[1], g._rect[1]);
-        acc[2] = x2 - acc[0]; acc[3] = y2 - acc[1];
-        return acc;
-      }, null);
-      // The tail's label must be renderable even when its rect is a narrow column, so
-      // give it a dedicated one-word form the fitting logic can use as-is.
-      keep.push({sec:'rest', short:'rest',
-                 n: fold.reduce((a,g)=>a+g.n,0),
-                 z: fold.reduce((a,g)=>a+g.z,0), tail:true, _rect: boxRect});
+      // Place the synthetic tail in the LARGEST FREE RECTANGLE of the map box. A union
+      // box over the folded rects can contain a kept tile whenever the folded set spans
+      // more than one column, which is how "rest" came to overlap "solu...".
+      function freeRects(boxW, boxH, rects) {
+        const taken = rects.filter(g => g._rect).map(g => g._rect);
+        let best = null;
+        // candidate strips: each x edge and y edge of every taken rect, plus the borders
+        const xs = new Set([0, boxW]);
+        const ys = new Set([0, boxH]);
+        taken.forEach(r => { xs.add(r[0]); xs.add(Math.min(r[0]+r[2], boxW));
+                             ys.add(r[1]); ys.add(Math.min(r[1]+r[3], boxH)); });
+        const X = [...xs].filter(v => v >= 0 && v <= boxW).sort((a,b)=>a-b);
+        const Y = [...ys].filter(v => v >= 0 && v <= boxH).sort((a,b)=>a-b);
+        for (let i = 0; i + 1 < X.length; i++) {
+          for (let j = 0; j + 1 < Y.length; j++) {
+            const cx0 = X[i], cy0 = Y[j], cw = X[i+1]-X[i], ch = Y[j+1]-Y[j];
+            if (cw <= 0 || ch <= 0) continue;
+            const mx = cx0 + cw/2, my = cy0 + ch/2;
+            const hit = taken.some(r => mx > r[0] && mx < r[0]+r[2] &&
+                                         my > r[1] && my < r[1]+r[3]);
+            if (hit) continue;
+            const area = cw * ch;
+            if (!best || area > best.area) best = {rect:[cx0, cy0, cw, ch], area};
+          }
+        }
+        return best;
+      }
+      const free = freeRects(D.mapw, D.maph, keep);
+      if (free) {
+        keep.push({sec:'rest', short:'rest',
+                   n: fold.reduce((a,g)=>a+g.n,0),
+                   z: fold.reduce((a,g)=>a+g.z,0), tail:true, _rect: free.rect});
+      }
     }
     // If the folded union is itself too narrow to label, drop the synthetic tile rather
     // than render a 23px sliver with a meaningless label.

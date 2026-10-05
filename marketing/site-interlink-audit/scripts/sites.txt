@@ -1,0 +1,19 @@
+# Sites to audit. One domain per line. Blank lines and # comments are ignored.
+# Also accepts a JSON array of strings, or comma-separated values.
+#
+# Refresh everything in this file:
+#   python3 refresh.py --list sites.txt
+#
+# Refresh one domain:
+#   python3 refresh.py --site spanglobalservices.com
+#
+# Re-audit what we already have, without crawling anything new:
+#   python3 refresh.py --all
+#
+# Force a fresh crawl even if a cached bundle exists:
+#   python3 refresh.py --list sites.txt --force
+
+spanglobalservices.com
+lakeb2b.com
+
+# Add future client sites below.

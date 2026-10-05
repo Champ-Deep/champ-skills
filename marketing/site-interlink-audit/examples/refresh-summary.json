@@ -1,0 +1,99 @@
+{
+  "sites": {
+    "deependhq.com": {
+      "host": "deependhq.com",
+      "stem": "bundle-deependhq-com",
+      "report": "/Users/deep/.hermes/cache/scratch/sitearch/reports/interlink-deependhq-com.html",
+      "verify": "26 passed, 0 failed",
+      "related": "/Users/deep/.hermes/cache/scratch/sitearch/bundle-deependhq-com-related.json",
+      "widget": "/Users/deep/.hermes/cache/scratch/sitearch/widget-deependhq-com/related-sites.html",
+      "visual": "0 fail",
+      "ok": true,
+      "entities": 4,
+      "work_pages": 0,
+      "work_links": 0,
+      "seconds": 8.2,
+      "checked": "2026-10-04T21:01:23Z"
+    },
+    "apollo.io": {
+      "host": "apollo.io",
+      "stem": "bundle-apollo-io",
+      "report": "/Users/deep/.hermes/cache/scratch/sitearch/reports/interlink-bundle-apollo-io.html",
+      "verify": "29 passed, 0 failed",
+      "related": "/Users/deep/.hermes/cache/scratch/sitearch/bundle-apollo-io-related.json",
+      "widget": "/Users/deep/.hermes/cache/scratch/sitearch/widget-apollo-io/related-sites.html",
+      "ok": true,
+      "entities": 60,
+      "work_pages": 391,
+      "work_links": 743,
+      "seconds": 57.6,
+      "checked": "2026-10-04T20:54:08Z"
+    },
+    "www.activecampaign.com": {
+      "host": "www.activecampaign.com",
+      "stem": "bundle-activecampaign-com",
+      "report": "/Users/deep/.hermes/cache/scratch/sitearch/reports/interlink-activecampaign-com.html",
+      "verify": "29 passed, 0 failed",
+      "related": "/Users/deep/.hermes/cache/scratch/sitearch/bundle-activecampaign-com-related.json",
+      "widget": "/Users/deep/.hermes/cache/scratch/sitearch/widget-activecampaign-com/related-sites.html",
+      "visual": "0 fail",
+      "ok": true,
+      "entities": 60,
+      "work_pages": 288,
+      "work_links": 568,
+      "seconds": 34.3,
+      "checked": "2026-10-04T21:00:15Z"
+    },
+    "www.apollo.io": {
+      "host": "www.apollo.io",
+      "stem": "bundle-apollo-io",
+      "report": "/Users/deep/.hermes/cache/scratch/sitearch/reports/interlink-apollo-io.html",
+      "verify": "29 passed, 0 failed",
+      "related": "/Users/deep/.hermes/cache/scratch/sitearch/bundle-apollo-io-related.json",
+      "widget": "/Users/deep/.hermes/cache/scratch/sitearch/widget-apollo-io/related-sites.html",
+      "visual": "0 fail",
+      "ok": true,
+      "entities": 60,
+      "work_pages": 391,
+      "work_links": 743,
+      "seconds": 59.6,
+      "checked": "2026-10-04T21:01:15Z"
+    },
+    "www.lakeb2b.com": {
+      "host": "www.lakeb2b.com",
+      "stem": "bundle-lakeb2b-com",
+      "report": "/Users/deep/.hermes/cache/scratch/sitearch/reports/interlink-lakeb2b-com.html",
+      "verify": "29 passed, 0 failed",
+      "related": "/Users/deep/.hermes/cache/scratch/sitearch/bundle-lakeb2b-com-related.json",
+      "widget": "/Users/deep/.hermes/cache/scratch/sitearch/widget-lakeb2b-com/related-sites.html",
+      "visual": "0 fail",
+      "ok": true,
+      "entities": 60,
+      "work_pages": 324,
+      "work_links": 634,
+      "seconds": 196.8,
+      "checked": "2026-10-04T21:04:40Z"
+    },
+    "www.spanglobalservices.com": {
+      "host": "www.spanglobalservices.com",
+      "stem": "bundle-spanglobalservices-com",
+      "report": "/Users/deep/.hermes/cache/scratch/sitearch/reports/interlink-spanglobalservices-com.html",
+      "verify": "29 passed, 0 failed",
+      "related": "/Users/deep/.hermes/cache/scratch/sitearch/bundle-spanglobalservices-com-related.json",
+      "widget": "/Users/deep/.hermes/cache/scratch/sitearch/widget-spanglobalservices-com/related-sites.html",
+      "visual": "0 fail",
+      "ok": true,
+      "entities": 60,
+      "work_pages": 40,
+      "work_links": 63,
+      "seconds": 191.1,
+      "checked": "2026-10-04T21:07:51Z"
+    }
+  },
+  "last_run": "2026-10-04T21:07:51Z",
+  "totals": {
+    "total": 5,
+    "ok": 5,
+    "failed": 0
+  }
+}

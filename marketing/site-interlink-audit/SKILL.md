@@ -132,6 +132,118 @@ certain when it came from a heuristic. When the tool cannot infer entities for a
 - Add an explicit "no ellipsised tile label" assertion. An ellipsis reads to a client as
   broken text even though the verifier's own clip check passes.
 
+## Refresh, related links, CLEF, and the on-site widget
+
+Four commands, one crawl. See `PLATFORM.md` for the full guide.
+
+```bash
+python3 refresh.py --list sites.txt     # refresh every site in a drop-in list
+python3 refresh.py --all                # re-audit stored bundles, crawl nothing new
+python3 semantic.py bundle-<site>.json  # related links beyond same-technology
+python3 component.py --bundle bundle-<site>.json   # the embeddable carousel
+```
+
+`refresh.py` reuses a cached crawl unless `--force`, rebuilds four artefacts per site
+(plan, report, related links, widget), writes `refresh-summary.json`, and exits non-zero if
+any site fails. It takes a lock so two refreshes cannot interleave.
+
+### Related links, not just same-technology
+
+`semantic.py` finds the links nobody has thought of: "Data Cleansing -> What is Data
+Cleansing?", "Healthcare List -> What is a Healthcare Email List?". TF-IDF over body and
+title (never the URL, which rewards slug similarity over content), nearest neighbours via
+an inverted index over discriminating terms. 3,218 pages in ~35s; an O(n^2) scan took 4m18s.
+
+Bands, not magnitudes: `strong` / `likely` / `possible` / `weak`. Every suggestion carries a
+written reason.
+
+Three rules keep the shortlist honest:
+
+- **One direction per pair.** "A links to B" and "B links to A" are one editorial decision.
+  19% of candidate rows were the mirror of another row (1,393 on LakeB2B), which crowded the
+  top of the list with mirrors of itself. Keep the higher-scoring direction and flag the rest
+  `link_back_too`.
+- **`link_back_too` is built from source counts, not the score.** The rule score is symmetric
+  in A and B by construction, so "the reverse also scored well" was true for every mirrored
+  pair and carried no information. It now means both pages are suggested from three or more
+  different sources.
+- **A conversion page can be a target but never a source.** `/free-trial`, `/demo`,
+  `/contact` and `corporate_brochure` pages are legitimate link destinations and terrible
+  places to host an editorial reference. `usable()` gates targets; `can_host()` gates
+  sources.
+
+### CLEF is optional and gated
+
+Cloudflare CLEF is a SystemOne-API decision model (Apache 2.0). Full weights are **55 GB**
+and `clef-flash` is **19 GB**, so neither fits a laptop disk; Workers AI serves the same API
+for pennies. Modes: `none` (rules only, fully functional), `hosted`
+(`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`), `local` (`CLEF_PATH`).
+
+```bash
+python3 semantic.py bundle-<site>.json   # prints: clef mode: none | hosted | local
+```
+
+All questions go out in ONE batched request. Blend once, keep the rule score in its own
+column, and never let a missing judgement outrank a judged one.
+
+### The on-site component
+
+`component.py` emits `related-sites.html` + `related-sites.js`. The page announces itself
+via a meta tag and the widget scores `catalog.json` against it at runtime. Never recommends
+the site you are already on. Themable through CSS custom properties (`--rsw-bg`, `--rsw-fg`,
+`--rsw-mut`, `--rsw-line`, `--rsw-acc`, `--rsw-face`).
+
+## What an adversarial review caught, and how it is fixed
+
+Every item below was found by an external review of the Span report and is now a regression
+test in `test_units.py` (`t_adversarial_review`). The pattern: a headline number or a
+matching rule that was confident and wrong.
+
+- **A scary orphan rate was mostly one low-value folder.** "76% invisible" was 2,024 of
+  2,434 unlinked pages sitting under `/faq/`. The summary now reports `faq_pages`,
+  `pages_ex_faq` and `zero_in_ex_faq` so the finding can state both rates, and the headline
+  names the split. Never quote a site-wide orphan rate without saying what is in it.
+- **Menu links were deleted, then the report called the result invisible.** `boilerplate`
+  removed any target linked from a large share of pages, which included every menu
+  destination, so menu-linked pages scored zero inbound while being perfectly reachable.
+  Boilerplate is now position-based: a recurring target is furniture only if it also sits in
+  nav/header/footer/aside. Degree is reported three ways: `in`, `in_content`, `in_menu`.
+- **A whole content area sat outside the sitemap index.** The Span blog has 1,613 posts in
+  `/blog/sitemap_index.xml`, referenced by neither `sitemap_index.xml` nor `robots.txt`, so
+  the crawl saw 4 blog pages and concluded there was no research layer. `discover_sitemaps`
+  now probes conventional out-of-index names.
+- **Entities were matched on single words, so links followed the word not the topic.**
+  Fixed with ownership as the governing rule: a name that has its own product page is an
+  entity, whatever its shape or frequency. This admits `aws` and `sap` (three letters, on
+  58% and 63% of pages) and still rejects `chief`, `health` and `account`, which own nothing.
+- **The pages that drive revenue were missing from the entity set.** `MAX_CLUSTER_MEMBERS`
+  stops one geography cluster from eating 12 of 60 slots, capped clusters emit the remainder
+  as singletons so nothing is dropped, and owned names are promoted past the cap. Span went
+  from 60 entities to 319 with ServiceNow, Salesforce, AWS, SAP, Workday and Five9 present.
+- **List product pages were labelled research pages.** `role_from_url()` overrides the text
+  classifier on URL shape: anything under a list directory is commercial, `/blog/` is TOFU,
+  white papers and guides are MID. A page that sells a list is BOFU whatever its copy says.
+- **The worklist fed pages that were already well linked.** Targets are now scored by
+  inbound: an orphan target is worth 3x, one with 200 inbound is damped to 0.35x.
+- **Redirecting targets reached the worklist.** The check compared a normalised URL against
+  a raw key and never matched, so it looked like it worked while doing nothing. Redirect keys
+  are normalised on entry, targets are dropped, and `redirecting_targets` reports what was
+  dropped so nothing disappears quietly.
+
+- **Ownership must mean a real hub, not a string match.** Fixing the money pages with an
+  ownership rule created a second defect: a name "owns" a page when its slug appears in that
+  page's URL, so `from` owned `/case-studies/from-dormant-data-to-349k-in-revenue`, `key`
+  owned the SurveyMonkey page, `thanks` owned `/thanks`, `web` owned `/webinars` and `sgs`
+  owned the corporate brochure. Half the worklist was junk. `owns_a_hub()` now requires a
+  topic page: not a question-shaped slug, not an FAQ/white-paper/case-study/brochure
+  section, not an append service, not a utility leaf. Section names are normalised because
+  they arrive hyphenated, underscored or spaced depending on the theme, and the site's own
+  name is never one of its topics.
+- **Function words and UI words are never topics.** `FUNCTION_WORD` and `GENERIC_WORD` cover
+  prepositions, question words and courtesy words. Splitting a slug on hyphens and stripping
+  the page-type tail leaves the preposition behind, so `from-dormant-data-to-349k` yields
+  `from`. This is the rule to check first when a suggested entity sounds absurd.
+
 ## Files
 
 All code lives in `scripts/`. Run from that directory so the relative imports resolve:

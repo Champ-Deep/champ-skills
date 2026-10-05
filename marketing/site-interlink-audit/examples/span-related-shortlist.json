@@ -1,0 +1,186 @@
+{
+ "bundle": "bundle-spanglobalservices-com.json",
+ "clef_mode": "none",
+ "shortlist": [
+  {
+   "source": "https://www.spanglobalservices.com/email-lists",
+   "source_title": "Our Data",
+   "target": "https://www.spanglobalservices.com/faq/what-do-i-get-with-an-email-list",
+   "target_title": "What do I get with an email list?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/email-lists",
+   "source_title": "Our Data",
+   "target": "https://www.spanglobalservices.com/faq/how-do-i-get-an-email-list-for-marketing",
+   "target_title": "How do I get an email list for marketing",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-cleansing",
+   "source_title": "Data Cleansing",
+   "target": "https://www.spanglobalservices.com/faq/what-is-data-cleansing",
+   "target_title": "What is Data Cleansing?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-cleansing",
+   "source_title": "Data Cleansing",
+   "target": "https://www.spanglobalservices.com/faq/how-is-data-cleansing-done",
+   "target_title": "How is Data Cleansing Done?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-profiling",
+   "source_title": "Data Profiling",
+   "target": "https://www.spanglobalservices.com/faq/what-is-data-profiling",
+   "target_title": "What is Data Profiling?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-profiling",
+   "source_title": "Data Profiling",
+   "target": "https://www.spanglobalservices.com/faq/how-data-profiling-is-done",
+   "target_title": "How Data Profiling is done?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-profiling",
+   "source_title": "Data Profiling",
+   "target": "https://www.spanglobalservices.com/faq/what-is-data-profiling-in-business-intelligence",
+   "target_title": "What is Data Profiling in business intelligence?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 0.9999,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/healthcare-lists",
+   "source_title": "Healthcare List",
+   "target": "https://www.spanglobalservices.com/faq/what-is-a-healthcare-email-list",
+   "target_title": "What is a Healthcare Email List?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-verification",
+   "source_title": "Data Verification",
+   "target": "https://www.spanglobalservices.com/faq/what-is-data-verification",
+   "target_title": "What is Data Verification?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/data-verification",
+   "source_title": "Data Verification",
+   "target": "https://www.spanglobalservices.com/faq/how-do-i-get-data-verification-services",
+   "target_title": "How do I get Data Verification Services?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/faq/what-is-centos",
+   "source_title": "What is CentOS?",
+   "target": "https://www.spanglobalservices.com/faq/which-industries-use-centos",
+   "target_title": "Which industries use CentOS?",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 1.0,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  },
+  {
+   "source": "https://www.spanglobalservices.com/faq/what-is-centos",
+   "source_title": "What is CentOS?",
+   "target": "https://www.spanglobalservices.com/technology-lists/centos-users-list",
+   "target_title": "Centos User List",
+   "score": 0.652,
+   "band": "strong",
+   "rule": 0.652,
+   "semantic": 0.9999,
+   "clef": null,
+   "why": [
+    "same funnel stage",
+    "FAQ answers should point at the full page"
+   ]
+  }
+ ]
+}

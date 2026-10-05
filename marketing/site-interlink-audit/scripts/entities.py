@@ -37,8 +37,74 @@ STOP = {
     "worldwide", "global", "niche", "wide", "specific", "custom", "various", "different",
 }
 
+# Words that carry no topic on their own. A slug like "from-dormant-data-to-349k" yields
+# "from" once the page-type tail is stripped, and without this it becomes an entity.
+FUNCTION_WORD = {
+    "from", "to", "for", "with", "without", "and", "or", "but", "not", "the", "a", "an",
+    "of", "in", "on", "at", "by", "as", "is", "are", "was", "were", "be", "been", "it",
+    "its", "this", "that", "these", "those", "we", "our", "us", "you", "your", "they",
+    "them", "their", "he", "she", "his", "her", "how", "why", "what", "when", "where",
+    "who", "which", "can", "will", "should", "would", "could", "may", "into", "over",
+    "under", "about", "after", "before", "than", "then", "there", "here", "all", "any",
+    "some", "each", "more", "most", "less", "least", "very", "just", "only", "also",
+    "via", "per", "up", "down", "out", "off", "again", "once", "ever", "never", "one",
+    "two", "new", "best", "top", "how-to", "step", "steps", "guide", "using", "use",
+}
+
 ENTITY_MIN_PAGES = 3     # below this it is noise, not a hub
 MAX_ENTITIES = 60        # keep the report readable
+# One cluster must not eat the whole budget. A geography theme ("Netherlands +12") consumed
+# 12 of 60 slots on the Span audit, which is how ServiceNow, Salesforce, AWS, SAP and
+# Workday were crowded out of the entity set despite owning pages and driving revenue.
+# Cap members per cluster; the report lists the largest members anyway.
+MAX_CLUSTER_MEMBERS = 6
+
+# An adversarial review of the Span worklist found 44 of 63 proposed links matched an
+# ordinary English word rather than a topic: "chief" pulled ADP Payroll to Chief Medical
+# Officers, "directors" matched "directory", "health" sent Meditech to a consumer Health and
+# Wellness list. A word that names no organisation, place or product cannot be an entity, and
+# no site-specific list can be exhaustive, so this is a general blocklist. Proper nouns that
+# merely collide with a word are unaffected: only the bare lowercase form is blocked.
+GENERIC_WORD = {
+    # job titles and org structure
+    "chief", "director", "directors", "officer", "officers", "executive", "executives",
+    "president", "manager", "managers", "owner", "owners", "founder", "founders",
+    "staff", "team", "teams", "employee", "employees", "senior", "junior",
+    "lead", "leader", "leadership", "role", "roles", "title", "titles", "job", "jobs",
+    "board", "member", "members", "head", "ceo", "cfo", "cio", "cmo", "cto", "coo",
+    "president", "chairman", "chairwoman", "supervisor", "administrator",
+    # generic business and technical vocabulary
+    "account", "accounts", "accounting", "cloud", "asset", "assets", "managed",
+    "consulting", "consultant", "consultants", "advisory", "application",
+    "applications", "app", "computer", "computers", "network", "networks",
+    "software", "hardware", "security", "secure", "cyber", "cybersecurity",
+    "repository", "file", "files", "document", "documents", "content", "media",
+    "channel", "channels", "campaign", "campaigns", "program", "programs",
+    "project", "projects", "growth", "value", "values", "success", "quality",
+    "results", "knowledge", "experience", "expertise", "support", "health",
+    "healthy", "wellness", "care", "medical", "clinical", "financial", "finance",
+    "legal", "compliance", "government", "public", "private", "buyer", "buyers",
+    "partner", "partners", "vendor", "vendors", "supplier", "suppliers",
+    "provider", "providers", "enterprise", "enterprises", "organization",
+    "organizations", "organisation", "organisations", "general", "specific",
+    "various", "different", "other", "others", "more", "most", "first", "last",
+    "next", "previous", "current", "recent", "latest", "early", "high", "low",
+    "medium", "large", "small", "major", "minor", "main", "global", "worldwide",
+    "industry", "industries", "market", "sector", "vertical", "segment",
+    "process", "processes", "tool", "tools", "product", "products", "platform",
+    "platforms", "service", "services", "solution", "solutions", "technology",
+    "technologies", "tech", "system", "systems", "database", "databases",
+    "intelligence", "analytics", "analysis", "reporting", "directory", "record",
+    "records", "customer", "customers", "client", "clients", "user", "users",
+    "business", "company", "companies", "management", "strategy", "strategies",
+    "insight", "insights", "performance", "marketing", "outreach", "automation",
+    # courtesy, UI and fragment words. A second review round found these reaching the
+    # worklist as link targets: "thanks" owns /thanks and recurs on 31 pages, "click"
+    # owns nothing but matches CTA copy, and "key" matched the SurveyMonkey page.
+    "thanks", "thank", "welcome", "regards", "sincerely", "click", "here", "learn",
+    "key", "keys", "core", "point", "points", "link", "links", "item", "items",
+    "explore", "discover", "browse", "viewall", "readmore", "continue", "begin",
+}
 
 
 # A slug that reads as a question is FAQ furniture, not an entity.
@@ -61,6 +127,13 @@ STOP |= {
     "medical", "healthcare", "legal", "physician", "physicians", "dental", "dentist",
     "digital", "channel", "channels", "president", "event", "events", "professional",
     "professionals", "corporate", "company", "enterprise", "startup", "startups",
+    # courtesy and UI words. "thanks" owns /thanks, passes the length test and recurs on
+    # 31 pages of a real site, so it became a link target for half the worklist.
+    "thanks", "thank", "welcome", "regards", "sincerely", "click", "here", "learn",
+    # "key" matched the SurveyMonkey page and became a link target. An ordinary noun that
+    # is only ever a fragment of another brand's name.
+    "key", "keys", "core", "point", "points", "link", "links", "item", "items",
+    "explore", "discover", "browse", "viewall", "readmore", "continue", "begin",
     "segment", "segments", "big", "small", "medium", "large", "social", "content",
     "privacy", "policy", "terms", "contacted", "big", "totally", "addressable",
 }
@@ -156,7 +229,7 @@ def is_generic(name):
         return True
     if first.lower() in VERB:
         return True
-    if name.lower() in GENERIC_LOWER:
+    if name.lower() in GENERIC_LOWER or name.lower() in GENERIC_WORD:
         return True
     if len(name) < 3:
         return True
@@ -238,6 +311,61 @@ def count_mentions(nodes, entity):
     return hits
 
 
+# A page only counts as an entity's hub if it is a real destination for that topic.
+# Everything here was letting junk be treated as owned: a question-shaped FAQ slug
+# (/faq/who-can-benefit-from-this-list became the entity "from"), a vendor page that
+# merely contains the word (the SurveyMonkey page claimed "key"), a utility page
+# (/thanks, /web-testing, /webinars) and an append service.
+NOT_A_HUB_SECTION = {
+    "faq", "white-paper", "infographic", "guide", "case-studies", "resource",
+    "corporate_brochure", "home_slider", "marketing_tool", "our_capability",
+    "process_document", "testimonial", "client", "blog", "segment", "segment_2",
+    "gdpr_2", "tech_logo_1", "technographic_2", "blogs_right_side",
+    "person_salesforce_cem", "main_bx", "thankyou", "thanks",
+}
+# path fragments that mark a utility or append page rather than a topic hub
+NOT_A_HUB_PATH = (
+    "/data-append/", "/thank", "/thanks", "/web-testing", "/webinar", "/thank-you",
+    "/sitemap", "/wp-", "/feed", "/rss", "/privacy", "/terms", "/disclaimer",
+    "/cookie", "/gdpr", "/author/", "/tag/", "/category/", "/page/",
+)
+
+
+def owns_a_hub(node):
+    """Does this page stand for a topic, or is it furniture that happens to match?"""
+    u = (node.get("url") or "").lower().rstrip("/")
+    if not u:
+        return False
+    seg = [x for x in re.sub(r"^https?://[^/]+", "", u).split("/") if x]
+    if not seg:
+        return False
+    # a question-shaped slug is an FAQ answer, never a topic hub
+    slug = re.sub(r"\.(html?|php|aspx?|pdf)$", "", seg[-1].lower())
+    if looks_like_question(slug):
+        return False
+    # Section names arrive hyphenated, underscored or spaced depending on the theme, so
+    # normalise before comparing. The corporate brochure compared "corporate_brochure"
+    # against "corporate-brochure", never matched, and let the site's own brand page
+    # qualify as a hub for itself.
+    sec = re.sub(r"[\s_-]+", "_", (node.get("section") or "").strip().lower())
+    if sec in NOT_A_HUB_SECTION:
+        return False
+    if any(p in u for p in NOT_A_HUB_PATH):
+        return False
+    # a bare utility page like /thanks or /web-testing: the whole slug is the path, and
+    # the slug is not a topic. Require the leaf slug to actually name something.
+    leaf = seg[-1].lower()
+    if leaf in ("thanks", "thank-you", "thankyou", "web-testing", "web-testing-tools",
+                "testimonials", "contact", "about", "contact-us", "about-us"):
+        return False
+    if len(seg) <= 2 and len(leaf) < 4:
+        return False
+    # the site is not its own entity
+    if len(seg) <= 1:
+        return False
+    return True
+
+
 def build_clusters(bundle, text_by_id=None):
     """
     Return [(label, [entities], {entity: pages})] plus a per-page entity index.
@@ -317,16 +445,68 @@ def build_clusters(bundle, text_by_id=None):
 
     scored = []
     for name, pages in mention.items():
-        if not entity_like(name):
+        # Ownership, computed up front, is the exemption from every filter below. It must
+        # mean "this name owns a HUB page", not "the string appears somewhere in a URL".
+        # An adversarial review round two found the looser version let junk through: "from"
+        # owned /faq/who-can-benefit-from-this-list, "key" owned the SurveyMonkey page,
+        # "thanks" owned /thanks, and those three alone made up half the worklist. A name
+        # that only appears in a question-shaped FAQ slug, a thank-you page or an append
+        # service owns nothing.
+        owned_early = [nd for nd in slug_index.get(name.strip(), []) if owns_a_hub(nd)]
+        # The shape heuristic is a guess about words; ownership is evidence. "aws" and "sap"
+        # are three-letter acronyms, which the length rule rejected outright, yet
+        # /technology-lists/sap-users-list and complete-aws are two of the highest-traffic
+        # technology pages on the site. A name that owns a product page is a product.
+        # An ordinary English word is not an entity at all, whatever it owns. "thanks"
+        # passed the shape test on length alone and then qualified on 31 pages.
+        if name.strip().lower() in GENERIC_WORD:
             continue
-        # A single common word appearing on a large share of the site is the theme or the
-        # brand, not a link target. Multi-word proper nouns ("sage 100", "fortune 500") are
-        # never the site theme, so they are exempt.
-        if len(name.split()) == 1 and share.get(name, 1.0) > 0.40:
+        # The site is not one of its own topics. "sgs" owns the corporate brochure page,
+        # appears on every page, and proposed /corporate-brochure/sgs-corporate-brochure
+        # as a link target for the lead cost calculator.
+        # the bundle records the host, and a site's short brand is not always its domain
+        # stem ("spanglobalservices" versus the SGS in its own logo), so accept both plus
+        # any acronym the host initialises to.
+        host = re.sub(r"^www\.", "", (bundle.get("host") or bundle.get("domain") or "")).lower()
+        stem = host.split(".")[0]
+        self_names = {stem, stem.replace("-", ""), stem.replace("-", " ")}
+        head = re.sub(r"[^a-z]", "", stem)
+        if 3 <= len(head) <= 6:
+            self_names.add(head)          # spanglobalservices -> sgs
+        if name.strip().lower() in self_names:
             continue
-        if len(name.split()) == 2 and share.get(name, 1.0) > 0.60:
+        # Function words are never a topic, whatever page they came from. Splitting
+        # /case-studies/from-dormant-data-to-349k-in-revenue on hyphens leaves "from",
+        # which then owned that case study and was proposed as a link target for 9 pages.
+        if name.strip().lower() in FUNCTION_WORD:
             continue
-        owned = slug_index.get(name.strip(), [])
+        if not entity_like(name) and not owned_early:
+            continue
+        # A single common word appearing on a large share of the site is usually the theme
+        # or the brand. But an adversarial review of the Span report found the opposite
+        # failure: ServiceNow, Salesforce, AWS, SAP, Workday and Microsoft Dynamics, the
+        # pages that drive revenue, were all missing from the entity set while long-tail
+        # single words survived. AWS sits on 58% of pages and SAP on 63%, so the share test
+        # deleted exactly the money pages. The exemption is ownership: a name with its own
+        # product page is a hub regardless of how often the word appears, because a footer
+        # menu mentioning it everywhere is not the same as it being the site theme.
+        owned_early = slug_index.get(name.strip(), [])
+        if len(name.split()) == 1 and share.get(name, 1.0) > 0.40 \
+                and not owned_early:
+            continue
+        # A single ordinary English word is not an entity, however often it appears.
+        w0 = name.split()
+        # Distinctiveness must hold for EVERY name, not only two-word ones. The old test
+        # only ran for `len(name.split()) == 2`, so "chief" on 40% of pages sailed through
+        # while a two-word phrase with the same share was dropped.
+        if share.get(name, 1.0) > 0.60 and len(w0) >= 1 and not owned_early:
+            continue
+        # Case cannot be the test: slugs lowercase everything, so "servicenow" and "chief"
+        # look identical here. What separates them is whether the name OWNS a page. A product
+        # has "/technology-lists/servicenow-users-list"; "chief" owns nothing and only ever
+        # appears inside a job-title list on someone else's page. slug_index already encodes
+        # this, so rely on it rather than on a heuristic.
+        owned = owned_early
         if not owned:
             continue
         discussed = len(pages)
@@ -334,20 +514,37 @@ def build_clusters(bundle, text_by_id=None):
         # owning a hub page is the strongest signal there is
         hub_bonus = 40 if owned else 0
         # specificity: mention count alone ranks "technology" above "servicenow". Reward
-        # names that read as products (mixed case, acronym, digit, or multi-token proper
-        # nouns) and damp ones that are plain common words.
+        # names that read as products (multi-token, or carrying a digit) and damp ones that
+        # are plain single words.
         w = name.split()
         # multiplier in [0.15, 4]: how much does this look like a product, not a common word
         mult = 1.0
-        if any(c.isupper() for c in name[1:]): mult += 1.0        # Salesforce, Sage, Workday
         if any(ch.isdigit() for ch in name):  mult += 0.8         # Sage 100, Dynamics 365
         if len(w) > 1:                        mult += 0.5         # multi-token proper noun
-        if all(x.islower() for x in w) and len(w) == 1:
-            mult -= 0.85                                          # "technology", "cloud"
+        if len(w) == 1:
+            # A lowercase single word is only a real product if it OWNS a page. Slugs are
+            # lowercase, so "servicenow" is indistinguishable from "chief" on case alone; what
+            # separates them is that one has /technology-lists/servicenow-users-list and the
+            # other owns nothing. The old flat -0.85 punished both, which is why ServiceNow,
+            # Salesforce, SAP and Workday never survived the cut while long-tail single words
+            # did.
+            if owned:
+                mult += 0.9                                       # a product with its own page
+            else:
+                mult -= 0.85                                      # a word in passing copy
         mult = max(0.15, min(4.0, mult))
         scored.append(((discussed + stranded * 2 + hub_bonus) * mult, name, pages))
     scored.sort(key=lambda x: -x[0])
-    keep = [x for x in scored[:MAX_ENTITIES]]
+    keep = scored[:MAX_ENTITIES]
+    # Every entity that owns a product page earns a slot, whatever its score. The Span audit
+    # dropped AWS, SAP, Workday, Five9 and VMware from the entity set because the cap was
+    # filled by a geography cluster and long-tail topics. A page that sells a product is
+    # never optional, so owned names are promoted past the cap instead of being discarded.
+    if len(keep) < len(scored):
+        chosen = {n for _, n, _ in keep}
+        promoted = [x for x in scored if x[1] not in chosen and slug_index.get(x[1].strip(), [])]
+        if promoted:
+            keep = keep + promoted
     entities = {name: set(pages) | {p["id"] for p in slug_index.get(name.strip(), [])}
                for _, name, pages in keep}
 
@@ -410,6 +607,19 @@ def build_clusters(bundle, text_by_id=None):
         seen |= comp
         members = sorted(comp, key=lambda m: -len(entities[m]))
         if not members:
+            continue
+        # A component wider than this is one theme (a geography set, a product family), not
+        # a competitive set. Emit the capped members as ONE labelled cluster and every
+        # remaining member as its own singleton, so no entity is ever dropped: the earlier
+        # silent truncation lost 34 of 60 entities on a real site, and truncating without
+        # singletons loses them again. The cap still stops one theme from monopolising the
+        # cluster list, which is what crowded the money pages out of the entity budget.
+        if len(members) > MAX_CLUSTER_MEMBERS:
+            head = members[:MAX_CLUSTER_MEMBERS]
+            label = head[0].title() + f" +{len(head)-1}"
+            clusters.append((label, head, {m: entities[m] for m in head}))
+            for m in members[MAX_CLUSTER_MEMBERS:]:
+                clusters.append((m.title(), [m], {m: entities[m]}))
             continue
         if len(members) > 14:
             # Too broad to be ONE competitive set, but the entities are still real and
