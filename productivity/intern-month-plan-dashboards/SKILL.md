@@ -175,8 +175,21 @@ Checks 6 and 7 are the ones that catch real defects. In the first build they cau
 
 Then read a 1440 screenshot with the Read tool and apply the five-second test: state what the intern should do today and when the next deliverable is. If you cannot from the screenshot alone, the layout failed.
 
+## Deep's own cross-team view (not the intern's view)
+
+The per-intern dashboard answers "what do I do today". Deep needs the inverse: "what are all eight doing, how do they connect, and what am I holding up". That is a different artifact with a different job, built by `build-team-dashboard.js` (gate: `team_dashboard_gate.py`).
+
+Shape that worked: **Deep's lanes first** (the four things only he can move), then people by pod, then a dependency map, then a single "what I owe" panel.
+
+1. **Lead with his own lanes, not with the intern cards.** The page has to answer his day, with the team inside it. Intern-first buries the only part nobody else can do.
+2. **The dependency map is the part with no existing source.** Every intern has a plan; the links between them live only in the hub note. Extract them explicitly as an edge list (`{a, b, label, critical}`) or the page is just eight task lists side by side, which is what the per-intern dashboards already are.
+3. **Pair the owes with the owes.** Each card carries "what I owe <them>" from `packs/<id>/conversation.md`, so a glance shows both directions of the same debt. This is what makes the page useful for maintenance rather than just visibility.
+4. **Read `WHAT YOU OWE` out of the packs, never re-derive it.** `sed -n '18,40p' packs/<id>/conversation.md` per person returns all eight in one batch. A regex like `(?is)(what i owe.*)` grabs the heading and nothing else, because the section starts with a one-line instruction and the items are a markdown checkbox list, not prose.
+
 ## Pitfalls
 
+- **Do not let a generated page hardcode a scratch path for its CSS.** The builders live in the vault and must survive next month, so read the published CSS straight out of the run sheet (`src.split("\n").slice(3,144)`) instead of `/Users/deep/.hermes/cache/scratch/published.css`. A scratch path makes the vault copy fail on rerun with `ENAMETOOLONG`, because a later `fs.readFileSync(CSS)` treats the CSS *string* as a filename. Keep CSS as content end to end.
+- **A gate check can pass while measuring nothing.** `s.count(chr(39)+'s critical link'+chr(39))` printed `got 0` and still passed, because the needle did not match the text it claimed to count. Any check whose expected value and needle disagree should be printed and read, not just asserted. Prove each new assertion fails on a seeded copy before trusting it.
 - **Never slice the `PEOPLE` array with a bracket or quote counter.** Apostrophes inside task strings (`"reps' hands"`) and brackets inside them make every such scanner truncate silently or throw on a valid file. Slice between `const PEOPLE = [` and the `/* ---------- state ---------- */` comment, then `new Function("return " + body)`. This cost two debug cycles in Oct 2026.
 - **A trailing comma can leave an array unclosed and still look correct in the diff.** `["Team",10,[...]],` on the last KRA row closes the inner list and the row but not the `kra:[` block, and every later field then reads as a syntax error far from the cause. Parse `PEOPLE` and assert each object's KRA weights sum to 100 after any edit.
 - **Do not name intern colleagues in a dashboard or pack** if they are not already in the vault as people. Confirm the spelling first.
@@ -198,7 +211,7 @@ Say these plainly. Do not imply the messages were sent.
 
 ## Files
 
-- `build-person-dashboards.js`, `build-packs.js`, `build-combined-emails.js`, `verify.py` and `pack_check.py` live in the vault at `Efforts/Active/<Team> <Month>/handover/` so they survive for the next month. `build-combined-emails.js` and `pack_check.py` arrived Oct 2026 after the undefined-fields incident and are not optional.
+- `build-person-dashboards.js`, `build-packs.js`, `build-combined-emails.js`, `build-team-dashboard.js`, `verify.py`, `pack_check.py` and `team_dashboard_gate.py` live in the vault at `Efforts/Active/<Team> <Month>/handover/` so they survive for the next month. `build-combined-emails.js` and `pack_check.py` arrived Oct 2026 after the undefined-fields incident and are not optional.
 - Per-person packs in `Efforts/Active/<Team> <Month>/handover/packs/`, one folder per intern plus an index `README.md`.
 - Dashboards in `Efforts/Active/<Team> <Month>/dashboards/`, plus a `manifest.json` with per-person task counts.
 
