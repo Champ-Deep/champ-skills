@@ -151,6 +151,22 @@ Keep the combined email note generated, never hand-edited: `build-combined-email
 
 `build-person-dashboards.js`, then `build-packs.js`, then `build-combined-emails.js`. Then `verify.py` and `pack_check.py`. The pack build throws if a dashboard is missing rather than silently shipping an empty folder.
 
+## Adding someone to the roster mid-month
+
+Adding a person is four edits, and the count guard will catch you if you miss the generator side. `build-combined-emails.js` refuses to run on anything other than the expected count, which is the right behaviour: it failed loudly on 9 drafts when it expected 8.
+
+1. **Run sheet `PEOPLE`**: add the entry with all fields, then assert `kra` weights sum to 100 and every `weeks{w}.days` key set matches the calendar exactly. Getting the week keys wrong is silent, so assert them against a hardcoded date list per week, not against `WEEKS.length`.
+2. **`build-packs.js` `ORDER`**: add `{ n, id, first }`. Then add a `CONVOS[id]`, an `OWES[id]` and a `SEND_NOTE[id]`, or the pack builds with empty sections.
+3. **`pack_check.py` `NAMES`**: add the id. Every count in that file derives from `len(NAMES)` on purpose: hardcoded 8s meant the gate had to be edited twice the same day. Derive them.
+4. **`build-combined-emails.js`**: bump the expected count.
+
+Two traps worth naming:
+
+- **A KRA row written as two arrays parses without error.** `[["Name",45,[...]], ["Name",35,[...]]]` inside `kra:[...]` reads as a nested row of length 4 rather than a length-3 row, and the KPI renderer silently drops half of it. Assert `k.length === 3` for every KRA row, not just that the weights sum to 100.
+- **Do not map weeks by feel.** October's weeks are w1 = 1 to 2 Oct (1 working day, 2 Oct is a holiday), w2 = 5 to 9, w3 = 12 to 16, w4 = 21 to 23 (19 and 20 are holidays), w5 = 26 to 30. A first draft put a new joiner's LMS audit on 19 and 20 Oct, which are Ayudha Puja and Vijayadashami.
+
+When one surface moves between two people, update all five places or the two will each plan work the other is doing: the run sheet entry, the person's KRA sheet, their plan note, their email draft, and the other person's sheet. Say the handover in writing in both emails and name the date.
+
 ## Verify (mandatory)
 
 `verify.py` (Playwright + chromium, both verified working on this machine) for the dashboards, and `pack_check.py` for the packs, emails and combined note:
