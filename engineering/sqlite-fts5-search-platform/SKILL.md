@@ -311,6 +311,50 @@ stylesheet is not checked.
 `#6E8894 -> #A0B1B9` and `#E8415A -> #F7A0AA` cleared 4.5:1 on both `--navy-2`
 and `--navy-3`.
 
+## jsdom cannot see a layout bug; a real browser can
+
+jsdom reports the DECLARED value, not the used one. `getBoundingClientRect`
+returns zeros. `getComputedStyle` returns what the stylesheet says. So a page
+can have a correct DOM, correct data and a fully green suite while being visibly
+broken. Four defects survived that way in one project:
+
+1. **Every bar chart rendered with NO FILL.** The fill was a `<span>`, so
+   `display:inline`, and width/height do not apply to an inline box. All 43 bars
+   were 0x0 while the data was correct in every test.
+2. **A card clipped its own footnote by 334px.** Two causes, both invisible
+   without layout: a grid's default `align-items:stretch` forcing the tallest
+   row height onto a shorter card, and a loading placeholder written as
+   `style="height:330px"`, which CAPS the content that replaces it.
+3. **One screen mixed digit conventions.** `toLocaleString('en-IN')` only
+   diverges from the Western pattern past four digits, so `3,798` and `6,04,431`
+   appear on one screen and read as two kinds of number rather than one.
+4. **A list of accounts rendered one card**, because the endpoint paged over
+   contacts and one company held 975 of them. Totals right, array non-empty.
+
+**Rule: a page is not tested until it has been rendered and measured.** Drive
+real Chrome with `playwright-core` against the system binary and assert on
+geometry:
+
+    every bar fill has width > 0 and height > 0
+    no fill has computed display:inline
+    bar widths are proportional, not all equal
+    nothing spills outside its own card (child.bottom <= card.bottom)
+    no two sibling blocks intersect
+    every grouped number matches ONE locale convention
+    every text run clears 4.5:1 measured from computed colour, not from the token
+    the list page holds N DISTINCT named items, not one item repeated
+
+Two habits that generalise:
+
+- **A loading placeholder reserves space; it never limits content.** Write
+  `min-height`, never `height`. A fixed height on a skeleton silently caps
+  whatever replaces it.
+- **Assert a list page has several DISTINCT items.** `len(items) > 0` passes
+  when one company repeats a thousand times.
+
+If a headless browser is unavailable, say so and treat all visual claims as
+unverified. Do not report a page as beautiful on the strength of a stylesheet.
+
 ## One sqlite connection per thread, never one shared connection
 
 `check_same_thread=False` does not make a connection thread-safe. It silences
