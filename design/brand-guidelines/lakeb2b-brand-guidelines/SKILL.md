@@ -1,6 +1,6 @@
 ---
 name: lakeb2b-brand-guidelines
-description: Brand guidelines for Lake B2B, a B2B data services company. Use when creating any Lake B2B branded content including presentations, documents, social media posts, marketing materials, emails, or any design work requiring Lake B2B branding. Also use when users ask about Lake B2B brand colors, fonts, logo usage, or visual identity standards.
+description: Brand guidelines for Lake B2B, a B2B data services company. Use when creating any Lake B2B branded content including presentations, documents, web pages, case studies, social media posts, marketing materials, emails, or any design work requiring Lake B2B branding. Also use when users ask about Lake B2B brand colors, fonts, logo files, logo usage, or visual identity standards.
 ---
 
 # Lake B2B Brand Guidelines
@@ -52,15 +52,29 @@ The name "LakeB2B" symbolizes depth (data reservoirs) and collaborative B2B part
 - **Primary:** Montserrat (Light, Regular, Bold, Extra Bold)
 - **Secondary:** Alata
 - **Fallback:** Arial
+- **Web showcase pages:** a soft serif (Fraunces) is approved for display headlines only, with Montserrat for everything else and IBM Plex Mono for data labels. See `references/web-and-digital.md`.
 
-## Logo Rules
+## Logo
 
-- Minimum digital: 180px width
+### Files (use these, in this order)
+
+| File | Use |
+|---|---|
+| `assets/LakeB2B_Logo_Transparent.png` (2042 x 579, transparent) | master for decks, documents and print-ready PDFs |
+| `assets/LakeB2B_Logo_Transparent_720.png` (720 x 204, transparent, about 60KB) | web pages, Artifacts and single-file HTML, embedded as a base64 data URI |
+
+Vault copies sit in `Atlas/Context Docs/Lake B2B/Brand Assets/` in the Celsus vault. The old `LakeB2B_Logo_Square.png` has a white box baked in and is low resolution; do not use it for new work.
+
+### Rules
+
+- Minimum digital: 180px width, on every breakpoint including phones
 - Minimum print: 30mm width
-- Clear space: Width of letter 'B' on all sides
-- Approved backgrounds: White, light gray, purple (#6D08BE), navy (#011A6B)
+- Clear space: width of the letter 'B' on all sides (16px or more around a 180px logo)
+- Approved backgrounds: white, light gray, purple (#6D08BE), navy (#011A6B)
+- On dark heroes, gradients and photos, set the logo inside a white pill or card with the clear space; never directly on the brand gradient
+- `alt="LakeB2B, Enabling Growth"`; keep the 3.53 to 1 proportion
 
-**Never:** Alter colors/fonts, skew/rotate, add effects, place on busy backgrounds, merge with other brands.
+**Never:** alter colors or fonts, skew or rotate, add effects (shadow, glow, outline), recolor or invert with CSS filters, animate the logo, place on busy backgrounds, merge with other brands.
 
 ## Image Guidelines
 
@@ -68,8 +82,18 @@ Use imagery implying: Human-Technology intersection, Innovation, Data visualizat
 
 Apply brand color tints (purple, pink, orange neons) and curved line graphics.
 
+## Client-facing rules
+
+- A client works with LakeB2B or SPAN, never both; never show both brands to one client.
+- Never name an outside delivery vendor in LakeB2B material; vendors are "we" or "our team".
+- Zero em dashes and en dashes in any LakeB2B output.
+
 ## Detailed References
 
-- **Logo specifications:** See [references/logo-usage.md](references/logo-usage.md)
-- **Color values (CMYK/RGB):** See [references/colors.md](references/colors.md)
-- **Brand assets:** See [assets/Lake_B2B_Brand_Book.pdf](assets/Lake_B2B_Brand_Book.pdf)
+- **Logo specifications and files:** See [references/logo-usage.md](references/logo-usage.md)
+- **Color values (CMYK/RGB) and gradients:** See [references/colors.md](references/colors.md)
+- **Web, case study and Artifact tokens:** See [references/web-and-digital.md](references/web-and-digital.md)
+- **Brand book:** See [assets/Lake_B2B_Brand_Book.pdf](assets/Lake_B2B_Brand_Book.pdf)
+- **Ready-made premium page kit on this brand:** the `showcase-page` skill
+
+When the logo files or the web reference are not in the account copy of this skill, read them from the Celsus vault at `Other/Skills/lakeb2b-brand-guidelines/`.

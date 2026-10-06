@@ -60,3 +60,19 @@ Use appropriate file formats:
 - **Digital/Web:** PNG (transparent background), SVG
 - **Print:** PDF, EPS, AI
 - **Presentations:** PNG (high resolution)
+
+## Logo files in this skill
+
+| File | Size | Use |
+|---|---|---|
+| `assets/LakeB2B_Logo_Transparent.png` | 2042 x 579, transparent | master for decks, documents, print-ready PDFs and anything that needs to scale |
+| `assets/LakeB2B_Logo_Transparent_720.png` | 720 x 204, transparent, about 60KB | web pages and single-file HTML (sharp at 180 to 360px wide on retina screens) |
+
+Both are cropped tight to the artwork with a small margin; add the clear space (width of the letter B) in layout, not in the file. Vault copies live at `Atlas/Context Docs/Lake B2B/Brand Assets/` in the Celsus vault. The older `LakeB2B_Logo_Square.png` has a white box baked in and is low resolution; do not use it for new work.
+
+## Logo on the web
+
+- Embed the 720px PNG as a base64 data URI in single-file pages and Artifacts, set `width="180"` (or larger) and `height` in proportion (3.53 to 1), and give it `alt="LakeB2B, Enabling Growth"`.
+- The navy wordmark needs a white or light grey ground. On dark heroes, gradients or photos, set the logo inside a white pill or card with at least the clear space on every side (for a 180px logo, 16px or more). Never place it straight on the brand gradient.
+- Never recolour it with CSS filters, never invert it for dark mode, never animate the logo itself. The container may have a shadow; the logo may not.
+- Keep it at 180px or wider on every breakpoint, including phones.

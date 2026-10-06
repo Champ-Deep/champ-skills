@@ -65,10 +65,10 @@ For backgrounds, supporting graphics, and digital platforms. Use sparingly.
 ### Gradients
 
 Create gradients by blending primary colors:
-- **Logo Gradient:** Gold (#FFB703) → Red (#E8033A) → Purple (#6D08BE)
-- **Gold-Orange Gradient:** #FFB703 → Lighter orange tone
-- **Red-Crimson Gradient:** #E8033A → Deeper red
-- **Purple-Blue Gradient:** #6D08BE → Lighter purple/blue
+- **Logo Gradient:** Gold (#FFB703) to Red (#E8033A) to Purple (#6D08BE)
+- **Gold-Orange Gradient:** #FFB703 to Lighter orange tone
+- **Red-Crimson Gradient:** #E8033A to Deeper red
+- **Purple-Blue Gradient:** #6D08BE to Lighter purple/blue
 
 ### Format Usage
 - **Digital (web, social, presentations):** RGB values

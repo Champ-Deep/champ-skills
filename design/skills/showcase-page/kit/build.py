@@ -57,7 +57,7 @@ def nav(chip, short='Book a review', hold=False, b=BRAND):
     LOGO = logo_uri(b['logo'])
     return f'''<div class="progress" aria-hidden="true"><i></i></div>
 <header class="nav"><div class="wrap">
-<a class="nav-pill" href="{b['home_url']}" target="_blank" rel="noopener" aria-label="Home"><img src="{LOGO}" alt="{b['logo_alt']}" width="180" height="52"><span class="sep"></span><span class="lbl">{b['nav_label']}</span></a>
+<a class="nav-pill" href="{b['home_url']}" target="_blank" rel="noopener" aria-label="Home"><img src="{LOGO}" alt="{b['logo_alt']}" width="180" height="51"><span class="sep"></span><span class="lbl">{b['nav_label']}</span></a>
 <span class="chip-ind">{chip}</span>{'<span class="hold-pill" role="note">HOLD until 9 Oct</span>' if hold else ''}<span class="sp"></span>
 <a class="btn btn-dark mk-glow" href="{b['cta_url']}" target="_blank" rel="noopener"><span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span><span class="long">{swap(b['cta_label'])}</span><span class="short">{swap(short)}</span>{ARR}</a>
 </div></header>'''
