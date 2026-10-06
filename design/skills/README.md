@@ -10,7 +10,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `deck-doctor` | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `editorial-web-direction` | Art-direct personal sites, portfolios and hero sections like a magazine spread: giant type on a visible grid, margin notes, scanline or dot image treatments. Use for any  |
 | `frontend-design` | Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data vis |
-| `frontend-design-pro` | Advanced marketing-site and page design, distinct from standard frontend-design. Four modes: build landing pages that convert (message hierarchy, hero patterns, proof, CT |
+| `frontend-design-pro` | Advanced marketing-site and page design, distinct from standard frontend-design. Four modes plus a showcase route: build landing pages that convert (message hierarchy, he |
 | `frontend-handoff` | Turns a backend into a frontend. Ingests routes, endpoints, schemas, auth, roles, and error codes from OpenAPI, Postman, a route file, source code, or live Supabase intro |
 | `identity-kit` | Build a full visual identity at studio depth: brandmark, wordmark, mascot, icon set, tagline and ornaments, drawn as SVG on a labelled brand sheet. Use for any logo, pers |
 | `impeccable` | Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a |
@@ -19,6 +19,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `power-design` | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
 | `prospect-deck` | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
+| `showcase-page` | Builds premium scroll pages that prove a result: client case studies, campaign wins, event recaps, partner proof and data snapshots. Night-to-sunset hero, floating stat c |
 | `text-art-eggs` | Make ASCII, block-letter and braille art (figlet logos, animated braille pictures, Nike-style robots.txt, humans.txt, agents.txt, console art) plus page eggs. Use for any |
 | `theme-factory` | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
 | `visual-report-builder` | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |

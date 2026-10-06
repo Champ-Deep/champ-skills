@@ -1,7 +1,7 @@
 ---
 name: visual-report-builder
 description: >
-  Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, brief, one-pager, dashboard page, strategy document, client overview, partnership summary, deal tracker, campaign report, performance review, or investor update. Also trigger for: "make this visual", "build a report page", "HTML report", "visual dashboard", "strategy page", "make this look editorial", "client-facing report". MANDATORY TRIGGER for any single-file HTML report prioritizing visual storytelling. NOT for interactive dashboards (use data:interactive-dashboard-builder) or web apps (use frontend-design).
+  Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, brief, one-pager, dashboard page, strategy document, client overview, partnership summary, deal tracker, campaign report, performance review, or investor update. Also trigger for: "make this visual", "build a report page", "HTML report", "visual dashboard", "strategy page", "make this look editorial", "client-facing report", "this report looks basic", "make it premium", "add micro-interactions". MANDATORY TRIGGER for any single-file HTML report prioritizing visual storytelling. NOT for interactive dashboards (use data:interactive-dashboard-builder) or web apps (use frontend-design).
 ---
 
 # Visual Report Builder
@@ -42,6 +42,7 @@ structure more navigable, or the story more scannable, it doesn't belong.
 - Slide decks (use `pptx`)
 - Word documents (use `docx`)
 - Simple markdown notes
+- Client proof pages and case studies (use `showcase-page`)
 
 ---
 
@@ -104,6 +105,8 @@ Not buried in paragraphs. Not crammed into table cells.
 - Progress bars and gauges for completion/temperature/progress. Visual, not textual.
 - When you have 3-7 key metrics, always lead with a stat strip right after the hero.
   The reader should know the score within 3 seconds of opening the page.
+- Numbers that arrive on scroll count up to their exact stated value; the final value
+  is written in the HTML so exports and no-JS readers see it.
 
 ### 3. Sections Tell a Story
 
@@ -175,6 +178,7 @@ Use what serves the content.
 ```
 TOPBAR
   Brand name (left) · Status/date badge (right, mono, with pulsing dot)
+  Scroll progress bar along the top edge
 
 HERO
   Kicker (mono, uppercase, brand accent, with decorative line)
@@ -188,7 +192,7 @@ SECTIONS (§ 01 through § N)
   Section body (cards, charts, grids, tables, bars, tiles, splits)
 
 CLOSING ELEMENT
-  A question, a call-to-action, or a provocative statement
+  A call-to-action, a real open question, or the clearest concrete fact
   (serif italic, large, with gradient background on card)
 
 FOOTER
@@ -201,7 +205,8 @@ FOOTER
 
 These are the building blocks. You can combine them, modify them, and invent new
 ones. The patterns below capture the visual grammar. When you understand the grammar,
-you can write new sentences.
+you can write new sentences. `references/components.md` lists more (unit charts, heat
+tiles, stacked bars, dot maps, sortable tables, timelines) with tested vanilla code.
 
 ### Pattern 1: The Stat Strip
 
@@ -235,6 +240,7 @@ a category (partner economics, channel performance, budget allocation).
 - Bar track is 6-8px tall. Fill uses the category color at varying opacity.
 - Sort by value descending (biggest bar on top) unless there's a reason not to.
 - Use `opacity` on bars to signal status: full opacity = confirmed, reduced = pending.
+- Bars grow from zero once when they scroll into view (`scaleX`), never on every pass.
 
 ### Pattern 3: The Split Grid
 
@@ -246,6 +252,7 @@ data sets: revenue split + governance, before + after, us vs. them.
 - Each card is a standard card (surface background, 1px border, 16px radius).
 - Cards can contain tables, icon-labeled items, or mini stat strips.
 - Use contrasting accent colors between the two cards to reinforce the duality.
+- When the two cards measure different units, each says which scale it uses.
 
 ### Pattern 4: The Timeline / Roadmap
 
@@ -261,11 +268,12 @@ Horizontal or vertical sequence of phases/weeks/milestones.
 - Phase labels are pills matching section tags (mono, uppercase, tiny).
 - Deliverables are in the body font. Owners are bold or tagged.
 - A "John's ask" or callout card at the end for special requirements.
+- The connecting line draws on scroll and the phase dots pop in sequence.
 
 ### Pattern 5: The Closing Question
 
 A full-width card with gradient background (radial gradients from two brand colors,
-low opacity, over the surface color). Contains a provocative question or
+low opacity, over the surface color). Contains a real open question for the reader or a
 call-to-action in large serif italic.
 
 **Design rules:**
@@ -295,6 +303,8 @@ When the report includes data visualization:
 6. Line charts: `tension: 0.4` for smooth curves, `pointRadius: 0` (show on hover
    only), `fill: true` with low-opacity background for area effect.
 7. Grid lines: use the `--line` color. X-axis grid hidden, Y-axis subtle.
+8. Prefer hand-built CSS or SVG for bars, unit charts and stacked bars (see
+   `references/charts-tables.md`); use Chart.js for lines and rings.
 
 ---
 
@@ -307,8 +317,8 @@ brand. This section just tells you how to pick the right accent color.
 When creating a report for a specific brand:
 
 1. **Check if a brand skill exists.** Look for loaded skills matching the company:
-   `lakeb2b-brand-guidelines`, `ampliz-brand-guidelines`, `champions-group-brand`,
-   or any custom brand skill.
+   `lakeb2b-brand-guidelines`, `span-brand-guidelines`, `ampliz-brand-guidelines`,
+   `metricfox-brand-guidelines`, `champions-group-brand`, or any custom brand skill.
 
 2. **Pull the palette.** Extract primary color, accent color, and any secondary
    colors from the brand guidelines. Map them into the custom property system:
@@ -322,7 +332,8 @@ When creating a report for a specific brand:
    faces change.
 
 4. **Footer and topbar.** Use the brand's wordmark style. If the brand has a
-   specific tagline or positioning line, include it.
+   specific tagline or positioning line, include it. Logos follow the brand skill's
+   background rules (LakeB2B: white, light grey, purple or navy only, 180px minimum).
 
 5. **When no brand skill exists:** Use the neutral dark palette with purple accent.
    This is the safe default that looks professional for any context.
@@ -355,7 +366,7 @@ Every report follows this structure:
 - Mobile-first. Base styles are for narrow screens.
 - `clamp()` for font sizes and spacing (eliminates most breakpoints).
 - One or two `@media (min-width: 720px)` breakpoints for grid layout changes.
-- `max-width: 1280px` on the shell container. Generous horizontal padding
+- `max-width: 1600px` on the shell container, so the report uses the full width on wide screens (Deep dislikes a narrow centered column with dead space either side). Generous horizontal padding
   via `clamp(16px, 4vw, 40px)`.
 
 **Accessibility:**
@@ -365,6 +376,14 @@ Every report follows this structure:
   (no alt text needed, they accompany labels).
 
 ---
+
+## Brand, template and components (before building)
+
+1. **Brand.** Infer it or ask "which brand?" once. Load the brand skill and lock colours, fonts and logo (see Brand Adaptation above). No brand named means the neutral dark palette with purple accent.
+2. **Template.** For a new report, propose a template from `references/templates.md` (Campaign Report is the usual fit; Market or Data Snapshot for dataset cuts). If the reader needs one decision page, route to `executive-one-pager`; if it is a client proof page, route to `showcase-page`.
+3. **Components from 21st.dev.** If the 21st.dev MCP is connected (`search`, `get_inspiration`, `get_component`), search the 3 to 5 key components with the queries in `references/components.md`, pick, and pull code for at most two (free tier: 2 a day). Port to this skill's scoped vanilla CSS and credit the id in a comment. Not connected: say so in one line and use the patterns above plus the kit fallbacks. Never write an API key into a file.
+4. **Micro-interactions from MicroKit.** Every interactive element gets a hover, focus and touch response from `references/micro-interactions.md`: row accent bars on tables, animated row reorder on sortable tables, label swap and arrow slide-through on buttons, top-rail glow on chips. One per element, 200 to 500ms, brand colours.
+5. **Charts and motion.** Pick charts by data shape and keep separate scales for different units (`references/charts-tables.md`). Animate bars, dots and lines to their values once on scroll, keep final values in the HTML, honour `prefers-reduced-motion`, and support `?static=1` for PDF and PNG exports (`references/motion.md`).
 
 ## Process: How to Build a Report
 
@@ -387,11 +406,12 @@ Every report follows this structure:
    No section should be just a wall of text.
 
 7. **Add charts if data warrants it.** Doughnut for composition, line for trends,
-   bar for comparison. Keep it to 1-2 charts max. Reports are documents, not
+   bar for comparison. Keep it to 1-2 Chart.js charts max. Reports are documents, not
    dashboards.
 
-8. **Write the closing.** A question, a call-to-action, or a statement that leaves
-   the reader thinking. This is the last thing they see.
+8. **Write the closing.** A call-to-action, a real open question for the reader,
+   or the clearest concrete fact on the page. Never an aphorism or kicker line
+   (the `no-ai-slop` gate deletes those).
 
 9. **Test contrast.** On dark backgrounds, verify all text is explicitly light.
    On colored backgrounds, verify readability. Never rely on inherited color.
@@ -427,20 +447,22 @@ reports the app generates.
 
 ## Hard Rules
 
-1. **Never use em-dashes.** Periods, commas, colons, or restructure.
+1. **Never use em dashes or en dashes**, including headings, labels, chart text, date ranges and PDF exports. Periods, commas, colons, or restructure.
 2. **Always check contrast.** Text on dark or colored backgrounds must be
    explicitly set to a light color. Never rely on inheritance.
 3. **Scope all CSS.** Every selector under the project root class.
 4. **One file.** All HTML, CSS, and JS in a single `.html` file.
-5. **No frameworks.** Vanilla HTML, CSS, JS. Google Fonts + Chart.js CDN only.
+5. **No frameworks.** Vanilla HTML, CSS, JS. Google Fonts + Chart.js CDN only. Components pulled from 21st.dev are ported to vanilla.
 6. **Numbers first.** If a section has key metrics, they go at the top of the
    section, not buried in prose.
 7. **Mobile-first responsive.** Base styles for narrow, `clamp()` for scaling,
    media queries for layout shifts only.
+8. **Never invent a number.** Every figure comes from the source; rates and shares
+   computed from stated figures are allowed and labeled as computed.
 
 ---
 
-## Verify before delivery — MANDATORY
+## Verify before delivery (mandatory)
 
 This output is visual, so reading the source does not tell you whether it worked. Render it and look at it.
 
@@ -457,8 +479,18 @@ The four things this catches that nothing else does:
 1. **Contrast measured against the composited background**, including transparency stacking, rather than against the hex you intended.
 2. **Horizontal overflow at 390px**, with the offending element named.
 3. **Content that overflows its container** once real text length replaced the sample.
-4. **Flat hierarchy** — three elements competing where one should dominate. Only the eye finds this.
+4. **Flat hierarchy:** three elements competing where one should dominate. Only the eye finds this.
+
+Add three checks of your own:
+
+5. **The Paddle bar.** Would Paddle ship this? Numbers on hairlines with mono labels, a real visual in every section, hover and focus responses on every interactive element.
+6. **Copy gate.** `no-ai-slop` in Gate mode on every line; zero dashes in the HTML and any PDF (`pdftotext file.pdf -` then grep for the two dash characters).
+7. **Width.** At 1440 the report spans the page with a gutter, not a narrow column.
 
 Zero FAILs before delivery. Every WARN either fixed or justified in one line. If no browser is available, say so and label the output **unverified**, listing what was not checked.
 
-→ Full protocol: the `visual-verify` skill.
+Full protocol: the `visual-verify` skill.
+
+## References
+
+`references/css-starter.md` (scoped starter), `references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`. When the shared files are not in the account copy, read them from the Celsus vault at `Other/Skills/visual-report-builder/references/`. The working kit (tokens, components, export script) is at `Other/Skills/showcase-page/kit/`.

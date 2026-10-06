@@ -1,0 +1,58 @@
+{
+  "slug": "02-sea-multi-location-account-screening",
+  "title": "Southeast Asia Account Screening",
+  "desc": "LakeB2B case study: 691 target accounts screened to 417 eligible and 1,211 qualified contacts across four Southeast Asian markets.",
+  "chip": "Account screening",
+  "short": "Book a review",
+  "cta_h": "Send us your target account list. We will tell you which accounts fit.",
+  "cta_p": "A 20 minute review with our data team, on your own list.",
+  "foot": "Case study 02 \u00b7 Client details anonymized \u00b7 Aug to Oct 2026",
+  "map": [
+    {
+      "name": "Philippines",
+      "v": 552,
+      "lon": 122.6,
+      "lat": 11.6,
+      "label": [
+        117.6,
+        15.6,
+        "end"
+      ]
+    },
+    {
+      "name": "Malaysia",
+      "v": 447,
+      "lon": 101.7,
+      "lat": 4.7,
+      "label": [
+        94.3,
+        9.6,
+        "start"
+      ]
+    },
+    {
+      "name": "Singapore",
+      "v": 190,
+      "lon": 103.82,
+      "lat": 1.36,
+      "label": [
+        93.8,
+        -3.4,
+        "start"
+      ],
+      "leader": true
+    },
+    {
+      "name": "Indonesia",
+      "v": 22,
+      "lon": 113.6,
+      "lat": -1.2,
+      "label": [
+        119.4,
+        -6.6,
+        "start"
+      ],
+      "leader": true
+    }
+  ]
+}
