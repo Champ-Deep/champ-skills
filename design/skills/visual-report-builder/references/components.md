@@ -18,7 +18,7 @@ Connection: Cowork reads the MCP as a custom connector (`https://21st.dev/api/mc
 
 | Component | Use when | 21st.dev query (ids seen Oct 2026) | MicroKit pairing | Kit fallback |
 |---|---|---|---|---|
-| Sticky blurred nav | every page | `sticky header blur navbar` (27109, 8137) | glow follow on the primary button | `.nav` + `.nav-pill` + `.btn.btn-dark.mk-glow`; turns light past the hero via `.nav.light` |
+| Sticky blurred nav | every page | `sticky header blur navbar` (27109, 8137) | glow follow on the primary button | `.nav` + `.nav-pill` (reversed logo on the hero, full colour on the page) + `.btn.btn-dark.mk-glow`; turns light past the hero via `.nav.light` |
 | Scroll progress bar | any page over two screens | `scroll progress` | none | `.progress > i`, width from `--p` |
 | Hero: atmospheric gradient | case studies, recaps, anything with one result to state | `hero gradient night sky`, `hero dithering card` (9940) | none | `.hero` with `{{STARS}}` and `{{CLOUDS}}` (SVG feTurbulence clouds, CSS twinkle stars), headline split by `data-words` |
 | Hero: split with product card | product or partner pitch with a UI to show | `split hero product screenshot` (19078, 4710) | label swap on the CTA | grid 6/6, text left, `.panel` with the live UI right, deep soft shadow |
@@ -73,4 +73,4 @@ Logo marquee:
 </style>
 ```
 
-Logo on dark grounds: LakeB2B's logo may only sit on white, light grey, purple or navy. On the night hero it sits in a white pill (`.nav-pill`), 180px minimum width.
+Logo on dark grounds: use the brand's reversed logo (white wordmark) on dark heroes and the all-white logo on purple or gradient grounds; never box a full-colour logo in a white panel. The kit nav carries the reversed and full-colour files and swaps them when the nav moves onto the light page (`.nav.light`). 180px minimum width.

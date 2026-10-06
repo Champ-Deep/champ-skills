@@ -26,7 +26,7 @@ White text passes on purple `#6D08BE` and navy `#011A6B`. Gold `#FFB703` takes d
 ## Layout and components
 
 - Full width: content to 1600px with a fluid gutter (`clamp(16px, 4.2vw, 72px)`); never a narrow centered column.
-- The showcase kit (`Other/Skills/showcase-page/kit/` in the Celsus vault, skill `showcase-page`) carries the tokens, the logo pill nav, floating stat cards, charts, motion and micro-interactions already on brand. Start there for any LakeB2B case study, results page or campaign page.
+- The showcase kit (`Other/Skills/showcase-page/kit/` in the Celsus vault, skill `showcase-page`) carries the tokens, the nav with the reversed-to-colour logo swap, floating stat cards, charts, motion and micro-interactions already on brand. Start there for any LakeB2B case study, results page or campaign page.
 - Buttons: dark ink pill with a gold arrow square (primary), white pill on gradients, translucent outline (ghost).
 - CTA default: "Book a 20 minute data review" linking to `https://www.lakeb2b.com/contact-us`; secondary link `lakeb2b.com`.
 

@@ -10,7 +10,7 @@ def logo_uri(path):
     mime = 'image/svg+xml' if p.suffix == '.svg' else 'image/png'
     return f'data:{mime};base64,' + base64.b64encode(p.read_bytes()).decode()
 # brand defaults (LakeB2B); override per page in cases/<id>.json
-BRAND = {'logo': 'assets/lakeb2b-logo.png', 'logo_alt': 'LakeB2B, Enabling Growth', 'home_url': 'https://www.lakeb2b.com',
+BRAND = {'logo': 'assets/lakeb2b-logo.png', 'logo_reversed': 'assets/lakeb2b-logo-reversed.png', 'logo_alt': 'LakeB2B, Enabling Growth', 'home_url': 'https://www.lakeb2b.com',
          'home_label': 'lakeb2b.com', 'cta_url': 'https://www.lakeb2b.com/contact-us', 'cta_label': 'Book a 20 minute data review',
          'brand_line': 'LakeB2B. Enabling Growth.', 'nav_label': 'Case study'}
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -54,10 +54,10 @@ def swap(t):
     return f'<span class="swap"><span class="cur">{t}</span><span class="inc" aria-hidden="true">{t}</span></span>'
 
 def nav(chip, short='Book a review', hold=False, b=BRAND):
-    LOGO = logo_uri(b['logo'])
+    LOGO = logo_uri(b['logo']); LOGO_R = logo_uri(b.get('logo_reversed', b['logo']))
     return f'''<div class="progress" aria-hidden="true"><i></i></div>
 <header class="nav"><div class="wrap">
-<a class="nav-pill" href="{b['home_url']}" target="_blank" rel="noopener" aria-label="Home"><img src="{LOGO}" alt="{b['logo_alt']}" width="180" height="51"><span class="sep"></span><span class="lbl">{b['nav_label']}</span></a>
+<a class="nav-pill" href="{b['home_url']}" target="_blank" rel="noopener" aria-label="Home"><img class="on-dark" src="{LOGO_R}" alt="{b['logo_alt']}" width="180" height="51"><img class="on-light" src="{LOGO}" alt="" aria-hidden="true" width="180" height="51"><span class="sep"></span><span class="lbl">{b['nav_label']}</span></a>
 <span class="chip-ind">{chip}</span>{'<span class="hold-pill" role="note">HOLD until 9 Oct</span>' if hold else ''}<span class="sp"></span>
 <a class="btn btn-dark mk-glow" href="{b['cta_url']}" target="_blank" rel="noopener"><span class="gl a" aria-hidden="true"></span><span class="gl b" aria-hidden="true"></span><span class="long">{swap(b['cta_label'])}</span><span class="short">{swap(short)}</span>{ARR}</a>
 </div></header>'''

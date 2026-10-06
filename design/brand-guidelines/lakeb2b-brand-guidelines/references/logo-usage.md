@@ -66,13 +66,17 @@ Use appropriate file formats:
 | File | Size | Use |
 |---|---|---|
 | `assets/LakeB2B_Logo_Transparent.png` | 2042 x 579, transparent | master for decks, documents, print-ready PDFs and anything that needs to scale |
-| `assets/LakeB2B_Logo_Transparent_720.png` | 720 x 204, transparent, about 60KB | web pages and single-file HTML (sharp at 180 to 360px wide on retina screens) |
+| `assets/LakeB2B_Logo_Transparent_720.png` | 720 x 204, transparent, about 60KB | web pages and single-file HTML on white or light grounds (sharp at 180 to 360px wide on retina screens) |
+| `assets/LakeB2B_Logo_Reversed.png`, `assets/LakeB2B_Logo_Reversed_720.png` | master and web, transparent | dark grounds: white wordmark with the full-colour mark and B2B (brand book page 5, navy panel) |
+| `assets/LakeB2B_Logo_White.png`, `assets/LakeB2B_Logo_White_720.png` | master and web, transparent | purple and brand-gradient grounds: all-white logo (brand book page 5, gradient panel) |
 
 Both are cropped tight to the artwork with a small margin; add the clear space (width of the letter B) in layout, not in the file. Vault copies live at `Atlas/Context Docs/Lake B2B/Brand Assets/` in the Celsus vault. The older `LakeB2B_Logo_Square.png` has a white box baked in and is low resolution; do not use it for new work.
 
 ## Logo on the web
 
 - Embed the 720px PNG as a base64 data URI in single-file pages and Artifacts, set `width="180"` (or larger) and `height` in proportion (3.53 to 1), and give it `alt="LakeB2B, Enabling Growth"`.
-- The navy wordmark needs a white or light grey ground. On dark heroes, gradients or photos, set the logo inside a white pill or card with at least the clear space on every side (for a 180px logo, 16px or more). Never place it straight on the brand gradient.
-- Never recolour it with CSS filters, never invert it for dark mode, never animate the logo itself. The container may have a shadow; the logo may not.
+- Pick the version by the ground behind it: full colour on white or light grey, reversed on navy and dark heroes, all-white on purple and the brand gradient. Keep the clear space (16px or more around a 180px logo).
+- Never box the full-colour logo in a white panel to sit on a dark ground; use the reversed file instead.
+- A nav that starts over a dark hero and turns light on scroll carries both files and swaps them with a class (see the `showcase-page` kit).
+- Never recolour with CSS filters, never invert it for dark mode, never animate the logo itself.
 - Keep it at 180px or wider on every breakpoint, including phones.

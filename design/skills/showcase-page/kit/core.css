@@ -418,3 +418,13 @@ table.data tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 0 var(--purple
 .tag:hover{background:rgba(109,8,190,.14);color:var(--purple)}
 .legend span{transition:opacity .3s}
 @media (hover:none){.pill:hover,.tile:hover{transform:none}}
+/* logo: reversed version (white wordmark, brand book p.5) on the night hero; full colour once the nav sits on paper */
+.nav-pill{background:transparent;box-shadow:none;padding:6px 0;border-radius:0}
+.nav-pill .lbl{color:#fff}
+.nav-pill .sep{background:rgba(255,255,255,.28)}
+.nav-pill .on-light{display:none}
+.nav.light .nav-pill .on-dark{display:none}
+.nav.light .nav-pill .on-light{display:block}
+.nav.light .nav-pill .lbl{color:var(--ink)}
+.nav.light .nav-pill .sep{background:var(--line)}
+@media (max-width:760px){.nav-pill{padding:4px 0}}

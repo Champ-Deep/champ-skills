@@ -10,11 +10,11 @@ Vanilla HTML, CSS and JS. No framework, no build tool beyond Python 3, Playwrigh
 | `shoot.py` | `python3 shoot.py <slug> [--export]` screenshots 1440 and 390 (motion top and static full page), reports overflow, small tap targets and console errors; `--export` writes `export/<slug>.png` (2x) and a one-page `export/<slug>.pdf` with the hero flattened |
 | `cases/02.*`, `cases/03.*` | worked examples: map, unit chart, sortable table, callout, timeline |
 | `data/sea_dots.json` | Southeast Asia dot grid (Natural Earth 50m), used by `sea_map()` |
-| `assets/lakeb2b-logo.png` | LakeB2B logo cropped from the brand folder |
+| `assets/lakeb2b-logo.png`, `assets/lakeb2b-logo-reversed.png` | LakeB2B transparent logo (full colour for light grounds) and reversed (white wordmark for the dark hero); the nav swaps them |
 
 ## Case JSON keys
 
-`slug`, `title` (2 to 4 word page name), `desc`, `chip` (nav chip), `short` (mobile button label), `hold` (true adds a red HOLD pill), `cta_h`, `cta_p`, `foot`, optional `css` (page-level overrides), optional `map` (bubbles for `sea_map`), optional `tiles` (`[segment, worked, mapped]` rows), optional `brand` (overrides `logo`, `logo_alt`, `home_url`, `home_label`, `cta_url`, `cta_label`, `brand_line`, `nav_label`).
+`slug`, `title` (2 to 4 word page name), `desc`, `chip` (nav chip), `short` (mobile button label), `hold` (true adds a red HOLD pill), `cta_h`, `cta_p`, `foot`, optional `css` (page-level overrides), optional `map` (bubbles for `sea_map`), optional `tiles` (`[segment, worked, mapped]` rows), optional `brand` (overrides `logo`, `logo_reversed`, `logo_alt`, `home_url`, `home_label`, `cta_url`, `cta_label`, `brand_line`, `nav_label`).
 
 ## Placeholders in case HTML
 

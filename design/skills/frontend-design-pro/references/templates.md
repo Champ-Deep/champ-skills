@@ -62,7 +62,7 @@ Fonts: Fraunces display, Inter Tight body, IBM Plex Mono labels. Hero gradient s
 
 | Brand | Skill | Primary | Fonts | Logo rule |
 |---|---|---|---|---|
-| LakeB2B | `lakeb2b-brand-guidelines` | Purple #6D08BE 60%, Red #E8033A 20%, Gold #FFB703 20% | Montserrat body, serif display allowed for headlines | white, light grey, purple or navy ground; 180px minimum |
+| LakeB2B | `lakeb2b-brand-guidelines` | Purple #6D08BE 60%, Red #E8033A 20%, Gold #FFB703 20% | Montserrat body, serif display allowed for headlines | full colour on light grounds, reversed on dark, all-white on purple; 180px minimum |
 | SPAN | `span-brand-guidelines` | per skill | per skill | per skill |
 | Ampliz | `ampliz-brand-guidelines` | per skill | per skill | per skill |
 | MetricFox | `metricfox-brand-guidelines` | per skill | per skill | per skill |

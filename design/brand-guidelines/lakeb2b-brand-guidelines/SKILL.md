@@ -61,7 +61,9 @@ The name "LakeB2B" symbolizes depth (data reservoirs) and collaborative B2B part
 | File | Use |
 |---|---|
 | `assets/LakeB2B_Logo_Transparent.png` (2042 x 579, transparent) | master for decks, documents and print-ready PDFs |
-| `assets/LakeB2B_Logo_Transparent_720.png` (720 x 204, transparent, about 60KB) | web pages, Artifacts and single-file HTML, embedded as a base64 data URI |
+| `assets/LakeB2B_Logo_Transparent_720.png` (720 x 204, transparent, about 60KB) | web pages, Artifacts and single-file HTML on white or light grounds, embedded as a base64 data URI |
+| `assets/LakeB2B_Logo_Reversed.png` and `_720.png` | dark grounds (navy, night heroes, dark photos): white wordmark, full-colour mark and B2B, as on brand book page 5 |
+| `assets/LakeB2B_Logo_White.png` and `_720.png` | purple or brand-gradient grounds: all-white logo, as on brand book page 5 |
 
 Vault copies sit in `Atlas/Context Docs/Lake B2B/Brand Assets/` in the Celsus vault. The old `LakeB2B_Logo_Square.png` has a white box baked in and is low resolution; do not use it for new work.
 
@@ -71,7 +73,8 @@ Vault copies sit in `Atlas/Context Docs/Lake B2B/Brand Assets/` in the Celsus va
 - Minimum print: 30mm width
 - Clear space: width of the letter 'B' on all sides (16px or more around a 180px logo)
 - Approved backgrounds: white, light gray, purple (#6D08BE), navy (#011A6B)
-- On dark heroes, gradients and photos, set the logo inside a white pill or card with the clear space; never directly on the brand gradient
+- Match the version to the ground: full colour on white or light grey; reversed (white wordmark) on navy and dark heroes; all-white on purple and the brand gradient. Never put the full-colour version, with its navy wordmark, on a dark ground, and never box it in a white panel to force it onto one
+- On a web page whose nav moves from a dark hero onto a light page, swap reversed to full colour as the nav changes ground
 - `alt="LakeB2B, Enabling Growth"`; keep the 3.53 to 1 proportion
 
 **Never:** alter colors or fonts, skew or rotate, add effects (shadow, glow, outline), recolor or invert with CSS filters, animate the logo, place on busy backgrounds, merge with other brands.
