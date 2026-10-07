@@ -1,6 +1,6 @@
 ---
-name: lead-gen-playbook-builder
-description: Turns a simple campaign idea into a complete, rep-ready lead-gen playbook. Use this whenever someone gives a one-line campaign idea (a target, a product, an event, a moment) and wants it fleshed out into something a BD or lead-gen team can execute, including intake questions, multi-channel cadence, exact pitches per channel, decision-based flowcharts for reply handling, personas, tracking, and guardrails. MANDATORY TRIGGER for "build a lead gen playbook", "campaign playbook", "flesh out this campaign", "turn this campaign idea into a playbook", "outreach playbook for [X]", "cadence for [campaign]", "channel-based messaging", "decision flowchart for outreach", "give my lead gen team a playbook", "pitches for each channel", "what do we send and when", "sequence for [target]", or any request to convert a rough campaign concept into a full, executable outreach plan. Works for B2B and B2C, event-based and always-on campaigns. Pairs naturally with brand voice skills and any contact-data source.
+name: "lead-gen-playbook-builder"
+description: "Turns a one-line campaign idea into a complete, rep-ready lead-gen playbook: intake, personas, multi-channel cadence, exact pitches per channel, reply-handling flowcharts, tracking and guardrails, plus CLF prospecting email rules, domain readiness and a rep training block. Trigger for build a lead gen playbook, campaign playbook, flesh out this campaign, outreach playbook, cadence for a campaign, channel-based messaging, decision flowchart for outreach, give my lead gen team a playbook, pitches for each channel, what do we send and when, sequence for a target, or any request to turn a rough campaign concept into an executable outreach plan. Works for B2B and B2C, event-based and always-on campaigns."
 ---
 
 # Lead-Gen Playbook Builder
@@ -43,6 +43,11 @@ Read `references/decision-flowcharts.md`. For each channel, render a Mermaid flo
 
 Wrap the campaign in the machinery that makes it run: daily quotas per rep per channel, a real-time tracking schema (status stages, owner, last touch), reply-handling SLAs, pricing discipline, and the hard don'ts. Include explicit gates with dates where attendance or conversion can cascade.
 
+Every playbook's operating system also includes:
+- A **domain readiness checklist** with an owner and a date, completed before the first send: one-page website live on each prospecting domain (overview, services, contact, about, privacy policy), SPF, DKIM and DMARC set, sender identity aligned.
+- A **rep training block** that teaches the eight prospecting email rules in plain language, with one good and one bad example email, so the team can adopt them without a meeting.
+- A **gradual switch-over plan**: which live sequences finish on the old process and which start on the new rules, so nothing is stopped mid-cadence.
+
 ### Phase 7: Assemble
 
 Assemble everything into the output structure in `references/output-template.md`. The finished playbook is one self-contained document. A rep with zero context should be able to execute from it alone.
@@ -54,9 +59,41 @@ These recur across campaigns and you should bake the relevant ones into every bu
 - **Anchor discipline.** If the campaign uses social proof (named attendees, named customers), only cite genuinely confirmed names. Unverified anchors that back out trigger a cascade where everyone who joined because of them also leaves. This is the single most common reason high-RSVP events collapse on the day.
 - **Lead-with-problem.** Rounds 1 and 2 never lead with the asset, the SKU, or the price. Trust is upstream of the pitch.
 - **Pricing discipline.** Define exactly when a rep may quote, what they may quote (indicative ranges vs firm numbers), and what needs sign-off. Reps quoting firm numbers without authority is a recurring own-goal.
-- **Channel-fit and deliverability.** Respect per-inbox send caps, verified-only addresses, no info@/hello@, never re-mail bounces, rotate subject lines. A campaign that burns the domain is worse than no campaign.
+- **Channel-fit and deliverability.** Respect per-inbox send caps, verified-only addresses, no info@/hello@, never re-mail bounces, rotate subject lines. A campaign that burns the domain is worse than no campaign. Every email pitch in the playbook follows the prospecting email rules below.
+- **Parent-brand firewall.** Data and lead-gen campaigns never use Champions Group (name, domain, logo, signature). Sign as the selling brand and send from a dedicated prospecting domain.
 - **Compliance per audience.** B2C consumer data needs opt-in and consent screening (CAN-SPAM, TCPA for SMS, state privacy). Regulated verticals (betting, finance, health) need jurisdiction screening. Never target minors; target the buying adult.
 - **Real-time tracking.** "I think we have about ten" is how campaigns die undetected. The tracker is updated within the hour and is the single source of truth, reviewed at named gates.
+
+## Prospecting email rules (CLF lead-gen standard, adopted Oct 2026)
+
+These come from the lead-gen team that switched to them over three months and now books 15+ leads a month consistently. Sending domains with a live website outperform domains without one. Apply every rule to any prospecting or follow-up email this skill writes.
+
+**Brand rule.** Never use Champions Group (name, domain, logo or signature) for data or lead-gen prospecting. Spam complaints and blocklists attach to whatever brand and domain the email carries, and Champions Group is the parent brand for Champion Lagoons, Royal Champion Yachts and the longevity businesses. Sign as the selling brand (LakeB2B, SPAN, Ampliz, Contact Consumers, MetricFox) and send from a dedicated prospecting domain, never from a primary brand domain.
+
+**Before anything is sent (domain readiness).** Every prospecting domain needs:
+- A basic one-page website that a prospect lands on when they search the domain: company overview, services or solutions, contact information, about or company information, and a privacy policy.
+- SPF, DKIM and a valid DMARC record, plus a one-click unsubscribe for any bulk send.
+- A matching identity: the sender address, website, company name and signature all name the same company. If any of these disagree, stop and fix it before writing copy.
+
+**The eight email rules.**
+1. Professional signature: sender name, title, company name, phone number, website.
+2. One link only: the website in the signature. No links in the body, no tracking links, no calendar link until the prospect has replied.
+3. First-touch email: 125 words maximum, ideally 100 to 125. Follow-ups are shorter.
+4. Plain text only: no HTML templates, banners, images, colored fonts or heavy formatting.
+5. Subject line: 2 to 4 words, natural, relevant to the message. No clickbait, no all caps, no punctuation tricks.
+6. No spam or promotional language. Banned in subject and body: free, guaranteed, best price, act now, limited offer, risk-free, special promotion, urgent, 100%, no obligation, click here, exclusive deal.
+7. Sender identity aligned: sending address, website, company name and signature are consistent and credible (see domain readiness).
+8. Every prospecting domain has its website live before its first send (see domain readiness).
+
+**Signature template (plain text):**
+```
+[Full Name]
+[Title], [Selling Brand Name]
+[Phone with country code]
+[prospecting-domain website]
+```
+
+Roll this out gradually. Move each campaign onto these rules as its next sequence starts; do not stop live sequences mid-cadence.
 
 ## Output
 

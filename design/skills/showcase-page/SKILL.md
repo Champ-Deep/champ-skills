@@ -1,6 +1,6 @@
 ---
-name: showcase-page
-description: "Builds premium scroll pages that prove a result: client case studies, campaign wins, event recaps, partner proof and data snapshots. Night-to-sunset hero, floating stat cards, animated data visuals, MicroKit micro-interactions, 21st.dev components, brand locks, live Artifact plus PDF and PNG export, screenshot QA. Trigger on case study page, success story page, results page, proof page, showcase page, event recap page, make this premium, make it like Paddle or passionfroot, scroll animations, the case study looks basic."
+name: "showcase-page"
+description: "Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots) with animated data visuals, MicroKit micro-interactions, 21st.dev components, Artifact plus PDF and PNG export."
 ---
 
 # Showcase Page

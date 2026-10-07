@@ -14,14 +14,16 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `champ-brainstorm` | Interactive brainstorming skill using the CHAMP framework, a structured ideation method that adapts its lens depending on context. Use this skill whenever a user wants to |
 | `content-dispatch` | Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, cr |
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
-| `lead-gen-playbook-builder` | Turns a simple campaign idea into a complete, rep-ready lead-gen playbook. Use this whenever someone gives a one-line campaign idea (a target, a product, an event, a mome |
+| `lead-gen-playbook-builder` | Turns a one-line campaign idea into a complete, rep-ready lead-gen playbook: intake, personas, multi-channel cadence, exact pitches per channel, reply-handling flowcharts |
 | `nostalgia-angle-ads` | Turn a campaign theme into ad concepts by borrowing a world the buyer grew up with and mapping its objects to their data pain, then A/B test two looks per brand (the Lake |
 | `pikvita-push-notifications` | Write and schedule push notifications for Pikvita, the Bangalore independent store delivery app. MANDATORY TRIGGER for: 'push notification', 'notification copy', 'notific |
 | `reddit-reply` | Draft and vet Reddit comments that read as a practitioner rather than a vendor. Use for any Reddit reply, r/Coldemailing daily engagement, or whenever a reply could touch |
 | `science-topic-forge` | Judge, reshape, and convert any research topic idea into a best-practice Claude Science prompt tuned to the ICP of the Champions Group brand it is for (LakeB2B, Ampliz, S |
 | `seo-toolkit` | SEO in three modes: (1) People Also Ask strategy: harvest PAA questions, topic clusters, FAQ hub architecture, briefs and roadmap for a domain; (2) rapid rank: page-level |
 | `site-growth-audit` | Audit a live site and turn findings into a ranked plan. |
+| `site-interlink-audit` | Use to audit a site's internal linking and link gaps. |
 | `slack-gif-creator` | Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GI |
+| `span-blog-builder` | Build a Span Global Services (SGS) blog end to end: research, Word draft, readability rewrite, Span theme design and a WordPress-safe paste-ready code block. |
 | `vinh-copywriting` | Writing layer that sharpens persuasive text, emails, talking points, slide copy, pitch decks, proposals, LinkedIn posts. Based on Vinh Giang's communication and storytell |
 
 See the master [INDEX.md](../INDEX.md) for every skill.

@@ -8,6 +8,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 |---|---|
 | `anniversary-gift` | Build a personalized, single-file HTML gift page for a work anniversary or birthday. Use this skill whenever someone wants to create a digital gift for a colleague, emplo |
 | `interactive-quiz` | Create beautiful, interactive single-file HTML quizzes, surveys, questionnaires and intake forms with diverse, dopamine-designed interaction patterns people enjoy answeri |
+| `intern-month-plan-dashboards` | Per-intern month dashboards, handover emails and 1:1 agenda. |
 | `intern-onboarding-planner` | Generate a day-by-day first-month onboarding plan for a new hire or intern from resume plus role brief, as a single-file HTML dashboard that answers on screen one: what d |
 | `interview-prep` | Build interview prep materials for a job candidate before you talk to them, a prep note (candidate snapshot, role-fit analysis, real risks/tensions to probe, must-ask que |
 | `leaderboard` | Create beautiful internal leaderboards that rank people and teams across any metric. Produces screen-ready and print-friendly HTML with podium heroes, ranking tables, tre |
