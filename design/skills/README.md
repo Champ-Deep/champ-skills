@@ -19,7 +19,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `power-design` | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
 | `prospect-deck` | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
-| `showcase-page` | Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots) with animated data visuals, MicroKit micro-interactions, 21st. |
+| `showcase-page` | Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots, partner check-ins) with animated data visuals, MicroKit micro- |
 | `text-art-eggs` | Make ASCII, block-letter and braille art (figlet logos, animated braille pictures, Nike-style robots.txt, humans.txt, agents.txt, console art) plus page eggs. Use for any |
 | `theme-factory` | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
 | `visual-report-builder` | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |

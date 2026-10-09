@@ -10,6 +10,8 @@ description: "Generate a comprehensive daily note in the Celsus Obsidian vault r
 > 2. A colorful Lake B2B-branded HTML executive report for the reporting manager
 > 3. A BearDrive knowledge sync: the day's qualifying documents curated into the BearDrive agent knowledge space (Step 6.5)
 >
+> Plus, every run: the Commitments to Action pass (Step 3l). Every commitment from the day's Wispr Flow meetings and notes is pulled, moved toward done with ready-to-send drafts, and stuck decisions go to the Celsus Decision Desk.
+>
 > **Gold standard:** `2026-03-16.md` is the benchmark. Every daily note must match or exceed this quality.
 
 ---
@@ -29,6 +31,7 @@ Zoom and Wispr Flow tools are deferred. Load them with ToolSearch before Step 3,
 ```
 ToolSearch query: "zoom meeting recordings assets search"
 ToolSearch query: "wispr flow meetings scratchpad notes transcript"
+ToolSearch query: "select:ArtifactData,PushNotification"
 ```
 
 Connector tool names are prefixed with a server ID that varies by install. Match on the SUFFIX, not the full string.
@@ -65,7 +68,7 @@ TZ='Asia/Kolkata' date -d "$TARGET_DATE 00:00:00" -u '+%Y-%m-%dT%H:%M:%SZ'   # w
 TZ='Asia/Kolkata' date -d "$TARGET_DATE 23:59:59" -u '+%Y-%m-%dT%H:%M:%SZ'   # window end
 ```
 
-Rule of thumb: IST day D runs from `D-1 18:30:00Z` to `D 18:29:59Z`. Compute it, never hardcode it.
+Rule of thumb: IST day D runs from `D-1 18:30:00Z` to `D 18:29:59Z`. Compute it, never hardcode it. Sreedeep works until 2 AM IST, so meetings after midnight belong to the previous working day: extend the window to 02:30 IST of the next day and file those late meetings under the working day they belong to.
 
 Store these as `WINDOW_START_UTC` and `WINDOW_END_UTC`. Every Zoom and Wispr query in Step 3 uses them.
 
@@ -191,7 +194,7 @@ Zoom My Notes exist even for meetings Sreedeep did not host. Search the `zoom_ca
 
 ### 3h. Meetings, Pass 3: Wispr Flow MCP (transcripts, action items)
 
-Wispr Flow Meeting Recorder captures conversations including ones Zoom never saw: in-person meetings, phone calls, Meet/Teams calls. It is the verbatim layer.
+Wispr Flow Meeting Recorder captures conversations including ones Zoom never saw: in-person meetings, phone calls, Meet/Teams calls. It is the verbatim layer. On a heavy day it holds far more meetings than the calendar (7 Oct 2026: 5 calendar entries, 17 Wispr recordings). Never let the calendar count cap the recap.
 
 **Step 3h-1: list the day's recorded meetings.**
 
@@ -215,6 +218,7 @@ get_meeting(meeting_id: "<id>", view_transcript: {})
 - Use `todos` for structured action items. These map DIRECTLY into the Tasks section as "New Today". This is the single highest-value field in the whole pipeline: the only source that reliably produces real commitments Sreedeep made out loud.
 - Use `summary` (the Flow Summary, always returned in full) for the one-line takeaway in the Meetings table.
 - Transcripts are character-bounded at 12000 by default. For a long call, follow the continuation offset in the truncation marker rather than accepting a partial read. Raise `char_limit` up to 40000 for dense strategic calls (Chief syncs, client negotiations, Longevity/Cadence sessions).
+- On days with 8 or more meetings, fan out: split the meetings across parallel subagents (4 or 5 meetings each), each reading full transcripts and returning commitments in the Step 3l format.
 
 **Step 3h-3: attendees.**
 
@@ -282,7 +286,7 @@ After getting answers, create the vault stub immediately with the full context b
 > Flag for morning routine
 ```
 
-List each unresolved note in the Capture Inbox section of the daily note so the morning routine knows to ask about it.
+List each unresolved note in the Capture Inbox section of the daily note so the morning routine knows to ask about it. If a note carries a decision, also put it on the Celsus Decision Desk (Step 3l) so Sreedeep can answer it from his phone.
 
 **Vault stub paths (one folder per source, so provenance survives):**
 
@@ -363,6 +367,21 @@ Read all files in `Efforts/Active/` and report current status. Pay attention to:
 
 Cross-reference against the day's meetings and action items. If a Wispr `todo` or Zoom next-step maps to an active effort, note it in that effort's "what changed today" rather than stranding it in the Tasks section alone.
 
+### 3l. Commitments to Action (Celsus Decision Desk), MANDATORY
+
+The recap is not done when the tasks are listed. Sreedeep expects every commitment from the day's Wispr Flow meetings and notes to be pulled, and as many as possible moved toward done before he wakes up.
+
+1. **Pull every commitment.** From the full Wispr transcripts (not the summaries) collect: everything Sreedeep said he would do, send, decide or review; everything someone is waiting on him for; every open choice; and every task owned by someone else. Zoom next steps join the same list. Skip nothing because speaker labels are messy: resolve the speaker from context and flag the guess.
+2. **Decide what his past calls already cover.** Read `Efforts/Active/Celsus OS/Decision Desk/Task Decision Precedents.md`. If a precedent matches at 0.70 or higher and the decision is not on the always-ask list (client-facing commitments, new or recurring spend, pricing, hiring and reporting lines, anything Chief owns, HR or legal disputes), decide it and log the basis. Everything else becomes a "needs you" card with a recommendation, up to 4 options, the reason, a confidence and the source quote.
+3. **Move the work.** For each task Sreedeep owns that Claude can advance, write the ready-to-send piece: email, WhatsApp message, checklist, agenda, brief. Short, plain, no apologies in client email, no dashes. Where a connected tool can do the thing outright without sending anything on his behalf (create a Notion tracker, find a file in the vault), do it and mark the card done.
+4. **Write to the desk.** Add the cards to the Celsus Decision Desk store (ArtifactData, collection `cards`, artifact https://claude.ai/artifact/GcC9cKY72Mykcauhjj5aiy), copying the schema from the latest `cards-YYYY-MM-DD.json` in the Decision Desk folder. Before adding, sync back any cards he answered (status `decided`, `confirmed`, `overridden`) into the precedent file's Answer log. Update `meta/run` with the run time and a one-line summary.
+5. **Alert on critical.** A card that is critical priority, sits on a client, revenue or due-within-24-hours task, and still needs him goes to `alerts/outbox.jsonl` (Champ Bot delivers to his WhatsApp admin chat) and into one push notification naming at most 3 items.
+6. **Team tasks.** Tasks owned by others go into the latest Team Task Sheet xlsx in the Decision Desk folder for HR, one row each, `#` column stable.
+7. **TASKS.md.** Sreedeep-owned commitments go into `## Active` inside a fenced `<!-- CELSUS DECISION DESK (added <date time> IST) -->` block, deduped against blocks already there. Never below `## Done`, never moving the file.
+8. **In the daily note.** The Meeting Intelligence section links the desk and states the counts: needs you, decided for you, ready to act, team tasks. The Tasks section's "New Today" lists every Sreedeep-owned commitment with a pointer to its draft. Tomorrow's Focus is taken from the critical cards.
+
+The `Celsus decision sweep` scheduled task runs the same loop at 2:53 PM, 7:53 PM and 11:53 PM IST. The recap dedupes against what the sweep already filed rather than repeating it.
+
 ---
 
 ## Step 4: Compile the Daily Note
@@ -390,7 +409,7 @@ Claude and Cowork Sessions
 Claude Code Sessions
 Email and Communications
 Meetings                             (Calendar + Zoom + Wispr, reconciled)
-Meeting Intelligence                 (transcript-derived decisions and commitments)
+Meeting Intelligence                 (transcript-derived decisions and commitments, plus Decision Desk counts)
 Active Efforts Progress
 Sales Enablement and Deliverables    (only if deliverable assets exist)
 Capture Inbox                        (always present: Wispr, Apple Notes, Zoom My Notes)
@@ -430,7 +449,7 @@ Appendix: Raw Activity Log
 Table: `Meeting | With | Time (IST) | Key Takeaways | Source`
 
 - Source column values: `Cal`, `Zoom`, `Wispr`, or combinations like `Cal+Zoom+Wispr`
-- Link the Zoom recording play URL on the meeting name when one exists
+- Link the Zoom recording play URL on the meeting name when one exists, and the Wispr share link when there is no Zoom recording
 - Action item checkboxes below the table, sourced from Wispr `todos` merged with Zoom next-steps
 - Attendance from Zoom `participants` when available, not the invite list
 - IMPORTANT: Sreedeep attends Cirralogix/Recruit Champ Weekly at 3:30 to 4:30 PM (NOT InfraTech Weekly)
@@ -444,12 +463,13 @@ This is what the transcripts bought us, and the reason the connectors are wired 
 Meeting Intelligence
 
 Meetings recorded: N of M | Transcripts available: N | Action items extracted: N
+Decision Desk: N need you (N critical) | N decided for you | N ready to act | N team tasks for HR
 
 Decisions Made Today
 - {decision} ({meeting}, {who decided})
 
 Commitments Sreedeep Made
-- [ ] {commitment} ({meeting}, due {date if stated})
+- [ ] {commitment} ({meeting}, due {date if stated}) -> draft on the desk
 
 Commitments Made To Sreedeep
 - {person} owes {what} ({meeting}, by {date if stated})
@@ -510,14 +530,14 @@ If a source found nothing or access failed: state why plus add a carried-forward
 **Tasks, THREE required subsections (non-negotiable):**
 1. Completed Today, everything that got done
 2. Carried Forward, unchecked from previous days; nothing gets silently dropped
-3. New Today, new items surfaced from today's work, including every Wispr `todo` and every Zoom next-step
+3. New Today, new items surfaced from today's work, including every Wispr `todo` and every Zoom next-step, each with a pointer to its draft on the Decision Desk
 
 Always carry forward incomplete tasks from yesterday's daily note. Dedupe against the Meeting Intelligence commitments so an item does not appear twice.
 
 **Tomorrow's Focus:**
 - Top 3 only. Specific and actionable. Not vague.
 - Format: bold title + one sentence of context
-- Weight toward dated commitments surfaced from transcripts. A promise made out loud outranks a vague intention.
+- Weight toward dated commitments surfaced from transcripts. A promise made out loud outranks a vague intention. Critical cards on the Celsus Decision Desk come first.
 
 **Appendix:**
 - Machine-generated raw timeline
@@ -532,6 +552,7 @@ Google Calendar:        connected / pending
 Zoom MCP:               connected, N meetings / N assets / N recordings   |  auth failed  |  not loaded
 Wispr Flow MCP:         connected, N meetings / N transcripts / N notes   |  auth failed  |  not loaded
 Apple Notes:            N notes captured / N need context / access failed
+Decision Desk:          N cards added / N answers synced to precedents / N alerts queued
 WhatsApp:               pending
 Claude Code sessions:   manual only
 BearDrive sync:         N synced / N pending / N failed / N review  |  CLI not wired  |  SOP missing
@@ -557,6 +578,7 @@ energy:
 mood:
 meetings-recorded:    # e.g. "4 of 6 recorded, 3 transcripts"
 captures:             # e.g. "wispr 3, apple 2, zoom 1 | 4 pending context"
+decision-desk:        # e.g. "10 need you (3 critical), 13 decided, 22 ready"
 tags:
   - daily
   - [day-of-week]
@@ -662,6 +684,7 @@ After all outputs are created, provide a short bullet-point summary:
 - What is in the vault note (sections, data sources used)
 - What is in the HTML report (link to file)
 - Meeting coverage: N meetings, N recorded by Zoom, N transcribed by Wispr, N with no coverage
+- Decision Desk: N need you (N critical), N decided for you, N ready to act, link to the desk
 - Capture status: how many from each source, how many processed, how many need morning context
 - BearDrive sync: N synced / pending / failed / review, and whether the CLI is wired yet
 - Any flags (stale efforts, missing meeting notes, connector failures, new prospects to track)
@@ -680,6 +703,7 @@ After all outputs are created, provide a short bullet-point summary:
 | `Inbox/Zoom Notes/` | Orphaned Zoom My Notes stubs |
 | `Other/Templates/Template - Daily Note.md` | Template |
 | `Efforts/Active/` | Active efforts |
+| `Efforts/Active/Celsus OS/Decision Desk/` | Decision Desk README, precedents, card snapshots, team task sheet, Champ Bot alert outbox |
 | `Atlas/Products/` | Product notes |
 | `Atlas/People/` | People |
 | `Atlas/Context Docs/` | Context docs |
@@ -699,6 +723,7 @@ After all outputs are created, provide a short bullet-point summary:
 - Wispr `since`/`until`: filters on modified time, not start time. Always verify actual meeting start against the target day.
 - Both Zoom and Wispr expose a tool named `search_meetings`. Disambiguate by server prefix.
 - Dictated notes carry transcription artifacts. Normalize: "Jreanoth" not "Dre"; "Champion InfoMetrics" not "champion informatics"; "Gujarathi" with the h. Flag single-occurrence unknown names as unverified rather than creating person notes.
+- Wispr speaker labels are unnamed and can swap mid-meeting. Sreedeep may be Speaker 1, 2 or 3. Resolve from context (who promises to send, who is addressed as Sreedeep, Deep or Champ) and mark the guess.
 - Vendor names (not client names) are anonymized as Vendor A/B/C in any team-facing output. Key at `Atlas/Ops/Vendor Anonymization Key.md`.
 - No em dashes in any output, vault note or HTML.
 - BearDrive: the Sync SOP in the vault owns curation policy and CLI config. Until `wired: true` in its config block, Step 6.5 stages manifests only. Never upload anything on the hard-exclusion list, and never let a BearDrive failure block the recap.
@@ -724,6 +749,7 @@ What makes a good daily note:
 16. Every timestamp shown in IST, never raw UTC
 17. Every meeting-derived claim traceable to a Zoom UUID or Wispr meeting_id in the Appendix
 18. BearDrive sync ran (or staged): manifest written to `Atlas/Ops/BearDrive/Sync Log/`, one-line status in the Appendix tracker and the exec summary, zero hard-exclusion files ever uploaded
+19. Every Wispr meeting of the day read in full, every Sreedeep commitment on the Decision Desk with a draft or checklist, critical cards alerted, team tasks in the HR sheet
 
 ## Iteration Log
 
@@ -759,3 +785,5 @@ What makes a good daily note:
 | 2026-09-01 | v5: BearDrive Knowledge Sync added (Step 6.5) | BearDrive is the curated agent knowledge space; daily docs now flow up automatically so Sreedeep never curates by hand |
 | 2026-09-01 | v5: Sync SOP as external policy source | Curation rules and CLI config live in the vault (Atlas/Ops/BearDrive/), editable without touching the skill |
 | 2026-09-01 | v5: Stage-then-wire posture | CLI not yet configured; manifests accumulate as a backlog that syncs in full on first wired run |
+| 2026-10-08 | v6: Commitments to Action step (3l) and Celsus Decision Desk | The 7 Oct recap saw 5 calendar meetings while Wispr held 17; Sreedeep wants every Wispr commitment pulled and moved, stuck decisions routed to Celsus OS, critical ones alerted, and team tasks shared with HR |
+| 2026-10-08 | v6: Window extended to 02:30 IST, subagent fan-out on heavy days | His day runs to 2 AM and heavy days exceed what one pass reads in full |

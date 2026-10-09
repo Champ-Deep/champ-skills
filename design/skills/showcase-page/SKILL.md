@@ -1,17 +1,22 @@
 ---
 name: "showcase-page"
-description: "Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots) with animated data visuals, MicroKit micro-interactions, 21st.dev components, Artifact plus PDF and PNG export."
+description: "Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots, partner check-ins) with animated data visuals, MicroKit micro-interactions, 21st.dev components, Artifact plus PDF and PNG export."
 ---
 
 # Showcase Page
 
-A showcase page proves one result to a buyer who skims. It earns a second look the way Paddle and passionfroot pages do: one atmospheric moment at the top, editorial numbers, real charts that animate to their values, and small responses under the pointer that make the page feel built with care. The LakeB2B case study v2 set (Oct 2026) is the reference build: `Atlas/Context Docs/Lake B2B/Case Studies/v2/` in the Celsus vault.
+A showcase page proves one result to a buyer who skims. It earns a second look the way Paddle and passionfroot pages do: one atmospheric moment at the top, editorial numbers, real charts that animate to their values, and small responses under the pointer that make the page feel built with care. The LakeB2B case study v2 set (Oct 2026) is the reference build: `Atlas/Context Docs/Lake B2B/Case Studies/v2/` in the Celsus vault. The Champions Group x Onex check-in (`Calendar/Meetings/2026-10-07 - Champions Group x Onex Check-in.html`) is the reference for a post-meeting partner page.
 
 The working kit lives in the vault at `Other/Skills/showcase-page/kit/` (`core.css`, `core.js`, `build.py`, `shoot.py`, worked examples). Copy it into the session and build from it. When the vault is not mounted, rebuild the same structure from `references/components.md`.
 
 ## What went wrong before (do not repeat)
 
 The v1 LakeB2B case studies were called "really mediocre, so basic" by Deep: static, flat, one chart each, no motion, generic cards, a funnel that put accounts and contacts on one scale. A page that only restates numbers in boxes fails, however clean it is.
+
+The first Onex partner page (Oct 2026) looked good but failed on basics Deep noticed at once:
+- an invented logo (an orange tile with a crown) inside a white pill instead of the real logo file;
+- a selected tab whose white text sat on a light pill in dark mode, so the selection could not be seen;
+- an eyebrow with a short horizontal rule line before it, in spaced uppercase mono with dot separators. Deep reads that pattern as a tell-tale AI sign.
 
 ## Hard rules
 
@@ -22,15 +27,18 @@ The v1 LakeB2B case studies were called "really mediocre, so basic" by Deep: sta
 5. **Client-reported lines are labeled as client reported**, and a paraphrase says it is a paraphrase.
 6. **Respect timing holds.** A case with a pending client decision carries a red HOLD pill in the nav and a HOLD suffix in its file names until the date passes.
 7. **Look at the output.** Screenshots at 390 and 1440 are opened with the Read tool and critiqued before anything is called done.
+8. **Real logos, no boxes.** Use the brand skill's transparent logo files, swapped full-colour on light grounds and reversed on dark grounds (carry both in a nav that changes ground on scroll). Never place a logo in a white pill, card or tile, and never draw a substitute mark. If only a boxed file exists, make or find a transparent one first.
+9. **No AI-tell ornaments.** No short horizontal rule or dash line before an eyebrow or label. The hero eyebrow is plain sentence-case text ("Champions Group and Onex, after our call on 7 October"), not spaced uppercase mono with dot separators. Keep mono uppercase only for small data labels inside panels, and use it sparingly.
+10. **Selected states read in both themes.** Tabs, toggles and segmented buttons take a dedicated token pair (light: ink fill, white text; dark: brand fill, ink text) plus an accent underline or ring. Check the selected state in the 390 dark screenshot.
 
 ## Step 1: Evidence and brand
 
 - Gather the numbers and their sources into a short evidence table (figure, source file, allowed or not). Read the raw client files for per-row data the chart needs (per account, per market, per send).
-- Brand: infer from the client or ask once ("which brand?"). Load that brand skill (`lakeb2b-brand-guidelines`, `span-brand-guidelines`, `ampliz-brand-guidelines`, `metricfox-brand-guidelines`, `champions-group-brand`) and lock its colours, fonts and logo. No brand named means the neutral theme in `references/templates.md`.
+- Brand: infer from the client or ask once ("which brand?"). Load that brand skill (`lakeb2b-brand-guidelines`, `span-brand-guidelines`, `ampliz-brand-guidelines`, `metricfox-brand-guidelines`, `champions-group-brand`) and lock its colours, fonts and logo files. Data claims use LakeB2B figures (800M+ contacts, 25+ years, 189 countries). No brand named means the neutral theme in `references/templates.md`.
 
 ## Step 2: Pick the template
 
-Propose one template from `references/templates.md` in a single AskUserQuestion, recommended first: Case Study, Campaign Report, Partner Pitch, Event Recap, Market or Data Snapshot (Executive One-Pager routes to its own skill). Skip the question when the request names the format.
+Propose one template from `references/templates.md` in a single AskUserQuestion, recommended first: Case Study, Campaign Report, Partner Pitch, Event Recap, Market or Data Snapshot (Executive One-Pager routes to its own skill). Skip the question when the request names the format. A page that follows a meeting with a partner uses Partner Pitch in check-in mode: what each side brings, decisions, the agreed plan with a cost calculator where prices were quoted, how success is judged, a tickable "before next call" list with owners on both sides, and the questions for the next call.
 
 ## Step 3: Source the components (21st.dev, then MicroKit)
 
@@ -48,7 +56,7 @@ Propose one template from `references/templates.md` in a single AskUserQuestion,
 
 ## Step 5: Build with the kit
 
-Section order for a Case Study: sticky nav with logo pill, case label, industry chip and primary button; scroll progress bar; atmospheric hero with staggered headline; three floating stat cards with count-up and comparator chips; client strip; split sticky challenge and approach; the main visual section (two or more panels on their own scales, a table where rows exist); Paddle stat band; closing line; CTA panel; footer.
+Section order for a Case Study: sticky nav with the real logo on the page ground, case label, industry chip and primary button; scroll progress bar; atmospheric hero with staggered headline; three floating stat cards with count-up and comparator chips; client strip; split sticky challenge and approach; the main visual section (two or more panels on their own scales, a table where rows exist); Paddle stat band; closing line; CTA panel; footer.
 
 - Charts follow `references/charts-tables.md`: unit charts for counts, two scales when units differ, values on the marks, computed rate columns, sortable tables.
 - Motion follows `references/motion.md`: one load sequence, reveals on scroll, `prefers-reduced-motion`, `?static=1` export mode, final values in the HTML.
@@ -61,12 +69,13 @@ Section order for a Case Study: sticky nav with logo pill, case label, industry 
 2. Open the 1440 hero, the 1440 full page in two halves, and the 390 full page with the Read tool. Check: hero headline wraps in three lines or fewer, cards overlap the hero edge cleanly, no label collides on any chart, no orphaned single tile or dot row, table columns fit their panel.
 3. Check one motion frame mid-scroll (bars and dots mid-animation, spy rail on the active step) and one hover state per micro-interaction.
 4. Claim audit: every number on the page traces to the evidence table; computed numbers are right.
-5. The Paddle bar. Would Paddle ship this? If a section is a box of text with a number in it, add the visual that proves it or cut the section.
+5. Basics audit: real logo with no box in both nav states, selected states visible in the dark screenshot, no rule line before any eyebrow, no spaced-mono hero eyebrow.
+6. The Paddle bar. Would Paddle ship this? If a section is a box of text with a number in it, add the visual that proves it or cut the section.
 
 ## Step 7: Deliver
 
 1. Publish each page with the Artifact tool (title is the page's 2 to 4 word name; one-sentence description; republish the same file path to keep the URL).
-2. Save to the vault beside the client or entity material (for LakeB2B: `Atlas/Context Docs/Lake B2B/Case Studies/v2/`): standalone HTML, one-page PDF, 2x PNG, plus an index note listing live links and status (ready, hold, do-not-send conditions).
+2. Save to the vault beside the client or entity material (for LakeB2B: `Atlas/Context Docs/Lake B2B/Case Studies/v2/`; for meeting pages: `Calendar/Meetings/`): standalone HTML, one-page PDF, 2x PNG, plus an index note listing live links and status (ready, hold, do-not-send conditions).
 3. The message to Deep is two lines: what shipped, and the one decision he needs to make.
 
 ## References

@@ -1,5 +1,5 @@
 ---
-name: champions-group-brand
+name: "champions-group-brand"
 description: "Brand guidelines for Champions Group, the parent holding company across 12 ventures. Use when creating ANY Champions Group branded content including presentations, documents, proposals, MOUs, prospectuses, reports, one-pagers, social media, emails, investor materials, partnership materials, or any design requiring the Champions Group signature orange + white identity. Also trigger for anything involving Sreedeep, Deep, Champ, Chief, Champions Accelerator, Champions Infometrics, Champions Club, or any document that should carry the Champions Group parent brand (as opposed to a subsidiary brand like Ampliz or Lake B2B). MANDATORY TRIGGER for all Champions Group corporate and executive-level materials. If in doubt whether to use Champions Group branding or a subsidiary brand, use this skill and let the user decide."
 ---
 
@@ -8,6 +8,8 @@ description: "Brand guidelines for Champions Group, the parent holding company a
 Brand guidelines for Champions Group, enabling creation of premium on-brand content and materials with the signature **orange + white** identity.
 
 > **UPDATED 2026-04-10:** Primary palette migrated from charcoal + gold to orange + white to match the current Champions Group logo. All new materials must use orange + white. Re-skin older materials on touch.
+>
+> **UPDATED 2026-10-07:** Real logo files added (transparent and reversed). The old "crown/shield icon" description was wrong and is removed. Never draw or invent a logo mark; use the files. Logos sit directly on the page ground with no white box. LakeB2B figures updated to 800M+ contacts.
 
 ## Brand Overview
 
@@ -84,13 +86,27 @@ Champions Group is the umbrella entity that houses the Champions Ecosystem (Cham
 
 ## Logo & Identity Rules
 
-- Champions Group wordmark uses Inter/Calibri Bold with the crown/shield icon, rendered in Champions Orange #F26722
-- Minimum digital width: 160px. Minimum print width: 30mm.
-- Clear space: Height of the "C" on all sides.
-- Approved backgrounds: White (primary), Off White, Peach, Orange (wordmark inverted to white).
-- Orange elements: Use #F26722 on light backgrounds. Use #FFFFFF wordmark on #F26722 backgrounds.
+The Champions Group logo is a red serif "Champions" wordmark (logo red about #E90008) with an orange figure (logo orange about #F26E00) holding a red "@" above the "m", and "Group" in an orange script under the right side. The logo's own red and orange stay exactly as drawn; they are not recoloured to Champions Orange.
 
-**Never:** Stretch, rotate, recolor outside palette, add drop shadows, place on busy/patterned backgrounds, use gradient fills on the wordmark itself, combine with subsidiary logos in the same lockup.
+### Files (use these, never draw a mark)
+
+| File | Use |
+|------|-----|
+| `ChampionsGroup_Logo_Transparent.png` (1694 x 1064, transparent) | master for decks, documents and print on light grounds |
+| `ChampionsGroup_Logo_Transparent_720.png` (720 x 452) | web pages, Artifacts and single-file HTML on white or light grounds, embedded as a base64 data URI |
+| `ChampionsGroup_Logo_Reversed.png` and `_720.png` | dark grounds (dusk heroes, ink panels, dark mode): wordmark and "@" in white, figure and "Group" stay orange |
+
+Files live in the Celsus vault at `Other/Skills/champions-group-brand/assets/`. When they are not in the account copy of this skill, read them from there. For a web page, resize to about 2x the display width before embedding (300px wide for a 60px-tall nav logo) to keep the page light.
+
+### Placement rules
+
+- **No boxes.** The logo sits straight on the page ground: no white pill, card, tile or rounded box behind it, on any brand. If the only file available has a background, find or make a transparent version before using it; prefer transparent files every time.
+- **Swap by ground, not by box.** Full-colour on light grounds, reversed on dark grounds. In a nav that starts over a dark hero and turns light on scroll, carry both files and switch them with the nav state and with dark mode.
+- **Size:** at least 54px tall in a desktop nav (50px on phones) so "Group" stays readable; minimum digital width 160px elsewhere. Minimum print width: 30mm.
+- **Clear space:** height of the "C" on all sides.
+- **Approved grounds:** white, off white, peach, and dark warm grounds (#1C1210 to #2B1810) with the reversed file. Avoid placing it on Champions Orange fills, where the logo orange disappears.
+
+**Never:** stretch, rotate, recolor outside the supplied files, add drop shadows or glows, place on busy or patterned backgrounds, put it in a box, draw a substitute icon (no crowns, shields or letter tiles), or combine it with subsidiary logos in the same lockup. A subsidiary logo (LakeB2B, Ampliz) can appear elsewhere on the same page, on its own ground and with its own transparent file.
 
 ## Brand Voice
 
@@ -100,7 +116,7 @@ Champions Group is the umbrella entity that houses the Champions Ecosystem (Cham
 | **Warm** | Orange identity reflects energy and approachability. We lead with warmth. |
 | **Visionary** | We think in ecosystems, not silos. Innovation, resilience, scale. |
 | **Empowering** | Partners and founders are the heroes. We build the platform. |
-| **Precise** | Numbers speak. 12 companies, 120M+ contacts, 4M+ physicians, concrete ROI. |
+| **Precise** | Numbers speak. 12 companies, 800M+ LakeB2B contacts, 4M+ physicians, concrete ROI. |
 
 **Frame Champions Group as:** "A multi-venture innovation group". Never "holding company", "conglomerate", or "investment firm."
 
@@ -266,6 +282,11 @@ function headerCell(text, width) {
 - Soft Peach #FFF4EC background: use Ink #1A1A1A text. Orange OK for accent only.
 - Never: light gray text on white, orange text on peach, orange text on warm tint.
 
+### Web basics (check on every page)
+- **Logo:** real file, no box, swapped by ground (see Logo & Identity Rules).
+- **Selected states must read in both themes.** Selected tabs, toggles and segmented buttons use a dedicated token pair, never the theme ink: light theme Ink #1A1A1A fill with white text; dark theme Champions Orange #F26722 fill with Ink #1A1A1A text, plus an orange underline or ring. Check the selected state in a dark-mode screenshot before publishing; white text on a light pill is the known failure.
+- **No invented marks or icons standing in for a brand.** Text alone is better than a fake logo.
+
 ## Image & Photography Guidelines
 
 - Clean, professional, aspirational imagery
@@ -277,16 +298,20 @@ function headerCell(text, width) {
 
 ## Key Stats (for content)
 
-| Metric | Value |
-|--------|-------|
-| Companies in Portfolio | 12 |
-| B2B Contacts (via Ampliz/Lake B2B) | 120M+ |
-| Companies in Database | 7M+ |
-| Physicians (Healthcare) | 4M+ |
-| Hospitals | 9,000+ |
-| Clinics | 200K+ |
-| Data Accuracy | 99% |
-| Ecosystems | 4 |
+| Metric | Value | Source |
+|--------|-------|--------|
+| Companies in Portfolio | 12 | group |
+| Ecosystems | 4 | group |
+| LakeB2B B2B contacts | 800M+ | Deep, Oct 2026 |
+| LakeB2B track record | 25+ years supplying verified data | Deep, Oct 2026 |
+| LakeB2B coverage | 189 countries, APAC regional data a specialty | LakeB2B Quick Reference |
+| LakeB2B contact accuracy | 90%+ | LakeB2B Quick Reference |
+| LakeB2B verification team | about 200 data staff in Bangalore | Deep, Oct 2026 |
+| Physicians (Healthcare, Ampliz) | 4M+ | group |
+| Hospitals (Ampliz) | 9,000+ | group |
+| Clinics (Ampliz) | 200K+ | group |
+
+Use LakeB2B figures for data claims. The older "120M+ contacts, 7M+ companies, 99% accuracy" figures are retired; do not use them. Do not name LakeB2B's data customers on shared pages without Deep's say-so.
 
 ## When to Use Champions Group vs. Subsidiary Branding
 
@@ -306,12 +331,13 @@ function headerCell(text, width) {
 ## Detailed References
 
 - **Subsidiary brand guidelines:** See `ampliz-brand-guidelines` and `lakeb2b-brand-guidelines` skills
+- **Logo files:** `Other/Skills/champions-group-brand/assets/` in the Celsus vault
 - **Company profiles:** See `Atlas/Companies/` in Celsus vault
 - **Context documents:** See `Atlas/Context Docs/` in Celsus vault
 
 ---
 
-*Last updated: 2026-04-10. Palette migrated from charcoal+gold to orange+white to match current Champions Group logo.*
+*Last updated: 2026-10-07. Real logo files and placement rules added; LakeB2B figures updated. Palette migrated from charcoal+gold to orange+white on 2026-04-10.*
 
 ## Voice gate: no AI slop
 
