@@ -44,7 +44,7 @@ Propose one template from `references/templates.md` in a single AskUserQuestion,
 
 1. List the 3 to 5 components the page depends on (see the catalog in `references/components.md`).
 2. If the 21st.dev MCP is connected (tools `search`, `get_inspiration`, `get_component`, `search_logo`), run `search` for each with the catalog query. Pull code with `get_component` for at most the two that matter most (free tier: 2 code pulls a day; `get_usage` shows the quota). Port the React and Tailwind code into the kit's vanilla files and credit the id in a CSS comment.
-3. Pick the micro-interactions from `references/micro-interactions.md` (MicroKit patterns, already ported in the kit): label swap and arrow slide-through on buttons, glow follow on the primary CTA, edge shine on the ghost button, spotlight rail on step lists, tilt and sheen on stat cards, animated row reorder on sortable tables.
+3. Pick the micro-interactions from `references/micro-interactions.md` (MicroKit patterns, already ported in the kit): label swap and arrow slide-through on buttons, glow follow on the primary CTA, edge shine on the ghost button, spotlight rail on step lists, tilt and sheen on stat cards, animated row reorder on sortable tables. Then widen the set with the `scroll-journey-kit` skill (letter swap on nav links, magnetic primary button, sliding pill on any filter or tab row, spotlight cards, split headlines, section rail): at least six distinct effects per page, different on different elements.
 4. If the MCP is not connected, say so in one line and continue with the kit. Never write an API key into a file, page, or the vault.
 
 ## Step 4: Write the copy, then gate it
@@ -61,6 +61,7 @@ Section order for a Case Study: sticky nav with the real logo on the page ground
 - Charts follow `references/charts-tables.md`: unit charts for counts, two scales when units differ, values on the marks, computed rate columns, sortable tables.
 - Motion follows `references/motion.md`: one load sequence, reveals on scroll, `prefers-reduced-motion`, `?static=1` export mode, final values in the HTML.
 - Mobile at 390: one column, cards stack straight, 44px tap targets, no horizontal overflow, tables drop the inline bar column.
+- Scroll depth: use the `scroll-journey-kit` for the atmospheric hero (glow horizon, word-by-word headline) and give every page one interactive section (a filter or toggle that re-cuts a chart, a hover readout tied to a real row). Static exports (`?static=1`, PDF, PNG) skip pinning and show every end state.
 - `python3 build.py <ids>` writes the standalone HTML and the Artifact fragment and fails on any dash.
 
 ## Step 6: Verify
