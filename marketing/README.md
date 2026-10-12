@@ -6,6 +6,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 
 | Skill | What it does |
 |---|---|
+| `anusha-hissaria-style` | Custom writing style: Anusha Hissaria. Apply only when the user explicitly requests this skill by its exact name 'anusha-hissaria-style'. |
 | `asset-title` | Generate high-converting, ICP-matched titles for any marketing or sales asset (case study, blog post, whitepaper, one-pager, report, deck, webinar, ebook). MANDATORY TRIG |
 | `b2b-blog-writer` | Full-pipeline B2B blog writing that turns trending topics into authoritative thought-leadership posts for any entity, then optionally enhances the post into a visual cont |
 | `b2b-thought-leader-pulse` | Tue/Thu Span Global Services content intelligence pulse. Scans 7 sectors, applies the Thought Leadership Research Playbook to produce 5 Research Briefs with non-commodity |
