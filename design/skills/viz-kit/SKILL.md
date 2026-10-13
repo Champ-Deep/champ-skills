@@ -1,11 +1,23 @@
 ---
 name: "viz-kit"
-description: "Brand-independent charts and executive landing pages from one component kit (US map, pyramid, treemap, log ladder, matrix, countdowns, live builder). Use for any data viz or exec page."
+description: "Use when building a viz kit, ad kit, or data visual. Create varied campaign creative with static ads, narrative carousels and rendered motion, or token-driven charts and executive pages. Trigger for campaign showcases, LinkedIn ad options, creative galleries and data visualization."
 ---
 
 # Viz Kit
 
-One kit for every chart and every executive landing page, for any brand. Components are token-driven: a brand changes values in one `:root` block, never markup. Other page skills (executive-one-pager, visual-report-builder, landing-page, campaign-visualization, meeting-growth-visuals) call this skill for their charts and visual blocks.
+Two modes, selected by the deliverable: campaign creative and data visualization. Do not treat an advertising request as a chart page, or turn a single-chart request into an advertising package.
+
+## Route before building
+
+| Request | Mode and next step |
+|---|---|
+| Viz kit, ad options, campaign showcase, LinkedIn creatives, static/carousel/motion package | **Campaign creative.** Read `references/campaign-creative.md` and follow that workflow instead of the chart steps below. |
+| Chart, map, dashboard block, data-led executive page | **Data visualization.** Follow Steps 1 to 6 below. |
+| Both campaign assets and a data-backed proposal | Build the raw creatives through campaign mode, then use the chart components only where evidence supports the proposal. |
+
+For campaign mode, default to five distinct campaign directions with static executions, one narrative document carousel and one rendered motion ad, unless the user's scope is narrower. Vary buyer situation, offer, format and composition, not just the service label or background colour. Judge the exported ads first: a polished gallery cannot rescue weak raw designs. Load `prospect-creative-campaign-builder`, `vinh-copywriting`, `impeccable`, the relevant brand skill, `carousel-funnel`, `no-ai-slop` and `visual-verify`; use `media-use` to route generated imagery and motion, including Higgsfield when available. Never claim to have used a specialist workflow without loading and applying it.
+
+The existing data component kit remains token-driven: a brand changes values in one `:root` block, never markup. Other page skills (executive-one-pager, visual-report-builder, landing-page, campaign-visualization, meeting-growth-visuals) call this skill for their charts and visual blocks.
 
 **Reference implementation:** `Other/Skills/viz-kit/gallery.html` in the Celsus vault (also published as the "Viz Kit Gallery" artifact, https://claude.ai/artifact/3zArqRTh8VFmxaSVVZ8aCc; read it with the Artifact tool, action read). It renders all 20 components with sample data and a Neutral / Forest / Plum brand switcher. Copy component CSS and markup from it. US state shapes: `Other/Skills/viz-kit/us-states-albers.json`.
 
@@ -25,7 +37,7 @@ Ask which brand the page is for only if it is unclear. Then:
 2. If the brand has a design system file in the vault (for example the SGS design prompt under `Atlas/Context Docs/SPAN Global Services/`), use that.
 3. Otherwise use the Neutral tokens below.
 
-Never mix two brands' palettes on one page.
+Never mix two brands' palettes inside one chart or creative. In an agency proposal, the host brand may own gallery chrome while the advertised brand owns each ad. Scope their tokens separately so the gallery styling cannot leak into exported creatives.
 
 ### Token contract
 

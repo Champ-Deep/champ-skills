@@ -29,7 +29,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `theme-factory` | Design & Creative | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
 | `visual-report-builder` | Design & Creative | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |
 | `visual-verify` | Design & Creative | Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic inte |
-| `viz-kit` | Design & Creative | Brand-independent charts and executive landing pages from one component kit (US map, pyramid, treemap, log ladder, matrix, countdowns, live builder). Use for any data viz |
+| `viz-kit` | Design & Creative | Use when building a viz kit, ad kit, or data visual. Create varied campaign creative with static ads, narrative carousels and rendered motion, or token-driven charts and  |
 | `web-artifacts-builder` | Design & Creative | Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex a |
 | `ab7-brand-guidelines` | Brand Guidelines | Brand guidelines for AB7 Solutions (Champions sub-vendor partner). Use for any AB7-branded proposal, deck, one-pager, report or web page, or questions on AB7 colours, fon |
 | `ampliz-brand-guidelines` | Brand Guidelines | Brand guidelines for Ampliz, a B2B and Healthcare Data Intelligence company. Use when creating any Ampliz-branded content including presentations, documents, social media |
@@ -199,7 +199,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `theme-factory` | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
 | `visual-report-builder` | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |
 | `visual-verify` | Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic inte |
-| `viz-kit` | Brand-independent charts and executive landing pages from one component kit (US map, pyramid, treemap, log ladder, matrix, countdowns, live builder). Use for any data viz |
+| `viz-kit` | Use when building a viz kit, ad kit, or data visual. Create varied campaign creative with static ads, narrative carousels and rendered motion, or token-driven charts and  |
 | `web-artifacts-builder` | Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex a |
 
 ## Brand Guidelines (`design/brand-guidelines/`)
