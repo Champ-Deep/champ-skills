@@ -200,7 +200,7 @@ Hey [Name],
 > Worth a 15-min call to see if we can do the same for [Company]?
 
 **Checklist:**
-- [ ] Subject line is Level 1 (a friend could say it), under 30 characters (a 6,337-email study: 84% open rate under 30 chars vs 69% for long subjects; one-word subjects and subjects containing a number test best)
+- [ ] Subject line is Level 1 (a friend could say it), 2 to 4 words and roughly 15 to 40 characters (the 6,337-email study had under 30 chars at 84% open versus 69% for long; Belkins has 2 to 4 words highest at 46%. Test a number in the subject; treat one-word subjects as an A/B variant, not the default)
 - [ ] Body under 100 words (same study: 11.9% reply rate under 100 words vs 1.9% at 100 to 200)
 - [ ] No sentence over 20 words
 - [ ] Exactly one CTA

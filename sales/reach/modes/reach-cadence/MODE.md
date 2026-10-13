@@ -27,8 +27,8 @@ A first touch has gone out, or a lead has gone quiet. Trigger after Engage or Ac
    - DAY 14, Strategic pivot: under 130 words, a new angle or a different person to talk to.
    - DAY 21, Last warm touch: under 120 words, give them control ("reply PAUSE if you'd rather I stop").
    - DAY 30, Archive or nurture: a short decision message.
-   - EMAIL CAP: at most three of these touches go by email (first touch plus two follow-ups). Reply rate peaks at two follow-ups, then drops while unsubscribes spike. Every later touch runs on LinkedIn, phone or WhatsApp. Never a fourth email to the same person.
-   - Send the email touches on Tuesday or Wednesday, midday to early afternoon in the prospect's timezone.
+   - EMAIL CAP: default is three of these touches by email (first touch plus two follow-ups): controlled studies peak at three, and per-step reply yield falls to about 60%, then 47%, then 42% of the previous step after that. On established domains a 4 to 7 touch sequence can add replies, but only with a genuinely new angle per email; the hard stop is Google's spam threshold (under 0.1%, never 0.3%), never reply math. In all cases later touches prefer LinkedIn, phone or WhatsApp over another email.
+   - Send the email touches Tuesday to Thursday, 8 to 11 AM in the prospect's timezone. Day of week is a minor lever; hour and timezone are the major ones.
 3. Vary the angle every touch. Never "just bumping this to the top of your inbox."
 4. Offer to adapt the cadence for a different channel mix if the rep names one.
 

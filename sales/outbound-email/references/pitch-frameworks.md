@@ -22,7 +22,7 @@ Each framework covers: structure, subject line rules, and a fully annotated exam
 4. **The Ask** (1 sentence): Binary yes/no. Offer to send an asset (one-pager, breakdown, audit findings). No link.
 
 **Subject line rules:**
-- Format: `[Company Name] + [short trigger reference]` (under 7 words total, under 30 characters where the name allows)
+- Format: `[Company Name] + [short trigger reference]` (under 7 words total, aim for 15 to 40 characters)
 - Never use: "Quick question", "Following up", "Touching base", "Partnership opportunity"
 - Good examples: `Acme Corp + APAC expansion` / `Tekflow's Salesforce migration` / `Idea for Meridian's Q2 pipeline`
 

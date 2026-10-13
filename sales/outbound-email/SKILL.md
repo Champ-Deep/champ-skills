@@ -26,7 +26,7 @@ These come from the lead-gen team that switched to them over three months and no
 2. One link only: the website in the signature. No links in the body, no tracking links, no calendar link until the prospect has replied.
 3. First-touch email: under 100 words target, 125 words absolute maximum. Follow-ups are shorter. (A 6,337-email study put under-100-word emails at an 11.9% reply rate versus 1.9% at 100 to 200 words; see `references/cold-email-benchmarks.md`. The CLF field test and the study both point the same way: shorter wins.)
 4. Plain text only: no HTML templates, banners, images, colored fonts or heavy formatting.
-5. Subject line: 2 to 4 words and under 30 characters, natural, relevant to the message. Under-30-character subjects open at roughly 84% versus 69% for long ones, and subjects containing a number open highest of any pattern tested. One-word subjects are valid when specific. No clickbait, no all caps, no punctuation tricks.
+5. Subject line: 2 to 4 words and roughly 15 to 40 characters, natural, relevant to the message. Under-30-character subjects opened at 84% versus 69% for long ones in one study, and 2 to 4 words is the highest band in Belkins' B2B data (46% open). Subjects containing a number are the best-tested variant. One-word subjects are an A/B test only, never the default. No clickbait, no all caps, no punctuation tricks.
 6. No spam or promotional language. Banned in subject and body: free, guaranteed, best price, act now, limited offer, risk-free, special promotion, urgent, 100%, no obligation, click here, exclusive deal.
 7. Sender identity aligned: sending address, website, company name and signature are consistent and credible (see domain readiness).
 8. Every prospecting domain has its website live before its first send (see domain readiness).
@@ -146,9 +146,9 @@ Write all three emails in one pass after strategy is confirmed.
 - ✅ Plain text only — zero HTML, zero images, zero inline formatting
 - ✅ One link maximum per email: the website in the signature. No body links, no tracking links
 - ✅ Word count (body only, excluding subject and signature): Touch 1 is under 100 words target, 125 maximum. Touch 2 and Touch 3 are shorter
-- ✅ Subject line: 2 to 4 words and under 30 characters, natural, relevant to the message. A/B a one-word subject against a subject containing a number
-- ✅ Send day: schedule Touch 1 and Touch 2 for Tuesday or Wednesday, midday to early afternoon in the prospect's timezone. Worst days: Thursday and Friday
-- ✅ Sequence cap: three emails total (first touch plus two follow-ups). Reply rate peaks at two follow-ups; past that, replies drop and unsubscribes spike. If there is no reply by Touch 3, any future touch is LinkedIn, phone or WhatsApp, never a fourth email
+- ✅ Subject line: 2 to 4 words, roughly 15 to 40 characters, natural, relevant to the message. Best-tested variant puts a number in it; one-word subjects are for A/B only
+- ✅ Send day: schedule first touches Tuesday to Thursday, 8 to 11 AM in the prospect's timezone. Weekend and Friday-afternoon sends are clearly worse (weekends down 61% in one B2B dataset), but day-of-week is a small lever: every weekday lands within 0.04 points of the others on 850M emails, while morning versus afternoon is worth about 1.5x. Timing multiplies research quality, never replaces it
+- ✅ Sequence cap: three emails total (first touch plus two follow-ups) is the default. Sources split past that: smaller controlled studies peak at three emails and then fall, while 850M-email platform data shows cumulative replies still climbing through 4 to 7 touches, with each step earning only about 60%, then 47%, then 42% of the previous step's rate. On a new or reputation-sensitive prospecting domain, stop at three. If extending, the fourth email must carry a genuinely new angle or asset (never a bump) and the hard stop is sender reputation: Google spam complaints under 0.1%, never 0.3%. Any further touch prefers LinkedIn, phone or WhatsApp over a longer email chain
 - ✅ Full plain-text signature on every touch: name, title, selling brand, phone, website
 - ✅ One CTA per email — binary yes/no question or specific time proposal only
 - ✅ Prospect's first name in greeting only — no further name-drops
@@ -213,7 +213,7 @@ TOUCH 3 — BREAKUP  (Day 12–14)
 Before presenting, run the pre-send check on every touch and fix any miss:
 - Sender address, website, company name and signature name the same company
 - Exactly one link (signature website), plain text, no images
-- Subject 2 to 4 words and under 30 characters; Touch 1 body under 100 words (125 hard cap)
+- Subject 2 to 4 words, roughly 15 to 40 characters; Touch 1 body under 100 words (125 hard cap)
 - No spam words; no Champions Group anywhere
 
 After presenting, offer:
@@ -230,7 +230,7 @@ After presenting, offer:
 | `references/service-catalogue.md` | Step 4 — signal-to-service mapping |
 | `references/pitch-frameworks.md` | Step 5 — full framework structures + examples |
 | `references/persona-matrix.md` | Step 6 — tone rules by title tier × vertical |
-| `references/cold-email-benchmarks.md` | Evidence behind the word-count, subject-length, send-day and follow-up-cap rules (6,337-email study, Oct 2026). Read when someone challenges or wants to tune those rules |
+| `references/cold-email-benchmarks.md` | Evidence behind the word-count, subject-length, send-window, follow-up-cap, CTA and volume rules: 8 sources cross-checked (6,337-email study, Instantly, Belkins 7.5M, Smartlead 850M, lemlist, Woodpecker, Backlinko, Autobound), with contested zones marked. Read when someone challenges or wants to tune those rules |
 
 ## Final gate: no AI slop (mandatory before delivery)
 
