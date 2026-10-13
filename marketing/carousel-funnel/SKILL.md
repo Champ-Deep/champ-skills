@@ -1,6 +1,7 @@
 ---
 name: carousel-funnel
-description: Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post copy, the tracked first-comment link, the ungated landing page spec, ChampUTM naming, and Factors.ai visitor identification so the team knows which companies came from which post. MANDATORY TRIGGER for "make a carousel", "turn this playbook into a carousel", "LinkedIn document post", "carousel for socials", "slides for LinkedIn", "link in the comments", "promote this guide on LinkedIn", "social version of this PDF", "carousel plus tracking", or any request to distribute a long asset on social with a link back to the full version. Works for every Champions Group brand; loads the brand's guideline skill for colours and voice.
+description: >-
+  Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post copy, the tracked first-comment link, the ungated landing page spec, ChampUTM naming, and Factors.ai visitor identification so the team knows which companies came from which post. MANDATORY TRIGGER for "make a carousel", "turn this playbook into a carousel", "LinkedIn document post", "carousel for socials", "slides for LinkedIn", "link in the comments", "promote this guide on LinkedIn", "social version of this PDF", "carousel plus tracking", or any request to distribute a long asset on social with a link back to the full version. Works for every Champions Group brand; loads the brand's guideline skill for colours and voice.
 ---
 
 # Carousel Funnel
@@ -74,6 +75,12 @@ Deliver one folder: `<slug>.json`, `out/linkedin/*.png`, `out/linkedin/<slug>-li
 - One carousel per asset per month per page. Refresh the hook and re-post as `v2` after 30 days if the first run did well; do not post the same file twice.
 - Brand colours and wordmark come from the brand skill, not from memory. Never mix two brands' colours on one carousel.
 - No em dashes or en dashes anywhere: slides, post, comment, page, sheet.
+
+## Sandboxed preview compatibility
+
+Test carousel controls with JavaScript disabled and inside a restrictive `srcdoc` iframe. Standalone browser success does not prove preview compatibility. For script-blocking shells, use native radio inputs with CSS page selection and an expandable all-pages view. Fragment links can navigate away from `srcdoc`; test clicks instead of setting scroll position programmatically. Keep labels at least 44px square, visually hidden inputs accessible and at 16px font size, and preserve keyboard selection. Click every page, assert exactly one intended page is visible, then test expansion. Provide the PDF separately because preview shells may block downloads. If the actual host is unreachable, report its status as unverified even when the sandbox test passes.
+
+Keep approval-process copy outside buyer-facing event copy while clearly marking the review gallery as proposed. Use one principal CTA per ad. Inspect full-size assets after contact sheets to catch copy-image collisions and low-contrast CTAs.
 
 ## Files
 
