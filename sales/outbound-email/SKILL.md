@@ -24,9 +24,9 @@ These come from the lead-gen team that switched to them over three months and no
 **The eight email rules.**
 1. Professional signature: sender name, title, company name, phone number, website.
 2. One link only: the website in the signature. No links in the body, no tracking links, no calendar link until the prospect has replied.
-3. First-touch email: 125 words maximum, ideally 100 to 125. Follow-ups are shorter.
+3. First-touch email: under 100 words target, 125 words absolute maximum. Follow-ups are shorter. (A 6,337-email study put under-100-word emails at an 11.9% reply rate versus 1.9% at 100 to 200 words; see `references/cold-email-benchmarks.md`. The CLF field test and the study both point the same way: shorter wins.)
 4. Plain text only: no HTML templates, banners, images, colored fonts or heavy formatting.
-5. Subject line: 2 to 4 words, natural, relevant to the message. No clickbait, no all caps, no punctuation tricks.
+5. Subject line: 2 to 4 words and under 30 characters, natural, relevant to the message. Under-30-character subjects open at roughly 84% versus 69% for long ones, and subjects containing a number open highest of any pattern tested. One-word subjects are valid when specific. No clickbait, no all caps, no punctuation tricks.
 6. No spam or promotional language. Banned in subject and body: free, guaranteed, best price, act now, limited offer, risk-free, special promotion, urgent, 100%, no obligation, click here, exclusive deal.
 7. Sender identity aligned: sending address, website, company name and signature are consistent and credible (see domain readiness).
 8. Every prospecting domain has its website live before its first send (see domain readiness).
@@ -145,8 +145,10 @@ Write all three emails in one pass after strategy is confirmed.
 **Hard rules that apply to ALL three emails — no exceptions:**
 - ✅ Plain text only — zero HTML, zero images, zero inline formatting
 - ✅ One link maximum per email: the website in the signature. No body links, no tracking links
-- ✅ Word count (body only, excluding subject and signature): Touch 1 is 125 words maximum, ideally 100 to 125. Touch 2 and Touch 3 are shorter
-- ✅ Subject line: 2 to 4 words, natural, relevant to the message
+- ✅ Word count (body only, excluding subject and signature): Touch 1 is under 100 words target, 125 maximum. Touch 2 and Touch 3 are shorter
+- ✅ Subject line: 2 to 4 words and under 30 characters, natural, relevant to the message. A/B a one-word subject against a subject containing a number
+- ✅ Send day: schedule Touch 1 and Touch 2 for Tuesday or Wednesday, midday to early afternoon in the prospect's timezone. Worst days: Thursday and Friday
+- ✅ Sequence cap: three emails total (first touch plus two follow-ups). Reply rate peaks at two follow-ups; past that, replies drop and unsubscribes spike. If there is no reply by Touch 3, any future touch is LinkedIn, phone or WhatsApp, never a fourth email
 - ✅ Full plain-text signature on every touch: name, title, selling brand, phone, website
 - ✅ One CTA per email — binary yes/no question or specific time proposal only
 - ✅ Prospect's first name in greeting only — no further name-drops
@@ -211,7 +213,7 @@ TOUCH 3 — BREAKUP  (Day 12–14)
 Before presenting, run the pre-send check on every touch and fix any miss:
 - Sender address, website, company name and signature name the same company
 - Exactly one link (signature website), plain text, no images
-- Subject 2 to 4 words; Touch 1 body 125 words or fewer
+- Subject 2 to 4 words and under 30 characters; Touch 1 body under 100 words (125 hard cap)
 - No spam words; no Champions Group anywhere
 
 After presenting, offer:
@@ -228,6 +230,7 @@ After presenting, offer:
 | `references/service-catalogue.md` | Step 4 — signal-to-service mapping |
 | `references/pitch-frameworks.md` | Step 5 — full framework structures + examples |
 | `references/persona-matrix.md` | Step 6 — tone rules by title tier × vertical |
+| `references/cold-email-benchmarks.md` | Evidence behind the word-count, subject-length, send-day and follow-up-cap rules (6,337-email study, Oct 2026). Read when someone challenges or wants to tune those rules |
 
 ## Final gate: no AI slop (mandatory before delivery)
 

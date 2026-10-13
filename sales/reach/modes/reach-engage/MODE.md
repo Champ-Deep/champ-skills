@@ -23,12 +23,13 @@ A brief or research exists and the rep needs the first touch (or a rewrite of a 
 
 1. Take the prospect brief (or ask the rep to paste it). If none exists, send them to `reach-research` first.
 2. Write the email under these rules:
-   - Under 110 words.
+   - Under 100 words (125 hard cap). A 6,337-email study measured an 11.9% reply rate under 100 words against 1.9% at 100 to 200: if it does not fit, the pitch is not sharp enough yet.
    - Three layers of personalization: one line on their company, one on their role, one on them specifically.
    - Lead with THE WEDGE and WHY NOW from the brief, not with us.
    - Exactly one call to action (the DEFAULT ASK unless the rep overrides).
    - Tone matched to seniority (C-suite, Director, or IC) and to BRAND VOICE.
-   - Subject line under 6 words: curiosity or specificity, never clickbait.
+   - Subject line under 30 characters and under 6 words: curiosity or specificity, never clickbait. A one-word subject or a subject containing a number tests best.
+   - Send Tuesday or Wednesday, midday to early afternoon in the prospect's timezone.
 3. Return three things: the subject line, the email, and one alternate opening line the rep can swap in.
 4. Flag the single spot where the rep should add a genuine human detail (something they noticed that no model would know).
 
