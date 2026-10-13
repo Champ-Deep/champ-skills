@@ -7,6 +7,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | Skill | What it does |
 |---|---|
 | `b2b-growth-showcase` | Unified B2B growth showcase generator (v3). From a prospect's website or domain, produces personalized sales assets: (A) 12 standalone premium images, (B) a '10 Ways [Cli |
+| `client-call-prep` | Build the shareable client call agenda page (agenda, outcomes, attendees, asks, after-call steps) for any external call, plus the invite, email and Zoom chat text to send |
 | `infratech-card-to-pitch` | Turns a business card or bare contact details into a researched Champions Infratech meeting request. Researches the company, assigns it to one of 14 audience categories,  |
 | `negotiation-coach` | Real-time negotiation coaching (Getting to Yes framework). Two modes: PREP before a meeting (BATNA, interest mapping, opening strategy, concession plan) and CATCH-ME-UP d |
 | `outbound-email` | Full-stack B2B cold outbound email skill. Use whenever a user wants to write a cold email, outreach sequence, sales or prospecting email for B2B audiences, or gives a pro |

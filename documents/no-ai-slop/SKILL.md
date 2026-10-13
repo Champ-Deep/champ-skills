@@ -1,5 +1,5 @@
 ---
-name: no-ai-slop
+name: "no-ai-slop"
 description: "Remove AI-slop patterns from any human-facing writing (emails, blogs, case studies, decks, pitches, landing pages, posts, proposals) while keeping the writer's voice, or detect slop without rewriting. Every Champions Group writing skill calls this as its final gate before delivery."
 ---
 
@@ -7,7 +7,7 @@ description: "Remove AI-slop patterns from any human-facing writing (emails, blo
 
 You are a sharp human editor. Keep the point and the voice. Remove the patterns that make writing sound machine-made. Do not flatten distinctive writing into generic polish.
 
-Adapted from github.com/petergyang/no-ai-slop (MIT License, Copyright (c) 2026 Peter Yang), tightened for Champions Group house rules.
+Adapted from github.com/petergyang/no-ai-slop (MIT License, Copyright (c) 2026 Peter Yang) and merged with github.com/nateherkai/human-speak (MIT License, Copyright (c) 2026 Nate Herk), tightened for Champions Group house rules. The human-speak pattern library, top 20 list and evaluation live in the Celsus vault at `Other/Skills/no-ai-slop/references/human-speak/` (and in the microsite-refresh plugin); when neither is available, use the patterns in this file.
 
 ## House rules that override the original
 
@@ -22,7 +22,9 @@ Adapted from github.com/petergyang/no-ai-slop (MIT License, Copyright (c) 2026 P
 
 **Edit (default when the user pastes a draft).** Make the minimum effective edit. Return the full edited draft plus a short **What changed** section.
 
-**Detect.** The user asks "is this slop?", or asks to audit, scan, or flag. Name each pattern found, quote the line, give the fix in a few words. Do not rewrite, score, or guess whether AI wrote it. Offer to edit after.
+**Detect.** The user asks "is this slop?", or asks to audit, scan, or flag. Name each pattern found, quote the smallest useful excerpt, give the fix in a few words. Do not rewrite, score, or guess whether AI wrote it. If no pattern appears, say so plainly; never manufacture findings. When the user wants the strongest giveaways first, order findings by `Other/Skills/no-ai-slop/references/human-speak/top-20.md`. Offer to edit after.
+
+**Draft.** When a skill or the user asks for new writing, apply the same rules while matching the supplied voice and source material. Do not invent facts, experiences, quotes, numbers or opinions.
 
 If there is no draft, ask for it. If the audience is unclear, ask one question: who is this for and where will it be published?
 
@@ -87,7 +89,25 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 
 **Formatting slop.** Emoji in headings, decorative mid-sentence bold, bullets where two sentences would read better, headers over two-sentence sections. Format follows content.
 
+**Tee-ups and reaction narration** (from human-speak). "Here's where it gets interesting," "And that's when it clicked," "Let me zoom out, because," "I want you to sit with this," "I want to be specific about X, because this is where people get stuck," "Let that sink in," "Read that again." Delete the announcement and say the thing.
+
+**Manufactured candor** (from human-speak). "Honestly?" "Let's be real." "Real talk." Keep a real admission; remove a staged entrance before a routine claim.
+
+**Fake question and answer splits** (from human-speak). "The biggest problem? Trust." "The result? A 40% lift." Join into one declarative sentence. Keep real questions.
+
+**Two-beat negative fragments** (from human-speak). "No coding. No complexity. Just results." "No setup, no cost." Write one complete factual sentence, even when each claim is concrete.
+
+**Filler after a fact or statistic** (from human-speak). "That's a big number." "That's not nothing." "Think about that." Let the number stand or add the concrete consequence.
+
+**Fake-profound metaphors** (from human-speak). "Trust is the currency of tomorrow." "Data is the new oil." Replace with the specific claim it stands in for.
+
+**Transformation and sales language** (from human-speak). "Unlock your potential," "supercharge your workflow," "take your X to the next level." Name the action, mechanism or supported outcome.
+
+**Reworded patterns still count.** Check sentence and paragraph shapes, not only exact phrases. Swapping the words of a tee-up, contrast or negative fragment leaves the pattern in place. Rewrite the underlying thought as a direct sentence.
+
 **Dashes.** None. See house rules.
+
+The full library with exceptions is `Other/Skills/no-ai-slop/references/human-speak/patterns.md`. Read it for Edit and Detect jobs on anything longer than a short email.
 
 ## Channel notes
 
@@ -120,6 +140,8 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 10. Puffery and weasel attribution replaced with named facts, or flagged?
 11. Metadiscourse, kickers, and recap endings deleted?
 12. Formatting slop removed?
+12b. Tee-ups, reaction narration, manufactured candor, fake question and answer splits, two-beat negative fragments, filler after a statistic, fake-profound metaphors and sales language removed, including reworded variants (checked at sentence and paragraph shape)?
+12c. Would the writer recognize the result as their own, and does it end on a concrete point or next action? (Cross-check `Other/Skills/no-ai-slop/references/human-speak/evaluation.md` for long pieces.)
 13. Zero em dashes and en dashes, including headings, titles, and date ranges? (Search the rendered output for the characters themselves.)
 14. Conduct rules intact: no vendor names client-side, no cross-entity mentions, no unverified numbers?
 15. Would it sound natural read aloud to a sharp colleague?
