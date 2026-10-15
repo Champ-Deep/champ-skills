@@ -122,3 +122,7 @@ The rules a machine cannot check. These separate correct from good.
 4. Refinement: optical alignment, concentric radii, layered shadows, widow control.
 
 Work top down. A beautifully optically-aligned button that cannot be reached by keyboard is a failure with good manners.
+
+## Interaction checks
+
+For any page with a copy button, filter pills, tabs or a section rail, run the test recipe in `design/skills/frontend-design/reference/interior-rules.md` in Step 3: measure the thumb against the selected button, rapid-click the control, force the copy failure, and re-run under reduced motion. A control that looks right in a screenshot can still fail these.

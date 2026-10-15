@@ -121,3 +121,7 @@ Swipe-to-delete and similar gestures are invisible. Always provide a visible fal
 ---
 
 **Avoid**: Removing focus indicators without alternatives. Using placeholder text as labels. Touch targets <44x44px. Generic error messages. Custom controls without ARIA/keyboard support.
+
+## Behaviour under repeat input
+
+States are not enough. Check what happens on a second click mid-animation, a failed action, keyboard-only use and reduced motion. The rules and vanilla ports are in `interior-rules.md` in this folder (source: interior.dev, MIT).

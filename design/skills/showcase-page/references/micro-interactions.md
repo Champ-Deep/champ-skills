@@ -41,3 +41,7 @@ Small responses to a hover, focus, tap or scroll that tell the reader the page i
 | Menu | blur-glide-menu | multi-level nav only |
 
 Install the original with `npx shadcn@latest add @microkit/<name>` in a React project, or copy the CSS variant from microkit.co and port it to the kit's tokens for a single-file page.
+
+## Behaviour rules (interior.dev)
+
+The table above covers looks. For how controls behave under repeat clicks, failure and keyboard use, follow `design/skills/frontend-design/reference/interior-rules.md`. It has vanilla ports of the copy button (reserved width, error state), the segmented control (travelling thumb, roving focus, live count) and scroll spy (travelling reading line, click lock), plus the test recipe. Use the copy button and segmented control ports instead of ad hoc ones.
