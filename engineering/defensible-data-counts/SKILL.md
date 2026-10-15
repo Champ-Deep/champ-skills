@@ -73,6 +73,30 @@ taxonomy, and route every published figure through one predicate such as
 them. Keep the matched string on every detection row, so one result can be
 audited back to the bytes that produced it.
 
+## Provenance travels on the rows, not on the page
+
+When real supplied data lands in a table that also holds demo or synthetic rows,
+the row itself must carry where it came from: a `source` column (or equivalent)
+that every query can filter on. A README explaining which rows are real is not
+provenance, because the consumer of the data rarely reads the README, and the
+counting code never does. Prefix the marker so one `LIKE` test separates the
+real set for every downstream count and every answer given to a buyer.
+
+Related, and equally cheap to get wrong: **the facts the consumer is told about
+the data must live in the consumer's own interface.** If the consumer is a tool,
+bot or querying agent, provenance notes belong in the tool's schema result, not
+in documentation the agent never opens. A data note that exists only in a doc
+cannot ground an answer that is generated from a database.
+
+Keep the provenance of *aggregates* separate too: when a supplied summary covers
+different scope (per region vs one market) than an existing summary table, seed
+it into its own table. Overwriting a table whose readers assume one row per
+subject silently changes every number those readers quote.
+
+See `references/supplied-and-demo-data.md` for the ingest contract: preview then
+commit, normalisation of supplied headers and codes, and the real-file test that
+guards the field mapping.
+
 ## Both halves of a headline pass the identical gate
 
 A market claim almost always has two halves: an entity count and a people
@@ -99,7 +123,44 @@ know the number moved, which is worse than the original error.
 
 State what you could not source as `GAP` with the reason, in the artifact
 itself. A sheet of placeholders that looks filled is more dangerous than an
-empty one.
+empty one. When only some sources were checked, label each source's status on
+its own (checked live, quoted as reported, not reachable) rather than one
+blanket disclaimer over the whole artifact.
+
+## Published numbers must agree with each other
+
+Before a figure goes in front of anyone, audit the artifact's own arithmetic and
+its neighbours:
+
+- **Percent breakdowns must sum to 100.** A sum above 100 usually means a
+  catch-all row ("Others") is counted alongside the rows it contains; restate the
+  total with the exclusion named, never round the discrepancy away.
+- **One quantity, one number per page.** A page quoting three different totals
+  for the same thing in its headline, stat strip and table means the copy came
+  from different sources. Trace the one you can source and flag the rest.
+- **Identical figures on unrelated pages are copied boilerplate, not
+  measurement.** A number (or product blurb) sitting on a page where it has no
+  business is template residue; report it as a content defect, do not cite it.
+- **An exact integer ratio across almost every row is a formula, not data.** If
+  column B equals a fixed multiple of column A on nearly all rows, every one of
+  them derives from one computation; say so instead of presenting them as
+  independent observations.
+- **Two sources disagreeing is most often a scope mismatch, not an error.** Ask
+  what each covers (one country vs global, one product vs a suite) before
+  calling either number wrong, and put the question to whoever owns the data.
+  The same holds across measurement *models*: a vendor's modelled estimate
+  against counted sessions from an analytics tag is two different measures, so
+  "flat there, up here" is a mismatch to name, not a failed replication.
+
+## A zero can mean nobody was measuring
+
+Before publishing that a source shows nothing, or that it "does not back" a
+claim, check that the source was configured to measure that thing at all.
+A switched-off tracker, a wrong entity or brand key, or a range older than the
+tool's own data start all return clean zeros indistinguishable from a real
+absence, and a feature that is off makes "no change" look like proof of
+stability. Report the configuration state alongside the number, and send the
+question to whoever owns the measurement rather than resolving it yourself.
 
 ## Build the deliverable, then verify its cells against source
 
@@ -136,3 +197,11 @@ That gap is not random, it skews toward mid-market and non-global companies, and
 it belongs next to the number rather than in a footnote. The same applies to a
 date field that records when the source file *claims* a record was verified
 rather than a live check — name the field for what it is.
+
+## References
+
+- `references/evidence-classes.md` — the class decision table (supplied,
+  counted, estimated, demo) and the quotable-gate pattern.
+- `references/supplied-and-demo-data.md` — ingest contract for a real file
+  meeting a demo store: preview then commit, header and code normalisation,
+  row-level provenance, scoped aggregates, the real-file test.
