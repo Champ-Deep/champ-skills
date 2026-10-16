@@ -119,7 +119,7 @@ The full library with exceptions is `Other/Skills/no-ai-slop/references/human-sp
 
 ## Workflow
 
-1. Read the whole piece first. If the Celsus vault is mounted, run `python3 Other/Skills/no-ai-slop/slop_lint.py <file>` as a mechanical pre-check (dashes, banned words, stock phrases, common contrast shapes). It catches surface patterns only; the judgement calls below still apply.
+1. Read the whole piece first. If the Celsus vault is mounted, run `python3 Other/Skills/no-ai-slop/slop_lint.py <file>` as a mechanical pre-check (dashes, banned words, stock phrases, common contrast shapes). It catches surface patterns only; the judgement calls below still apply. A lint hit inside text quoted verbatim from a source document (a PDF, a client's original, legal text) is the source's voice, not the writer's: check the hit against the source before editing, and flag rather than rewrite quoted material.
 2. Identify the core point and the voice traits to keep. If you cannot find the core point, ask.
 3. Detect: return findings and stop.
 4. Edit or Gate: make the minimum effective changes, then run the Eval.

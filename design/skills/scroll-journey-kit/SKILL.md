@@ -63,6 +63,12 @@ A section is interactive when the visitor changes what they see. Pick at least o
 - A pinned scene whose progress drives a visual (camera, bars, a line draw).
 Always keep a plain-HTML twin of the data (table or list) for crawlers and screen readers.
 
+## Pitfalls
+
+- Count-up figures must exist in the DOM before `lakekit.js` runs. `data-mk-count` snapshots the element's text at init and restores that snapshot when the count finishes, so any number your script computes (a countdown to an event date, a live total) has to be written by an inline script placed *before* the kit script tag; otherwise the animation lands on the stale placeholder you shipped.
+- IntersectionObserver reveals never fire for content inside a hidden container. Items in a `display:none` tab or accordion panel stay hidden forever if only the observer reveals them; reveal them by replaying the stagger when the panel becomes visible (on tab select), or leave panel rows out of `.rv` and animate them at panel open. A `.rv:not(.in)` count over hidden panels is expected to be nonzero; do not chase it as a bug.
+- When a pinned scene scales its image up to full size, scale from center (`transform-origin: 50% 50%`), not the bottom edge. A bottom origin pushes the settled scene down and the frame reads bottom-heavy at p=1.
+
 ## Rules
 
 - Pointer effects run only on `(hover:hover) and (pointer:fine)` and never under reduced motion. Touch gets the plain element, and the glow lights are hidden on touch.
@@ -77,7 +83,7 @@ Always keep a plain-HTML twin of the data (table or list) for crawlers and scree
 ## Checks before delivery
 
 1. Render at 1440, 768 and 400 with touch emulation, plus reduced motion. Open the screenshots and critique them.
-2. Scroll the journey at 0, 40, 70 and 100 percent and look at each frame.
+2. Scroll the journey at 0, 40, 70 and 100 percent and look at each frame. A frame alone cannot prove the scrub ran: a mid-journey screenshot read as "the animation never fired" is usually scrub lag or a moment before the pin engaged. Settle first, then probe computed styles (the `--p` value on `.lk-journey`, headline opacity, scene opacity) and only then judge the screenshot against the numbers.
 3. Hover or focus one element of each effect and confirm it settles back on leave.
 4. Dash count 0. Zero console errors. No horizontal overflow at 400.
 5. A heading never stays hidden when JS is blocked (test with scripts off).
