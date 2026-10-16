@@ -121,6 +121,11 @@ runs for a client, it creates or updates a persistent context folder in the vaul
 
 ### Auto-Create Client Folder
 
+Create only the files this prep actually produced. A profile and a `meeting-history.md` entry are
+expected on first encounter; `pain-points.md` and `solution-mapping.md` stay unwritten until a
+meeting supplies their content, and the profile notes which ones are still missing rather than
+shipping empty stubs.
+
 On first encounter with a new client/prospect, create:
 
 ```
@@ -258,9 +263,47 @@ When classification is ambiguous, err toward the deeper tier.
 
 ---
 
+## Interview Mode (hiring calls)
+
+When the meeting is an intern panel, a junior hire screen or any call where Deep sits on the
+interviewer side, the prep job changes: he needs questions in his hand, not context in his
+head. Run the normal classification (interviews are always DEEP), then apply this override.
+
+1. **Pull the material first.** Invite times and co-interviewers, the role profile, resumes,
+   prior notes in `Atlas/Hiring/`. If something is missing, record the gap on the page as a
+   count ("0 of 2 resumes on hand") and offer to fetch it. Never invent candidate specifics,
+   referrers or dates to make the page look complete.
+2. **Fix the structure on a minute rail.** Thirty minutes becomes 3 minutes of intro plus
+   segments that sum to the rest, each labelled with its minute window, so the page can be
+   read mid-call without arithmetic.
+3. **Decide the deciding questions before the call.** Six per call: four technical, two on
+   the person. A question that is not marked deciding gets dropped when time runs short,
+   which is the point of marking it.
+4. **Give every question a "proves" line in the same row.** The interviewer grades depth,
+   not vocabulary, and the line says what a strong answer must contain. A question with no
+   proves line becomes a trivia quiz.
+5. **One push per answer:** "show me", "why that choice", "when did it break". The push is
+   what separates a rehearsed answer from a real one.
+6. **Split the live rounds visibly.** One question explicitly allows AI and grades how they
+   drive the tool; one forbids it and must be answered live. State the rule as a badge in
+   the row before the answer starts, so a fast reply cannot be confused with a memorised one.
+7. **Close with a scoring block.** Three outcomes decided the same night (advance, one
+   timeboxed take-home, no), the two-minute write-up window after the call, and the one-line
+   message back to the talent owner. Both candidates get a decision, never one waiting on
+   the other's.
+
+Question design principles and the hiring signals AI companies publish about themselves live
+in `references/interview-question-design.md`. If Deep asks for a page he can hold on his
+phone rather than a markdown brief, build the deliverable with `executive-one-pager` and
+supply its content from this section; the one-pager's budget, claim-audit and contrast gates
+then apply in full.
+
+---
+
 ## Data Retrieval Strategy
 
-For every meeting that needs prep, pull context from all sources in parallel:
+For every meeting that needs prep, once the date and the set of meetings are confirmed, pull
+context from all sources in parallel:
 
 ### 0. Client Context Folder (FIRST, before anything else)
 
@@ -274,6 +317,12 @@ For every meeting that needs prep, pull context from all sources in parallel:
 ```
 
 ### 1. Google Calendar (`gcal_list_events`)
+
+Reconcile what the user said against the event before researching. A stated date ("tomorrow",
+"Friday") is a claim, not a fact: read the event's own start time, and lead the reply with any
+mismatch ("this call is today, and nothing sits at that hour on the day you named"). Prepping
+the wrong day wastes the whole run and Deep walks into an empty slot. Note an open RSVP while
+you are there.
 
 ```
 -> Find the current meeting: attendees, description, attachments, location
@@ -325,6 +374,8 @@ For every meeting that needs prep, pull context from all sources in parallel:
 ### Merge & Deduplicate
 
 After pulling from all sources:
+- If a prep note for this meeting already exists in `Calendar/Meetings/`, read it and build on it
+  instead of starting a parallel version. Two competing notes on one meeting is the failure.
 - Deduplicate action items that appear in multiple sources
 - Identify the single most recent meeting as the "last meeting" anchor
 - Flag any conflicting information between sources
@@ -429,7 +480,33 @@ See `references/deep-prep-template.md` for the full template and section-by-sect
 9. **Sales & Marketing Enablement**, ICPs, content ideas, campaign calendar, SEO audit
 10. **Custom Solution Portfolio**, Innovation opportunities, bundled offerings
 11. **Strategic Positioning & Differentiation**, Dual SWOT + Management Narrative
+11b. **Visual showcase pages**, When Deep asks for a page as well as the note: variants in one
+dated folder under `Calendar/Meetings/`, numbered by role (`01 - ...` to share, `02 - ...` hold
+back until the counterparty opens the topic), plus the design system they were built from. Most
+counterparties have no brand system in the vault, so derive one from their real logo file rather
+than inventing a palette: measure the dominant colours, take one corner treatment and one
+recurring motif from the mark, and record the asset's source URL in the design-system page so
+the derivation is auditable. Both variants get screenshot at 1440 and 390 and read before
+delivery (see the `visual-verify` skill).
+11c. **Script and showcase are always two separate files.** When Deep wants something to run a
+call from, ship a client-facing SHOWCASE (shared on screen, nothing internal, no toggle that could
+reveal notes) and a private SCRIPT AND NOTES page (countdown, word-for-word lines, cheat sheet,
+objections, facts, notes box) as two HTML files he opens in two windows. One combined page with a
+hide-internal switch failed his real need: he must read the script while the showcase is on screen.
+Name them `1 - SHOWCASE (share this screen).html` and `2 - SCRIPT AND NOTES (keep private).html`
+at the top of the dated folder, with fonts, logos, build files and older versions under
+`_support/`. Each script phase carries a pointer to the showcase section to be on, and the
+showcase top bar links to those sections so he can drive it in one click. Leak-test the showcase
+text for internal words before delivery. Name files by role, never p1, p2 or ds.
 12. **Source Reference Index**, Every claim footnoted
+
+**Grounding rule.** Every number carries its source or a stated absence of one. Standing brand
+figures (market size, coverage, headcount) get grepped in the vault and the brand skills first:
+repeating one from memory imports a figure that belongs to a different company. Numbers the
+counterparty published about itself are labelled as their claim inside the note ("their site
+reports", "email of date"), never converted into fact. A competitor named from model knowledge is
+marked unverified in the same line. No source found is written as "no source found", never left
+to imply confirmation.
 
 ---
 
@@ -539,6 +616,11 @@ on the last, across meetings, across months, across team members.
   - Auto-link all people, companies, efforts, products mentioned
   - Add to today's daily note under Meetings section
   - **Update client context folder** with new research and intel
+  - Deliver every artifact with a `MEDIA:` absolute path. A bare path is not a delivery.
+- When there is more than one variant, number them by role in the same dated folder and say in the
+  reply which one to share and which one to hold. The page Deep acts on (next steps, tickable asks)
+  ships; the page that opens a negotiation he has not chosen to open is built and held, and the
+  filename carries that decision so it is not a memory he has to keep.
 
 - **Medium preps:** Save to `Calendar/Meetings/{Date} - {Meeting Title} Prep.md`
   - Lighter format but still vault-linked
@@ -554,6 +636,8 @@ After every prep (any tier):
 3. If new solutions proposed -> append to `solution-mapping.md`
 4. If new context docs created -> save to `context-docs/`
 5. Update the master `{ClientName}.md` if relationship status changed
+6. A file this prep never produced does not get created here either. Appending a pain point
+   means the file already exists; if it does not, say so in the reply instead of seeding it.
 
 ### Post-Meeting (Future Integration)
 
@@ -575,6 +659,7 @@ After the meeting, say "process meeting notes" or "meeting debrief" to:
 - "what do I need for today's meetings"
 - "prep for Charles" / "prep for Gary sync"
 - "SPIN prep for [company]"
+- "prep me for the intern interview" / "interview questions for [candidate]" (Interview Mode)
 
 **Morning routine trigger:**
 - Runs automatically as Phase 5 after Day Planner
@@ -601,3 +686,6 @@ After the meeting, say "process meeting notes" or "meeting debrief" to:
 | Multiple meetings need DEEP prep | Prioritize by time (earliest first), ask user to confirm order |
 | Claude in Chrome available + DEEP prep | Use it to create/update NotebookLM notebook via browser, query for source-grounded insights |
 | Claude in Chrome unavailable or not logged in to Google | Skip NotebookLM gracefully, use standard 4-source retrieval |
+| The ask names a set of meetings without saying which ("prep all of them") | One clarifying question listing the candidates, sent before research starts. Fall back to the calendar when it goes unanswered: prep the one event that exists and state what was not covered. |
+| Stated date conflicts with the calendar event | Lead with the conflict, note an open RSVP, and say both in the reply. |
+| Deep names a meeting in passing with no file and no event ("the 3 pm tomorrow thing") | State the hour and date actually found, or say plainly that nothing is booked then, before prepping against it. |
