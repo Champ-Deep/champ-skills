@@ -56,7 +56,7 @@ They will NOT read your document top to bottom. They will scan it.
 **The 3-10-30 rule:**
 - **3 seconds:** The reader sees the hero stat strip and knows the headline numbers.
   Revenue, win rate, deal count, status. No scrolling required.
-- **10 seconds:** The reader scans the section headers (§01, §02, §03) and grasps
+- **10 seconds:** The reader scans the section headers (01, 02, 03) and grasps
   the document's structure. They know what chapters exist and can jump to any one.
 - **30 seconds:** The reader finds a specific data point. The combination of
   numbered sections, color-coded metrics, and visual patterns (bars, charts, grids)
@@ -115,8 +115,10 @@ looking at?), a middle (the data), and an implication (so what?). Sections are n
 and labeled so readers can navigate and reference them in conversation: "look at section 3."
 
 **What this means in practice:**
-- Section headers have two parts: a mono-font number (`§ 01`) and a pill-shaped tag
-  with the topic (`The setup`, `The deal`, `Next steps`).
+- Section headers are one mono eyebrow line: a two-digit number (`01`) then the topic
+  (`The setup`, `The deal`, `Next steps`). No section sign (§) and no pill outline around
+  the topic: Deep reads the `§ 01` pill as an AI-generated tell (16 Oct 2026), and
+  executive-one-pager and b2b-growth-showcase already ban it.
 - Below the header, a serif h2 states the section's thesis in 3-6 words, with one
   word in italics: "The capital *stack.*"
 - The section body uses cards, grids, bar charts, tables, or split layouts. Never
@@ -186,8 +188,8 @@ HERO
   Deck paragraph (sans, secondary color, max-width 56ch)
   Stat strip (3-7 key metrics in a grid)
 
-SECTIONS (§ 01 through § N)
-  Section header (mono number + pill tag)
+SECTIONS (01 through N)
+  Section header (mono eyebrow: number and topic, no § and no pill)
   Section H2 (serif, one word italicized in accent color)
   Section body (cards, charts, grids, tables, bars, tiles, splits)
 
@@ -366,6 +368,12 @@ Every report follows this structure:
 - Mobile-first. Base styles are for narrow screens.
 - `clamp()` for font sizes and spacing (eliminates most breakpoints).
 - One or two `@media (min-width: 720px)` breakpoints for grid layout changes.
+- Grid tracks that hold wrapping content are `minmax(0, 1fr)`, never bare `1fr`,
+  and the element doing the shrinking also carries `min-width: 0`. A bare `1fr`
+  resolves to `minmax(auto, 1fr)`, so a long word or a `<pre>` in the content
+  pushes the track past the viewport while every child still measures inside it.
+- Wide data tables sit in an `overflow-x: auto` wrapper so they scroll in place
+  instead of scrolling the page or being clipped by the root.
 - `max-width: 1600px` on the shell container, so the report uses the full width on wide screens (Deep dislikes a narrow centered column with dead space either side). Generous horizontal padding
   via `clamp(16px, 4vw, 40px)`.
 
@@ -387,6 +395,16 @@ Every report follows this structure:
 
 ## Process: How to Build a Report
 
+0. **This skill is loaded before any page is built, not after it is judged.** Deep reads
+   every HTML deliverable as a designed page and rejects a wall of prose: "way too much text
+   without anything to break up the monotony." The gate is not the finished file being
+   attractive, it is this skill being the source of the build: card and grid components,
+   a visual in every section, type hierarchy doing the work. A source document that renders
+   as table after table with no break is a defect whatever its content, so the first design
+   act is choosing which of these patterns breaks each run of prose: stat strip, split grid,
+   flow steps, big-number band, quote, a card grid. Paragraphs are the exception in a section,
+   never its body.
+
 1. **Understand the content.** What data, decisions, metrics, and narrative does
    this report convey? What's the single most important takeaway?
 
@@ -395,6 +413,19 @@ Every report follows this structure:
 
 3. **Choose a project prefix.** Short, unique, descriptive. This becomes the CSS
    namespace.
+
+3b. **Write the design direction before the first CSS rule**, as a comment at the top of
+   the stylesheet: which grounds alternate and in what order, the one dark ground, where each
+   brand colour is allowed (accent, mark, rule) and where it is not (bands, gradient fills),
+   the three type roles, one section rhythm (number, pill, headline, lede at the same offset in
+   every section), explicit light text on dark. Then write every rule against that comment.
+   A page assembled section by section without it makes a different visual decision in each
+   section and reads as off-brand even when every hex is correct. Client pages get their own
+   stylesheet: never inherit CSS from an internal report page. Worked example, read it when
+   building a tiered proposal: `Celsus/Efforts/Active/Ryan Pilot Proposal/build/build_proposal.py`
+   (DESIGN DIRECTION comment, section 02 interactive dossier and decision graph) and its
+   `verify_v5.py` (per-element contrast measured from rendered pixels, interaction assertions,
+   overflow, console, section shots in one run).
 
 4. **Outline the sections.** What are the 4-8 chapters of this story? What pattern
    (stat strip, data bars, split grid, timeline, table) best serves each section?
@@ -426,6 +457,41 @@ Every report follows this structure:
 
 ---
 
+## Presenting it live: pair the page with a readout script
+
+When the page will be shown to a team, deliver two files: the HTML and a
+markdown readout script.
+
+- The script names the exact file path, tells the audience to open it, then
+  walks the sections in the page's own order with a cue for each ("Press <section>")
+  so speaker and screen never drift.
+- **The screen carries only what the audience must answer.** Questions the team
+  should respond to live go on the page as a numbered list with owner tags.
+  Questions that are really asks of one named person belong in the readout script
+  or chat, never on the screen: a page full of your own to-dos sends the meeting
+  off track.
+- **Label each figure's check status separately**, one line in the hero and again
+  in the footer: what you verified against the live source and when, what is quoted
+  as reported and not re-measured, what sits behind credentials and was not
+  queried. A single blanket "figures unverified" disclaimer is wrong the moment
+  you have checked part of them, and it goes stale when a source becomes
+  checkable: update the line in the same edit that gains the check.
+
+When Deep will present the page rather than send it, also write the **spoken** script:
+
+- Time it to the page's own section order and title each block with the section it
+  belongs to, so he can pick up mid-page when a meeting runs short.
+- Bracket every aside that is not said aloud: pauses, looks to a named person, reads
+  of an open question. Speaker and screen stay aligned only if the off-script bits
+  are visually distinct from the lines.
+- One line per card or row. The page carries the detail; the script says what to
+  emphasise and stops.
+- End with a read-back of what was decided and what is still open, then the next
+  step with an owner, so the meeting closes on commitments rather than content.
+- Keep internal-only rules (never quote a floor, a ceiling, a per-record price)
+  in the script as reminders. They are spoken guidance for the presenter, not
+  text that may ever reach the screen.
+
 ## What Makes This Different From frontend-design
 
 | This skill | frontend-design |
@@ -448,6 +514,7 @@ reports the app generates.
 ## Hard Rules
 
 1. **Never use em dashes or en dashes**, including headings, labels, chart text, date ranges and PDF exports. Periods, commas, colons, or restructure.
+1b. **Never use the section sign (§)** or a pill-outlined section tag. Section eyebrows are a bare mono number and topic.
 2. **Always check contrast.** Text on dark or colored backgrounds must be
    explicitly set to a light color. Never rely on inheritance.
 3. **Scope all CSS.** Every selector under the project root class.
@@ -487,10 +554,18 @@ Add three checks of your own:
 6. **Copy gate.** `no-ai-slop` in Gate mode on every line; zero dashes in the HTML and any PDF (`pdftotext file.pdf -` then grep for the two dash characters).
 7. **Width.** At 1440 the report spans the page with a gutter, not a narrow column.
 
+And when the page has controls that keep state (filters, checkboxes, scorecards), drive them in Playwright and assert what each click actually did: the filtered row count, a verdict string after the last required item is set, the state surviving a reload, and reset clearing it. A page that audits clean can still have dead buttons.
+
+Assert on `getComputedStyle(el).textTransform` before comparing label text. CSS `text-transform: uppercase` normalises `textContent`, so a case-sensitive assert on a mono label fails against the very string the page renders. Read the computed text, not the source string.
+
+The showcase on a proposal page is a working component, not a picture of one: hover reveals, click pins, a toggle changes state and copy, nodes take keyboard focus. If the page needs to "show what the client gets", build it with state from the start; a static mockup gets rejected as mediocre and is rebuilt anyway.
+
+A vision-model pass on a screenshot grades legibility and overlap, not brand fit or taste. It will call an off-brand page excellent. Use it for overlap and cut-off text only; judge hierarchy, colour discipline and rhythm yourself against the design direction comment and the brand skill.
+
 Zero FAILs before delivery. Every WARN either fixed or justified in one line. If no browser is available, say so and label the output **unverified**, listing what was not checked.
 
 Full protocol: the `visual-verify` skill.
 
 ## References
 
-`references/css-starter.md` (scoped starter), `references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`. When the shared files are not in the account copy, read them from the Celsus vault at `Other/Skills/visual-report-builder/references/`. The working kit (tokens, components, export script) is at `Other/Skills/showcase-page/kit/`.
+`references/css-starter.md` (scoped starter), `references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`, `references/pricing-options.md` (tiered proposal pages in two formats, client-facing gates). When the shared files are not in the account copy, read them from the Celsus vault at `Other/Skills/visual-report-builder/references/`. The working kit (tokens, components, export script) is at `Other/Skills/showcase-page/kit/`.
