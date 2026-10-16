@@ -85,6 +85,14 @@ Use imagery implying: Human-Technology intersection, Innovation, Data visualizat
 
 Apply brand color tints (purple, pink, orange neons) and curved line graphics.
 
+## Before writing any CSS for a LakeB2B page
+
+- Reload this skill if it was pruned by compaction; a summary saying it was loaded is not the same as having the palette in context. A page built without it drifted to improvised purple bands, gold tags with white text and a traffic-light rating scheme, and was rejected.
+- Write the design direction as a comment at the top of the stylesheet first (grounds, where each brand colour may appear, type roles, one section rhythm), then write rules against it. Patching a page section by section with no direction produces a different visual decision in every section.
+- Never inherit CSS from an internal page to build a client page; internal pages read as reports.
+- Deep's standing basics, enforced on every section: eyebrow, number, headline and lede share one top offset across all sections; purple is the accent, not a ground, unless the brand book shows that use; gold carries dark ink only; red flag for High, gold for Medium, neutral for Low (no green, no amber); every child on a dark ground gets explicit white.
+- A vision check on screenshots verifies legibility and overlap only. It will pass an off-brand or lackluster page. Judge brand fit against this file, not against the vision model's verdict.
+
 ## Client-facing rules
 
 - A client works with LakeB2B or SPAN, never both; never show both brands to one client.
