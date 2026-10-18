@@ -59,6 +59,34 @@ Builders: `choice(instructions, criteria)`, `noul(instructions)`,
 `score(instructions, criteria)`. Model defaults to `jev-latest`; pin via
 `JEV_MODEL` when you need reproducible scoring.
 
+## Local alternative when the API key is missing
+
+Clef-flash (Cloudflare, Apache 2.0, 9B) replaced Laya here on 2026-10-18 and keeps
+the same request shape; the install and probe are in `/Users/deep/laya-local`
+(`probe_clef.py`), about 7 s per call on an M1 Pro, so read "Laya" below as the
+local decision model. Laya (Convai Innovations, Apache 2.0) was a decision model with a Jev-compatible
+interface: same `state` + `questions` shape, same `choice` / `score` / `noul`
+primitives, downloadable weights, runs offline in Python. A verified local install
+lives at `/Users/deep/laya-local` (venv, package `laya`, README with the exact
+commands and measured latency). Use it when `TYPESAFE_API_KEY` is absent or when a
+gate must not depend on a network call.
+
+It inherits every Jev rule above (score is 0-indexed, batch questions in one
+call, buckets not magnitudes) plus one of its own: its probabilities are
+uncalibrated until you have checked them on your own labelled examples, because
+base checkpoints score near chance zero-shot on domain tasks. Fine-tuning on your
+own decisions is what makes it usable.
+
+## Fine-tuning Laya locally (measured on an M1 Pro)
+
+`laya-train` (or `python -m laya.train_cli`) trains on Apple MPS: 12 rows, 2 epochs took 32 seconds. Three traps cost time:
+
+- **Training rows use `expected`, not `gold`.** Row shape is `{"state": "<string>", "questions": {...}, "expected": {qid: label}}`. With `gold` the loader reports `n_items must be a positive integer, got 0`. Run `--dry-run` first; it prints rows read and valid items.
+- **`state` must be the same type at train and inference.** Train on a plain string and call `Router.predict(string, questions)`. A dict at inference serialises differently from the string it trained on.
+- **Evaluate on held-out rows only.** Passing the training file as `--eval` prints 1.0 accuracy after two epochs; that is memorisation. Split by date, not at random.
+
+Base Laya zero-shot is not a safe gate: it called a client-trial decision `auto_decide` at 0.61. Keep a deterministic rule layer in front and run Laya in shadow, logging its answer beside the rule verdict, until a fine-tuned checkpoint beats the rules on held-out labels. A working example with the gate, shadow log and training export lives at `/Users/deep/laya-local/decider/`.
+
 ## Failure modes to respect
 
 Read `docs.typesafe.ai/model-jaggedness/jev-1.13` before trusting a judgement.
