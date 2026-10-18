@@ -25,5 +25,5 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `theme-factory` | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
 | `visual-report-builder` | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |
 | `visual-verify` | Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic inte |
-| `viz-kit` | Brand-independent charts and executive landing pages from one component kit (US map, pyramid, treemap, log ladder, matrix, countdowns, live builder). Use for any data viz |
+| `viz-kit` | Use when building a viz kit, ad kit, or data visual. Create varied campaign creative with static ads, narrative carousels and rendered motion, or token-driven charts and  |
 | `web-artifacts-builder` | Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex a |

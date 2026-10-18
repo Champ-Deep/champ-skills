@@ -46,6 +46,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `carousel-funnel` | Marketing & Content | Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post co |
 | `case-study-builder` | Marketing & Content | End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence, shape the narrative for the specific buyer, write on-page + full PDF forma |
 | `champ-brainstorm` | Marketing & Content | Interactive brainstorming skill using the CHAMP framework, a structured ideation method that adapts its lens depending on context. Use this skill whenever a user wants to |
+| `chatgpt-query-spy` | Marketing & Content | Reveal the exact web search queries ChatGPT runs behind any prompt (its fan-out sub-queries) by reading the conversation response in browser DevTools, then place that exa |
 | `compact-keywords` | Marketing & Content | Find compact keywords (short, warm, low difficulty buyer phrases) for SPAN, LakeB2B or any Champions Group site and turn each into a one-page brief routed to the right pa |
 | `content-dispatch` | Marketing & Content | Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, cr |
 | `internal-comms` | Marketing & Content | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
@@ -87,6 +88,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `competitive-product-teardown` | Engineering & Dev | Compare our product to a competitor or upstream repo. |
 | `defensible-data-counts` | Engineering & Dev | Use when a detected or derived number is shown to a buyer. |
 | `deterministic-analysis-pipelines` | Engineering & Dev | Use when a site-wide analysis must run on many inputs. |
+| `factory-decision-gate` | Engineering & Dev | Use when a factory agent is about to act without Deep. |
 | `firecrawl` | Engineering & Dev | Firecrawl is the PRIMARY browser and web access tool for this workspace. Use it for any web interaction, reading, research, or scraping task BEFORE reaching for the Chrom |
 | `first-ci-workflow` | Engineering & Dev | Use when a repo has tests but no CI, or a green suite. |
 | `fleet-status-dashboard` | Engineering & Dev | Poll chats, repos, and endpoints into one live status view. |
@@ -106,12 +108,11 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `mcp-builder` | Engineering & Dev | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MC |
 | `open-model-runnability-probes` | Engineering & Dev | Use when checking if an upstream model will actually run. |
 | `optional-input-degradation` | Engineering & Dev | Use when an optional or external input can be absent. |
-| `outbound-voice-call` | Engineering & Dev | Use when an AI voice agent must call a real person. |
 | `permissioned-send-lane` | Engineering & Dev | Use when adding an outbound send path to a read-only system. |
 | `repo-design-probe-first` | Engineering & Dev | Use when designing a repo feature from real file:line proof. |
 | `skill-creator` | Engineering & Dev | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing sk |
+| `sprite-art-pipeline` | Engineering & Dev | Build layered sprite art and prove every spec renders. |
 | `sqlite-fts5-search-platform` | Engineering & Dev | Use when building faceted search over merged spreadsheets or any row store on SQLite, especially with full-text search, evidence-bearing detections, or many normalised en |
-| `third-party-data-source-adoption` | Engineering & Dev | Use when building on an external data feed or API. |
 | `upstream-model-integration` | Engineering & Dev | Use before adopting or self-hosting an upstream model. |
 | `verification-gate-integrity` | Engineering & Dev | Use before reporting any test, gate or audit as passing. |
 | `verifying-supplied-plans` | Engineering & Dev | Use when someone hands you a plan or audit to build. |
@@ -169,7 +170,6 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `skill-repo-sync` | Personal Ops (champ-science plugin) | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
 | `sprint-mode` | Personal Ops (champ-science plugin) | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
 | `vault-keeper` | Personal Ops (champ-science plugin) | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
-| `vault-wide-rename` | Personal Ops (champ-science plugin) | Use when renaming a misspelled name vault-wide. |
 | `weekly-review` | Personal Ops (champ-science plugin) | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |
 
 ## Design & Creative (`design/skills/`)
@@ -237,6 +237,7 @@ Blog, campaign, SEO, copywriting, social, thought leadership.
 | `carousel-funnel` | Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post co |
 | `case-study-builder` | End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence, shape the narrative for the specific buyer, write on-page + full PDF forma |
 | `champ-brainstorm` | Interactive brainstorming skill using the CHAMP framework, a structured ideation method that adapts its lens depending on context. Use this skill whenever a user wants to |
+| `chatgpt-query-spy` | Reveal the exact web search queries ChatGPT runs behind any prompt (its fan-out sub-queries) by reading the conversation response in browser DevTools, then place that exa |
 | `compact-keywords` | Find compact keywords (short, warm, low difficulty buyer phrases) for SPAN, LakeB2B or any Champions Group site and turn each into a one-page brief routed to the right pa |
 | `content-dispatch` | Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, cr |
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
@@ -299,6 +300,7 @@ MCP, testing, frontend build, auth, scraping, codebase tools.
 | `competitive-product-teardown` | Compare our product to a competitor or upstream repo. |
 | `defensible-data-counts` | Use when a detected or derived number is shown to a buyer. |
 | `deterministic-analysis-pipelines` | Use when a site-wide analysis must run on many inputs. |
+| `factory-decision-gate` | Use when a factory agent is about to act without Deep. |
 | `firecrawl` | Firecrawl is the PRIMARY browser and web access tool for this workspace. Use it for any web interaction, reading, research, or scraping task BEFORE reaching for the Chrom |
 | `first-ci-workflow` | Use when a repo has tests but no CI, or a green suite. |
 | `fleet-status-dashboard` | Poll chats, repos, and endpoints into one live status view. |
@@ -318,12 +320,11 @@ MCP, testing, frontend build, auth, scraping, codebase tools.
 | `mcp-builder` | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MC |
 | `open-model-runnability-probes` | Use when checking if an upstream model will actually run. |
 | `optional-input-degradation` | Use when an optional or external input can be absent. |
-| `outbound-voice-call` | Use when an AI voice agent must call a real person. |
 | `permissioned-send-lane` | Use when adding an outbound send path to a read-only system. |
 | `repo-design-probe-first` | Use when designing a repo feature from real file:line proof. |
 | `skill-creator` | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing sk |
+| `sprite-art-pipeline` | Build layered sprite art and prove every spec renders. |
 | `sqlite-fts5-search-platform` | Use when building faceted search over merged spreadsheets or any row store on SQLite, especially with full-text search, evidence-bearing detections, or many normalised en |
-| `third-party-data-source-adoption` | Use when building on an external data feed or API. |
 | `upstream-model-integration` | Use before adopting or self-hosting an upstream model. |
 | `verification-gate-integrity` | Use before reporting any test, gate or audit as passing. |
 | `verifying-supplied-plans` | Use when someone hands you a plan or audit to build. |
@@ -402,7 +403,6 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `skill-repo-sync` | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
 | `vault-keeper` | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
-| `vault-wide-rename` | Use when renaming a misspelled name vault-wide. |
 | `weekly-review` | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |
 
 ## Install from a skill folder

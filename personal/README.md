@@ -19,5 +19,4 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `skill-repo-sync` | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
 | `vault-keeper` | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
-| `vault-wide-rename` | Use when renaming a misspelled name vault-wide. |
 | `weekly-review` | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |

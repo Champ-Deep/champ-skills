@@ -13,6 +13,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `carousel-funnel` | Turn any long-form asset (playbook, guide, report, case study, PDF, blog) into a social carousel funnel: a 10-slide LinkedIn document PDF plus Instagram PNGs, the post co |
 | `case-study-builder` | End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence, shape the narrative for the specific buyer, write on-page + full PDF forma |
 | `champ-brainstorm` | Interactive brainstorming skill using the CHAMP framework, a structured ideation method that adapts its lens depending on context. Use this skill whenever a user wants to |
+| `chatgpt-query-spy` | Reveal the exact web search queries ChatGPT runs behind any prompt (its fan-out sub-queries) by reading the conversation response in browser DevTools, then place that exa |
 | `compact-keywords` | Find compact keywords (short, warm, low difficulty buyer phrases) for SPAN, LakeB2B or any Champions Group site and turn each into a one-page brief routed to the right pa |
 | `content-dispatch` | Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, cr |
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
