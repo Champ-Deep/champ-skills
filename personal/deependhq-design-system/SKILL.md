@@ -29,7 +29,11 @@ Every surface is either **editorial** or **operator**. Never both. The mode is s
 
 Mode boundaries use one of two devices only: a 1px `--line` hairline with a 48px gold-to-green gradient at the content gutter, or an eyebrow handoff (editorial eyebrows are gold Inter 600 small caps, operator eyebrows are green mono uppercase with a leading dot).
 
-Not doing: gold everywhere, terminal everywhere, a light mode, or a visible accent-theme switcher. The theme switcher stays as a terminal easter egg only.
+Not doing: gold everywhere, terminal everywhere, or a visible accent-theme switcher between dark looks.
+
+**Scheme (decided 2026-10-20): system light and dark, dark when the system has no preference.** `prefers-color-scheme` decides; a nav toggle writes `dh_scheme` to localStorage and overrides until cleared. Dark is the identity kit below. Light is "Field notes": ground `#EFEBE3` with a faint dot grid, Ink text, a dark green twin for operator state (candidate `#0F6B33`, measure before use; `--build` `#30E060` is about 1.5:1 on that ground and must never be used as text or small fills in light), Lamp only on the primary CTA. Every token gets a light twin under `[data-scheme="light"]` and the contrast table is rerun for both schemes. The old navy/classic easter egg is retired.
+
+**Islands (decided 2026-10-20):** the homepage is prerendered HTML plus deferred React islands bundled by esbuild into one `home-islands.js`. Islands are for interaction only (terrain hero, widget grid, folder cards, halftone footer). Every island has a static fallback in the prerendered HTML: a list, a card row, plain links. If the island fails to mount, nothing is missing, only not moving. 21st.dev and Kokonut UI components are the source for interactive pieces; their Tailwind utility classes are rewritten to plain prefixed CSS because the site ships no Tailwind.
 
 ## The identity kit (Deep, 2026-10-01)
 
