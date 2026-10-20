@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.
+description: Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy. Also use when the user pastes an article, video, study, or playbook and asks to improve or fold it into existing skills.
 ---
 
 # Skill Creator
@@ -95,6 +95,7 @@ These word counts are approximate and you can feel free to go longer if needed.
 **Key patterns:**
 - Keep SKILL.md under 500 lines; if you're approaching this limit, add an additional layer of hierarchy along with clear pointers about where the model using the skill should go next to follow up.
 - Reference files clearly from SKILL.md with guidance on when to read them
+- A `references/` index file may list only files confirmed to exist via `skill_view`'s `available_files`. An index written from intent points every future session at paths that error, and tempts a later session into creating files that were never meant to exist.
 - For large reference files (>300 lines), include a table of contents
 
 **Domain organization**: When a skill supports multiple domains/frameworks, organize by variant:
@@ -293,6 +294,10 @@ kill $VIEWER_PID 2>/dev/null
 
 This is the heart of the loop. You've run the test cases, the user has reviewed the results, and now you need to make the skill better based on their feedback.
 
+### Editing mechanics: read, then patch
+
+`skill_manage` patch batches are atomic: one `old_string` that does not match aborts the whole call and rolls back the operations that already applied inside it. Two habits cause that failure. Reconstructing `old_string` from memory instead of from what `skill_view` actually returned, and issuing `skill_view` and `skill_manage` for the same skill in one parallel block, where the patch executes before the read returns and therefore writes against the pre-read content. Both end the same way: a rollback that reads like a clean pass. Load the skill with `skill_view`, copy the target text verbatim from that output, then patch in the next turn, one skill per call. After a batched patch, re-read the skill before claiming the edits landed.
+
 ### How to think about improvements
 
 1. **Generalize from the feedback.** The big picture thing that's happening here is that we're trying to create skills that can be used a million times (maybe literally, maybe even more who knows) across many different prompts. Here you and the user are iterating on only a few examples over and over again because it helps move faster. The user knows these examples in and out and it's quick for them to assess new outputs. But if the skill you and the user are codeveloping works only for those examples, it's useless. Rather than put in fiddly overfitty changes, or oppressively constrictive MUSTs, if there's some stubborn issue, you might try branching out and using different metaphors, or recommending different patterns of working. It's relatively cheap to try and maybe you'll land on something great.
@@ -319,6 +324,20 @@ Keep going until:
 - The user says they're happy
 - The feedback is all empty (everything looks good)
 - You're not making meaningful progress
+
+---
+
+## Folding external findings into existing skills
+
+A common variant of "improve my skills with this": the user pastes an article, a Short, a study, or a competitor's playbook and wants the skill library to absorb it. The loop above (test, eval, iterate) does not apply here; the job is getting one external rule into every skill that carries it, with the evidence attached and nothing left contradicting.
+
+1. **Trace the claim to its primary source before writing it into a skill.** Viral summaries drop the caveats that make a number safe to act on: who was actually studied, how the metric was measured. Pull the original post or paper, read its methodology, and carry the population and measurement caveats into the skill next to the number. A stat quoted without its population becomes a rule the next session applies to the wrong audience.
+2. **Set precedence before editing.** Numbers measured on the user's own campaigns, team, or field tests beat borrowed study numbers. Where they disagree, keep the internal number as the rule and cite the study as supporting direction, saying so in one line. State the precedence in the reference file so a later session does not "fix" the rule back.
+3. **Find every skill carrying the rule, not just the obvious one.** Content-search the library for the rule's current wording (word caps, subject-line formats, banned-word lists, cadence limits) across all skills and their `references/` dirs. Standards are routinely copied verbatim into two or more skills, and the skill that names the topic is not always the copy you found first.
+4. **Patch every copy in the same pass.** A rule tightened in one skill and left stale in its twin leaves the library contradicting itself; whichever copy the next session loads wins, so the update silently fails half the time.
+5. **Edit the sentence in place; never append an update note.** "UPDATE: actually..." under the old rule means both versions are loadable. Replace the old wording so there is exactly one statement of the rule.
+6. **One reference file for the evidence, named by topic.** Full data tables, methodology, source links, and caveats go in a single `references/<topic>.md` under the skill that owns the rule (`cold-email-benchmarks.md`, never `short-AbCdEf123.md`). Each patched skill gets one line pointing at that file and saying when to read it. Headline numbers may be cited inline in the rules themselves; tables and methodology stay in the reference file. If two skills need the same evidence, both point at the one file rather than each growing a copy.
+7. **Verify, then hand off.** Grep the library for the old wording to confirm no stale copy survives, confirm the new wording landed everywhere you intended, then follow `skill-repo-sync` to commit and push. The library is other agents' live read path, so an unpushed edit is half-done.
 
 ---
 

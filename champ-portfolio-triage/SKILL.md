@@ -7,6 +7,10 @@ description: Use when reviving or assessing a Champ-Deep repo.
 
 Read-only assessments. Verify with `gh api`, never trust a tracker score.
 
+## Product nicknames to repos
+
+Deep's product names do not match repo or folder names; confirm with `gh search repos <name>` before concluding a repo does not exist. Verified: **ChampSets / Champ Set = `Champ-Deep/ChampSet`** (private fork of tinyfish-io/bigset, AGPL-3.0), whose only local clone is the folder **`/Users/deep/champ-bigset`** (check `git remote -v`, not the folder name). Its stack: Next.js frontend + Fastify backend + self-hosted Convex, agents in `backend/src/mastra`, three admin-set model roles stored in the Convex `__global__` modelConfig row with env fallbacks in `.env`. No other champ-sets-like repo exists in the org or his account.
+
 ## Verified 2026-10-02
 
 **ChampLantern** (`Champ-Deep/ChampLantern`, private, Python+React, 4 commits all 2026-09-30, ~17.5k LOC).
@@ -27,6 +31,20 @@ The blocker is credentials and one domain decision, not code.
 - Avatars: LiveKit Agents lists 16 avatar providers (Tavus, LiveAvatar, AvatarTalk, LemonSlice).
 - Booking video: Calendly+Loom is the only shipped precedent (CTA on video end).
 
-## Pitfall
+## Pitfalls
 
 The `Apps&Projects` tracker rows are unreliable in both directions. ChampOps is scored 70/"Operational" with zero code and an NXDOMAIN Supabase project. ChampLantern and deependhq-site are scored far below their real completion. Always re-verify.
+
+When Deep asserts where something (spend, a bug, a feature) comes from, treat it as a routing fact and go there; do not re-derive attribution across the whole stack first.
+
+## Method: rank on moveable progress, not on a score
+
+The tracker score ranks what has already been built, so a repo that is one review away from done and a repo that needs a quarter of new code can sit within a few points of each other. Choose the next repo to push by what a session can actually finish:
+
+1. Read every open PR and every blocked task first (`gh pr list`, plus the board), because blocked work is a decision or an access gate, not more coding.
+2. Score the artifacts, not the tracker: open PRs already green, an existing readiness or gap report, an identifiable blocker, and how much of the remaining work is mergeable versus greenfield.
+3. Take the oldest finished work first. Branches that have been green and unmerged for weeks are stalled on review bandwidth, and unblocking them is one session's work.
+4. Prove CI coverage before trusting any green claim: a repo with no workflow that fires on feature branches reports no runs, and no runs looks like nothing wrong.
+5. Fold what you learn back into the tracker row before you stop. A row left saying "agent running" after the branch was consolidated is the same stale data that made step 1 necessary.
+
+Report the runner-up as well as the pick, with its one blocking decision, so the choice stays revisable.

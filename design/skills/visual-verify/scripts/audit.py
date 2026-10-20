@@ -55,7 +55,11 @@ PROBE = r"""
   const parse = (c) => {
     const m = (c || '').match(/[\d.]+/g);
     if (!m) return null;
-    return { r: +m[0], g: +m[1], b: +m[2], a: m[3] === undefined ? 1 : +m[3] };
+    // color(srgb r g b / a), what Chrome returns for color-mix(), carries
+    // 0-to-1 channels; rgb()/rgba() carries 0-to-255. Read on a 255 scale,
+    // every translucent colour audits as near black at once.
+    const scale = /^color\(/.test((c || '').trim()) ? 255 : 1;
+    return { r: +m[0] * scale, g: +m[1] * scale, b: +m[2] * scale, a: m[3] === undefined ? 1 : +m[3] };
   };
   const over = (fg, bg) => ({
     r: fg.r * fg.a + bg.r * (1 - fg.a),

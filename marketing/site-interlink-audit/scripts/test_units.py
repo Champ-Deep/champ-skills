@@ -163,6 +163,214 @@ def t_clusters():
           f"{len(surfaced)} surfaced from {len(ents)} known")
 
 
+def t_adversarial_review():
+    """Every defect an external review of the Span report found, as a regression test."""
+    section("adversarial review fixes")
+    import entities as E
+    import plan as PLAN
+
+    def mk(url, title="T", words=400, section="guides", role="MID",
+           ptype="pages", nin=0, nout=1, text=None):
+        return {"id": str(abs(hash(url)) % 10 ** 6), "url": url, "title": title,
+                "words": words, "section": section, "role": role, "type": ptype,
+                "in": nin, "out": nout, "in_sitemap": True,
+                "text": text or "data leads targeting healthcare technology " * 30}
+
+    # 1. the "76% invisible" headline was 86% FAQ pages, so the summary must be able to
+    #    state the rate with and without them.
+    faq = [mk(f"https://x.test/faq/q{i}", section="faq", ptype="faq") for i in range(20)]
+    studies = [mk(f"https://x.test/case-studies/c{i}", section="case-studies",
+                  ptype="case_studies", nin=(1 if i < 4 else 0))
+               for i in range(8)]
+    # 4 of the 8 studies are linked, so excluding FAQ must lower the orphan rate
+    edges = [[studies[4]["id"], studies[i]["id"], "read", 0] for i in range(4)]
+    s = PLAN.build_plan({"domain": "x.test", "nodes": faq + studies,
+                         "edges": edges})["summary"]
+    check(s.get("faq_pages") == 20, "summary counts faq pages", str(s.get("faq_pages")))
+    check(s.get("pages_ex_faq") == 8, "summary counts non-faq pages",
+          str(s.get("pages_ex_faq")))
+    check(s.get("zero_in_ex_faq") == 4, "orphan rate ex-faq is reportable",
+          str(s.get("zero_in_ex_faq")))
+    check(s["zero_in_ex_faq"] / s["pages_ex_faq"] < s["zero_in"] / s["pages"],
+          "excluding FAQ makes the orphan rate honest", "")
+
+    # 2. list product pages are commercial whatever the copy sounds like
+    cases = [("https://x.test/technology-lists/zoho-crm-users-list", "BOFU"),
+             ("https://x.test/healthcare-lists/nurses-email-list", "BOFU"),
+             ("https://x.test/geo-targeted-lists/uk-business-email-list", "BOFU"),
+             ("https://x.test/blog/companies-using-x", "TOFU"),
+             ("https://x.test/white-paper/guide", "MID")]
+    for url, want in cases:
+        got = PLAN.role_from_url(url, "WRONG")
+        check(got == want, f"role from URL: {url.rsplit('/', 1)[-1]} -> {want}", got)
+    kept = PLAN.role_from_url("https://x.test/about-us", "TOFU")
+    check(kept == "TOFU", "an unknown path keeps the text classifier", kept)
+
+    # 3. ownership beats every word-shape heuristic, so aws and sap survive
+    def own_fixture(brand):
+        return {"domain": "x.test", "edges": [], "nodes": [
+            mk(f"https://x.test/technology-lists/{brand}-users-list",
+               title=f"{brand} users list", nin=30,
+               text=f"A list of {brand} users and contacts. " * 12),
+        ] + [mk(f"https://x.test/blog/{brand}-{k}", title=f"{brand} guide {k}",
+                section="blog", ptype="article",
+                text=f"Teams evaluate {brand} before they buy. " * 14)
+             for k in range(4)]}
+
+    for brand in ("aws", "sap"):
+        _, ents = E.build_clusters(own_fixture(brand))
+        check(brand in ents, f"a 3-letter acronym owning a page is an entity ({brand})",
+              str(sorted(ents)[:4]))
+
+    # 4. one cluster must not eat the entity budget, and the cap must not drop members
+    nodes = []
+    for g in [f"geo{i}" for i in range(14)]:
+        nodes.append(mk(f"https://x.test/geo-targeted-lists/{g}-business-email-list",
+                        title=f"{g} business email list"))
+        for k in range(4):
+            nodes.append(mk(f"https://x.test/blog/{g}-{k}", section="blog",
+                            ptype="article",
+                            text=f"Companies in {g} buy data lists. " * 14))
+    cl, ents = E.build_clusters({"domain": "x.test", "nodes": nodes, "edges": []})
+    surfaced = {m for _, mem, _ in cl for m in mem}
+    dropped = set(ents) - surfaced
+    check(not dropped, "a capped cluster still emits every entity as a singleton",
+          str(sorted(dropped)[:4]))
+    biggest = max(len(m) for _, m, _ in cl)
+    check(biggest <= E.MAX_CLUSTER_MEMBERS,
+          f"no cluster exceeds MAX_CLUSTER_MEMBERS ({E.MAX_CLUSTER_MEMBERS})",
+          str(biggest))
+
+    # 5. a redirecting target must never reach the worklist
+    def two_entity_bundle():
+        """netSuite is discussed on three pages so it becomes an entity; one of the pages
+        that mentions it is the source, and the hub it points at is the target."""
+        nodes = [mk("https://x.test/technology-lists/netsuite-users-list",
+                    title="NetSuite Users List", section="technology-lists",
+                    ptype="pages", nin=0,
+                    text="A NetSuite users list for finance teams. " * 14)]
+        nodes += [mk(f"https://x.test/blog/finance-teams-{i}",
+                     title=f"Finance teams guide {i}", section="blog",
+                     ptype="article", role="TOFU", nin=5,
+                     text=f"Finance teams compare NetSuite and Sage. " * 14)
+                  for i in range(3)]
+        return {"domain": "x.test", "nodes": nodes, "edges": []}
+
+    red = "https://x.test/technology-lists/netsuite-users-list"
+    plan = PLAN.build_plan(two_entity_bundle(),
+                           redirects={red: "https://x.test/technology-lists/"})
+    proposed = [l["url"] for w in plan["work"] for l in w["links"]]
+    check(red not in proposed, "a redirecting target is dropped from the worklist",
+          str(proposed[:3]))
+    check(any("netsuite" in u for u in plan["summary"]["redirecting_targets"]),
+          "the dropped redirect is reported, not silently discarded",
+          str(plan["summary"]["redirecting_targets"]))
+
+    # control: without the redirect map the same target IS proposed, so the test is real
+    plan_ok = PLAN.build_plan(two_entity_bundle())
+    check(red in [l["url"] for w in plan_ok["work"] for l in w["links"]],
+          "control: the target is proposed when it does not redirect",
+          str([l["url"] for w in plan_ok["work"] for l in w["links"]][:3]))
+
+    # 5a. Boilerplate must never delete a menu destination. An adversarial review found the
+    #     "76% invisible" headline counted the header menu as unreachable. The first fix
+    #     required a target to be BOTH recurring AND in the nav, which is worse: on a site
+    #     with a global menu those two sets coincide, so every menu edge was deleted exactly
+    #     as before. The rule is "recurring AND never linked from page prose".
+    import pipeline as PIPE
+    psrc = open(PIPE.__file__, encoding="utf-8").read()
+    check("menu_only = {t for t in nav_set if prose.get(t, 0) == 0}" in psrc,
+          "menu_only is targets linked only from the menu", "")
+    check("boiler = {t for t in always if t not in menu_only}" in psrc,
+          "boilerplate excludes menu-only destinations", "")
+    check("boiler = {t for t in always if t in nav_set}" not in psrc,
+          "the broken 'always AND in nav' rule is gone", "")
+
+    # 5b. nav_set must exist before boilerplate is computed. Defining it after its use
+    #     raised UnboundLocalError only after a 5 minute crawl, which is an expensive way
+    #     to learn about statement order.
+    import pipeline as PIPE
+    src = open(PIPE.__file__, encoding="utf-8").read()
+    check(src.index("nav_set = set()") < src.index("boiler = {t for t in always"),
+          "nav_set is defined before boilerplate uses it", "")
+    check("raw_cache = {}" in src, "raw_cache is declared so nav_set can be built", "")
+
+    # 5c. Ownership must mean a real hub. A second review round found the loose version
+    #     filled half the worklist with junk: "from" owned a case study
+    #     (/from-dormant-data-to-349k-in-revenue), "key" owned the SurveyMonkey page,
+    #     "thanks" owned /thanks, "web" owned /webinars, "sgs" owned the corporate
+    #     brochure. None of those is a topic.
+    # Some are blocked as words, others by the rules below. Assert the mechanism that
+    # actually applies rather than pretending they are all in one list.
+    for w in ["from", "to", "for", "with", "using", "how", "what", "new",
+              "here", "welcome", "click"]:
+        check(w in E.FUNCTION_WORD or w in E.GENERIC_WORD,
+              f"'{w}' is blocked as a non-topic word", "")
+    for w in ["thanks", "key", "core", "click"]:
+        check(w in E.GENERIC_WORD, f"'{w}' is a blocked generic word", "")
+    # "web" and "sgs" are caught structurally, not lexically: /webinars and the corporate
+    # brochure are not hubs, so neither can own one.
+    check(not E.owns_a_hub({"url": "https://x.test/webinars", "section": "webinars"}),
+          "/webinars is not a hub, so 'web' cannot own one", "")
+    check(not E.owns_a_hub({"url": "https://x.test/corporate-brochure/sgs",
+                            "section": "corporate-brochure"}),
+          "the brand brochure is not a hub, so 'sgs' cannot own one", "")
+
+    def owns_junk(url, section="", leaf_is_topic=True):
+        return E.owns_a_hub({"url": url, "section": section})
+
+    check(not owns_junk("https://x.test/thanks", "thanks"), "/thanks is not a hub", "")
+    check(not owns_junk("https://x.test/corporate-brochure/sgs", "corporate-brochure"),
+          "a corporate brochure is not a hub", "")
+    check(not owns_junk("https://x.test/faq/who-can-benefit-from-this-list", "faq"),
+          "an FAQ answer is not a hub", "")
+    check(not owns_junk("https://x.test/case-studies/from-dormant-data-to-x",
+                        "case-studies") is False,
+          "a case study CAN be a hub, so FUNCTION_WORD must block 'from'", "")
+    check(owns_junk("https://x.test/technology-lists/sap-users-list", "technology-lists"),
+          "a technology list IS a hub", "")
+    # section names arrive hyphenated, underscored or spaced; the comparison must normalise
+    check(not owns_junk("https://x.test/corporate_brochure/sgs", "corporate_brochure"),
+          "section matching normalises separators", "")
+
+    # 6. an entire content area can sit outside sitemap_index.xml. The Span blog lives in
+    #    /blog/sitemap_index.xml with 1,613 posts, referenced by neither the index nor
+    #    robots.txt, so the crawl saw 4 blog pages and reported no research layer.
+    import discover as DISC
+    src = open(DISC.__file__, encoding="utf-8").read()
+    check("/blog/sitemap_index.xml" in src,
+          "discovery probes an out-of-index blog sitemap", "")
+    check("sitemap_index.xml" in src and "robots.txt" in src,
+          "discovery still follows the index and robots.txt", "")
+
+    # 7. the worklist must prefer an orphan target over an already-linked one
+    def wl_fixture(target_in):
+        """'rich users list' must clear ENTITY_MIN_PAGES, so it is mentioned on 4 pages.
+        The hub's inbound count is the only thing that varies between the two runs."""
+        nodes = [mk("https://x.test/technology-lists/rich-users-list",
+                    title="rich users list", role="BOFU", section="technology-lists",
+                    nin=target_in,
+                    text="A rich users list for data buyers. " * 40)]
+        nodes += [mk(f"https://x.test/blog/rich-guide-{i}",
+                     title=f"rich users list guide {i}", role="TOFU", nin=20,
+                     section="blog", ptype="article",
+                     text="A rich users list compared with other vendors. " * 40)
+                  for i in range(3)]
+        nodes += [mk("https://x.test/blog/source-users-list-guide",
+                     title="source users list guide", role="TOFU", nin=40,
+                     section="blog", ptype="article",
+                     text="A source guide that mentions a rich users list. " * 40)]
+        return {"domain": "x.test", "nodes": nodes, "edges": []}
+    lo = PLAN.build_plan(wl_fixture(0))["work"]
+    hi = PLAN.build_plan(wl_fixture(300))["work"]
+    check(lo and hi, "both worklists produced a suggestion", f"{len(lo)} {len(hi)}")
+    if lo and hi:
+        best_lo = max((p["val"] for w in lo for p in w["links"]), default=0)
+        best_hi = max((p["val"] for w in hi for p in w["links"]), default=0)
+        check(best_lo > best_hi,
+              "an orphan target outranks an already-linked one",
+              f"orphan={best_lo} linked={best_hi}")
+
 # ------------------------------------------------------------------- plan
 def t_refresh_bookkeeping():
     section("refresh bookkeeping")
@@ -303,6 +511,89 @@ def t_related_direction_and_host():
           "cosine is symmetric, so the rule score cannot distinguish direction", "")
 
 
+def t_review_regressions():
+    """Every finding from the adversarial review of the Span worklist, as a test.
+
+    The review rejected 26 of 63 proposed links and the "76% invisible" headline. All seven
+    structural causes are pinned here so they cannot come back.
+    """
+    import entities as ENT, extract as EX, plan as PL, report as REP
+
+    # 1. Generic single words must never be entities. 44 of 63 wrong links followed one.
+    for w in ("chief", "health", "accounting", "cloud", "asset", "consulting",
+              "directors", "director", "account", "cybersecurity", "managed"):
+        check(ENT.is_generic(w), f"generic word blocked: {w}", "")
+    # ...while real products survive. These were the "money pages" the review said were missing.
+    for w in ("servicenow", "salesforce", "sap", "workday", "netsuite", "hubspot",
+              "adobe", "five9", "sage 100"):
+        check(not ENT.is_generic(w), f"real product kept: {w}", "")
+
+    # 2. A menu link must be recognised by DOM position, not by its words.
+    check(PL.is_editorial("Data Enrichment", is_chrome=True) is False,
+          "a menu link named 'Data Enrichment' is navigation", "")
+    check(PL.is_editorial("Read more", is_chrome=False) is True,
+          "an in-body link reading 'Read more' is editorial", "")
+    check(PL.is_editorial("Data Enrichment", None) is True,
+          "old bundles still fall back to the text heuristic", "")
+
+    # 3. Edge layout: the 4th field marks nav position; 3-field bundles still work.
+    check(PL.edge_is_content(["a", "b", "Zendesk Users List", 0]) is True,
+          "4-field in-body edge", "")
+    check(PL.edge_is_content(["a", "b", "Zendesk Users List", 1]) is False,
+          "4-field menu edge", "")
+    check(PL.edge_is_content(["a", "b", "Zendesk Users List"]) is True,
+          "3-field edge falls back cleanly", "")
+
+    # 4. The repeated mega-menu must not survive extraction as body prose.
+    chrome = ("ERP Users List MS Dynamics Users List PeopleSoft Users List "
+              "QuickBooks Users List Salesforce users list SAP Users List And More!")
+    # Fixture length matters: body() finds the first prose sentence and drops the run before
+    # it, so a one-line fixture never reaches the nav-stripping stage at all. This is a
+    # realistic FAQ answer.
+    prose = ("A CISO runs security for an enterprise and owns the roadmap, the budget "
+             "and the incident response plan, answering to the board on risk. Security "
+             "leaders at regulated companies also chair the disclosure committee, which "
+             "meets quarterly to review material incidents and sign off on the public "
+             "filing. That duty sits alongside a security budget that is usually a "
+             "fraction of one percent of revenue yet carries responsibility for the "
+             "whole estate. Buyers looking for a security contact list want that person, "
+             "not a generic inbox. ")
+    page = f"<html><body><h1>Who is a CISO</h1><p>{prose}</p><p>{chrome}</p></body></html>"
+    out = EX.body(page)
+    check("Salesforce users list" not in out, "footer mega-menu stripped from body text",
+          out[:80])
+    check("disclosure committee" in out, "editorial prose survives nav stripping", out[:80])
+
+    # 5. Orphan rate must be split by page type, not reported as one scary number.
+    def plan_for(nodes):
+        return PL.build_plan({"domain": "x.test", "edges": [], "nodes": nodes,
+                              "stats": {"truncated": False}})
+    def mk(i, typ, **kw):
+        d = {"id": str(i), "url": f"https://x.test/{typ}-{i}",
+             "title": f"Page {i}", "section": typ, "role": "THIN", "type": typ,
+             "in": 0, "out": 1, "in_content": 0, "in_menu": 0,
+             "text": "data leads targeting healthcare technology " * 60}
+        d.update(kw)
+        return d
+    faq_only = [mk(i, "faq") for i in range(80)]
+    p = plan_for(faq_only)
+    notes = REP.derive_findings(p, {"nodes": faq_only, "edges": [], "stats": {}})
+    faq_note = [x for x in notes if "FAQ" in x["t"] or "faq" in x["t"].lower()]
+    check(bool(faq_note), "an all-FAQ orphan set still gets a caveat, not a 100% headline", "")
+    if faq_note:
+        check("not a fix" in faq_note[0]["b"] or "not the fix" in faq_note[0]["b"],
+              "the FAQ note says what to actually do", faq_note[0]["b"][:60])
+    # A page linked only from the menu is NOT an orphan.
+    menu_only = [mk(0, "pages", **{"in": 3, "in_content": 0, "in_menu": 3})]
+    p2 = plan_for(menu_only)
+    s2 = p2["summary"]
+    check(s2["zero_in"] == 0, "a menu-linked page is not counted as unlinked",
+          str(s2["zero_in"]))
+    check(s2["zero_in_content"] == 1, "but it is counted as having no in-body link",
+          str(s2["zero_in_content"]))
+    check(s2["menu_linked"] == 1, "menu-linked pages are counted", str(s2["menu_linked"]))
+
+
 def t_coverage_disclosed():
     section("crawl coverage is disclosed")
     import plan as PLAN, report as REP
@@ -421,7 +712,9 @@ if __name__ == "__main__":
     for fn in (t_classify, t_extract, t_entities, t_clusters,
                t_refresh_bookkeeping, t_related_diversity,
                t_related_direction_and_host, t_clef_gate,
-               t_clef_runner, t_coverage_disclosed, t_plan, t_squarify):
+               t_clef_runner, t_review_regressions,
+               t_coverage_disclosed, t_adversarial_review,
+               t_plan, t_squarify):
         try:
             fn()
         except Exception as e:

@@ -24,7 +24,10 @@ These apply to every rescue. They are not per-repo choices.
   the open PRs. Never merge a feature branch into another feature branch.
 - **Hand the branch over, do not merge it.** Push the V2 branch, open nothing
   destructive, merge nothing to main, and delete nothing, until Deep reviews it.
-  Report before any merge.
+  Report before any merge. When CI only fires on pull requests or on the default
+  branch, a push to the V2 branch collects no runs at all; open it as a **draft
+  PR** instead. The PR event fires every job, draft status blocks an accidental
+  merge, and `gh pr checks <n>` gives you the per-job evidence the report needs.
 - **Give a per-branch merits verdict.** For every branch: fully contained, has
   unique work, or is not even the same project. Say which, with the command
   output that proves it. "Delete the stale ones" is not a plan; a containment

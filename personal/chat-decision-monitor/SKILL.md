@@ -1,7 +1,7 @@
 ---
 name: chat-decision-monitor
 description: "Watch Deep's other chats for open decisions and lost work."
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 metadata:
@@ -14,6 +14,8 @@ metadata:
 
 Watches every Hermes chat except the current one, surfaces decisions that are
 still open, and verifies risk claims against real repos before reporting them.
+Long-running form: a `no_agent` cron script (`chat_digest.py`) that only speaks
+when something changed.
 
 ## When to Use
 
@@ -81,6 +83,24 @@ for cron `monitor` mode.
   claims, not facts. Real example: a chat reported "ChampLantern tree is clean"
   (true) and missed that 6 commits / 35 files / 5,023 insertions existed only on
   that laptop with no upstream. Run `git` and quote real numbers.
+- **Run git for risk yourself; do not also mine the chat text for it.** The
+  scanner's `risk` regexes are a second, weaker source on the same fact, so a
+  script that already executes git should drop `risk` from its chat-signal set
+  and keep only `awaiting-you` and `blocked`. Two sources disagree, and the
+  transcript one is always the one that is wrong.
+- **An `ahead`/`no-remote` count only means work at risk from commits not on a
+  remote.** Check per branch: `git for-each-ref --format='%(refname:short)'` then
+  `rev-list --count <branch> --not --remotes`. Glob excludes (`--exclude=backup/*`)
+  do not behave as written against `refs/heads/...`, and a silent miss inflates
+  the number you report; confirm the exclusion with that per-branch loop.
+  `backup/*` branches are deliberate snapshots, not unpushed work.
+- **`dirty >= 10` files, not `> 0`.** A couple of modified files is normal work
+  in progress; reporting it trains Deep to ignore the line that matters.
+- **No remote at all is the top severity**, not a footnote: every commit in that
+  repo exists on one disk.
+- **Age out stale decisions instead of nagging them forever.** A chat that has
+  not spoken in 3 days drops out of the brief; it stops being a decision and
+  becomes history.
 - **Check undelivered promises** in `delivery_obligations` (`state != 'delivered'`).
 - **Report blocked items as parked, not failed**, when Deep deferred them. Say
   what still needs him even if the blocker is a missing credential.
@@ -125,14 +145,57 @@ Lessons from a real sweep across Deep's repos:
 - Never print secret values. Report key NAMES, value LENGTH, and a
   token-shaped yes/no.
 
+## The brief must be a script, not an agent run
+
+`decision_watch.py` in cron `monitor` mode still wakes an LLM, which costs a
+model call per real change and then writes prose that reads like a status
+report. The shape that works is a **`no_agent` job running a deterministic
+script** (`~/.hermes/scripts/chat_digest.py`), which reuses
+`decision_scan.summarize()` for decisions and runs `git` itself for risk.
+
+Its `plan(current, state, now, hour)` is a pure function over a persisted
+state file (`~/.hermes/state/chat_watch.json`), so it can be self-tested with
+fixed clocks before it ever sends. Build it that way: gather -> plan -> save ->
+print, with the print step the only side effect.
+
+Rules each line of the brief follows (from agent-supervision threads:
+Moltbook heartbeats, agent-tether, the Paperclip Telegram plugin):
+
+- **Nothing changed, print nothing.** Empty stdout is quiet; every run must
+  earn its message.
+- **One batched message per run, and every line says why now**: `NEW` or
+  `still open Nd`. Never one chat per line per run.
+- **Re-nag on a backoff (1d, 3d, 7d), then stop.** A blocker reported on every
+  tick is negative value: the alert loses all meaning and Deep stops reading.
+- **Quiet hours** (02:00-15:00 IST) hold everything except commits that exist
+  nowhere else, which is the one class worth waking him for.
+- **One digest per day**, at the first run after 15:00: the full open list,
+  sent even when nothing changed. New items are withheld from that run if they
+  were already sent in the hourly batches.
+- **He steers it in chat, not via buttons**: `snooze N [days]`, `done N`,
+  `list`. Inline Telegram buttons need a gateway callback handler that does
+  not exist yet, so do not promise tap-to-snooze.
+- **Silent when idle, loud only about work that can be lost.** No dead-man
+  switch exists: if the cron scheduler dies, nothing here can report that.
+
 ## Wiring
 
 ```
 schedule: every 30m
-monitor:  decision_watch.py      # change-gate, deterministic
+script:   chat_digest.py         # no_agent: true, prompt: "", monitor_script: null
 deliver:  telegram:<chat_id>     # NOT 'local', or Deep never sees it
-attach_to_session: true           # he can reply and the brief stays in context
+enabled_toolsets: null           # see Gotchas; [] strips every tool
 ```
+
+`decision_watch.py` remains the change-gate fallback if a job must stay in
+`monitor` mode.
+
+**Verify a no-LLM job by running it, not by reasoning about it.**
+`hermes cron run <id>` fires it immediately and writes the exact deliverable to
+`~/.hermes/cron/output/<id>/<YYYY-MM-DD>_<HH-MM-SS>.md`. Read that file: a job
+reporting `succeeded` proves the process exited 0, not that the message is the
+one you intended (a quiet-hours hold and a failure look identical from the
+exit code).
 
 ## Gotchas hit while building this
 
@@ -140,6 +203,15 @@ attach_to_session: true           # he can reply and the brief stays in context
   `[{"item": [...]}]` and then to a junk `[""]` on clear. The CLI has no
   toolsets flag at all. Fix in `~/.hermes/cron/jobs.json`, where the key is
   **`id`**, not `job_id`.
+- **`"enabled_toolsets": []` on an agent job means it has zero tools.** It
+  then fails every single run with `no command-execution tool` and mails a
+  failure alert each tick, which looks like a broken watcher rather than one
+  bad config field. The correct value is `null` (default toolsets). Symptom to
+  recognize: the same cron failure notification repeating on every schedule.
+  When editing `jobs.json` by hand, copy it to `jobs.json.bak-<reason>` first,
+  write through a temp file, then `os.replace`, because the gateway holds it.
+  Edit with the patch tool, never `sed -i` (BSD sed needs `-i ''` and eats the
+  script when it does not get it).
 - A monitor job's first tick always runs as a baseline, so expect one report on
   create even with no change.
 - `hermes cron incidents` and `hermes cron doctor` are the health checks; a late

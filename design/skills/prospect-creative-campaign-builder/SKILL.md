@@ -82,11 +82,19 @@ Read `references/creative-generation.md` for the current Higgsfield MCP tool sur
 
 For video: `marketing_studio_video` for ad motion or `kling3_0_turbo` with a start-image reference for cinemagraph-style variants. **Hard rule: all first-draft videos generate at 480p (or the model's lowest supported resolution). Video is where credits burn, so prove the concept cheap, get the user's approval, then `upscale_video` the approved cut rather than regenerating at high resolution.** Also note that any logo baked into a generated video cannot be fixed with a static image swap later, it needs a full regenerate, so get the source image's brand asset right (Step 3) before generating video from it.
 
-When downloading generated media, always re-query `job_display` for the specific job's exact result URL rather than constructing a CDN URL by hand — timestamps in these URLs are not guessable and a wrong guess produces a corrupt near-empty file that looks like it downloaded successfully until you check the byte count.
+When downloading generated media, always re-query `job_display` for the specific job's exact result URL rather than constructing a CDN URL by hand — timestamps in these URLs are not guessable and a wrong guess produces a corrupt near-empty file that looks like it downloaded successfully until you check the byte count. On the CLI path the same rule reads: `higgsfield generate create <model> ... --wait --json > job.json`, then take `[0]['result_url']` from that file; never assemble a CDN URL yourself.
+
+**Vision gate before compositing.** Every generated still passes a vision check before it is allowed into the deck. Check for concrete defects, not vibes: subject drift from the brief (generic "architecture" prompts return monuments/temples instead of business properties), invented text/numbers/logos/watermarks, and whether the reserved headline area is actually clear. On failure, regenerate once with the defect named as an explicit negative in the prompt ("absolutely no temples, pyramids, monuments, spires"), then report the remaining defect to the user instead of burning more retries silently.
+
+**Generate the art layer only; composite the message yourself.** Prompts must forbid text, numbers, logos and watermarks, and must reserve the type area ("upper 45-50% completely empty dark space"). Headline, real logo and CTA are rendered deterministically afterward with HTML/CSS plus the client's actual brand files, screenshotted via Playwright. That keeps copy editable, the logo exact, and a copy tweak from costing a regeneration.
+
+**Motion drafts expect cuts.** Even when the prompt asks for one smooth camera move, the model often returns a cut sequence. Design for it: put the headline on a fixed dark panel/gradient so it stays legible across every frame, and QA the render by sampling frames into one contact sheet (`ffmpeg -i in.mp4 -vf 'fps=1,scale=320:320,tile=3x2' -frames:v 1 sheet.jpg`) and vision-checking that sheet before shipping.
 
 ## Step 5: Assemble the creative deck
 
 Once creatives exist (generated, brand-corrected, or both), combine them into a single self-contained HTML file so the whole set is shareable as one artifact. Use `scripts/build_creative_deck.py` for this rather than writing a new base64-embedding script from scratch each time — this exact pattern (read local images/video, base64-embed, drop into an HTML template) got rewritten five separate times during the workflow this skill is based on, which is exactly the kind of repeated work that belongs in a bundled script instead of reinvented per run.
+
+Build in two passes: first render the art/typography assets to files (an `--assets-only` mode on your build script), vision-check them, then embed those finished exports into the gallery. Re-rendering the preview inside the gallery build produces a second, subtly different set of visuals that no longer matches the files you verified or ship as downloads.
 
 ## Step 6: Campaign playbook
 
@@ -116,6 +124,8 @@ Present the finished files to the user (creative deck, playbook, visual HTML —
 - Never construct a media download URL by hand; always re-query the generation tool for the authoritative result URL.
 - A user's own supplied copy (pitch templates, persona descriptions) is ground truth once given; structure around it, don't regenerate it.
 - First-draft video is always 480p (or the model's minimum). Upscale approved cuts with `upscale_video`; never spend high-resolution credits on an unapproved concept.
+- When the user says to use a tool "for this", the target is the deliverable in flight (its asset slots), not a detached demo of the tool.
+- Never let a generated asset into the deck before a vision check, and never fill a pending logo slot with an AI stand-in while the real asset is still being retrieved: build the logo-independent parts and wait.
 
 ## Reference files
 

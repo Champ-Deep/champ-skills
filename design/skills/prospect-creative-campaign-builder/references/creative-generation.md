@@ -43,3 +43,21 @@ Higgsfield (like most generative models) will invent its own version of a real b
 2. **Acceptable fallback for stills only**: generate without logo accuracy, then composite the real logo on afterward. This does not work for video, where the invented logo is baked into every frame; fix the brand asset on the source still first, then generate video from the corrected still.
 
 Either way, never ship a creative with an AI-invented version of a real, identifiable client's brand mark without the user explicitly signing off first.
+
+## Ad art-layer prompts (for composited creatives)
+When the headline/logo/CTA will be composited afterward (the recommended shape, see SKILL.md Step 4), the prompt produces an art layer, not a finished ad:
+
+- Reserve the type area in words: "upper 45-50% completely empty dark [color] for later typography". A busy top third forces copy over detail and kills the layout no matter how good the image is.
+- Forbid output text outright: "No words, numbers, diagrams, logos, maps, labels, people or watermark." The model will otherwise invent pseudo-text and fake brand marks you then have to crop out.
+- Name the exact object archetypes and add an explicit negative list for the known drift. Generic nouns ("architecture", "commercial buildings") drift toward temples, pyramids, monuments and spires, which read as landmarks rather than business properties and can carry unintended symbolism. Spell the objects ("modern rectangular glass office block, small flat-roof factory, rectangular warehouse") and close with "absolutely no temples, pyramids, monuments, spires, towers or antique architecture."
+- State medium and lighting to keep a set coherent across variants ("sophisticated macro photograph, subtle amber side light, dark midnight navy") so multiple ads read as one campaign.
+
+Then run the vision gate (SKILL.md Step 4) on the download before compositing; a concrete defect list beats trusting the prompt.
+
+## Motion QA
+
+- Judge motion by frames, not by the prompt: extract a contact sheet and vision-check it in one pass:
+  `ffmpeg -i raw.mp4 -vf 'fps=1,scale=320:320,tile=3x2' -frames:v 1 sheet.jpg`
+  Look for camera discontinuities (push-in then reset), geometry entering the reserved type area, and any accidental text/logo.
+- Design copy to survive cuts: headline sits on a fixed dark panel or gradient overlay rendered above the video, never floating on raw frames.
+- Strip generated audio (`--generate_audio false` on the CLI) for feed drafts; silent autoplay is the social-feed default anyway.

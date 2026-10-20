@@ -15,6 +15,13 @@ the landing page".
 Three deliverables, in this order: **what is actually being served**, **a working
 concept file**, **a written audit note**. Never a slide of suggestions.
 
+**Direction gate before any of it.** When the user hands over a reference site, the
+task is almost never "rebuild the reference". It is "put MY site into THAT design".
+Restating their words back as one sentence ("your site, their layout") before building
+is cheaper than a rebuild. And when they praise the reference for its scroll behaviour,
+the deliverable is the motion, not the palette: a static screen at any scroll offset is
+a wrong answer.
+
 ## 1. Establish what is served before designing anything
 
 The single most common finding in this class of work: the redesign already exists in
@@ -66,6 +73,30 @@ Then look at it. Screenshot every viewport height down the page, tile the frames
 one contact sheet, and read that single image. Tiling is not optional: nine separate
 frames cost nine tool calls and you lose the rhythm judgement that only a contact sheet
 gives you.
+
+## 2b. Dissect the motion of a reference site before rebuilding it
+
+Style is visible in a screenshot. Motion is not, and a page fetched with `curl` or
+`web_extract` hides it entirely: scroll listeners, pinning, word-by-word reveals and
+stacking decks never appear in the HTML source.
+
+1. Render the reference in a headless browser and screenshot at a fixed width.
+2. Sweep `scrollTo` through the page at 8 to 10 fractions, screenshotting each stage;
+   tile them into one contact sheet and read it. Any static frame pair that differs is
+   a mechanic you must inventory.
+3. List the techniques in use: scroll-linked transforms, `position: sticky` pinning,
+   `IntersectionObserver` thresholds, easing library (Lenis/GSAP/ScrollTrigger), CSS
+   scroll timelines. Pull it from the page itself:
+   `grep -oE '(lenis|gsap|scrolltrigger|ScrollTimeline|@scroll-timeline)'` over the
+   fetched source, lowercased.
+4. Pull palette and fonts from **computed styles**, not source CSS: a compiled
+   stylesheet (Tailwind and friends) buries brand colours in utility names. One
+   `page.evaluate` collecting `getComputedStyle` on headings, body and links beats
+   reading thousands of lines of utility classes.
+5. Rebuild each mechanic with the user's real content and brand tokens, then re-drive
+   the same scroll fractions on YOUR build and read the driven values back.
+
+Full recipe with the probe script: `references/scroll-motion-teardown.md`.
 
 ## 3. Name the real cause, not the surface complaint
 
@@ -130,6 +161,11 @@ Self-contained single HTML file. No build step, no server, opens from `file://`.
   a concept reads as fake to anyone who knows the site, and it hides data-shape bugs.
 - **Derive, never store, any count.** Stored totals drift and the site eventually
   renders "week 38 of 31".
+- **Use a proven scroll runtime, not hand-rolled scroll math.** GSAP plus
+  ScrollTrigger, or the LakeKit journey in `scroll-journey-kit`, already solves
+  pinning, scrub easing, resize refresh and teardown; a raw `scroll` listener
+  reimplements them and is where zero-range and stale-geometry bugs enter. Reach for
+  the libraries already in the workspace before writing your own.
 - **No-JS is the base state.** Entrance animations are added by JS as an enhancement:
   the element is visible by default, JS adds the hidden starting state, then reveals on
   intersection. A visitor with JS off, or with `prefers-reduced-motion`, sees everything.
@@ -214,3 +250,6 @@ Then deliver every file with a `MEDIA:` absolute path. Never a bare path.
   canvas count, running animations, overflow, tap targets, opacity-on-text, em dash
   count, reduced-motion state, console and page errors. Run it against two or more URLs
   to produce the comparison table.
+- `references/scroll-motion-teardown.md` - capturing a reference site's scroll motion
+  in a headless browser, the mechanic inventory table, and the build rules for pinned,
+  stacked and fill-driven sections.

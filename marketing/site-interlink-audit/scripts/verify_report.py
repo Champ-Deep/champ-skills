@@ -41,8 +41,13 @@ with sync_playwright() as pw:
 
         nf = pg.eval_on_selector_all(".find", "els => els.length")
         check(nf > 0, f"findings @{w}", f"{nf} shown")
-        empty = pg.eval_on_selector_all(".find span", "els => els.filter(e=>!e.textContent.trim()).length")
+        empty = pg.eval_on_selector_all(".find p, .find span", "els => els.filter(e=>!e.textContent.trim()).length")
         check(empty == 0, f"findings have body @{w}", f"{empty} empty")
+        # A finding card must carry a heading, not just loose text. Without this the
+        # 2-column findings grid could render as anonymous paragraphs and still pass.
+        nh = pg.eval_on_selector_all(
+            ".find h3, .find b", "els => els.filter(e=>e.textContent.trim()).length")
+        check(nh >= nf, f"every finding has a heading @{w}", f"{nh} for {nf} cards")
         ofl = pg.eval_on_selector_all(".find", "els => els.filter(e => {const r=e.getBoundingClientRect(); return getComputedStyle(e).overflow!=='visible';}).length")
         check(ofl == 0, f"findings not clipped @{w}")
 

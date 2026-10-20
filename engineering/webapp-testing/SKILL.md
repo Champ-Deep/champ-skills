@@ -80,6 +80,31 @@ with sync_playwright() as p:
 ❌ **Don't** inspect the DOM before waiting for `networkidle` on dynamic apps
 ✅ **Do** wait for `page.wait_for_load_state('networkidle')` before inspection
 
+## Waiting without `eval`: respect the page's CSP
+
+`page.wait_for_function("...")` passes a **string**, which Chromium evaluates with
+`eval`. Any page shipping a strict `Content Security Policy` (typical for a Cloudflare
+Worker: `script-src 'self'`) rejects it with `EvalError: Evaluating a string as JavaScript
+violates ... 'unsafe-eval'`, and the test dies even though the app is healthy. The failure
+names CSP, not a broken selector, so do not start editing the page.
+
+✅ **Do** express every wait as a locator or assertion, which run as real selectors and
+never eval:
+
+```python
+from playwright.sync_api import sync_playwright, expect
+
+page.locator('#form-status.success').wait_for(state='visible')   # state wait
+expect(page.locator('#category')).to_have_value('beauty')        # value assertion
+expect(page.locator('#navigation')).to_be_visible()              # visibility assertion
+```
+
+Rule of thumb: if your wait or assertion is a JavaScript string in `wait_for_function` or
+`page.evaluate`-style predicate, rewrite it as `expect(locator)` or `locator.wait_for`.
+Reserve string predicates for pages you control that ship no `script-src` CSP, and even
+there the locator form is the safer default because the same test keeps working if a CSP
+lands later.
+
 ## Best Practices
 
 - **Use bundled scripts as black boxes** - To accomplish a task, consider whether one of the scripts available in `scripts/` can help. These scripts handle common, complex workflows reliably without cluttering the context window. Use `--help` to see usage, then invoke directly. 

@@ -89,6 +89,8 @@ In your writing you should:
 
 Be sure to maintain epistemic honesty:
 - Explicitly state what is uncertain or unknown
+- In partner, vendor, or commercial research, keep three categories distinct: first-party published facts, vendor marketing claims, and proposed or unconfirmed arrangements; never present a fee, eligibility, or partner acceptance as established without a first-party source
+- Any sample outreach drafted inside the report may assert only states that already exist; frame the rest as requests or proposals
 - Consider different angles or steelman alternative positions
 - For scientific or analytical questions, develop and explore hypotheses
 - Take positions based on research - come to conclusions about what is true, don't just give overviews.

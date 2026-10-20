@@ -40,9 +40,18 @@ gh run view <run-id> --log-failed        # only while red
 Two results that both mean "not verified", and are not the same thing:
 
 - **No run at all.** The workflow's trigger does not cover this branch. An
-  absent run is not a pass; check the `on:` block and add the branch.
+  absent run is not a pass; check the `on:` block and add the branch. When the
+  branch is not a trigger target, opening a **draft PR** from it is the standard
+  way to collect real runs: the PR event fires the workflow, and a draft cannot
+  be merged by accident. Wait a minute first, then read
+  `gh pr checks <n>`; image and frontend jobs finish minutes after the PR exists.
 - **A run that exists and is red.** Triage per job. One job red usually means
   one environmental cause, not one code bug.
+- **A green run is not a completed gate when a required check was never
+  configured.** If the default branch has no required status checks, the PR page
+  shows every job green while `gh pr checks` reports nothing for a gate that
+  never ran. Branch protection is an ops action, and an unprotected default
+  branch is a finding to report, not a pass.
 
 Confirm from a **fresh clone of the pushed branch**, never the working tree: the
 working tree carries `node_modules` and caches that hide a broken lockfile.
@@ -100,6 +109,14 @@ its own caches, lockfile and services. After the batch returns:
    before repeating the number to the user.
 4. Report the divergence you found between the claim and the runner. A subagent
    saying "all green" while the runner is red is the finding, not an annoyance.
+
+**An interrupted subagent is not a failed task.** It often died inside one long
+command (a build, a codegen step) after finishing all the structural work. Read
+its transcript tail to see which gate it was in, inspect its clone for unmerged
+files and conflict markers, and if the merge set is complete, run the remaining
+gates yourself in one background job that records each exit code separately.
+Re-dispatching the whole task throws away an hour of merges that are already
+sitting, verified, in that clone.
 
 Never summarise a delegated branch as green before this step.
 

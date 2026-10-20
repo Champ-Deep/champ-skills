@@ -99,6 +99,11 @@ category is solid, generalize: "hundreds of verified CXO contacts" instead of "3
 | Verbal, via AM, not in writing | "Following the engagement, [Client] confirmed..." (paraphrase only) |
 | Inferred/estimated | Do not use as a hard metric. Reference qualitative outcome instead. |
 
+Every "verified" label names what it was verified against. An internal record proves the
+number exists on your side; it does not prove the client agrees with it. Say which it is
+(internal record, client record, client statement) in the handoff, so nobody reads
+"verified" as client-confirmed.
+
 ---
 
 ## Quick Reference: Who Verifies What (Lake B2B Context)

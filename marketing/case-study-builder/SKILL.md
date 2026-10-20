@@ -1,6 +1,6 @@
 ---
 name: case-study-builder
-description: "End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence, shape the narrative for the specific buyer, write on-page + full PDF formats, hand off to design. MANDATORY TRIGGER for: \"build a case study\", \"write up a client win\", \"create a success story\", \"turn this into a case study\", \"proof points for [client]\", \"showcase what we did for [client]\", \"client results content\", \"write our case study for [company]\", \"client impact story\", \"document this win\", \"which clients should we case study\", \"find case study opportunities\", \"who should we case study next\", \"case study pipeline\", \"identify case study candidates\", \"niche clients without case studies\", \"high-ticket clients we should document\", or any request involving client outcomes, proof points, publishable win stories, or auditing which sectors lack proof content. Also trigger when a client hit a milestone or delivered strong results."
+description: "End-to-end case study pipeline: identify which clients deserve one, gather and verify evidence, shape the narrative for the specific buyer, write on-page + full PDF formats, hand off to design. MANDATORY TRIGGER for: \"build a case study\", \"write up a client win\", \"create a success story\", \"turn this into a case study\", \"proof points for [client]\", \"showcase what we did for [client]\", \"client results content\", \"write our case study for [company]\", \"client impact story\", \"which clients should we case study\", \"case study pipeline\", \"niche clients without case studies\", \"audit our published case studies\", \"which of our live case studies hold up\", \"case study credibility audit\", \"redesign our case studies\", or any request involving client outcomes, proof points, publishable win stories, or auditing which sectors lack proof content. Also trigger when a client hit a milestone or delivered strong results."
 ---
 
 # Case Study Builder
@@ -19,15 +19,23 @@ content for a specific vertical.
 **Mode B: Build** — You already know which client to case study. You want to gather the
 evidence, verify it, shape it for the right buyer, and produce the deliverables.
 
+**Mode C: Audit a published set** — Case studies are already live and something does not
+hold up: a client questioned one, or the set has never been checked. Fetch every
+published study, run each through the credibility gate in Phase 5, and return a table
+(URL, claim, attributed quote, logo, date, source stated, banned-word hits) with a
+READY / HOLD / NEEDS EVIDENCE verdict per study. NEEDS EVIDENCE studies go to Mode B
+with their gaps as the intake.
+
 ---
 
 ## Step 0: Mode and Brand Selection
 
 Start every session with two quick decisions:
 
-**1. Mode selection** — Ask the user (via `AskUserQuestion`) which mode they want:
+**1. Mode selection**: Ask the user (via `AskUserQuestion`) which mode they want:
 - Pipeline Scan (find and prioritize case study opportunities)
 - Build (produce a case study for a specific client)
+- Audit (test case studies already live against the credibility gate below)
 
 **2. Brand selection** — This skill works across all entities. Ask which brand is publishing
 this case study. The brand determines voice, visual identity, and which brand skill to load.
@@ -117,9 +125,15 @@ CS records, campaign delivery files, client approvals, and what to do when data 
   but they require different framing.
 - Is there any risk the client could dispute the claims? Flag it and adjust the copy.
 
-Do not write if a Tier 1 evidence item is unverified. Return to the user with a specific
-request — for example: "To confirm the open rate figure, can Sean pull the delivery report
-for this campaign?"
+Classify every claim before writing: VERIFIED (a record exists and you have read it),
+CLIENT-REPORTED (theirs, so framed as theirs), MISSING (no record anywhere). Never
+publish a MISSING claim or an unverified Tier 1 number. When the user asks you to build
+anyway, build around the gap: omit that component from the client-facing piece entirely,
+with no placeholder and no stand-in figure, and move it into an internal
+EVIDENCE-AND-CONSENT-CHECKLIST carrying the questions in the order the people who can
+answer them will be asked: delivery record, account owner, then client contact. Come
+back to the user with the specific request, for example: "To confirm the open rate
+figure, can Sean pull the delivery report for this campaign?"
 
 ### Phase 3: Audience Mapping
 
@@ -215,6 +229,23 @@ requires delivery data through Sean.
 | Champions Group | Cross-portfolio wins, accelerator outcomes | Growth rate, expansion | Visionary, founder-to-founder |
 
 Load the matching brand skill alongside this one for full voice and visual alignment.
+
+## Final gate: evidentiary credibility (mandatory before delivery)
+
+Style gates do not catch the failure that actually loses clients: a published study the
+buyer suspects a machine wrote. Run every number on the piece through four questions.
+It must name what it counts, the date range it covers, and the record it came from, and
+it must be tagged measured by us or reported by the client. A figure that misses any of
+the four is cut or moved to the internal checklist. Publish a proof panel (methodology
+line, source type, verification status) instead of naked stat callouts, and carry an
+attributed quote with name and title wherever one exists: a published set with no
+attributed quotes and no dates reads as invented at a glance. "Verified" in a handoff
+always names what it was verified against, because an internal record proves the number
+exists on your side, not that the client agrees with it. A study whose naming consent,
+hold release or contract status is still open is built but carries a visible HOLD marker
+and does not leave the building.
+
+---
 
 ## Final gate: no AI slop (mandatory before delivery)
 

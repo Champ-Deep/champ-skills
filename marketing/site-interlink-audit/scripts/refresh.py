@@ -272,6 +272,12 @@ def _run(args, hosts):
     ok = [r for r in results if r.get("ok")]
     bad = [r for r in results if not r.get("ok")]
     summary["last_run"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    # Drop entries for sites that are no longer on disk. Renaming a bundle (stripping a
+    # "www." prefix, fixing a slug) leaves the old key behind pointing at a deleted report,
+    # so the summary quietly grows stale entries that never update again.
+    for host in [h for h, r in summary["sites"].items()
+                 if r.get("report") and not os.path.exists(r["report"])]:
+        del summary["sites"][host]
     summary["totals"] = {"total": len(results), "ok": len(ok), "failed": len(bad)}
     with open(SUMMARY, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)

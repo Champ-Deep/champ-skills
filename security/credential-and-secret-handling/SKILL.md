@@ -54,6 +54,28 @@ anywhere, change it. Do not repeat it.
    matches the item's bound origin. Re-check before retrying; do not attempt a
    cross-origin fill.
 
+## Getting a secret from Deep onto his machine
+
+When a script or env file needs a value only he holds, never hand him a
+one-liner that carries the secret inside quotes: pasting it breaks the quoting
+(the shell stalls at a `quote>` continuation prompt) and the value lands in his
+shell history. Give the two-step instead:
+
+```bash
+read -s TOK
+printf 'KEY=%s\n' "$TOK" >> ~/.path/secrets.env; unset TOK
+grep -c '^KEY=' ~/.path/secrets.env   # expect 1; >1 means a partial earlier write
+```
+
+`read -s` echoes nothing, nothing enters history, and the count check catches a
+half-written line from an aborted attempt before anything consumes the file.
+
+When Deep says "add the variable, I will fill the value" (his usual form for an
+API key he just pasted), write the NAME only: append `KEY=` with an empty value
+plus a one-line comment, tell him the file path and line, and let him paste the
+value himself. Confirm success by testing the key against its service (status
+code only), never by printing the file back.
+
 ## Storing a credential in the vault
 
 "Save it in my Celsus vault" does NOT mean write the value into a markdown note.
@@ -63,6 +85,21 @@ browser prompt; the vault is for the reference, not the secret.
 
 If a login page is not currently open, say what is needed and stop there rather
 than inventing a storage location.
+
+## CLIs that dump variables
+
+A command whose normal output is a variable dump (`railway variables`,
+`kubectl get secret -o yaml`, `heroku config`, `cat .env`) prints live values
+straight into the transcript, and tool output reaches the transcript exactly
+like a paste. Ask for key names before running it:
+
+```bash
+railway variables | grep -oE '^[A-Za-z_][A-Za-z0-9_]*'    # names only
+```
+
+If a value has already been printed, treat it exactly like a paste: one line
+saying it is exposed and should be rotated, then continue with the work that is
+not blocked.
 
 ## Secrets in repos
 

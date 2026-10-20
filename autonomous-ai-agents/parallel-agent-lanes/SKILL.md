@@ -18,8 +18,10 @@ Use a bounded window of capacity (a free tier, a credit balance, an overnight, a
 "2 days") to advance several repos at once, where the human reviews only short
 reports instead of transcripts.
 
-The deliverable is a lane plan plus paste-ready prompts plus a launcher. Running
-the lanes is the user's call, not yours.
+When the user asks what to run, the deliverable is a lane plan plus paste-ready
+prompts plus a launcher, and running them is their call. When they explicitly ask
+you to run the work, dispatch the lanes yourself, and still write the prompts and
+the report contract down as files so the next session does not rebuild them.
 
 ## 1. Measure the ceiling before planning against it
 
@@ -72,7 +74,16 @@ Look specifically for:
   and a failure is a legitimate finding.
 
 One lane per repo. Lanes never touch each other's repo. State that constraint in
-each prompt.
+each prompt. The same rule covers output directories: two lanes writing into one
+collide on filenames and shared assets, so partition the path in the prompt (one
+lane owns `<dir>/<topic>/`, the other owns `<dir>/` everywhere except `<topic>/`)
+and name the files each lane may never touch. For code lanes, isolation means a
+worktree, not the main checkout: `git worktree add <scratch>/<lane> -b <branch>
+<base>` off the default branch, so two lanes cannot stage each other's files. When two lanes fork the SAME base
+branch into two worktrees, worktree isolation does not prevent a merge conflict in
+files both lanes legitimately edit: put each lane's touched-file list into BOTH
+prompts and instruct each to keep its edits in those files only, so the merges
+reconcile without hand-resolution.
 
 ## 3. Optimise for review cost, not token efficiency
 
@@ -82,6 +93,12 @@ one hour per block.
 
 - Fix the report line count per lane and specify the fields. Approximation by
   reading a transcript does not happen when the transcript never gets read.
+- Specify the classification, not just the outcome. A lane investigating reported
+  issues returns every item as REAL BUG / NOT A BUG / NEEDS DECISION with a file:line
+  or command behind it, plus explicit `not verified` and `decisions needed` fields.
+  "Fixed" with no classification hides the items nobody fixed. When dispatching
+  through `delegate_task`, pass that contract as `output_schema` so summaries
+  arrive structured.
 - Put the entire user-facing timeline in the plan: when to launch, when to stop
   reading, when to review, when to merge.
 - Say plainly what happens if the user finds themselves reading a transcript during
@@ -134,9 +151,24 @@ them:
    invent a product decision unattended.
 8. Per-branch merits verdict before any cleanup recommendation.
 
+For a lane whose output another lane (or your own code) must IMPORT, the integration
+contract is part of the prompt, not something to discover later: exact export names,
+exact option/field ids, the entry file path, and the command that proves it runs
+("must pass `node test/x.test.js`"). A lane that decides its own API returns
+something that cannot be wired in without renegotiating it, and the screenshot it
+took proves pixels, not the interface. Verify the returned artifact yourself before
+building on it.
+
 ## 6. Launch
 
-One detached tmux session per lane, from `scripts/launch-lanes.sh`. Supports
+In Hermes, dispatch through `delegate_task`: one task object per lane, carrying the
+whole prompt (children share no context with you), a fixed-format `output_schema`,
+and the isolation rules. Results arrive as separate messages per lane, the live
+transcript path lets you watch a lane without polling, and `action: stop` kills one
+that has drifted. Keep plan, prompts and report contract as files either way.
+
+For lanes that need a real shell, a server left running, or work that must outlive
+the session: one detached tmux session per lane, from `scripts/launch-lanes.sh`. Supports
 `--status` to capture all panes and `--kill` to tear down.
 
 **Multi-line prompts must go through a tmux buffer, not `send-keys`.** `send-keys`
@@ -171,6 +203,12 @@ the user's decision. Silence reads as completion.
   files, not chat prose, or the next session rebuilds them from scratch.
 - **A lane with no fixed report format will be reviewed by reading its
   transcript**, which is exactly the cost the plan was built to avoid.
+- **A lane's final report is a self-report, not evidence.** Re-verify every claim
+  that has an external handle before relaying it: `gh pr view <n> --json
+  state,mergedAt` for "PR opened, not merged", list the deliverable paths with
+  `search_files(target='files')`, and
+  re-run your own dash/slop scan over the produced files. A report can claim
+  success around a write that silently failed.
 
 ## Supporting files
 

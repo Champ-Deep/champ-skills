@@ -26,17 +26,40 @@ build  →  audit (machines catch what eyes miss)
 
 ## Setup
 
-Both scripts need Playwright with Chromium. Check once per session:
+Both scripts need Playwright with Chromium. The interpreter on `PATH` is often NOT the
+one that has it, so probe first and pick the winner rather than installing blind:
 
 ```bash
-python3 -c "import playwright" 2>/dev/null || pip install playwright --break-system-packages
-python3 -c "from playwright.sync_api import sync_playwright; sync_playwright().start().chromium.launch().close()" \
+for p in "$(command -v python3)" /opt/anaconda3/bin/python3 /opt/homebrew/bin/python3 \
+         /usr/bin/python3 "$HOME"/.hermes/*/bin/python* "$HOME"/.hermes/*/*/bin/python*; do
+  [ -x "$p" ] && "$p" -c "import playwright" 2>/dev/null && { echo "USE=$p"; break; }
+done
+```
+
+Then check the browser against that same interpreter:
+
+```bash
+<the-winner> -c "from playwright.sync_api import sync_playwright; sync_playwright().start().chromium.launch().close()" \
   2>/dev/null || playwright install chromium
 ```
 
-In sandboxes where Chromium is preinstalled, it is already on the path and no download is needed. If a page must be served rather than opened as a file, start the static server as a background process in one call and run the audit or shoot script in a separate call: chaining `python3 -m http.server` and the Playwright script in one foreground command gets rejected as a long-lived process and runs neither. If a browser genuinely cannot be obtained, say so plainly, fall back to the manual checklist in `reference/critique-protocol.md`, and label the output **unverified**. Never silently skip the gate and imply it passed.
+Only install into a fresh environment if no interpreter probes clean. Re-running an
+install against the PATH python while a working one already exists elsewhere just
+repeats the same failure with a different interpreter.
+
+In sandboxes where Chromium is preinstalled, it is already on the path and no download is needed. When neither script's browser works, the one-shot fallback that still lets you LOOK is a headless Chrome screenshot fed to a vision call: `"<chrome>" --headless=new --disable-gpu --hide-scrollbars --window-size=1200,<full height> --screenshot=out.png <file>` then `vision_analyze` on the PNG. Size the window tall enough to cover the whole page, or say plainly which sections the shot did not reach: a partial screenshot reported as a full check is the same false pass the gate exists to prevent. If a page must be served rather than opened as a file, start the static server as a background process in one call and run the audit or shoot script in a separate call: chaining `python3 -m http.server` and the Playwright script in one foreground command gets rejected as a long-lived process and runs neither. If a browser genuinely cannot be obtained, say so plainly, fall back to the manual checklist in `reference/critique-protocol.md`, and label the output **unverified**. Never silently skip the gate and imply it passed.
 
 ---
+
+## Step 0: the dash count, before anything renders
+
+Any generated HTML or vault write for Deep carries a hard zero em dash and en dash rule. Visual inspection cannot settle it (a dash inside a headline still looks fine), and it is a one-line machine check, so run it before the browser:
+
+```bash
+grep -c $'\xe2\x80[\x93\x94]' file.html   # must print 0
+```
+
+Fix every hit, then proceed. When a page ships through a build script, put this grep in the script so the count gates the build rather than the review.
 
 ## Step 1: Audit — the machine pass
 
@@ -64,6 +87,12 @@ Severities: **FAIL** blocks delivery. **WARN** needs a reason to ignore. **INFO*
 
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body). Real luminance maths in about ten lines of Python settles whether the FAIL is the checker or the page. If it passes by hand, do not desaturate the design; change the element's ground to something a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or record it as a known checker limitation in the report, naming the measured ratios. Report FAILs you leave standing as measured passes, never as ignored.
 
+**Prove which app is listening before you shoot it.** A dev server or other project can own loopback while your server owns the wildcard interface, so `localhost:<port>` renders a completely different app that passes every visual check with the wrong content. Run `lsof -nP -iTCP:<port> -sTCP:LISTEN`, then grep the fetched HTML for a string only your build contains, and drive the LAN address when loopback is contested. A green gate run against the wrong app is the one failure that produces no symptom at all.
+
+**For an async component, drive the flow and shoot each state separately.** An idle screenshot of a search box that morphs into a thinking orb proves nothing about the states that matter: the tools default to the load state, and a defect that exists only during the animation disappears the moment it finishes. Drive the real interaction (type, submit, wait for the async work), capture idle, mid-flight and settled states as separate PNGs, assert the state from a DOM signal (a phase attribute, an element mount) rather than a sleep, and check the console for errors each state produced. This is the multi-state requirement above applied to one component rather than a whole page.
+
+**Re-run the audit in each state the flow can reach, not only the load state.** A default-page audit of a multi-step app measures only its empty state, and every control that renders after an interaction (a mapping select populated from the uploaded file, the remove chip that appears once a chip exists) is absent from the default DOM, so the audit reports clean while an undersized or unlabelled control sits one click away. Drive the flow to each state that ships controls (uploaded, configured, results, signed in) and run the audit plus a shoot at that state. States nobody screenshots are states nobody audits, and the interactive states are exactly where the touch-target and labelling FAILs hide.
+
 A clean audit is **necessary, not sufficient.** It cannot tell you the page is ugly, the hierarchy is flat, or the hero says nothing. That is Step 3.
 
 ---
@@ -76,12 +105,14 @@ python3 scripts/shoot.py <url-or-file> --out .verify --widths 390,834,1440 --the
 
 Captures above-the-fold and full-page at each width and theme, at 2x scale, with mobile emulation and touch below 700px. It waits for fonts and network idle, and reports any console errors, which are defects regardless of how the page looks.
 
+When your own capture script scrolls to each section before shooting, force instant scrolling first (`html{scroll-behavior:auto!important}` injected, or `scrollTo({top, behavior:'instant'})`) and pause before the shutter: a shot taken mid smooth-scroll lands wherever the animation happens to be, and the screenshot then gets blamed on the page for content it never framed.
+
 Useful flags:
 
 - `--reduced-motion` also captures the `prefers-reduced-motion: reduce` variant. Use it whenever the expressive tier is in play: the reduced version is what most conservative users actually see, and it is usually the one nobody checked. Treat it as a separate implementation surface, not a frozen default: a control hidden until an interaction (an email row that appears after file choose) still fires its native form submit in that state, so state-only bugs such as a field value leaking into a URL query live here and nowhere else. Screenshot it and probe its flows, not just the animated default.
 - `--selector "[data-loaded]"` waits for a real readiness signal instead of guessing at a timeout.
 - `--wait 2000` for pages with slow entrance choreography.
-- `scripts/offline-check.py <target>` proves a local-only claim: it runs the page with the browser offline and exits 1 on any external request, console error or storage write. Run it on every artifact that promises no CDN, no remote fonts and no telemetry, and on anything delivered as a single file that must open from disk.
+- `scripts/offline-check.py <target>` proves a local-only claim: it runs the page with the browser offline and exits 1 on any external request, console error or storage write. Pass a local file as `file:///abs/path`; a bare filesystem path is rejected as an invalid URL. Run it on every artifact that promises no CDN, no remote fonts and no telemetry, and on anything delivered as a single file that must open from disk.
 
 For a non-web deliverable (PDF, PPTX, DOCX, poster, chart image), you still shoot it: convert a page to PNG and read that. Rendering a slide to an image and looking at it catches overflowing text boxes and clipped charts that no amount of reading the source will.
 
@@ -96,6 +127,8 @@ soffice --headless --convert-to pdf deck.pptx   # decks, then pdftoppm
 
 **Read every PNG with the Read tool.** You have vision. Use it. Then critique against the protocol.
 
+When the look pass runs through an auxiliary vision call instead of your own eyes (a batch too large for one context, a non-vision model, a fan-out to subagents), the prompt decides the yield. Prime a role and a cap: *"Critique as an art director for <this product's category>. Name the three most damaging problems, each naming the element and the specific change, five sentences max."* An open-ended "describe this screen" returns an inventory of what is on the screen and no punch list. Then re-run the identical prompt after the fix round and check each named defect is gone: the same question twice turns the before/after into a mechanical comparison instead of a judgement call.
+
 A set too large to open yourself still has to be opened. Past about eight PNGs the look pass outgrows one context, so fan it out: parallel vision subagents, one per batch of up to eight shots, each returning defects as shot / element / observation / fix / severity plus its swap and accessory test, then you merge the findings and fix. The fold shots stay yours: a subagent's summary of a screenshot is not a screenshot.
 
 **One tall full-page capture is not readable either.** At 2x a 6000px page comes back as a thumbnail in which a misaligned divider and a clipped caption are both invisible, and the vision model will report the section that happens to be centred while missing the one at the seam. Slice the full-page shot into bands and judge each separately, naming which section it covers so every defect stays addressable:
@@ -108,7 +141,7 @@ for i, y in enumerate(range(0, H, 1500)):
     im.crop((0, y, W, min(H, y + 1500))).save(f'.verify/band-{i}.png')"
 ```
 
-Nine bands for a landing page is normal and still cheaper than a subagent. Keep the 390px band count separate from the 1440px one: the defect list differs, because the layouts differ.
+Nine bands for a landing page is normal and still cheaper than a subagent. Keep the 390px band count separate from the 1440px one: the defect list differs, because the layouts differ, so the two crops cover different sections and the section name in the prompt has to come from the crop's own y-range, not from the other width's list.
 
 → Full procedure in [critique-protocol.md](reference/critique-protocol.md).
 
@@ -120,6 +153,7 @@ The short form, in the order that finds the most problems fastest:
 4. **Compare the breakpoints side by side.** The 390 shot and the 1440 shot should look like the same product making different decisions, not a desktop page squeezed. Look specifically for: text that stayed 48px, a grid that became one sad column of stretched cards, a nav that turned into a wall.
 5. **The swap test.** Could this screenshot be dropped onto a competitor's site with only the logo changed and nobody would notice? If yes, there is no design here, only competence.
 6. **Count the accessories.** Gradient, glow, glass, badge, icon tile, animated border, decorative blur. Pick the least load-bearing one and remove it. The professional version of almost every AI-built screen is a calmer one.
+7. **Check fidelity agreement.** Every layer on screen should share one level of detail and one edge quality: a hard-outlined pixel sprite sitting over a smooth anti-aliased gradient, or a crisp illustration beside soft-shadowed cards, reads as two art directions stacked no matter how good each piece is. Name the layer that disagrees with the rest.
 
 Write the critique down as a numbered list of defects before you fix anything. Fixing while looking produces one fix and three missed problems.
 
@@ -129,7 +163,34 @@ Write the critique down as a numbered list of defects before you fix anything. F
 
 Apply the fixes, then run Steps 1 and 2 again. Two rounds is normal. If round three still has FAILs, the problem is structural: stop patching and reconsider the layout or the design system.
 
-**Measure before you fix.** A clipping, overflow, or animation-state claim read off a screenshot is a hypothesis, not a finding: a full-page shot captures scrollable panels in whatever scroll state they happened to be in, and a vision read will happily report a border that does not exist. Confirm with a DOM probe first, `getBoundingClientRect()` of the control against its scroll container plus `scrollHeight` vs `clientHeight`. For scrubbed or pinned sections, settle the scroll (`window.scrollTo`, wait for the scrub to catch up; `mouse.wheel` mid-flight lags), then read computed styles: the progress custom property, headline opacity, scene opacity. A screenshot blamed for "the transition never ran" at a mid-scrub frame is the frame, not the code; probe the numbers before spending a fix round. If the probe matches intent, the layout is fine and the screenshot misled you. Fixing on the screenshot's word spends a whole round on a defect that was never there.
+**Namespace ids in generated repeated sections.** `getElementById('x')` and `querySelector('#x')` resolve against the whole document and return only the first match, so a template that emits the same ids for every section wires all lookups to section one: the first block renders, the rest stay blank, and console, overflow and audit all stay green because nothing threw. Prefix every generated id with its section key (`#t4-t0`) or query inside the section root, then assert content on every instance rather than the first: map each section to its block's `textContent.length` and fail the gate on a zero. This check belongs in the same probe run as the copy-button test, since a copy button can copy the right payload while the visible prompt it was supposed to fill is empty.
+
+**Namespace a new page shell before reusing a component library.** A generic root class such as `.lab` may already mean a label inside a chart. Giving that selector `min-height: 100vh` silently stretches every KPI label while overflow and console checks remain green. Search existing class usages first, use a product-specific root class, and assert a reasonable label height in a rendered representative chart. Review at least one example of each reused component, not only the default screen.
+
+**A control that renders correctly can still be permanently dead.** Read `.disabled` on
+every button, link and control on the loaded page before you trust a click, and log any
+that are disabled without an explicit `disabled` in the source: a `h(tag, attrs)`-style
+DOM helper that does `setAttribute(k, v)` will turn the prop `disabled: false` into the
+attribute `disabled="false"`, and HTML treats any value as disabled, so the control looks
+live and silently swallows every tap. Mouse-driven automation finds this only if it
+asserts the page advanced; driving with `page.click()` on an already-inert button fails
+soft and the run still looks green. Sweep the default state instead:
+
+```js
+[...document.querySelectorAll('button, a, input, [role=button]')]
+  .filter(b => b.disabled || b.getAttribute('aria-disabled') === 'true')
+  .map(b => b.textContent.trim() + ' @ ' + b.outerHTML.slice(0, 90))
+```
+
+**Measure before you fix.** A clipping, overflow, animation-state, or contrast claim read off a screenshot is a hypothesis, not a finding: a full-page shot captures scrollable panels in whatever scroll state they happened to be in, and a vision read will happily report a border that does not exist. Confirm with a DOM probe first, `getBoundingClientRect()` of the control against its scroll container plus `scrollHeight` vs `clientHeight`. For scrubbed or pinned sections, settle the scroll (`window.scrollTo`, wait for the scrub to catch up; `mouse.wheel` mid-flight lags), then read computed styles: the progress custom property, headline opacity, scene opacity. A screenshot blamed for "the transition never ran" at a mid-scrub frame is the frame, not the code; probe the numbers before spending a fix round. If the probe matches intent, the layout is fine and the screenshot misled you. Fixing on the screenshot's word spends a whole round on a defect that was never there.
+
+**Shoot the settled state and a deliberate mid-state; each hides what the other shows.** A mid-frame screenshot lies about missing content (the reveal has not run yet), but the settled screenshot cannot see anything that exists only while the sequence runs: an arrowhead drawn ahead of its line, an overlay released early, a staged element visible before its cue. Once the probe numbers settle, capture one mid-progress frame alongside the final frame and check it for elements visible before their driver reaches them; defects with a time dimension never appear in the resting shot.
+
+**A section shot must come from the element, not the scrolled viewport.** A viewport capture taken after `scroll_into_view` catches the sticky nav sitting over the section's top band, and the eye reports "the eyebrow and first row are clipped" when only the scroll position is wrong. Capture `locator(selector).screenshot()` for section review, and confirm any clip a vision pass names against the element's bounding box before spending a fix round.
+
+**A cropped shot's blind spots are not its defects.** The eye will report the closing statement, the table footer and the last card row as "clipped off the bottom" whenever the crop window happens to end just above them, and the fix it proposes (more padding, a taller canvas) is a fix for the crop. Before acting, compare the element's claimed position against the full-page height: if it sits below the crop range, re-crop a band that contains it. The same applies to any element named as missing when it is simply not in frame; ask the next pass about the region where it lives. Confirm both mechanically, by bounding-box measurement rather than by re-reading the same image.
+
+**Replayed entrance animation reads as empty space.** Word-by-word and staggered reveals start from `opacity: 0`, and a page reloaded for a capture replays them from the top, so a card shot mid-reveal reports "dead space below the fold" or an invisible header as a layout defect. A capture flag the build honours in script does not reach CSS animations unless the stylesheet honours it too: force the animated end state in the CSS itself (`.static .w{animation:none;opacity:1;transform:none}`), rebuild, re-shoot. Tell the two causes apart in the shot: a mid-reveal frame shows a *partially* populated block (headline complete, subtitle ghosted); true dead space shows none of it.
 
 **`document.scrollWidth` does not prove there is no overflow.** A root with `overflow-x: hidden` (or an ancestor clip) reports `scrollWidth === innerWidth` while children are twice the viewport wide and half of them are invisibly cut off. Measure geometry instead: walk `getBoundingClientRect().right > innerWidth + 1` over the page's elements, excluding nodes that scroll by design (table wrappers, the sidebar rail, canvases). The two probes disagree, and the rect walk is the one telling the truth.
 
@@ -137,7 +198,18 @@ Apply the fixes, then run Steps 1 and 2 again. Two rounds is normal. If round th
 
 **Give every wide data table its own scroll box.** A table wider than the screen must scroll inside `overflow-x: auto` on its own wrapper. Without one it either forces the page to scroll horizontally or gets cut off by the root clip, and the audit will name the root as the culprit rather than the table.
 
+**Stack it instead when the page is read, not scanned.** On a reference or cheat-sheet page held open during a live call, a sideways-scrolling table hides half its text off screen, so stack the rows: `table, tr, td { display:block }`, `thead{display:none}`, each `td` labelled by its column through `td::before{content:attr(data-l)}`. A rect probe passes either layout, so confirm the stacked version by eye at the mobile width: a cell wrapped to a readable stack and a cell truncated at the viewport both report tidy bounding boxes.
+
 **Animated label spans get shrunk out of their own text.** A button whose label animates through `grid-template-columns: 0fr/1fr` sits in a flex row, and the flex item's base size collapses to zero, so the label clips to a fragment ("Book a") at narrow widths while the button still measures fine. Give the button `white-space: nowrap` and the label span `min-width: max-content`, then re-shoot: the truncation only shows at 390 and only after the animation rule exists.
+
+**A button that is itself the grid partitions its own label.** Setting `display: grid`
+on a `<button>` lays the button's children into the template, so the description meant to
+span lands in the narrow icon column and wraps into a four or five line stack while
+every overflow check stays green: wrapped text does not overflow, it just becomes
+unreadable. Keep the button's children as one row (an inner flex wrapper holding icon,
+name and price, full width) and, in the look pass, ask the shot explicitly whether
+descriptions run one or two lines rather than five. Narrow stacks and clipping are
+different defects and only one of them is caught by an overflow probe.
 
 **A tap target is measured on the link, not the image inside it.** A nav logo rendered 44px tall still audits as an undersized target when its `<a>` wraps tightly at 34px. Set the height on the anchor (`display: flex; align-items: center; min-height: 44px`) rather than only on the `<img>`, because the anchor is what the geometry check measures.
 
@@ -145,7 +217,44 @@ Apply the fixes, then run Steps 1 and 2 again. Two rounds is normal. If round th
 
 **A canvas or WebGL page needs a second proof.** The audit inspects the DOM and sees none of the pixels, so a blank canvas audits clean. For any stateful scene: expose a read-only state hook (`window.<name>.getState()`), drive each state in Playwright, assert the state actually changed, and byte-compare one capture per state so "all five views render distinctly" is a measured claim instead of a look. Set `--selector "[data-loaded]"` only after the scene is really built, never at script start.
 
-**Report honestly.** State what was verified and at what sizes:
+**Re-verify on the deployed artifact, not the build you tested locally.** After any deploy,
+the target of the gate becomes the production URL: `curl -o /dev/null -w "%{http_code}"` every
+route and every static asset the app ships (nested asset paths, generated media, credit or
+license files), then re-shoot the same screenshot set against the live host. A static server
+that serves a path locally can 404 it in the container, and a client bundle can be stale
+there while current on disk; only the production read proves it. Cursory `200` on the health
+route is not verification of the surfaces people will open. Grep the served bytes too: fetch one asset the change touched and grep it for a string only the new code contains (a new identifier, a new rule), because a `200` proves the route answers, not that the container is serving the new build.
+
+**In an overflow-constrained panel, order content by whether the table must act on it.**
+A fixed-height card clips whatever sits last, so a footer prompt (vote now, act now) placed
+below a variable-length readout (initiative list, log) disappears exactly when the session is
+busiest and the prompt matters most. Render actionable prompts first, passive data after, and
+re-shoot with every region populated at once to confirm. On a surface nobody scrolls, "it is
+below the fold" and "it is clipped" are the same failure.
+
+**Reproduce a phone-only interaction complaint before touching the code.** A defect
+users hit with a finger may not reproduce under mouse automation. Emulate the device and
+dispatch real touch events at the element's centre, one element per screenshot:
+
+```js
+await call('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+await call('Emulation.setTouchEmulationEnabled', { enabled: true });
+// scrollIntoView({ block: 'center' }) first, then:
+await call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+await call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+```
+
+Then distinguish the three causes with probes, not by reading the pixels: `.disabled` is
+set means the control is inert by construction; `document.elementFromPoint(cx, cy) !== el`
+means something else (overlay, stacking context) owns the tap; neither means the handler
+never bound, so read the console. Probes and `Runtime.evaluate` keep returning while
+screenshots time out, so on a cold or slow page the probe is the reliable channel and the
+shot is the bonus. Assert page state after each step (a step counter, a `.sel` class) and
+let the assertion failure, not the missing highlight, drive the fix.
+
+**A panel shorter than its column is a layout defect wearing a vaguer costume.** A two-column section whose detail panel sits at `align-items: start` ends short of the checklist beside it, and the vision pass reads it as "dead space below the card", which is the same complaint in softer words. Set `align-items: stretch` on the grid so the panel fills, re-shoot, and require both columns to end on one baseline before you call it fixed.
+
+**Report honestly.** State what was verified and at what sizes, and when a shot only reached part of a tall page, name the sections it did not cover as unchecked rather than letting the check read as complete:
 
 > Verified at 390 / 834 / 1440, light and dark. Audit clean apart from one INFO on measure in the footer. Two rounds of critique: fixed hierarchy in the hero (headline was competing with the eyebrow) and the card grid collapsing to stretched full-width blocks on mobile.
 
@@ -157,13 +266,17 @@ Never write "verified" if you did not open the images.
 
 Delivery is blocked until all of these are true:
 
+- [ ] Dash count zero on the file (Step 0), any hits fixed before rendering
 - [ ] `audit.py` run at a mobile width and a desktop width, zero FAILs, every WARN either fixed or justified in one line
+- [ ] Audit and shots cover every state that ships controls (empty, configured, results, signed in), not only the default load
 - [ ] `shoot.py` run and **every PNG opened with the Read tool**
 - [ ] A written critique exists, naming specific elements, not adjectives
 - [ ] Fixes applied and the audit re-run clean
 - [ ] Dark mode checked if it ships, reduced-motion checked if anything animates
+- [ ] Any scrubbed or staged sequence sampled at a mid-state as well as settled: no element visible before its driver reaches it
 - [ ] Console is free of errors
-- [ ] Overflow checked by element rect against the viewport, not by `document.scrollWidth` (a clipped root lies), and a console-driven check of any interactive control the page ships
+- [ ] Overflow checked by element rect against the viewport, not by `document.scrollWidth` (a clipped root lies), and any "text is clipped / element is missing" claim from a vision pass first confirmed against the full-page height, since a crop's own edge is the usual culprit
+- [ ] Every interactive control the page ships, console-checked: no control is disabled in its default state without an explicit source attribute, and each one advances page state when driven
 - [ ] Local-only or self-contained claims proved with `scripts/offline-check.py`, browser offline: zero external requests, zero storage writes
 - [ ] The swap test passes: this could not be any other brand's page
 

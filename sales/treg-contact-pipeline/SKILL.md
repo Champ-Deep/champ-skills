@@ -70,6 +70,18 @@ Produce three workbooks with openpyxl, bold navy header, freeze panes, autofilte
 
 Describe the source to the client as our contact build. Do not name providers.
 
+## Capping the spend inside a product
+
+When the pull is wired into a user-facing agent rather than run by an operator, the budget
+gates must live in the request path, not in the operator's discipline. Three layers, all in
+code: (1) per-request scope, a hard maximum on companies per pull and title chunks per
+company; (2) a per-run dollar ceiling checked before each provider call, so a runaway loop
+stops at cents; (3) a per-day total across all requests. Make repeat pulls free by caching
+per company plus title-chunk, so re-asking the same question costs nothing. Surface the
+cap and spend-to-date in the UI (a "budget today" tile): the user sees the ceiling without
+opening the console, and the visible number doubles as the check on which config the
+deployed build is actually running.
+
 ## Cost model to quote before starting
 
 Per usable contact, staged: roster $0.002 to $0.005, verification $0.002 to $0.004, email $0.005 (on about 20 percent of rows), total about $0.012 to $0.015. Unstaged (buy contact data first, filter later) ran at $0.037 on the Virtusa build. Company lookalike checks: about $0.007 per named company across two providers; avoid CompanyEnrich company-search pages unless the free count shows 80 or more rows and the rows themselves are the deliverable.

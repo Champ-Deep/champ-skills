@@ -84,6 +84,8 @@ Known failure modes to check for: garbled letters in anything longer than one sh
 
 ## Step 4: Clean and systematise in code
 
+**Merge, don't transplant.** When the approved mark needs a detail taken from a second render (a prop, a face detail, a recolour), send both renders back to Higgsfield as image references and ask for a pixel-exact composite with only that change. Generated vectors sit on different grids, so moving paths between two renders misaligns by a cell and fails at favicon size. See `references/pixel-art-to-vector.md` in the `higgsfield-generate` skill for the prompt shape, the two-model A/B, and grid fitting.
+
 The picks become a system in Python (`svgkit.py` and `marks.py` in the worked example's `src/`). Recraft SVGs are flat lists of `<path fill="rgb(...)">` with a full-canvas background path first.
 
 - **Load and clean:** strip the c2pa metadata, drop the background rectangle, drop specks (any path under about 900 square units, and any off-palette colour), lock colours to exact hex.
@@ -142,7 +144,7 @@ Every item fails the kit if it fails:
 - **High-res, minimal, bold.** Zoom the 2x render: crisp vector edges, solid fills, one outline weight, no thin lines in icons, no stray specks.
 - **Cookie-cutter tells:** initials in a plain circle, a gradient blob, library icons, an unaltered script font, more than four colours, clip-art mascots, a tagline that names a category.
 - **Constants hold** in every mark; name them and point at them.
-- **Small sizes:** favicon cut at 16 and 32, mascot at 32, icons at 24, on both grounds.
+- **Small sizes:** favicon cut at 16 and 32, mascot at 32, icons at 24, on both grounds. Render every mark on the real light ground before showing it: a cream badge on cream vanishes, so it needs a one-pixel ink ring (flood the outside from the corners, outline every outside cell touching a paper cell).
 - **Collisions:** nothing touches a frame or label; text on covers and posts clears the mascot.
 - **Legibility:** every icon nameable at 24 px without a caption; marigold or other accent never used for body text on the light ground.
 - **IP:** no known characters, logos or brand marks; references teach grammar, never surface.

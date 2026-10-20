@@ -41,6 +41,14 @@ inverts the whole conversation. Also check the assumption itself: one workbook
 assumed a data file held a column that no supplied file contained, and the
 audit's first job was to disprove it.
 
+The same check applies when the new input arrives as a page, export, or URL
+instead of a question: diff it against what you hold on the natural key and
+report overlap and unique counts before treating it as new material. An outside
+page built from the same underlying source usually adds provenance, not rows,
+and its unique set is exactly what the sender is about to deliver next;
+ingesting the overlap anyway creates duplicate records carrying two
+provenances, and every downstream count silently splits between them.
+
 ## Evidence class is a schema column, not a report convention
 
 The most damaging detection bug is scoring weak context as strong evidence,

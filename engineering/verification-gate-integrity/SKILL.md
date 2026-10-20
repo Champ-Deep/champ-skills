@@ -34,11 +34,44 @@ collected count does.
   it an explicit skip with a stated reason so "no server running" is never read as
   "the layout passed".
 
+The same rule covers configuration: a required status check that was never added
+to branch protection is a gate nobody can pass, because the PR page reports every
+job green while `gh pr checks` has nothing to show for it. Read the protection
+rules, do not infer them from a green PR, and report an unprotected default branch
+as a finding rather than as a pass.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
 confirm green. Run this on converted and inherited gates, not only the ones just
 written. A gate never seen failing is a gate nobody knows is armed.
+
+## Prove "pre-existing" on the baseline, not from memory
+
+Before reporting a red test as unrelated to your change, run that exact command on
+the unchanged baseline (a stash, a worktree of the base commit, or a clean checkout)
+and capture the same failure there. A failure reproduced on the baseline is a
+pre-existing defect you can name with evidence; a failure you merely recognize as old
+is a guess wearing the costume of a finding, and it shields your own regression when
+the two happen to share a symptom.
+
+## Name the fixture boundary of every pass
+
+A run driven by fixture identities, seeded databases or canned provider responses
+proves the code path, not the external service. Report it as exactly that: state the
+fixture explicitly, then list the live behaviors still unverified (real signup, real
+paid checkout, real provider network call, production migration) instead of letting a
+fixture pass read as a live one. Fixture success converted into a live claim fails the
+same way an unarmed gate does: the report looks healthy in both cases.
+
+## Green lanes are not an integrated pass
+
+When the work is split across branches, worktrees or parallel workers, each lane goes
+green against its own slice and proves nothing about the seams: a duplicated shared
+file, a contract both sides changed, a route wired on one side only. Copy or merge
+every lane's output into one tree and run one integrated gate (build, tests, and a
+browser pass over the real combined surface) before reporting done. Lane-level green
+reported as done is a pass claim about code that never existed in one place.
 
 ## Measure what the browser hands the user, not what the CSS declares
 
@@ -58,6 +91,12 @@ also fails a 44px minimum.
   button. The browser resolves taps, not bounding boxes.
 - **Re-measure against the pre-fix values.** A new gate proven only against the fixed
   state may not discriminate. Point it at the old numbers and confirm it reports them.
+- **Count what the fixtures already contain before you assert a count.** A new test
+  written against a seeded database (seed rows, loaded templates, prior test runs) that
+  expects the fresh data alone will report an inflated or deflated number and read as a
+  product bug when it is only an unexamined pre-image. Query the fixture for the
+  pre-existing rows, or scope the assertion to your own keys, before fixing the code
+  the failure appears to indict.
 
 ## Browser probes: read the DOM, do not guess selectors
 

@@ -7,6 +7,7 @@ metadata:
   hermes:
     tags: [interns, people-os, dashboards, cadence, kpi]
     related_skills: [intern-onboarding-planner, frontend-design, visual-verify]
+    see_also: [templates/short-horizon-brief.md, build-person-dashboards.js, verify.py]
 ---
 
 # Per-Intern Month Plan Dashboards
@@ -106,6 +107,71 @@ New scope from a call changes three artifacts, and missing any one leaves an int
 
 Re-verify KRA weights sum to 100 after every edit, by parsing `PEOPLE` rather than reading it.
 
+## Short-horizon brief: WFH days, a crunch week, a two-day push
+
+The month plan says what a person owns for the month. When the next one to three days must be assigned because the shape of the work changed (working from home, a stalled build, a fresh set of issues that just burned two days), write a short brief instead: `Efforts/Active/<Team> <Month>/<Name> WFH Brief <DD>-<DD>.md`, built from evidence, never from the month plan alone. Copy and modify `templates/short-horizon-brief.md`.
+
+### Source the evidence before writing a single task
+
+In order:
+
+1. Grep `TASKS.md` for the person's name and their project codename. The open lines are the backlog the new tasks draw from.
+2. The last two weeks of `Calendar/Daily Notes/YYYY/MM/`.
+3. The effort's hub note plus the person's plan/run-sheet note in `Efforts/Active/`.
+4. Repo state: `gh api "search/repositories?q=user:<handle>"`, then issues and PRs for the project. A person's push history rarely matches the plan: personal accounts, commits under a different handle, or no commits at all, so an empty result is not evidence of no work.
+5. Wispr transcripts for the shortlist: `search_meetings` over the date window, then `get_meeting` per candidate.
+
+Wispr retrieval rules:
+
+- **Search by project vocabulary, never by the person's name.** Meetings are indexed on title, summary and notes, and participants appear inside the body only as "Speaker 1/2", so a name query returns zero while the meeting sits in the window list. Search the feature, system or product name, then confirm from the returned summary.
+- **Pass `meeting_id` verbatim from the search result.** It is a full UUID and a shortened prefix is rejected. Keep ids whole when you dump results to a file for filtering.
+- The summary's "Next Steps" list is usually the only record that a promised item exists. Carry those into the brief as owed items instead of re-asking.
+
+### State the identification when it is a guess
+
+If the brief rests on mapping a nickname to a codebase (a widget name, an internal project handle), state the mapping as a one-line assumption at the top of the handoff, and put the "these two may be the same, or may not" risk in the Deep-only section. A brief built on a guessed identification silently assigns two days of work to the wrong build.
+
+### Structure
+
+Everything between two horizontal rules is paste-ready for Flock; nothing below the second rule reaches the intern.
+
+1. **Issue table**: `Issue | Evidence | Fixed means`. "Fixed means" must be observable (a log line, a passing test, an email in an inbox), never "improved" or "stable". Evidence carries dates and artifacts so the intern can reproduce the same failure.
+2. **Tasks by day**: `Day | Task | Issue | Expected by end of day`, one issue id per row so coverage of the issue table is visible at a glance. Close with an explicit out-of-scope list; stretch items only after the day's required column is done.
+3. **Timesheet**: one file per day, filled as work happens rather than reconstructed at night, mandatory evidence column, sent on Flock midday and at stop. A row without evidence did not happen.
+4. **What Deep owes before start**: keys, approvals, access, a test fixture instead of live data. A required section, the short-brief form of the rule that no brief assigns work without naming what is owed back.
+5. **For Deep only**, below the rule: decisions he owes, conflicts between records, debts from earlier plans, a sent-tick.
+
+### Verify before handing over
+
+- Zero em and en dashes: `grep -c $'\u2014\|\u2013'` on the file must return 0.
+- Every wikilink resolves to an existing file (`find Atlas Efforts Calendar -name "<target>.md"`), checked against `_config/link-policy.md` first.
+- Print the weekday of every assigned date and compare against the holiday list in the hub note. Tasks written onto a public holiday are the same failure as a meeting booked on one.
+- If two records disagree about what the person is working on (plan note says one repo, that week's calls say another), name the conflict for Deep in the Deep-only section instead of silently picking one. Two days spent extending the wrong build is cheap; shipping it is not.
+
+### When the brief must be filled in and returned: the HTML checklist form
+
+When the assignee works through the brief and reports back, ship a single-file HTML checklist beside the markdown paste: `<Name> WFH Checklist <DD>-<DD>.html`, same folder. Markdown stays for the Flock paste; HTML is the working surface the intern returns.
+
+Rules:
+
+- One card per task: id, timebox, status select (Not started / In progress / Blocked / Complete), acceptance criteria, an evidence field, and a Send line naming the exact artifacts due. Timebox everything: two days gets six to eight tasks, not a backlog.
+- **Completion is gated on evidence.** Ticking with an empty evidence field refuses and says why; clearing the evidence unticks the task. This is the UI form of "a row without evidence did not happen". Assert both directions: refusal before the gate is satisfied, acceptance after (the general rule lives in `interactive-data-app-verification`: drive gated controls with `.click()`, because `.check()` throws on a deliberate refusal).
+- **Timesheet in the same file**: date / start / end (IST) / task / evidence rows, break rows excluded from totals, overlap and end-before-start warnings, and the download refuses to export while a warning stands.
+- **Download filled checklist** plus **Print / save PDF**. The file is emailed, not uploaded: zero external requests, progress in localStorage, no server, no build step for the recipient.
+- Ground every task in the repo's current dependency state (read the launcher, `pyproject.toml`, package manifest), never the month plan's description of it. Where a capability is unverified (model image input, Java controller compatibility, third-party proxy behavior, anti-bot walls), the task is a feasibility probe that must return evidence or an exact failing reproduction, never a claimed result.
+
+Export recipe (the standalone filled copy):
+
+1. Clone `document.documentElement`, rewrite the embedded state node's `textContent` with `JSON.stringify(state).replace(/</g, ...)` so the output text holds the literal six characters `\u003c` (`String.fromCharCode(92)+'u003c'`, or `\\u003c` when the source is hand-written JS). A `'\u003c'` JS literal is an identity replace: the parser decodes it to `<` before `replace` runs, so a `</script>` in typed evidence still closes the tag early.
+2. Keep every generated JS string literal on one line. A real newline written inside a quoted string (`['<!doctype html>' ...]`) is a syntax error at parse time, pointing nowhere near the cause.
+3. Serialize `<!doctype html>` + `clone.outerHTML` into a Blob download named `<Name> WFH Checklist - filled.html`.
+
+Verification gate for the checklist:
+
+- Playwright: gate refuses blank completion, accepts after evidence, revokes when evidence clears, statuses persist across reload, timesheet math and warnings behave, export blocked while a warning stands.
+- Open the downloaded filled copy in a fresh browser context with localStorage denied; state must load from the embedded payload, and script-looking evidence must stay inert text.
+- Then `visual-verify` offline-check plus audit at 390 / 834 / 1440, and open every screenshot.
+
 ## The month map must be a real calendar
 
 An earlier build laid the map out as five columns, one per working week, and padded short weeks with cells labelled "holiday". That is wrong twice over: it hid Saturdays and Sundays entirely, and it labelled padding as "holiday" so a reader saw 5 Oct as a holiday when it is an ordinary Monday. Deep caught it: *"why is the 5th a holiday?"*
@@ -204,6 +270,8 @@ Shape that worked: **Deep's lanes first** (the four things only he can move), th
 
 ## Pitfalls
 
+- **Any shareable plan or pivot HTML is a designed page, so load `visual-report-builder` and the vault's `Atlas/Context Docs/Design/Warm Editorial Design Language.md` before writing CSS, then close with `visual-verify`.** Reuse the Accelerator run sheet palette (warm paper, orange accent, Manrope/Plex or Spectral/Hanken) so it reads as a sibling of the published page. A freehand page with system fonts and a default purple accent was rejected as generic: loading only this process skill is not enough.
+
 - **Do not let a generated page hardcode a scratch path for its CSS.** The builders live in the vault and must survive next month, so read the published CSS straight out of the run sheet (`src.split("\n").slice(3,144)`) instead of `/Users/deep/.hermes/cache/scratch/published.css`. A scratch path makes the vault copy fail on rerun with `ENAMETOOLONG`, because a later `fs.readFileSync(CSS)` treats the CSS *string* as a filename. Keep CSS as content end to end.
 - **A gate check can pass while measuring nothing.** `s.count(chr(39)+'s critical link'+chr(39))` printed `got 0` and still passed, because the needle did not match the text it claimed to count. Any check whose expected value and needle disagree should be printed and read, not just asserted. Prove each new assertion fails on a seeded copy before trusting it.
 - **Never slice the `PEOPLE` array with a bracket or quote counter.** Apostrophes inside task strings (`"reps' hands"`) and brackets inside them make every such scanner truncate silently or throw on a valid file. Slice between `const PEOPLE = [` and the `/* ---------- state ---------- */` comment, then `new Function("return " + body)`. This cost two debug cycles in Oct 2026.
@@ -213,7 +281,7 @@ Shape that worked: **Deep's lanes first** (the four things only he can move), th
 - **Do not let the health chip grade day one.** Interns open this on their first morning.
 - **Do not send the plan before access exists.** Day 1 accounts and repo access, not day 3. This is named in Viresh's own plan.
 - **Do not email work without naming what Deep owes.** Every intern here is blocked on him for something.
-- **Do not schedule one-on-ones on a public holiday.** Oct 2026: 2 Oct Gandhi Jayanti, 19 Oct Ayudha Puja, 20 Oct Vijayadashami. Check the hub note before proposing a date.
+- **Do not schedule meetings or assign work days on a public holiday.** Oct 2026: 2 Oct Gandhi Jayanti, 19 Oct Ayudha Puja, 20 Oct Vijayadashami. Check the hub note before proposing a date or writing tasks into a brief.
 - **Do not leave deliverables without acceptance criteria.** A weekly deliverable is an artefact someone else can use, not a status update.
 - **Never guess a name, email or role from a transcript.** A phantom name once reached a live onboarding deliverable. Verify against the vault or a Deep-confirmed source. The intern emails in this vault do not exist anywhere in it, which is a blocker, not a detail.
 

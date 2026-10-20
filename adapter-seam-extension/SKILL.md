@@ -104,6 +104,36 @@ claim.
 State plainly what is not live yet. If per-resource links still come from an env
 setting rather than a table, say the seam is not yet reading any real data.
 
+## Ingestion into keyed records: fold, coalesce, isolate
+
+Any writer that upserts into a table keyed by business values (technology,
+dimension, value) inherits three failure classes, and each one is silent in a
+single-upload demo:
+
+- **Fold variants before you key on them.** "United States", "USA" and "US",
+or "na" and "North America", are one fact typed two ways. Normalise through the
+existing country/state helpers and a small region alias map at parse time;
+otherwise every spelling becomes its own row and any later sum over-counts.
+The alias map is the known vocabulary: a new spelling lands as its own row
+until it is added.
+- **A partial update must coalesce, never overwrite.** A re-upload carrying
+only the contacts figure sends no companies figure and no source line. Writing
+them with `COALESCE(?, companies)` and `COALESCE(?, source)` preserves the
+original number and its provenance; a plain `SET source=?` replaces a real
+attribution with a derived default. Same for the pre-image: save it once per
+distinct key per batch, not once per row, so a key repeated inside one file
+does not report a phantom update or claim to roll back two rows.
+- **A bad row is a row error, not a failed upload and not stored junk.** An
+unknown dimension in a closed set, or a count too large to be real, should be
+collected with its row number while the rest of the file loads. Storing the
+typo'd key makes it unqueryable forever; aborting the whole file punishes the
+four good rows for one bad one. Keep one exception: a malformed header is the
+file's contract, so that one does abort.
+
+Keep the invariant stated in prose for whoever reads the tool's output:
+dimensions are separate cuts of one population, and adding across them is
+always wrong. Say it where the consumer sees it, not only in the schema.
+
 ## Pitfalls
 
 - **A `*_provider` setting in config that the factory ignores.** Check the

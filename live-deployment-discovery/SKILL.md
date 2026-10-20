@@ -41,6 +41,24 @@ intent, not of current state.
 
    A hashed preview URL and the apex domain are frequently different things, and
    the apex can 404 while the deployment is perfectly healthy. Test both.
+1b. **Compare the deployed service topology against what the repo declares,
+before debugging any 502.** A reverse proxy answering `200` for static paths
+while `Connection refused` on `/api/*` means the process it proxies to does not
+exist in that project, not that the code is broken:
+
+```bash
+railway deployment list                    # recent FAILED vs SUCCESS: prod may be an older image
+railway variables --json | python3 -c "import json,sys; print(sorted(json.load(sys.stdin).keys()))"
+<repo>: grep -nE '^\s*name:|dockerfilePath' railway.toml / compose file
+```
+
+The config file declares the intended services; the platform's variable set
+names what was actually provisioned. A declared backend service that never got
+created, and a proxy env var left at its container default (`localhost:<port>`),
+is the whole diagnosis: the repair is provisioning plus one variable, not a code
+change. Read the failed build's log too; if the image never built, production is
+still running the last successful one, and fixing the build must come first.
+
 2. **Read the backend health endpoint.** It is ground truth on configured versus
    merely declared:
 
@@ -57,6 +75,26 @@ intent, not of current state.
    - `app_env` tells you whether you are looking at production.
    - A protected route returning 401 is the cheapest proof that auth is really
      on rather than dev-bypassed.
+2b. **Isolate a user-reported broken feature before touching code.** Split the
+   path at the network boundary, cheapest evidence first:
+   - Hit the backend endpoint directly with a synthetic input (a curl POST with a
+     generated fixture file, an auth token from a throwaway registered user).
+     Registering one throwaway account on prod is the cheapest way to get past
+     auth; never report the API as untestable because you had no credentials.
+     A correct response proves the API, the API key, and the model provider all
+     work, so the break is upstream in the client. This answers "is it an API key
+     issue?" with a measurement instead of a guess.
+   - Then drive the deployed frontend headlessly (Python Playwright, mobile
+     viewport): log in, open the feature, exercise it through the real UI, and
+     capture console plus every response status. Screenshots at each step are
+     evidence a later session can re-read.
+   - If both pass, say so plainly: the break is device-side (stale cached PWA
+     build, denied permission, cold-start timeout). Name the candidates rather
+     than shipping a speculative code fix.
+2c. **Rule out a stale deployment by comparing bytes, not by trusting the
+   dashboard.** Hash the served HTML and its chunks against the local branch:
+   identical hashes mean the deployed build is the branch you are reading, so the
+   bug is not "an old deploy" and no redeploy will fix it.
 3. **Check what each credential actually belongs to before setting it.**
    Similar names are different vendors' secrets. An `*_MCP_TOKEN` naming an AI
    gateway is that gateway's own catalog token, not the key for a tool or MCP
@@ -70,6 +108,24 @@ intent, not of current state.
    frontend on the edge, stateful API where it can hold a volume.
 5. **Report credentials as a presence table, never as values.** Show which vars
    are set, which are missing, and what each missing one blocks.
+
+6. **Verify a claimed UI change by driving the page, not by reading its HTML.**
+   Nav and menu items rendered by delayed scripts do not exist until the page has
+   been interacted with (a pointer move, a scroll, a focus keypress), so an
+   untouched screenshot of an empty header reads as "the change is missing".
+   Interact first, wait, then read. In automation hover often will not open a mega
+   menu: click each top-level item, read the open panel's visible text from the
+   DOM, and screenshot each open state as evidence. Then check the footer, which
+   typically keeps links the header dropped and tells you whether the removal was
+   header-only.
+
+## Cloudflare static Worker cutovers
+
+- Treat Worker code, custom-domain triggers and DNS as separate outcomes. Wrangler can upload and activate a version, then exit nonzero because custom-domain attachment failed. Read deployment versions and fetch the workers.dev host before retrying; never call the custom domain live from an upload message.
+- Inspect apex and www DNS before replacing parking records. An active Cloudflare zone with correct nameservers can still retain registrar parking A/CNAME records. Domain changesets can report no conflicts while attachment rejects externally managed DNS records. Preserve mail records and limit any approved change to the exact web hostnames.
+- Check permissions rather than assuming Wrangler OAuth includes DNS editing. Worker/D1 access and zone metadata can work while DNS record reads return 403. If no authenticated DNS-capable channel is available, request the specific parking-record removal in the dashboard; do not request a token in chat or keep retrying the same denied API.
+- Keep strict CSP during browser verification. String-evaluating waits and injected style tags may be rejected by the page. Prefer locator waits/assertions and the shipped reduced-motion mode rather than weakening CSP to make the harness pass.
+- Verify request capture through the real browser and database: submit synthetic records, repeat one request id, read the exact rows, then delete only those synthetic ids and verify absence. A mocked UI success proves interaction states, not persistence or delivery notifications.
 
 ## Reporting honestly
 
@@ -89,6 +145,12 @@ Distinguish three blockers, because they need different people:
 Say which one each item is. "Blocked on credentials" collapses three different
 asks into one sentence and sends the user away to do the wrong thing.
 
+When reporting a set of findings (deploy state, open gates, credential status,
+blockers), Deep wants one compact table of findings followed by the open asks,
+not a chronological narration of what was tried. State every credential as
+`name: issued / pending / absent`, and name the exact durable fix (token URL,
+env var) for each pending one.
+
 ## Pitfalls
 
 - Do not treat a `404` on an apex domain as an undeployed app. Check the hashed
@@ -104,3 +166,8 @@ asks into one sentence and sends the user away to do the wrong thing.
   means the user runs one command; it is not a reason to abandon the task.
 - Do not present a port-forward or local tunnel as the plan. If the user asked for
   a durable host, name the durable host.
+- Do not debug a proxy's `Connection refused` by editing the proxy. Trace the
+  upstream target and confirm the upstream service exists on the platform first;
+  the config default usually points at a process that was never deployed.
+- Do not batch credential logins. Each pairing link expires on its own short
+  clock, so deliver one, confirm it, then start the next.

@@ -12,7 +12,7 @@ game specs drive the art, never the other way round.
 
 ## When to Use
 
-Building or replacing character, enemy or item art in a game or interactive app; a sprite
+Building or replacing character, enemy or item art, or the scene drawn behind those sprites, in a game or interactive app; a sprite
 editor or character customiser; a gallery of rendered asset combinations. Triggers on
 "make the sprites look real", "replace the procedural art", "add a character creator",
 "sprite test", "every outfit/weapon/hair variant".
@@ -83,6 +83,17 @@ compositions (`hyperframes-*`), or layout verification of the surrounding UI (`v
 - **Art drawn by code reads as amateur next to real art.** Procedural blocks cannot compete
   with hand-drawn layers at the same size; if a base library covers the style, migrate
   instead of polishing the generator. The migration is cheaper than the third polish pass.
+- **A code-drawn scene behind hand-drawn sprites is rejected as asset mismatch, not as bad
+  art.** The sprites are fine; the fidelity gap is the defect, and a critique pass will call
+  it "style clash", "murky contrast" or "dead space". Quantise every fill to the sprites'
+  texel grid (round each rect to a multiple of the sprite cell, draw in 8-16px blocks), swap
+  smooth gradients for stepped hard-edged fills (concentric bands instead of a radial glow),
+  keep the palette inside the sprites' shadow/mid/light family, size characters to read at
+  the viewing distance (a couch TV stage wants heroes around a quarter of the stage height),
+  and centre each group on its own half of the frame: corner-pinned characters with an empty
+  middle reads as unfinished. That buys procedural environment art a pass beside hand-drawn
+  sprites; procedural characters still do not pass. Judge it through `visual-verify`'s
+  fidelity check.
 - **Order the fixed-height readout by what the table must act on.** Prompts (vote, act)
   above passive lists (initiative, log), or the clip eats the prompt exactly when the
   session is busiest. See `visual-verify` for the verification half of this rule.

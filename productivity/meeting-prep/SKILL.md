@@ -371,6 +371,26 @@ you are there.
 -> If Chrome tools unavailable or Google not logged in: skip gracefully
 ```
 
+### 6. Owed-commitment verification (follow-up meetings)
+
+A continuity section that only reads notes will repeat claims the other side has not received.
+Before writing the owed list:
+
+1. For every promise made last time ("we will send pricing", "NDA to follow", "check in next
+   week"), search Sent mail for the counterparty's address, not just a keyword: subject lines
+   rarely carry the company name. Run both searches, they answer different questions.
+2. Nothing found in Sent is **unverified**, never "not sent": the mail may have gone out from a
+   different mailbox or by hand. Say so on the page and tell Deep to confirm in Outlook before
+   the call, rather than asserting a failure he then has to defend.
+3. A vault task line that says "Closed (sent)" overrules nothing. Where the task state and the
+   Sent search disagree, record the disagreement as an item to settle before dialling.
+4. Draft files under `Atlas/Zoom Triage/Drafts/` are unsent by definition. If the draft's dates
+   are stale, mark it "rewrite before sending" in the owed list instead of implying it went out.
+
+An overdue commitment (a check-in promised for a week later that happens 32 days on) goes at the
+top of the page with a one-sentence owner line. Owning the slip in the opening beats having the
+other side raise it.
+
 ### Merge & Deduplicate
 
 After pulling from all sources:
@@ -379,6 +399,11 @@ After pulling from all sources:
 - Deduplicate action items that appear in multiple sources
 - Identify the single most recent meeting as the "last meeting" anchor
 - Flag any conflicting information between sources
+- **Reconcile names against the invite.** Task lines and prose notes are hand-typed and drift
+  (a first name wrong on one line, a contact address transcribed with a typo domain). The
+  calendar invite and the client folder win; surface any mismatch as its own pre-call check
+  with the address quoted, since a typo'd attendee domain means a real person may never have
+  received anything.
 - Build a unified timeline: what happened -> what was promised -> what's due
 - Update the client context folder with any new intel discovered
 
@@ -480,6 +505,16 @@ See `references/deep-prep-template.md` for the full template and section-by-sect
 9. **Sales & Marketing Enablement**, ICPs, content ideas, campaign calendar, SEO audit
 10. **Custom Solution Portfolio**, Innovation opportunities, bundled offerings
 11. **Strategic Positioning & Differentiation**, Dual SWOT + Management Narrative
+11a. **Follow-up call page.** When Deep asks for a prep page for a call already in motion, he is
+asking for a second screen to run it from, not another markdown brief: internal only, stated as
+such in the header, delivered as a `MEDIA:` path. Build it from the owed list and the minute
+rail: a banner with time, link and clash badges plus a live countdown to start; pre-dial checks as
+their own block (unsent promises, RSVP state, who else is on the invite); an owed list of
+tickables that persist across reload (`localStorage`, one key per item); the facts to lock in the
+opening minutes; a timed run whose segments end before Deep's next commitment, with the handoff
+named; options as a proposals-only table; probes; a do-not-say list; after-call tickables; and a
+footer naming sources and every figure left unverified. Ship it alongside the existing `notes.md`,
+not instead of it.
 11b. **Visual showcase pages**, When Deep asks for a page as well as the note: variants in one
 dated folder under `Calendar/Meetings/`, numbered by role (`01 - ...` to share, `02 - ...` hold
 back until the counterparty opens the topic), plus the design system they were built from. Most

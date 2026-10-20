@@ -76,6 +76,23 @@ HTML must stay shareable.
 Validate input before the config check when both can fail, so a bad phone
 number is reported as a bad phone number and not masked by a missing key.
 
+## RULE: ChampVoice provider policy (standing)
+
+ChampVoice is Deep's Dograh fork; every provider decision in it follows these
+unless he says otherwise in the moment:
+
+- **No ElevenLabs anywhere in the ChampVoice stack**, including as a fallback.
+  Explicit standing direction, not a cost call.
+- **Indian voices come from Sarvam** (Bulbul v2/v3, named voices like `anushka`,
+  `hitesh`, `vidya`); keep its registry entries and BYOK path working.
+- **Multiple providers must be addable from the frontend, for numbers AND for
+  voices.** Telephony already supports N named configurations; voice selection
+  historically did not, so verify the Voices surface exists and is multi-provider
+  before claiming the requirement is met.
+- Provider registry and per-service config shapes live in
+  `api/services/configuration/registry.py`; TTS construction in
+  `api/services/pipecat/service_factory.py::create_tts_service`.
+
 ## Diagnose by failure signature
 
 | Signature | Cause | Where to look |

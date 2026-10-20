@@ -49,7 +49,16 @@ truncates the *front* of a slug, which is the identifying part. Assert the first
 are visible.
 
 **That saved state persists and resets.** If the artefact writes to localStorage, assert
-bytes were written, then clear it so the next run starts clean.
+bytes were written, then clear it so the next run starts clean. If it also exports a filled
+copy (a downloadable standalone HTML carrying the state), open the downloaded file in a fresh
+context with storage denied and assert the state loads from the embedded payload.
+
+**That gated controls refuse, then accept.** A control designed to block an action until a
+condition holds must be asserted both ways: click it with the condition unmet and assert
+nothing changed, satisfy the condition, click again, assert it changed. Drive gated inputs
+with `.click()`, never `.check()`: Playwright's `.check()` treats a deliberate JS refusal as
+an element failure and throws ("Clicking the checkbox did not change its state"), so the
+error reports a working gate as a broken element.
 
 ## Layout defects that survive a screenshot
 
@@ -101,12 +110,31 @@ A checker written once is not a fix. Add an assertion for each specific defect y
 (badge/name collision, legend occlusion, header overlap) so it cannot return silently, and
 re-run the whole checker after each build.
 
+## Contrast is a measurement, not an opinion
+
+A vision pass contradicts itself on contrast: it flags tiles as failing, the palette gets
+churned, it flags them again, and a computed-style measurement shows a 5.9:1 minimum that
+passes AA in both light and dark. Settle every contrast question with the WCAG
+relative-luminance formula run on computed styles, about fifteen lines inside a Playwright
+evaluate: read `getComputedStyle(el).backgroundColor` and `.color`, convert each channel to
+luminance, ratio = (L_light + .05) / (L_dark + .05), threshold 4.5:1 for normal text. Check
+every color scheme the app ships. When the eye and the number disagree, the number wins;
+never churn a palette on a screenshot's word.
+
+Sequential ramps have a mid-tone band that fails with either ink. On text-carrying tiles
+colored by a sequential scale (treemap, heatmap, choropleth legend chips), the middle steps
+are too light for white text and too dark for near-black text, so they fail 4.5:1 both ways.
+Either restrict text tiles to the ramp's extremes, darkest one or two steps take white ink and
+the lightest take dark ink, or choose each tile's ink from its own measured luminance against
+a fixed threshold. Never pick ink by a rank bucket: "top half gets white" fails the moment
+the distribution skews.
+
 ## Pitfalls
 
 - **Do not report a render as verified on a clean audit alone.** Contrast clean means the
   maths passed, not that the picture reads.
-- **Do not trust a vision pass on countable properties.** It miscounts and describes stale
-  frames. Measure, then look.
+- **Do not trust a vision pass on countable or measurable properties.** It miscounts,
+  describes stale frames, and contradicts itself on contrast. Measure, then look.
 - **Do not skip the looking step.** Reading the source or seeing an audit summary verifies
   nothing about how it reads.
 - **Do not hardcode expected counts in the checker.** They drift with the design; derive them

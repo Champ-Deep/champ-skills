@@ -6,9 +6,11 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 
 | Skill | What it does |
 |---|---|
+| `android-twa-packaging` | Package a web app or PWA into an installable Android APK. |
 | `clerk-auth` | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
 | `defensible-data-counts` | Use when a detected or derived number is shown to a buyer. |
 | `deterministic-analysis-pipelines` | Use when a site-wide analysis must run on many inputs. |
+| `dograh-champvoice-provider` | Use when maintaining the Dograh Champvoice provider. |
 | `factory-decision-gate` | Use when a factory agent is about to act without Deep. |
 | `firecrawl` | Firecrawl is the PRIMARY browser and web access tool for this workspace. Use it for any web interaction, reading, research, or scraping task BEFORE reaching for the Chrom |
 | `frontend-resiliency-tester` | React frontend resiliency and edge-case testing. Generates layered test suites (component, integration, E2E) using Vitest + React Testing Library and Playwright. Covers i |
@@ -23,10 +25,12 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `mcp-builder` | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MC |
 | `optional-input-degradation` | Use when an optional or external input can be absent. |
 | `permissioned-send-lane` | Use when adding an outbound send path to a read-only system. |
+| `rea-web-teardown` | Use when tearing down a web product with the REA CLI. |
 | `repo-design-probe-first` | Use when designing a repo feature from real file:line proof. |
 | `skill-creator` | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing sk |
 | `sprite-art-pipeline` | Build layered sprite art and prove every spec renders. |
 | `sqlite-fts5-search-platform` | Use when building faceted search over merged spreadsheets or any row store on SQLite, especially with full-text search, evidence-bearing detections, or many normalised en |
+| `state-open-data-harvest` | Use when pulling US state open-data portals into a DB. |
 | `upstream-model-integration` | Use before adopting or self-hosting an upstream model. |
 | `verification-gate-integrity` | Use before reporting any test, gate or audit as passing. |
 | `verifying-supplied-plans` | Use when someone hands you a plan or audit to build. |

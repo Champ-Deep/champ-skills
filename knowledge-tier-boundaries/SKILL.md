@@ -1,11 +1,11 @@
 ---
 name: knowledge-tier-boundaries
-description: "Use when deciding what may sync between vault and BearDrive."
+description: "Use when deciding what may sync between Deep's knowledge stores."
 ---
 
 # Knowledge tier boundaries
 
-Deep runs four stores that all look like "my knowledge base" and have genuinely
+Deep runs five stores that all look like "my knowledge base" and have genuinely
 different visibility. Requests to "sync them", "back them up", or "make the team
 bot read all of it" land on a boundary that was already decided. Read the
 decision before building the sync.
@@ -16,6 +16,7 @@ decision before building the sync.
 | `champ-knowledge` (BearDrive) | Whole org, forever | T0 de-identified patterns only |
 | `champ-drives` (BearDrive) | Whole org, forever | Commercial per-brand drives |
 | Champ Workspace | Authenticated, per route, audit-logged | Client-named records, decisions, live work |
+| Google Drive `Celsus Cloud/` (Workspace account, unshared) | Deep only | Curated vault projection plus agent-produced artifacts |
 
 ## The two tests, applied before anything lands in a BearDrive repo
 
@@ -62,6 +63,28 @@ often T0 by construction. A design rule like "three body sections beat six, and
 what it costs you is the explainer" is client-blind and belongs in
 `champ-knowledge/patterns/`. The named example does not. Extract the rule, drop
 the client, and flag it for a human rather than auto-publishing.
+
+## Google Drive as the shared context layer between agents
+
+When the request is to give a Google-side agent (Ask Gemini in Chat) and local
+agents (Hermes) one shared context:
+
+- **Home the folder on the Workspace account and keep it unshared.** Ask Gemini
+  in Chat searches Workspace Drive data, not the consumer Gmail drive, so a
+  folder on the wrong account is invisible to the agent it exists for.
+- **Projection, not a second vault.** One-way authority per folder: Celsus stays
+  canonical for identity, tasks and memory; the Drive tree is a publish plus an
+  inbox. A sync never makes Drive writable for canonical files.
+- **One writer per folder.** The local agent owns `context/`, the Google agent
+  owns `artifacts/`, both read everything. Two writers on one file is how
+  agents clobber each other.
+- **Publish a flattened contract file first** (the Layer 0/1 rules): outside
+  Obsidian `[[wikilinks]]` are plain text, so publish resolved paths.
+- **Exclude live-canonical files** (`TASKS.md`, `dashboard.html`) from any
+  mirror; reference copies only, per standing orders.
+- Apply the walkout and crossover tests subtree by subtree before the first
+  upload. Client-named `Efforts/` goes up only when the Google side genuinely
+  needs it.
 
 ## Pitfalls
 

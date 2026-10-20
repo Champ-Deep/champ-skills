@@ -74,11 +74,20 @@ Three failure modes worth expecting:
 
 Also check the reverse: **a claimed hard blocker may not be one.** A documented pricing or platform limit may already have changed. Re-read the vendor's current docs before repeating a limit as fact, and label what you could not confirm as needing verification.
 
+## Phase 3b: walk the conversion path like a first-time visitor
+
+Before ranking anything, drive the real journey in a browser: load the page, wait without clicking, scroll once, then follow each primary CTA to its destination. Four checks that only this walk finds:
+
+- **A CTA that resolves to a different offer is a false claim, not a UX nit.** "Book 30 minutes, no deck" that lands on a scheduler offering a 45-minute strategy session and two vendor-branded sales calls breaks the promise at the highest-intent moment. Compare the copy's promise (framing, duration, who you meet) against what the destination actually presents. The fix is route-or-copy, and the mismatch outranks any layout work.
+- **Let auto-opening overlays open themselves before you touch the page.** A chat widget that opens unprompted, covers reading content, and greets as the person rather than as an AI borrows human credibility while its retention and IP disclosure sits on a different page. Identity labeling and a pre-input privacy link are audit findings, not polish.
+- **Review what the site's own automation promotes to public.** On a site that republishes internal notes on a schedule, sensitive operational claims become public claims with no human in the loop. Search every copy, not the one visible page: log entries, essays, previews, feeds, and any assistant knowledge base. The fix must land at the publishing source, or the next run restores it and the edit was cosmetic.
+- **Report page length in viewport-heights, not CSS pixels.** "16,288 pixels" is abstract; "about 18 phone screens" is the finding. Separate scroll-linked scene distance from static copy so the fix direction (reorder sections vs cut content vs drop motion) is obvious.
+
 ## Phase 4: rank by leverage, and lead with damage control
 
 Order strictly by **(impact on the user's stated goals) / effort**, and separate the two kinds of work:
 
-- **Damage control first.** False public claims, leaked names or numbers, broken gates, dead CTAs. These are cheap and they are the reason a site cannot be trusted, so nothing built on top of them compounds.
+- **Damage control first.** False public claims, leaked names or numbers, broken gates, dead or misrouted CTAs. These are cheap and they are the reason a site cannot be trusted, so nothing built on top of them compounds.
 - **Foundations second.** Structural defects that make everything else ineffective (duplicate content, missing canonicals, no measurement).
 - **Enhancement last.** Everything that is a genuine improvement but not load-bearing.
 
@@ -126,6 +135,7 @@ A single document, written to the user's vault or notes, with:
 - An explicit "verified already fine, do not spend time here" section.
 - A phase table with the ordering rationale, and a phase zero for backup where history is missing.
 - A short "still undecided" list naming the choices that are the user's, not yours.
+- For personal-brand and visitor-perspective audits, a visitor-question table with one row per cold-visitor question (who are you, what do you do for me, why should I trust you, what do I do next), each with what the site supplies beside the adversarial reading of it. The two-column form keeps judgment tied to observed content instead of drifting into taste.
 
 Lead the chat reply with the finding that changes the plan most. Do not replay the process or summarize the document back to them.
 

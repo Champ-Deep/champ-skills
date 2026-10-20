@@ -526,6 +526,8 @@ Recalculate on every node reposition to keep lines attached.
 
 **Contrast: `#D94F0A` fails as body text on every light surface.** It is 3.80:1 on #F5F5F5 and 4.14:1 on white, both under the 4.5:1 text floor. Keep it for borders and fills only and add a separate text-grade token: `#A63506` passes at 5.50:1 on #F5F5F5 and 6.42:1 on #FAFAFA. Large decorative numerals only need 3:1, so `#D97A2E` is a usable step lighter.
 
+**An inlined payload can close its own script tag, and the obvious escape does nothing.** A `</script>` inside inlined JSON or user-entered text ends the script block early. Escaping `<` with a `'\u003c'` JS literal is an identity replace: the parser decodes that literal to `<` before `replace` runs, so the output still contains a live `</script>`. Build the backslash instead, `String.fromCharCode(92) + 'u003c'` in generated code (or `\\u003c` when the source is hand-written JS), and prove it by putting `</script>` in a field and reloading. Same failure class: keep generated string literals on one line, because a real newline written inside a quoted string is a syntax error at parse time pointing nowhere near the cause.
+
 **Verify headlessly, not by reading**: `npm install jsdom` in the scratch dir, load the file with `runScripts: 'dangerously'`, and click every widget. This catches typos in element ids that a static read never will (a reset handler referencing `$("pitch")` when the element is `#pitchText` throws only on click). Then run `visual-verify` audit plus a screenshot pass; a screenshot you did not open verifies nothing.
 
 ## Reference Files

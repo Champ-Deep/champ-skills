@@ -82,6 +82,11 @@ human).
 - **Hash or mask credentials when comparing them.** To prove two processes hold
   different keys, compare `sha256` prefixes from `ps eww -p <pid>`, never print
   the values.
+- **Entitlement tables describe the product line, not the account in front of
+  you.** A plan matrix saying a model needs a higher tier is written for all
+  subscribers and lags staged, account-level rollouts, so it overstates gating.
+  The live product or the user's own account screen is the higher-authority
+  source; check there before telling Deep his plan lacks a feature.
 
 ## References
 

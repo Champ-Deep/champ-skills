@@ -10,6 +10,12 @@ description: "Create distinctive, production-grade frontend interfaces with high
 
 This skill creates distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. It combines two systems: the **Impeccable** design language (anti-patterns and principles by Paul Bakaus, Apache 2.0) with a **Design System Generator** (concrete styles, palettes, fonts, and product-type intelligence inspired by UI UX Pro Max).
 
+## Standing gate: load before you build
+
+Any HTML, page, form, checklist, dashboard or single-file artifact deliverable starts by loading this skill, the applicable brand skill (for Champions work, `champions-group-brand`), and `visual-verify`, before a line of markup is written. Building first and styling after, or shipping the first render without running visual-verify's audit and screenshot gate, is the failure this order exists to prevent: the deliverable arrives broken or generic-looking and the whole thing gets rebuilt. The design skills decide the look; visual-verify is the only proof the look survived contact with a browser.
+
+**21st.dev components are non-negotiable for all front-end work** (Deep's standing rule). Before hand-writing a filter bar, command palette, data table, date picker, or any component class 21st offers, check the registry and install through the shadcn CLI. Full procedure, the env-var setup, and the registry quirks (keyframes-only CSS, shadcn overwriting your edits, proving the address under test serves your build) are in [21st-registry reference](references/21st-registry.md). Only write custom components when 21st genuinely has no equivalent, and say so in the report. **Kokonut UI is the companion library to check and try alongside 21st.dev for all frontend development**, especially buttons, cards and interaction patterns. Verify the existing API key through the live MCP/registry, install the chosen source with shadcn, adapt it to the project, and name the actual mounted or build-rendered components in the handoff. A catalog lookup or unused installation is not adoption. For static sites, build-time React rendering is valid for CSS-only components and avoids a client-framework migration.
+
 ## Two-phase pipeline: build, then polish
 
 This skill is **Phase 1**: structure, the design system, and the first cut of styling. It pairs with a **Phase 2** refinement skill, `ui-polish`, which hunts the residual "AI tells" (emoji icons, default palettes, decorative graphics where data belongs, overstuffed sidebars, static pricing) and replaces them with senior-designer choices.
@@ -199,6 +205,7 @@ Rules when you do use it:
 - `clamp()` for fluid spacing
 - Asymmetry. Break the grid intentionally for emphasis.
 - Don't wrap everything in cards. Never nest cards.
+- In a two-column section (stepper plus detail panel, list plus summary), let both columns end on one baseline: `align-items: stretch` on the grid, not `start`, or the shorter column stops mid-air and reads as unfinished space.
 - Left-aligned text with asymmetric layouts > centering everything
 - Container queries (`@container`) for component-level responsiveness
 - Safe areas: `env(safe-area-inset-*)` for notches, home indicators
@@ -282,6 +289,12 @@ These rules govern **product UI without exception**. The narrow set of cases whe
 - If the nav floats, it may use liquid glass under the rules in Style Selection above. It still needs a solid fallback and a worst-case contrast check.
 
 ### Charts & Data Visualization
+
+For an intelligence workspace, make the acceptance unit a changed analytical state, not a rendered chart. Require useful drill-downs, cohort definitions and denominators, missing-evidence states, and controls that change the answer without inventing values. A polished gallery of the customer's existing chart types is not new analytical capability.
+
+When an asynchronous response contains scene-specific data, render it only if its scene and source match the current selection. Clearing stale state in an effect alone leaves one render where the new component can receive the old data shape and crash.
+
+Keep home-page search and comparison choices aligned with backend capabilities. Regional aggregate data cannot support company-level filters or inferred country totals. Compare links must preserve the requested cohorts and respect the same feature gate as the destination.
 → *Consult [charts reference](reference/charts-and-data.md) for 25 chart types*
 
 When the interface includes data:

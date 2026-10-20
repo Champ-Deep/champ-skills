@@ -17,6 +17,11 @@ The Google connectors are thin wrappers over Google's raw APIs, with almost no g
 
 Read the reference for every app the task touches before the first edit. Embedding a Sheets chart in a deck means reading both. The references are short, and skipping one is how edits land in the wrong place.
 
+For the same apps driven from a terminal instead of connectors (scheduled
+syncs, publish/ingest scripts, posting to Chat spaces), read
+`references/workspace-terminal-cli.md` first: it picks between the `gog` and
+`gws` CLIs and carries their auth pitfalls.
+
 ## 1. Check the connectors before you start
 
 | Connector | What it can do |

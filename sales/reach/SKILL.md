@@ -25,3 +25,4 @@ One skill, five stages, one orchestrator. Pick the stage from the ask, read only
 3. The Champion's Hour runs stages in order and hands each stage's output to the next. Where the orchestrator file says "logic from reach-X", read `modes/reach-X/MODE.md`.
 4. Every stage ends with the no-ai-slop pass on anything the prospect will read. Where the vinh-copywriting style is required for persuasive copy, use that instead of no-ai-slop.
 5. Never invent customer names, data counts or statistics. Unverified numbers are labeled as estimates.
+6. Requests to position Champions as a data broker, qualify a company as an operational-data supplier, or evaluate data-licensing buyers route to the `data-brokerage` skill, not REACH.

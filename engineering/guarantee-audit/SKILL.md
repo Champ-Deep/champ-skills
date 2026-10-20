@@ -104,6 +104,11 @@ Fan out for breadth only after step 1, then re-execute every candidate you
 intend to report. A subagent reporting `file:line` is a pointer to a place to
 look, not a result.
 
+The same fan-out applies to code you just wrote and have not shipped: give the
+reviewer the file paths, the intended contract, and the test command, and ask
+for concrete defects with severities in its output schema. Readiness to hand
+off does not substitute for being reviewed.
+
 Budget for roughly one finding in three not reproducing, and expect false
 negatives too: an audit that credited a healthcheck as correct while the
 compose file's version discarded its return value and always exited 0. The
@@ -200,6 +205,11 @@ the author. Run the visual verification gate and open the screenshots.
   both ordinary, and only running each one finds them.
 - **Do not merge as part of an audit.** Report the verdict, leave the base
   branch untouched, and let the reviewer decide.
+- **Fixing reviewed defects one edit at a time with a test run between each.**
+  Apply the independent fixes as one batch, then run the suite once: a fix that
+  changes what is stored or counted moves your own assertions, and a single
+  green run after the batch shows every fix together instead of failing on each
+  intermediate state.
 
 ## Verification
 

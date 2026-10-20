@@ -91,6 +91,7 @@ Neutral defaults (light, with both dark blocks). Paste, then overwrite values fo
 | One fact the reader must remember | C03 Callout (one per page) |
 | Figures that are the argument, each with a source | C04 Proof tiles |
 | Values by US state | C05 Choropleth + C06 Ranked bar list + C07 Table view |
+| Cities or regions connected by flows, a hero globe, a network map | `references/dot-globe.md`: 2D canvas dot-matrix globe with great-circle arcs, drag-to-rotate, no WebGL |
 | Levels, tiers, funnel stages | C08 Pyramid (centered bars) |
 | Parts of a whole with many categories, drill-down | C09 Treemap |
 | Ranking with one entity that matters ("us") | C10 Highlight bars |
@@ -237,7 +238,7 @@ JS
 node gen.mjs   # writes states.json
 ```
 
-For world or other countries, use the same pattern with `world-atlas` and a d3 projection. For dense point data use deck.gl with MapLibre instead.
+For world or other countries, use the same pattern with `world-atlas` and a d3 projection. For a canvas dot-matrix globe with great-circle arcs (drag-to-rotate, no WebGL), `references/dot-globe.md` carries the decode, rasterize and verify recipe. For dense point data use deck.gl with MapLibre instead.
 
 ## Step 4. Write the words
 
@@ -270,3 +271,4 @@ Run one render check before publishing (Playwright is available in the cloud wor
 - Unicode half-circle glyphs render tiny; use the SVG dot from `VK.matrix`.
 - Log axes need explicit tick labels in plain money ("$1K", not "$1.0K").
 - Never put a count on a buyer-facing page that the data team has not confirmed; ship prototypes with a visible "illustrative" ribbon.
+- A section shot taken from the scrolled viewport, not the element itself, put the sticky nav over the section top and the critique read it as clipped text. Shoot `locator("#map").screenshot()` for section review, and confirm any claimed clip by bounding box before spending a fix round.

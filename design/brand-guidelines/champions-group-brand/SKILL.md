@@ -281,6 +281,7 @@ function headerCell(text, width) {
 - White background: use Ink #1A1A1A for body, Orange #F26722 for accents and headlines.
 - Soft Peach #FFF4EC background: use Ink #1A1A1A text. Orange OK for accent only.
 - Never: light gray text on white, orange text on peach, orange text on warm tint.
+- **White on Champions Orange measures 3.1:1.** It clears WCAG AA only for large text (24px+, or 18.66px+ bold) and for UI-component boundaries at 3:1, and fails for body-size text, so the visual-verify audit will FAIL it. "Never Ink on orange" still stands for the brand look, so the fix is structural, not a new text colour: keep white-on-orange to large headlines and button-sized labels, and put small text on white, peach, or a dark button surface (ink ground, orange or white text) instead.
 
 ### Web basics (check on every page)
 - **Logo:** real file, no box, swapped by ground (see Logo & Identity Rules).

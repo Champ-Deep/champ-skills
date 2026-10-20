@@ -86,6 +86,38 @@ def discover_sitemaps(base):
             if u not in seen and u not in found:
                 seen.add(u)
                 found.append(u)
+
+    # A whole content area can sit OUTSIDE the index. An adversarial review of the Span
+    # report found the blog has its own sitemap with 359 pages, none of it referenced by
+    # sitemap_index.xml or robots.txt, so the crawl saw 4 blog pages and concluded the site
+    # had no research layer. Probe the conventional names a WordPress install uses and keep
+    # any that answers. This is a bounded, cheap probe: no crawling off the sitemap.
+    for guess in ("/blog/sitemap_index.xml", "/blog/sitemap.xml", "/blog/wp-sitemap.xml",
+                  "/news/sitemap_index.xml", "/news/sitemap.xml",
+                  "/resources/sitemap_index.xml", "/insights/sitemap_index.xml",
+                  "/post-sitemap.xml", "/posts-sitemap.xml"):
+        u = urljoin(base, guess)
+        if u in seen:
+            continue
+        body = txt(u)
+        if not body:
+            continue
+        head = body[:2000].decode("utf8", "ignore").lower()
+        if "<sitemapindex" not in head and "<urlset" not in head:
+            continue
+        seen.add(u)
+        found.append(u)
+        if "<sitemapindex" in head:
+            try:
+                root = ET.fromstring(body)
+                for loc in root.iter():
+                    if loc.tag.endswith("loc") and loc.text:
+                        c = loc.text.strip()
+                        if c not in seen:
+                            seen.add(c)
+                            found.append(c)
+            except Exception:
+                pass
     return found
 
 

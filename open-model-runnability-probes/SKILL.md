@@ -30,6 +30,11 @@ expensive download from being the discovery mechanism.
 mismatch.** Every probe below costs seconds. Run them in order and report which
 one settled the question.
 
+Once weights are already downloading, switch to
+`references/local-runtime-verification.md`: device benchmark warm vs cold, offline
+rerun, dependency freeze, and the loader warnings that decide whether the numbers
+can be trusted.
+
 ## 1. Parse the config through the loader that would read it
 
 A successful parse proves the schema matches. A `KeyError` on a nested key proves

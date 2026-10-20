@@ -63,6 +63,27 @@ targets or accessibility.
 Read the expected value from the same API the page reads it from, and fail loudly if
 the key is missing rather than falling back to a default that belongs to one site.
 
+## Put every new server state into every client's predicate
+
+A live gate usually drives several screens at once, and each screen decides what to
+show by OR-ing the states it knows: `hidden = !!(combat || check || vote || ...)`. When
+the server gains a new top-level state key (a run, a phase, a mode), that enumeration
+is stale everywhere it was not edited, and the stale screen falls through to its
+default: a lobby overlay reappears mid-game, a "waiting" banner shows over live play.
+Grep the whole client for the derived predicates (`hidden =`, `classList.toggle`,
+`display:`), not just the file you are adding the feature to, and add the new key to
+each. The symptom in the gate is an assertion failing against copy that should never
+be visible, which looks like a timing flake and is not.
+
+## Repeat the run before calling it green
+
+A multi-client scenario with vote resolution, timers and reconnects can pass once and
+fail twice; a single green run proves nothing about stability. Loop the spec until you
+have N consecutive passes or the first failure (capture the failing assertion text on
+the first failure, not a re-run), and only then report. A failure that appears in the
+loop and not after is still a real defect: hunt it in the assertion rather than
+rerunning until it disappears.
+
 ## Identify elements by role or class, never by a substring of their text
 
 `":" in label` matches `"Source: Writing (/writing)"` as readily as `"10:30"`. The gate
@@ -71,6 +92,12 @@ real number and a wrong claim.
 
 Selectors must be unambiguous within the whole document, not merely plausible. When a
 substring is genuinely the only handle, assert on the element's class as well.
+
+Prefer structural or role selectors over presentational classes: a restyle that
+renames the class (a grid row, a button variant) breaks the spec for a reason unrelated
+to behaviour, and the red run then reads as a regression. When a restyle is
+intentional, change markup and selector in the same edit and re-run the whole spec in
+the same pass.
 
 ## Dismiss overlays the way a user does
 
@@ -82,11 +109,34 @@ When bounding boxes do not overlap but a click still fails, the blocker is stack
 context or pointer-events, not geometry. `document.elementFromPoint` at the click
 coordinates names the culprit.
 
+## Read security headers off the artifact that ships
+
+A CSP or security-header gate must assert against the same bundle and configuration
+that will deploy, not against the dev server: dev and deploy reach header middleware
+through different paths, so a green dev read can pass while the shipped Worker or
+container serves different headers. Stage the built deploy artifact with a copy of
+its static assets (a dry-run bundle plus a copied asset snapshot is enough, local
+database included) and assert on the served response there. One served-header read
+from the deploy-shaped bundle replaces any number of dev-server reads.
+
 ## Prove the gate discriminates
 
 Point the repaired gate at the pre-fix build and confirm it reports the old numbers. A
 gate rewritten this session has never been seen failing, so its passing means nothing
 until it has been observed to catch the defect it was written for.
+
+## Run the same gate against every target, and survive your own last run
+
+A journey that only ever hit localhost has never seen production's env vars, domain
+or database, and a green deploy status does not substitute: the status reports the
+container, not the journey. Parameterize the base URL and credentials inside the
+script and run the identical file against each deployed URL after every deploy.
+
+Log one `STEP <what succeeded>` line per stage so a timeout names the stage that
+died instead of only the selector it died on, and make creation steps idempotent
+(check the entity exists before creating it): a journey that assumes a clean world
+dies on a duplicate during its second run, and a gate that cannot be re-run after a
+partial failure is a gate you get exactly one attempt with.
 
 ## Pitfalls
 
@@ -96,3 +146,15 @@ until it has been observed to catch the defect it was written for.
 - **Selecting elements by a text substring.** Measures the wrong control with a real number.
 - **Forcing clicks past an overlay.** Hides exactly the defect the gate exists to catch.
 - **Reporting a green run without a seen failure.** Pass counts prove collection, not coverage.
+- **Asserting on copy that a new server state can still make visible.** Derived
+  `hidden`/visible predicates enumerate old states; the new one re-reveals an overlay.
+- **One run of a timing-dependent multi-client spec.** Flake or defect, one pass cannot
+  tell them apart; loop to N consecutive passes and capture the first failure's text.
+- **Selecting by a class the restyle is about to rename.** Gate red for cosmetic
+  reasons; update selector and markup together.
+- **Running the journey only against localhost after a deploy.** Production env and
+  domain differ; re-run the identical parameterized script at the prod base URL.
+- **Creation steps that assume a clean world.** The second run dies on duplicates;
+  check existence before creating so a partial run can resume.
+- **Reading CSP or security headers off the dev server.** Dev and deploy middleware
+  differ; assert against the staged deploy bundle instead.

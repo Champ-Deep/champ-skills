@@ -67,6 +67,18 @@ For long sources, delegate extraction to a subagent so raw text stays out of con
 
 **Verify before building.** Product, company and people's names get checked against public sites and sources Deep confirmed. Transcript-sourced names are suspect by default. In Presenter mode, cross-check deck numbers against any master or fact-verification doc; flag illustrative figures.
 
+**Source integrity, in this order.** A page that reports other people's numbers inherits their errors, so audit the source before the copy:
+
+| Check | Rule |
+|---|---|
+| Deck arithmetic | Add the tables up before quoting the headline (channel splits, landing-page rows, per-market lines). A total that does not equal its own breakdown is a defect in the source; state both figures on the page rather than silently picking one. |
+| Comparison period | If the deck never says what period its percentages compare against, label the figures "vs an unstated prior period" on the page. Never infer the window from a filename. |
+| Cause claims | A metric that moved the same week as a change (nav, layout, form) is correlation. The page says "same week", never "because". |
+| Outbound claims | Before writing "sent to N people" or "attached", re-read the actual record (sent item, draft, recipient list). Draft and sent look identical from memory, and recipient counts get overcounted. |
+| Figures not re-measured | If the underlying system (analytics, SEO tool, CRM) was never queried, the footer says so. "As reported, not independently re-measured" is the minimum. |
+
+**Finding the source.** To locate who sent a report, do not combine `$search` with `$orderby` (Graph rejects it) and do not filter on `from/emailAddress` when the sender is an internal display name. Filter on a receivedDateTime window instead, take `id, subject, toRecipients, isDraft, receivedDateTime`, and page with the returned `@odata.nextLink`. Attachments then come back as their Graph ids for download.
+
 ## Phase 2: Clarify (one round at most)
 
 If brand, reader, or the ask is unknown, ask via AskUserQuestion in ONE round. Otherwise default: a meeting follow-up takes the brand that ran the meeting, the attendees as readers, the agreed next step as the ask. In Presenter mode, default the briefed person to the user or the most senior person on the invite who did not author the deck. Readout for Chief defaults to Champions Group brand, Docket treatment, internal.
@@ -225,7 +237,13 @@ with sync_playwright() as p:
     b.close()
 ```
 
-Pass conditions: zero dashes; no overflow; nothing missing from the fold at 390; height within budget; zero console errors. A failed Google Fonts request inside a sandbox is expected and not a page error.
+Pass conditions: zero dashes; no overflow; nothing missing from the fold at 390; height within budget; zero console errors. A failed Google Fonts request inside a sandbox is expected and not a page error. If Playwright's bundled browser is not installed while Chrome is, launch the gate with `channel="chrome"` and keep going: the gate is about the page, not the browser install.
+
+**When a render is over budget, measure before you trim.** Evaluate every top-level block's bounding box height in the same session, cut the tallest one, re-run, and repeat. Trimming by feel wastes renders, because the section that looks wordy is often shorter than the one with a three-line assertion headline. Cheap levers first: widen an assertion headline's `max-width` from about 36ch to 44ch (three lines become two at 1440, and mobile does not move because the container is already narrower), cut a sub-line to under about 82 characters, give a three-item card list three columns instead of two, then row padding and section margins. Leave at least 100px of slack at both viewports: the reader's font metrics differ from the sandbox's, and a page that measures exactly at budget overflows for them.
+
+**Measure contrast; never eyeball it.** For every text class you ship, walk the element's ancestors to the first opaque background, blend the stack, and compare against the threshold for that size and weight (4.5:1, or 3:1 for large). Two traps: `getComputedStyle().color` returns the declared colour and drops the element's own `opacity`, so secondary text set to recede on the accent panel can pass the check while rendering under 4.5:1; and inside a solid accent block with ink text, tinting the inset with ink *lowers* contrast for the dark text on it, while a white tint raises it. Both audit snippets are in `references/verification-gates.md`.
+
+**Re-run the claim audit after every content edit, not once at the end.** Moving a question, folding a card into `<details>`, or rewriting a headline changes the rendered count behind the headline and lead.
 
 Then look once: open the 390 light, 390 dark, and 1440 full screenshots with the Read tool and check six things.
 
@@ -252,6 +270,7 @@ Make one pass of fixes, re-run the script, and publish. In Presenter mode, count
 | `references/charts-tables.md` | any chart or table: which chart fits the data, labels on marks, two scales, computed columns |
 | `references/motion.md` | reveal timings, easing, reduced motion, static export mode |
 | `references/micro-interactions.md` | hover, focus and touch responses (MicroKit patterns, ported) |
+| `references/verification-gates.md` | over budget, contrast audit code, trim levers, badge and marker rules |
 | `references/templates.md` | proposing a page template and locking a brand |
 | `references/design-language.md` | the Warm Editorial language, only when it is the right call |
 

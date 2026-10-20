@@ -26,15 +26,32 @@ live poll of real sources, never a summary of what was said about them.
 2. **Identify each service by a small identifying fact** — the HTML `<title>`,
    one JSON field, a short response head. Never dump a response body into
    context; one page can bury the signal under a hundred kilobytes of CSS.
-3. **Rank by risk, not by name.** Unpushed commits and missing remotes first,
+3. **An HTTP 200 is not evidence the app works.** Assert on the body, and
+   assert on a route a working app must actually serve: an API endpoint that
+   returns its real payload, a health endpoint that reports its database
+   connected, a page's `<title>`. A landing page answers 200 with its static
+   HTML while the backend behind it is dead, so probing it measures the CDN,
+   not the app. Verify the marker by curling the live URL first; a guessed
+   marker (an assumed `<div id="root">`, a framework's usual shell) turns the
+   probe into a permanent false red that gets ignored like a real one.
+4. **A red line that says why is the whole deliverable.** Append the last
+   error lines from the owning platform's logs to each failure so the alert
+   answers "why" without a follow-up session. An alert that only names the
+   broken thing makes Deep open the console to learn what you already could
+   have read.
+5. **Rank by risk, not by name.** Unpushed commits and missing remotes first,
    then dirty files, then divergence from upstream. The top row is the thing to
    fix today.
-4. **Emit two shapes from one collector.** JSON for other tools, HTML for Deep
+6. **Emit two shapes from one collector.** JSON for other tools, HTML for Deep
    to read. Keep collection logic single-source so they cannot disagree.
-5. **Make staleness visible.** Stamp the render time. A dashboard whose
+7. **Make staleness visible.** Stamp the render time. A dashboard whose
    timestamp is hidden is indistinguishable from a stale one.
-6. **Verify by re-running, then register the job and fire it once.** A poller
+8. **Verify by re-running, then register the job and fire it once.** A poller
    that has never actually run is not a poller.
+9. **Extend the sweep that already watches the thing; do not add a second
+   cron.** Before scheduling a new check, read what the existing monitor
+   script already probes. Duplicate jobs on the same targets double the
+   alerts and then disagree with each other, and Deep reads one of them.
 
 ## Distinguish "running" from "not finished"
 
@@ -107,5 +124,5 @@ in the wrong directory says nothing about the script.
 - `scripts/fleet_dashboard.py` — polls session state plus every repo under the
   projects directory into a self-refreshing HTML view. `--json` for machine
   consumption. Swaps nodes in place of reloading so scroll position survives.
-- `references/deployed-endpoints.md` — verifying that a live service is the
-  service its console label claims, and what each failure state looks like.
+- `references/deployed-endpoints.md` — the functional-probe pattern: what to
+  assert on a live URL, and what each failure state looks like.

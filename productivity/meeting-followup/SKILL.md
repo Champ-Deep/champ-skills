@@ -38,12 +38,24 @@ Following up on a discussion means, in priority order:
 
 - Pasted summary or notes: use as the primary source, but if the Zoom MCP is connected, find the matching
   meeting (search_meetings by keywords and date) and pull the transcript. Summaries hide who said "I will."
+- Transcript source chain: Zoom first; when Zoom has no transcript for the meeting, search Wispr next
+  (`search_meetings` by subject/participant/date, then `get_meeting` for the full transcript). Wispr records
+  meetings Zoom never saw (in-person, phone, Meet) and mirrors calendar subjects; local recordings under
+  Downloads/Zoom are the last resort. Always pass the server prefix: Zoom and Wispr both expose
+  `search_meetings`, and an unqualified call resolves to the wrong one.
+- Sweep the mailbox for the same evening (Outlook `$search="keyword AND received>=YYYY-MM-DD"`): follow-ups
+  get emailed after the call, and final pricing, attached decks, and internal decisions live in mail bodies
+  and attachments. A ledger built from the transcript alone misses commitments that were sent rather than said.
 - Scheduled sweep: pull all meetings since the last run. get_meeting_assets returns a huge payload; save to
   file and extract with jq (transcript_items, content_markdown), never read raw into context.
 - Speaker resolution: "my notes" transcripts label people Speaker 1/2/etc. Identify Deep by voice: he is the
   one coaching, setting strategy, and saying "I'll send you the plan from my end." Verbal tics: "things like
   that", "you know", "incredibly important". If identity is genuinely ambiguous, ask once via AskUserQuestion.
   Normalize mangled names against known people (transcripts garble Indian names constantly).
+- Treat named labels as unverified too: a real person's name can sit on another's lines, and one label can
+  change identity mid-transcript when participants drop off or diarization drifts. Attribute each commitment
+  by content (who would plausibly owe it: client side vs ours, which role), cross-check against invite
+  attendees, and mark the attribution CONFIRM whenever it changes who owes what.
 
 ### Step 2: Build the commitment ledger
 
@@ -59,7 +71,11 @@ A table with: owner, commitment (verbatim where possible), due date (absolute, n
 
 For each commitment, produce the actual artifact: the plan, the document, the reviewed script, the email.
 Drafts only, never send anything externally. Ground every claim in the transcript or vault; mark assumptions
-with CONFIRM flags rather than inventing specifics. Apply standing rules: no em dashes ever, no section-number
+with CONFIRM flags rather than inventing specifics. Before relying on an artifact (deck, doc, spreadsheet)
+pulled from mail or the vault, open it and confirm it is the current version: filenames and subjects get
+reused across rounds, so an attachment that matches by name can be an earlier iteration. Verify by content
+(dates, figures, named initiatives), not by filename, and name the version you verified when recommending
+it for send. Apply standing rules: no em dashes ever, no section-number
 tags, correct entity names, Lake B2B vs SPAN client separation where relevant.
 
 ### Step 4: Add the prepared-plus extra

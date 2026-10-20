@@ -44,7 +44,14 @@ def chrome_targets(raw, base):
     return chrome
 
 
-def extract_links(raw, base):
+def extract_links(raw, base, chrome=()):
+    """Return [(target_url, anchor_text, is_chrome)].
+
+    `is_chrome` comes from the link's position in the DOM (nav/header/footer/aside or a menu
+    class), not from its anchor text. An adversarial review caught this: judging navigation
+    by anchor text called "Data Enrichment" an editorial link while a real in-body citation
+    reading "Read more" was dismissed, so menu destinations looked like orphans.
+    """
     host = urlparse(base).netloc.replace("www.", "")
     out = []
     for m in re.finditer(r"<a[^>]+href=[\"']([^\"'#]+)[\"'][^>]*>(.*?)</a>", raw, re.S | re.I):
@@ -52,7 +59,7 @@ def extract_links(raw, base):
         if host not in u:
             continue
         label = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", m.group(2)))).strip()
-        out.append((u, label))
+        out.append((u, label, u in chrome))
     return out
 
 
@@ -110,17 +117,19 @@ def build(base, cap=6000, workers=12, use_sitemap=True, verbose=True,
         return u, g[0]
 
     pages, links_raw, chrome_all = {}, {}, collections.Counter()
+    raw_cache = {}
     with cf.ThreadPoolExecutor(max_workers=workers) as ex:
         for u, raw in ex.map(get, targets):
             if not raw:
                 continue
             s = raw.decode("utf8", "ignore")
             pages[u] = body_text(s)
-            lk = extract_links(s, base)
-            links_raw[u] = lk
-            for t, _ in lk:
-                chrome_all[t] += 1
+            raw_cache[u] = s
             ch = chrome_targets(s, base)
+            lk = extract_links(s, base, chrome=ch)
+            links_raw[u] = lk
+            for t, _, _ in lk:
+                chrome_all[t] += 1
             chrome_all.update(ch)
 
     # ---- remove repeated chrome blocks -------------------------------------
@@ -129,9 +138,38 @@ def build(base, cap=6000, workers=12, use_sitemap=True, verbose=True,
     # repeated line blocks and strip them from each page.
     chrome_lines = set()   # extract.body() already removes footers and menus
 
-    # boilerplate = targets linked from an implausible share of pages
+    # Every target the crawl saw inside a nav/header/footer/aside block, across all pages.
+    # Must be built before boilerplate, which needs it.
+    nav_set = set()
+    for _u in pages:
+        try:
+            nav_set |= chrome_targets(raw_cache[_u], base)
+        except Exception:
+            pass
+
+    # Boilerplate = a target linked from an implausible share of pages AND never linked
+    # from real page prose. Recurring furniture (utility bar, legal, cookie, social) is
+    # linked from everywhere and appears in no page body, so it is dropped.
+    #
+    # A menu destination is linked from everywhere too, because the menu is on every page.
+    # Deleting those made every menu destination look like an orphan, which is how the
+    # "76% invisible" headline ended up counting the header menu. So the exemption is not
+    # "also in the nav" but "never once in the prose": nav_set minus anything the body
+    # links to. Requiring BOTH "recurring" and "in the nav" was worse than the original,
+    # because on a site with a global menu the two sets coincide and every menu edge is
+    # deleted exactly as before.
     n_pages = max(len(pages), 1)
-    boiler = {t for t, c in chrome_all.items() if c >= max(8, n_pages * 0.25)}
+    always = {t for t, c in chrome_all.items() if c >= max(8, n_pages * 0.25)}
+
+    # targets reached from page prose at least once. Computed before boilerplate, so a
+    # menu destination that some article also links to is treated as editorial.
+    prose = collections.Counter()
+    for u, lk in links_raw.items():
+        for tgt, _label, is_chrome in lk:
+            if not is_chrome:
+                prose[tgt] += 1
+    menu_only = {t for t in nav_set if prose.get(t, 0) == 0}
+    boiler = {t for t in always if t not in menu_only}
 
     nodes, idmap = [], {}
     for i, u in enumerate(pages):
@@ -154,18 +192,31 @@ def build(base, cap=6000, workers=12, use_sitemap=True, verbose=True,
 
     edges = []
     for u, lk in links_raw.items():
-        for tgt, label in lk:
+        for tgt, label, is_chrome in lk:
             if tgt in boiler or tgt not in idmap:
                 continue
             if idmap[tgt] == idmap[u]:
                 continue
-            edges.append([idmap[u], idmap[tgt], label[:80]])
+            edges.append([idmap[u], idmap[tgt], label[:80], 1 if is_chrome else 0])
 
+    # Degree must be reported twice. A page linked only from the header menu is NOT orphaned:
+    # it is discoverable, it just has no in-body link. An adversarial review of the Span
+    # report found "76% invisible" counted the menu-linked AS/400 and ABM pages as orphans
+    # because only in-text links were counted.
     indeg = collections.Counter(e[1] for e in edges)
     outdeg = collections.Counter(e[0] for e in edges)
+    content_in = collections.Counter(e[1] for e in edges if not e[3])
+    content_out = collections.Counter(e[0] for e in edges if not e[3])
+    menu_in = collections.Counter(e[1] for e in edges if e[3])
     for n in nodes:
         n["in"] = indeg[n["id"]]
         n["out"] = outdeg[n["id"]]
+        n["in_content"] = content_in[n["id"]]
+        n["out_content"] = content_out[n["id"]]
+        n["in_menu"] = menu_in[n["id"]]
+        # "orphaned" means nobody links it at all. Reachability is a separate, weaker fact.
+        n["orphan"] = indeg[n["id"]] == 0
+        n["orphan_content"] = content_in[n["id"]] == 0
 
     bundle = {
         "base": base, "host": host, "fetched_at": time.strftime("%Y-%m-%d"),
