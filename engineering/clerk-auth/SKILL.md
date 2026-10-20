@@ -73,8 +73,7 @@ exactly these instructions, then wait:
    - the **Publishable key** (starts with `pk_`)
    - the **Secret key** (starts with `sk_`) — only needed for Next.js and
      backends, not for a pure React/Vite SPA.
-4. Have the user paste those keys into the chat, or set them in the env file
-   themselves. Never commit them.
+4. Have the user configure secrets through the deployment secret manager or a local ignored environment file. Never request secret keys in chat, print them, or commit them. A public publishable key is not a substitute for backend session verification.
 
 If the user already has a Clerk app for a sibling tool and wants shared
 accounts, reuse its keys instead of creating a new application.
@@ -135,6 +134,26 @@ backend verification is its own task; for most internal tools, protecting the
 frontend routes is enough to start. Flag to the user whether they need
 backend enforcement too (they do if the API is reachable directly, not just
 through the protected UI).
+
+## Shared usage credits and billing
+
+Keep Clerk monetary billing credits separate from application execution credits. A cross-tool wallet requires an application-side integer ledger with atomic reservations, settlement, unknown-cost holds and idempotent grants keyed to a verified paid billing period. Verify session identity on the server; never accept a client-supplied owner ID. Unknown provider cost is not zero.
+
+Check current merchant eligibility before promising Clerk Billing. The authoritative https://clerk.com/docs/guides/billing/overview lists unsupported countries and billing currency restrictions. Do not infer merchant country from the user's residence. Keep authentication and capped free trials independent of paid billing, with billing disabled until the actual merchant setup is eligible.
+
+For static frontends behind a Worker, use Clerk JS plus official backend authentication rather than migrating frameworks solely for auth. Follow Clerk's current CSP guide: the configured FAPI host and the fraud-protection, Cloudflare challenge and Stripe origins required by enabled features must be permitted. Browser-test the served CSP, not just a no-header static preview.
+
+## Integration verification for metered tools
+
+Exercise the actual browser client against the actual API, JWT verifier and SQL ledger using explicitly labelled test identities and provider fixtures. Independently green UI/API suites can disagree about custom-result fields, partial failures and money formatting.
+
+Keep a persisted failed or held run readable even when its response contains an `error` field. Preserve partial results, costs and the run ID; distinguish this result envelope from an HTTP authorization or validation failure.
+
+Show unknown provider cost as unresolved, never as zero. Keep the hold until reconciliation, and mark a requested but unsuccessful email check unknown rather than not requested. Keep rubric display names separate from per-row answer labels.
+
+Return a retriable error when an authoritative billing lookup fails transiently. Do not persist an acknowledged receipt that silently drops a paid allowance. Treat a confirmed missing subscription separately from a service outage.
+
+Bound streamed request bodies independently of Content-Length, and make public readiness require both valid frontend configuration and backend authentication dependencies.
 
 ## Verification before you call it done
 
