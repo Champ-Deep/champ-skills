@@ -77,13 +77,23 @@ One lane per repo. Lanes never touch each other's repo. State that constraint in
 each prompt. The same rule covers output directories: two lanes writing into one
 collide on filenames and shared assets, so partition the path in the prompt (one
 lane owns `<dir>/<topic>/`, the other owns `<dir>/` everywhere except `<topic>/`)
-and name the files each lane may never touch. For code lanes, isolation means a
-worktree, not the main checkout: `git worktree add <scratch>/<lane> -b <branch>
-<base>` off the default branch, so two lanes cannot stage each other's files. When two lanes fork the SAME base
+and name the files each lane may never touch. For code lanes, isolation means a worktree, not the main checkout: `git worktree add <scratch>/<lane> -b <branch> <base>` off the default branch, so two lanes cannot stage each other's files, and run `npm install` (or the repo's install) inside each worktree at creation time so a lane never starts by fighting a cold dependency tree. When two lanes fork the SAME base
 branch into two worktrees, worktree isolation does not prevent a merge conflict in
 files both lanes legitimately edit: put each lane's touched-file list into BOTH
 prompts and instruct each to keep its edits in those files only, so the merges
-reconcile without hand-resolution.
+reconcile without hand-resolution. Declare in your own report that conflicts in a
+shared stylesheet or registry file are expected, name the file, and say you will
+resolve them by hand when merging, so a future session does not treat them as lane
+failure. Give each lane a disjoint runtime too: its own port, its own copied
+database or output dir, its own build output. Lane tests commonly hit a loopback
+port another app already owns, so pass the machine's LAN address
+(`ipconfig getifaddr en0`) as the URL to drive and tell the lane to re-derive it
+rather than assume it. Reuse one dependency tree across worktrees by symlinking
+`node_modules` from the main checkout into each worktree at creation instead of
+letting every lane run a cold install. And write the shared contract (token tables,
+build commands, allowed dependencies, done criteria) as a committed file on the
+base branch before dispatching: five lanes inventing their own values is what
+happens when the contract lives in prompts, and prompts do not merge.
 
 ## 3. Optimise for review cost, not token efficiency
 
@@ -168,8 +178,8 @@ transcript path lets you watch a lane without polling, and `action: stop` kills 
 that has drifted. Keep plan, prompts and report contract as files either way.
 
 For lanes that need a real shell, a server left running, or work that must outlive
-the session: one detached tmux session per lane, from `scripts/launch-lanes.sh`. Supports
-`--status` to capture all panes and `--kill` to tear down.
+the session: `tmux new-session -d -s <lane> -c <worktree>` to start,
+`tmux capture-pane -p -t <lane>` to inspect, `tmux kill-session -t <lane>` to tear down. Prefer `delegate_task` unless the work genuinely needs a persistent shell.
 
 **Multi-line prompts must go through a tmux buffer, not `send-keys`.** `send-keys`
 interprets every newline as a submit, so a markdown prompt arrives as a dozen
@@ -185,6 +195,8 @@ symlinks with safe names and make every prompt use those.
 
 Report plainly what you did not run, what you could not verify, and what remains
 the user's decision. Silence reads as completion.
+
+**Wire the integration before any lane starts.** When lanes run in sequence and then combine, create the downstream integration task at dispatch time as a kanban card with `parents: [<last lane id>]`, chaining intermediate lanes the same way. It promotes and dispatches the moment its parents complete, so finishing does not depend on the human typing "continue" while the session idles, and each lane can be told in a card comment what the next card expects. A plan whose final integration step lives only in chat is a step that stalls.
 
 ## Pitfalls
 
@@ -209,10 +221,19 @@ the user's decision. Silence reads as completion.
   `search_files(target='files')`, and
   re-run your own dash/slop scan over the produced files. A report can claim
   success around a write that silently failed.
+- **`status: running` on a delegate_task child is not liveness.** A child can sit
+  in "running" for an hour while its model loops on reads and writes nothing.
+  Check evidence, not status: transcript mtime in the live log path, `git log` /
+  `git status` in the lane worktree, and whether the source files the goal names
+  actually exist. A lane that has only read files for an hour is stalled, not
+  working; `action: stop` it (its partial result still returns) and re-dispatch
+  with an instruction to resume from its diff. To make every such interruption
+  cheap, require an early WIP commit in the prompt ("commit immediately after
+  reading your diff, then after every step") so nothing lives only in a dirty
+  worktree.
 
 ## Supporting files
 
 - `references/lane-prompt-anatomy.md` - the lane prompt template, field by field,
-  with why each part exists and the failure it prevents.
-- `scripts/launch-lanes.sh` - start, inspect, and tear down N detached tmux lanes
-  from a prompts directory.
+  with why each part exists and the failure it prevents; the report contract; and how to chain lanes so integration fires without a human prompt.
+

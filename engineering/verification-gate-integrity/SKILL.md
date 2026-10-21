@@ -40,6 +40,15 @@ job green while `gh pr checks` has nothing to show for it. Read the protection
 rules, do not infer them from a green PR, and report an unprotected default branch
 as a finding rather than as a pass.
 
+## The exit code you read is the exit code you piped
+
+A patch script that asserts before it writes writes nothing when the assert trips,
+and `python edit.py | tail -1` exits with tail's status, so the shell reports
+success while the file is unchanged. Run edit and check scripts unpiped (or read
+`PIPESTATUS`), treat any traceback in the output as a failed step even when the
+pipeline exited 0, and confirm the write the way any edit is confirmed: grep the
+target file for the new value before reporting it applied.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
@@ -54,6 +63,35 @@ and capture the same failure there. A failure reproduced on the baseline is a
 pre-existing defect you can name with evidence; a failure you merely recognize as old
 is a guess wearing the costume of a finding, and it shields your own regression when
 the two happen to share a symptom.
+
+## Promotion is a sequence of claims, not one
+
+Deploying is a chain (find the version, deploy it, promote it), and the tool's success
+message is not proof the chain did what you intended. Assert each link: match the version
+you uploaded by its own identifier, never by list position or a timestamp sort; confirm the
+returned version id and traffic percentage against what you requested; then fetch the live
+artifact and grep it for a string only the new code contains. If a wrong version does go
+live, say so in the report with the corrected version id rather than letting the original
+success message stand.
+
+## A rejection from one HTTP client is not a deployment verdict
+
+Edge networks and WAFs block default library user-agents, so one client can get 403 while another gets 200 from the identical URL. Before reporting a deployment as down, an asset as missing, or access as broken, retry with a second client (curl, then the browser) and report which client saw what. A single-client failure is a client signal until reproduced.
+
+## A guard that protects one site protects one site
+
+A check wired into one repository's build (a lint, a copy guard, a dash count) protects
+exactly the projects that script runs for. Before reporting a guard as in place, name which
+sites the run covered, and put shared checks in the shared script or the CI config across
+repos rather than in a per-repo build step. A green run on the project you happen to have
+open reads as coverage you do not have.
+
+## A test asserting the removed contract fails by design
+
+When a deliberate redesign removes a pattern (a hover label swap, a chip UI), grep the test
+tree for that symbol first and rewrite the assertions in the same change: tests encode the
+old contract, so they go red by design and read as a regression, inviting a rollback of the
+polish. Report the rewritten assertions alongside the new pass count.
 
 ## Name the fixture boundary of every pass
 
@@ -72,6 +110,16 @@ file, a contract both sides changed, a route wired on one side only. Copy or mer
 every lane's output into one tree and run one integrated gate (build, tests, and a
 browser pass over the real combined surface) before reporting done. Lane-level green
 reported as done is a pass claim about code that never existed in one place.
+
+## One branch green is the feature on that branch only
+
+When output is composed in several branches (by result shape, by item count, by
+type), an assertion driven through the query your test happens to use covers
+exactly one of them. Before reporting the feature present, grep the composer for
+every site that builds the shared output, anchoring on an element that already
+appears in all of them, and drive each shape once; if some shapes stay undriven,
+list them as untested rather than folding them into the pass. The branch a test
+reaches is often not the branch production reaches most.
 
 ## Measure what the browser hands the user, not what the CSS declares
 

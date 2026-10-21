@@ -174,6 +174,10 @@ Non-negotiable. Check BEFORE shipping.
 - **No colored `border-left`/`border-right` side-tab stripes** on cards, list items, callouts, or alerts. Per Impeccable (github.com/pbakaus/impeccable), this is "the single most recognizable AI-dashboard tell." Use fill, weight, or a leading icon to signal status instead.
 - **No rounded-square icon tile sitting above every section heading.** That generic-SaaS pattern (icon in a soft rounded box, centered above a heading, repeated per section) reads as templated. Vary the treatment or drop the tile.
 - **No dark glows** (soft colored box-shadow blooms behind cards or text on dark surfaces) as a default decoration. If used at all, it must be load-bearing for one hero moment, not sprinkled across the UI.
+- **No shimmer skeletons.** The pulsing grey bars across a loading card are the loading-state tell for every generated dashboard. Prefer content placeholders with real copy, a spinner naming the operation, or rendering the shell and filling data in. Skeletons only where the user explicitly asked for them.
+- **No filter and sort chips.** Removable pill-shaped tags for active filters, close icons on selections, and pill-button filter bars are the default data-product UI. Use a labelled select, a segmented control, or a plain list of checkboxes, and show the active state on the control itself. Reserve chips for user-generated token input.
+- **No tabbed auth.** The Sign in / Sign up tabs sharing one card are a stock pattern. Prefer a single form with the alternate path as a text link below the primary action.
+- **No hover label swaps on buttons.** A label that changes on hover hides the action text at the moment of intent. Keep the label static and animate a secondary element (arrow, underline) unless the brand signature calls for the swap.
 
 **Glass: the ban stands, with one sanctioned exception.**
 
@@ -206,6 +210,8 @@ Rules when you do use it:
 - Asymmetry. Break the grid intentionally for emphasis.
 - Don't wrap everything in cards. Never nest cards.
 - In a two-column section (stepper plus detail panel, list plus summary), let both columns end on one baseline: `align-items: stretch` on the grid, not `start`, or the shorter column stops mid-air and reads as unfinished space.
+- When one hero column runs much taller than the other and the short one ends in dead air, fill it by moving an existing panel from the tall column into the short one, not by trimming margins or centring: centring just relocates the air symmetrically and still reads as empty. Measure the gaps with bounding boxes before and after, and name the reorder at the mobile breakpoint in the report.
+- Dead space inside a single column closes the same way: a gap under a hero's copy block is fixed by moving the next interactive element (the search field, the CTA) up to sit directly beneath the copy, not by shaving margins above and below or centring the block. Re-measure the gap with bounding boxes after the move and report the new element order in the handoff.
 - Left-aligned text with asymmetric layouts > centering everything
 - Container queries (`@container`) for component-level responsiveness
 - Safe areas: `env(safe-area-inset-*)` for notches, home indicators
@@ -303,6 +309,7 @@ When the interface includes data:
 - Tooltips for detail-on-demand
 - Responsive: simplify on mobile
 - Always label axes. Always include units.
+- Never pick text colour inside a palette tile by ramp index. Compute it per theme from relative luminance (target 4.5:1) and store one ink variable per swatch step per theme, because the same step index lands at different lightnesses in a light and a dark ramp; the audit in `visual-verify` is where the measurement is enforced.
 - For screenless-companion apps, invert the usual restraint. Dense multi-metric summaries with drill-down beat sparse one-number cards, because this app is the only place the data can be read.
 
 ---

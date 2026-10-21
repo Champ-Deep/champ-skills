@@ -1,6 +1,6 @@
 ---
 name: "visual-verify"
-description: "Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic interface audit (contrast maths, tap targets, layout animation, accessible names, overflow, AI-slop tells), then requires the agent to LOOK at its own screenshots and critique them before reporting done. Use at the end of every frontend build, landing page, dashboard, artifact, one-pager, report, deck, or theme change. MANDATORY TRIGGER after frontend-design, ui-polish, landing-page, web-artifacts-builder, theme-factory, power-design, page-refresh, executive-one-pager, visual-report-builder, graphify, or any time HTML, a component, a chart, or a rendered document is produced. Also triggers on 'check my design', 'does this look right', 'screenshot it', 'audit the UI', 'is this accessible', 'test the responsive layout'."
+description: "Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic interface audit (contrast maths, tap targets, layout animation, accessible names, overflow, AI-slop tells), then requires the agent to LOOK at its own screenshots and critique them before reporting done. Use at the end of every frontend build, landing page, dashboard, artifact, one-pager, report, deck, or theme change. MANDATORY TRIGGER after frontend-design, ui-polish, landing-page, web-artifacts-builder, theme-factory, power-design, page-refresh, executive-one-pager, visual-report-builder, graphify, or any time HTML, a component, a chart, or a rendered document is produced. Also triggers on 'check my design', 'critique this page', 'review the UI', 'does this look right', 'screenshot it', 'audit the UI', 'is this accessible', 'test the responsive layout'."
 ---
 
 # Visual Verify
@@ -61,6 +61,17 @@ grep -c $'\xe2\x80[\x93\x94]' file.html   # must print 0
 
 Fix every hit, then proceed. When a page ships through a build script, put this grep in the script so the count gates the build rather than the review.
 
+## Step 0.5: did the requested change actually land?
+
+A user reviewing your output can see at once that none of their requested changes
+appeared, which means the report and the disk disagreed. Before reporting any edit
+as done, grep the file on disk for the new value (a token name, the new class, the
+string that must now be absent) and paste that hit. A tool call that returned
+success is not proof the bytes are there, and a build that passes proves only
+that the old code still compiles. For a change made in several places (a
+replaced logo, a renamed section), grep the whole tree and show the count, not
+one hit.
+
 ## Step 1: Audit — the machine pass
 
 ```bash
@@ -85,11 +96,36 @@ Severities: **FAIL** blocks delivery. **WARN** needs a reason to ignore. **INFO*
 
 **A cluster of ~1:1 contrast FAILs is the checker, not your design.** Chrome returns `color(srgb r g b / a)` for every `color-mix(...)` result, with 0-to-1 channels, and a `[\d.]+` regex reads those channels as 0-to-255, so every translucent colour in the page audits as near black at once: nav bars, text on dark bands and translucent backgrounds all FAIL at 1.0 to 2.8:1 together. `scripts/audit.py` scales `color(` channels by 255; if you run a vendored or plugin copy of the script, carry that fix. Prove the gate before you distort the palette.
 
+**Chart text in the failure zone gets its ink from one computed value, not from a
+step index.** A sequential palette assigns text by ramp position ("step 3 and above
+use light ink"), and the same index resolves differently per theme: if dark theme's
+step 3 sits near mid-luminance while light theme's step 3 is a pale tone, one rule
+puts near-black on near-black in one theme and white on green in the other, at
+ratios like 3.2:1 and 3.8:1. Never pick tile ink by index. Pick it by measuring:
+compute the luminance of every palette step in every theme against both candidate
+inks (ten lines of Python), keep whichever clears 4.5:1 for each step/theme cell,
+and store the answer as one variable per step per theme (`--sink0..N` beside the
+`--s0..N` swatches) so components reference `var(--sink${k})` instead of encoding
+the threshold. Report the resulting ratio matrix with the fix. Two cells may land
+below 4.5 if no ink clears them: either darken that palette step or drop the label
+size to large-text, and say which.
+
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body). Real luminance maths in about ten lines of Python settles whether the FAIL is the checker or the page. If it passes by hand, do not desaturate the design; change the element's ground to something a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or record it as a known checker limitation in the report, naming the measured ratios. Report FAILs you leave standing as measured passes, never as ignored.
 
 **Prove which app is listening before you shoot it.** A dev server or other project can own loopback while your server owns the wildcard interface, so `localhost:<port>` renders a completely different app that passes every visual check with the wrong content. Run `lsof -nP -iTCP:<port> -sTCP:LISTEN`, then grep the fetched HTML for a string only your build contains, and drive the LAN address when loopback is contested. A green gate run against the wrong app is the one failure that produces no symptom at all.
 
+**An isolated component shot must come from the page it ships on, not a test harness.** A
+component preview routed through one query parameter hides whatever that param drives (the
+price plan, the option set), so every card in a multi-card component shoots identically and
+its card-specific fields audit as present when they were never rendered. Load the real
+production route, drive the state (plan buttons, open accordion), and assert the state
+signal: an accordion panel's `maxHeight` greater than zero, and visible plan name and price
+drawn from a log the render wrote. A harness render is also where layout rules get tested in
+isolation and pass while the page's grid stretches the same element into a different shape.
+
 **For an async component, drive the flow and shoot each state separately.** An idle screenshot of a search box that morphs into a thinking orb proves nothing about the states that matter: the tools default to the load state, and a defect that exists only during the animation disappears the moment it finishes. Drive the real interaction (type, submit, wait for the async work), capture idle, mid-flight and settled states as separate PNGs, assert the state from a DOM signal (a phase attribute, an element mount) rather than a sleep, and check the console for errors each state produced. This is the multi-state requirement above applied to one component rather than a whole page.
+
+**Disambiguate same-tag elements before scripting an interaction.** Once a page ships two `<canvas>` elements (a search orb and a globe) or several buttons sharing a class, a bare selector drives whichever one DOM order puts first, and the focus, keyboard or click test silently exercises the wrong element while reporting green. Select on a distinguishing attribute (`canvas[tabindex]`), and assert an observable consequence (caption text changed, route opened) rather than the focus move alone, since a page can hold focus somewhere other than the element you asked for.
 
 **Re-run the audit in each state the flow can reach, not only the load state.** A default-page audit of a multi-step app measures only its empty state, and every control that renders after an interaction (a mapping select populated from the uploaded file, the remove chip that appears once a chip exists) is absent from the default DOM, so the audit reports clean while an undersized or unlabelled control sits one click away. Drive the flow to each state that ships controls (uploaded, configured, results, signed in) and run the audit plus a shoot at that state. States nobody screenshots are states nobody audits, and the interactive states are exactly where the touch-target and labelling FAILs hide.
 
@@ -157,6 +193,10 @@ The short form, in the order that finds the most problems fastest:
 
 Write the critique down as a numbered list of defects before you fix anything. Fixing while looking produces one fix and three missed problems.
 
+### When the critique must be independent of the builder
+
+The look pass above is one agent judging work it just built. When the user asks for a critique, or a polish pass needs an outside verdict, fan out two isolated assessors through `delegate_task`, one task per assessor, each given only the URL or screenshots, the audience, and the instruction to review unanchored: do not read the repository, name the element and the specific change for every finding, cap the reply at the top defects by severity. Assessor A runs the design review: a 0 to 5 score per heuristic (impeccable's `critique` command or the Nielsen set) with a one-line key issue, then defects ranked by severity. Assessor B runs the deterministic evidence: `scripts/audit.py` at a mobile and a desktop width, driven interactive states, screenshots, console output. Merge into one report: the score table, the defect list with the fix named for each, a verdict (ship, fix-then-ship, rework), and a mark on any finding only one assessor saw. Convert it to a P0/P1/P2 list, apply P0 and P1 in one batch, then re-run Steps 1 and 2 and report both runs. Never report a heuristic score you did not collect: a score table assembled from memory is the same failure as an audit never run.
+
 ---
 
 ## Step 4: Fix and re-run
@@ -183,6 +223,12 @@ soft and the run still looks green. Sweep the default state instead:
 ```
 
 **Measure before you fix.** A clipping, overflow, animation-state, or contrast claim read off a screenshot is a hypothesis, not a finding: a full-page shot captures scrollable panels in whatever scroll state they happened to be in, and a vision read will happily report a border that does not exist. Confirm with a DOM probe first, `getBoundingClientRect()` of the control against its scroll container plus `scrollHeight` vs `clientHeight`. For scrubbed or pinned sections, settle the scroll (`window.scrollTo`, wait for the scrub to catch up; `mouse.wheel` mid-flight lags), then read computed styles: the progress custom property, headline opacity, scene opacity. A screenshot blamed for "the transition never ran" at a mid-scrub frame is the frame, not the code; probe the numbers before spending a fix round. If the probe matches intent, the layout is fine and the screenshot misled you. Fixing on the screenshot's word spends a whole round on a defect that was never there.
+
+**A control a reviewer wants disabled in an error state may be the only working path left.** A "clipboard unavailable" notice sitting above a live copy button reads as a contradiction, and the instinctive fix (disable or hide the button) deletes the manual fallback instead of correcting anything. Before accepting any "turn this off in the failure state" proposal, drive that state for real (deny the permission, drop the network, reject the submit) and list what still works: auto-selected text a user can copy by hand, a retry, a draft they open themselves. Accept the fix only when no alternative route remains, and state in the report which route the change removes.
+
+**When a vision pass returns a LIST of geometric claims, settle the whole list in one probe run.** An art-directed critique of a scaled full-page capture asserts overlapping hero columns, uneven tab widths, truncated evidence text, mismatched label weights, an off-margin footer and a floating checkbox in a single reply, and measurements show nearly all of it equal. Convert each claim to one measurable assertion (bounding-box gap, per-item widths, `scrollHeight` vs `clientHeight`, computed `font-weight`, shared left edges, control/label tops, center alignment), evaluate them in a single page probe, fix only the rows where the numbers disagree with intent, and name the disproved claims in the report so the next round does not re-litigate them. One probe beats N fix rounds, and a critique list from a thumbnail is mostly hypotheses.
+
+**A reported word join is checked in the DOM, not in the pixels.** `proposedtechnology` in a vision read may be downscaling or may be real: read the element's `textContent`. If the words are genuinely joined, the usual cause is a `<br>` or newline suppressed by a breakpoint rule, so put a space *before* the break tag (`proposed <br/>technology`): the whitespace survives when the break itself is hidden, and only the narrow width ever shows the merged state, which the desktop capture cannot reveal.
 
 **Shoot the settled state and a deliberate mid-state; each hides what the other shows.** A mid-frame screenshot lies about missing content (the reveal has not run yet), but the settled screenshot cannot see anything that exists only while the sequence runs: an arrowhead drawn ahead of its line, an overlay released early, a staged element visible before its cue. Once the probe numbers settle, capture one mid-progress frame alongside the final frame and check it for elements visible before their driver reaches them; defects with a time dimension never appear in the resting shot.
 
@@ -260,6 +306,8 @@ let the assertion failure, not the missing highlight, drive the fix.
 
 Never write "verified" if you did not open the images.
 
+When the deliverable is a set of files others open later (a showcase, a handoff, a deck), persist the report beside them as `VERIFICATION.md`: checks executed with counts, visual defects found and fixed, and explicit limits (devices not tested, no deployment, what was left unverified). A chat message ages out; the file travels with the artifact and answers the reviewer's first question without a rebuild.
+
 ---
 
 ## The gate
@@ -267,6 +315,7 @@ Never write "verified" if you did not open the images.
 Delivery is blocked until all of these are true:
 
 - [ ] Dash count zero on the file (Step 0), any hits fixed before rendering
+- [ ] Every requested change grepped in the files on disk (Step 0.5), with the hit count reported for anything applied in more than one place
 - [ ] `audit.py` run at a mobile width and a desktop width, zero FAILs, every WARN either fixed or justified in one line
 - [ ] Audit and shots cover every state that ships controls (empty, configured, results, signed in), not only the default load
 - [ ] `shoot.py` run and **every PNG opened with the Read tool**

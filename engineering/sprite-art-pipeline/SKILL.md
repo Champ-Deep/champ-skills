@@ -73,6 +73,11 @@ compositions (`hyperframes-*`), or layout verification of the surrounding UI (`v
   image renders blank with no console error, so the failure mode is a character-shaped hole
   in the game. Only the spec-driven file-existence test and a look at the gallery catch it;
   a green unit test suite does not.
+- **An icon source added to the sprite needs registration, or it silently never ships.**
+  Dropping an SVG into the icons folder does nothing on its own: the build reads an explicit
+  list, so an unregistered icon is absent from the sprite and every surface shows a broken
+  glyph with no failing test. Register it in the same change that adds the file, then
+  rebuild and grep the emitted sprite for its id.
 - **Hand-counting expected sprites in the test drifts from the spec table.** A hardcoded
   "expect 464" passes after you add a variant that never built. Derive the expectation from
   the spec data so a new spec without art fails the build.

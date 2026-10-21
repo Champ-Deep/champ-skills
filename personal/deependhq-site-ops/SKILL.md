@@ -13,6 +13,8 @@ A nightly scheduled task named `daily-note-recap` runs at 01:03 IST. Part A writ
 
 Repo worktree: `Efforts/Active/TheDeepEndHQ/deependhq-site/` inside the vault. **It is a worktree only. Never run a writing git command against its `.git` from a sandbox.** `publish.sh` clones fresh and rsyncs onto the clone, which is why it works from anywhere.
 
+The live refresh work happens in `/Users/deep/repos/deependhq-refresh` (branch `refresh/2026-10`), not the vault checkout, which has no commit history on `main`. Brand assets and the icon sprite rebuild through `references/brand-assets.md`.
+
 ## Diagnose first, in this order
 
 Run these before touching anything. Most "the site is broken" reports are one of the first three.
@@ -357,6 +359,8 @@ reachable with curl if a token is exported.
 ## Hardening checklist
 
 When asked to make this more reliable, these are the fixes that matter, in order:
+
+- [ ] **Reskin everything that hard-codes the palette.** Any CSS or JSX with literal navy or Lamp hex (toolkit surfaces are the usual carrier) bypasses the scheme tokens, so it renders dark colours on a light page. Sweep with a hex grep over `*.css` and `*.jsx`, move every hit to a token, and keep the pre-paint scheme script identical across every page or two pages of one site disagree about light and dark.
 
 - [ ] **Preflight in Part B.** Assert the daily-notes directory exists, the deploy key exists, and `content.json` parses. Hard fail before any authoring. This is what distinguishes "a quiet day" from "a broken sensor".
 - [ ] **Make live verification unconditional.** Currently gated on a successful push, which means the one guard designed to catch staleness is bypassed by the exact condition it exists to detect. Always fetch live `data.js` and compare `brand.today_date` against IST-yesterday, push or no push.

@@ -26,7 +26,7 @@ ls .github/workflows
 grep -nE '^  [a-z-]+:$|node-version|python-version|\s+run:' .github/workflows/<ci>.yml
 ```
 
-Ignore release/publish workflows that fire only on tags; the test workflow is the gate. If the repo pins Node 22 while this machine defaults to Node 24, switch with the version manager before installing, or the lockfile resolves differently than it will on the runner.
+Ignore release/publish workflows that fire only on tags; the test workflow is the gate. If the repo pins Node 22 while this machine defaults on Node 24, switch with the version manager before installing, or the lockfile resolves differently than it will on the runner. If the base has no `.github/workflows` directory at all, say so explicitly and derive the gates from the package scripts and repository docs; never write that CI passed when no workflow ran.
 
 5. Compare the observed heads with the plan. If the base moved, repeat the planned dry-run merge checks before touching the release branch.
 6. Confirm deployment access and required secret names without printing values. Authentication alone is not proof that the account can create the required environment, so verify project and environment access too. Also establish which checkout and commit the deployment actually runs from: when that checkout holds uncommitted changes, commit the exact running state as its own checkpoint before merging anything into it. Work that exists only in a working tree cannot be reverted to, bisected, or reproduced after the next push, and the first conflict resolution destroys the only copy of what production is running.
@@ -50,6 +50,8 @@ for b in <input-branches>; do git merge-base --is-ancestor origin/$b HEAD || ech
 ```
 
 This same containment proof is the gate for any later claim that a branch's commits are carried, including closing its PR and deleting the branch.
+
+**Cut the release from current remote main even when the inputs forked an older base.** Merge the finished inputs forward onto today's base, never the reverse. Regenerated-from-source outputs (content JSON, feeds, prerendered pages) are newest-wins data, not merge text: an older branch's regeneration can silently roll production content back while every merge looks clean. After each regeneration, assert the newest production record survived with an exact count or identifier check, not by eyeballing the diff.
 
 ## 3. Prove the conflict set before resolving it
 
@@ -83,6 +85,8 @@ Treat self-hosted schema and code generation commands as potentially deployment-
 
 A green baseline means every required command exits zero. Warnings are not failures unless the plan or CI promotes them, but record them when they indicate future cleanup. Honor `continue-on-error` steps as non-gates but record their counts, and before attributing a linter's errors to the release, confirm the erroring files are byte-identical to the base: pre-existing debt is reported as pre-existing, not as a regression you introduced.
 
+**A failing test on a byte-identical base is a candidate stale test, not automatically pre-existing debt.** Check whether the assertion encodes behavior the product has since retired (a removed route, a renamed field, a legacy classification). When it does, rewrite the test to the current contract, assert the retirement path itself (the redirect, the alias, the replacement), and prove the new assertion fails when that contract breaks. Never bend product logic to satisfy an expectation the product deliberately dropped, and keep the file's other assertions intact: a stale test is reconciled by making it test the truth, not by deleting it.
+
 A test that passes alone but times out only in the full suite is contention against the global test timeout, not a logic failure. Diagnose it by rerunning that test alone with a raised timeout to learn its true cost, then give the test an explicit per-test timeout and keep the global timeout where it was. Excluding the test, lowering the suite, or reporting the subset as green hides a flake that lands on the CI runner.
 
 ## 5. Implement each release phase as a verified vertical slice
@@ -106,6 +110,10 @@ Deploy stateful services first, then internal dependencies, backend, and fronten
 
 Read back exact service state after each external write. A successful CLI exit is not enough. Verify deployments, domains, variable names, health endpoints, and logs from the target environment.
 
+Give the preview a new name with no production routes, domains, or data bindings, then prove it serves *this* release rather than a stale build: fetch an emitted asset (favicon, bundle) from the preview URL and compare its hash or a known content marker against the release checkout. A 200 from the preview domain only proves a server answered.
+
+Preview origin is not production origin for integrations: third-party services that allowlist origins (chat/assistant backends, webhook receivers) will reject the preview URL through CORS or auth. Treat those rejections as a named boundary to retest on the production origin after publication, not as a release defect and not as a pass. Record them explicitly in the handoff so the publisher reruns that exact check live.
+
 ## 7. Run acceptance tests and collect evidence as artifacts
 
 Run browser smoke tests against the preview, save traces and screenshots, and exercise both ordinary and guardrail paths. Query the preview data store for the exact records and histograms required by the plan. Export and inspect generated files rather than assuming their sheets or metadata exist.
@@ -126,6 +134,8 @@ Build an evidence ledger mapping every gate to a concrete artifact:
 Do not mark a gate passed because a neighboring gate passed.
 
 ## 8. Recover a handoff that died mid-gate
+
+**A lane whose status says running is not evidence of progress.** Judge liveness by three signals together: the transcript's last timestamp, an actual on-disk diff in its workspace, and `git log` in its branch. A stalled worker usually leaves an uncommitted diff worth keeping, so re-dispatch it to resume from that diff with instructions to commit a WIP checkpoint after every step, rather than restarting the lane from scratch.
 
 When a delegated worker is interrupted (runtime cap, turn budget) its local clone still holds the partial result, and that clone is the only copy if it never pushed. Recover from it before re-dispatching anything:
 
@@ -171,6 +181,10 @@ A consolidation branch carries commits from several identities: the user, agents
 ## 10. Act only on an explicit go
 
 Report first: the branch and PR, a per-input merits call (land vs close-with-reason), the exact merge command you would run, and every open decision. Then wait for the go.
+
+**A scope change mid-run is a new go; make it durable.** When the user widens the authorization while work is in flight (for example preview-only becomes publish-to-production), record it where it survives the session: comment the new scope on the running work item and open the downstream task gated on it, stating both what is now authorized and what still is not (spending, migrations, policy changes). Do not carry the narrower earlier instruction forward just because it was the original brief.
+
+**A release is not published until the scheduled publisher cannot undo it.** Before marking a site release complete, locate the cron/nightly publishing path that will next overwrite production (often a different checkout from the release branch) and reconcile it onto the release tree. Preserve any newer content or uncommitted work in that source before syncing; overwriting it trades a rollback bug for lost work. If the source can't be reconciled cleanly, report the unresolved conflict instead of choosing a side.
 
 On the go, in order: merge the release PR; close each superseded PR with a reason that names the new PR and the containment proof (`Superseded by #<new>, commits contained, verified with git merge-base --is-ancestor`); close conflicting bot PRs such as dependency bumps with a note that the bot re-opens them against the new base. Delete a superseded branch only after the containment command succeeds for it. Containment, not a clean merge, is the deletion gate. If the base branch has no required-check protection, adding it is its own explicit step so the next push cannot land ungated.
 

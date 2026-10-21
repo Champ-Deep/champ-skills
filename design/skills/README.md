@@ -10,7 +10,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `deck-doctor` | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `editorial-web-direction` | Art-direct personal sites, portfolios and hero sections like a magazine spread: giant type on a visible grid, margin notes, scanline or dot image treatments. Use for any  |
 | `frontend-design` | Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data vis |
-| `frontend-design-pro` | Advanced marketing-site and page design, distinct from standard frontend-design. Four modes plus a showcase route: build landing pages that convert (message hierarchy, he |
+| `frontend-design-pro` | Advanced marketing-site and page design, distinct from standard frontend-design: landing pages that convert, outcome-first page refreshes keeping every word of the copy,  |
 | `frontend-handoff` | Turns a backend into a frontend. Ingests routes, endpoints, schemas, auth, roles, and error codes from OpenAPI, Postman, a route file, source code, or live Supabase intro |
 | `identity-kit` | Build a full visual identity at studio depth: brandmark, wordmark, mascot, icon set, tagline and ornaments, drawn as SVG on a labelled brand sheet. Use for any logo, pers |
 | `impeccable` | Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a |

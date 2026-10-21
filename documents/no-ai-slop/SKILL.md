@@ -93,6 +93,10 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 
 **Manufactured candor** (from human-speak). "Honestly?" "Let's be real." "Real talk." Keep a real admission; remove a staged entrance before a routine claim.
 
+**Ironic quotation marks.** A word or phrase in scare quotes ("genuinely usable", "practical, not performative") performs a reaction instead of stating the claim. Use it plainly or cut it. Quotation marks are for quotes, titles, and terms being defined.
+
+**Self-praising interface copy.** Page copy that narrates its own design decisions ("no filler panels", "simplified by design", "built for people who skim") argues for its own quality instead of demonstrating it, which is the written form of the slop it claims to avoid. State what the surface does and let the reader judge the quality. Applies to headlines, section intros, and card descriptions alike.
+
 **Fake question and answer splits** (from human-speak). "The biggest problem? Trust." "The result? A 40% lift." Join into one declarative sentence. Keep real questions.
 
 **Two-beat negative fragments** (from human-speak). "No coding. No complexity. Just results." "No setup, no cost." Write one complete factual sentence, even when each claim is concrete.

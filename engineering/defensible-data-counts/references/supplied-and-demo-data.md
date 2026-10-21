@@ -17,6 +17,27 @@ An inbound file is never written straight to the live tables. Two stages:
 One workbook can carry several sheets; commit them as separate batches rather
 than assuming one batch per file.
 
+## Newest-wins upsert and rollback need different stamps
+
+When a re-load replaces a row on its natural key instead of inserting one, two
+facts must stay separate: which batch created the row (rollback's handle) and
+which batch last touched it (freshness). Overwriting the creating batch id with
+the newest one turns rollback into a delete: the stored pre-image then carries
+the new batch id, the rollback removes a row it should have restored, and the
+count silently loses rows.
+
+- keep the creating batch id on the row for its whole life; put the latest load
+  in separate `updated_at` / `updated_by` columns so newest-wins and `as_of`
+  freshness never move the rollback handle;
+- snapshot the whole row as the pre-image, so the older timestamp travels back
+  with it, and assert that in the rollback test;
+- regression-test the triple: load A, re-load B over it (value and timestamp both
+  change), roll back B (value and timestamp both return to A), roll back A (the
+  pre-A row returns).
+
+Freshness belongs with the number the consumer sees: expose `as_of` from the
+newest contributing row so an answering agent can date the count it quotes.
+
 ## Field mapping pitfalls (all hit on real supplier files)
 
 - **Technology from the sheet name, not the columns.** Supplier workbooks name a

@@ -68,6 +68,11 @@ Traps that produced real bugs:
   falls outside it and renders empty.
 - Nested SVG inside a `<g transform>` needs a fixed pixel box, not a percentage
   width, or it draws at zero size.
+- **A "light version" that is not the same file.** Inverting a badge and
+  re-tracing it produces a second drawing: the outline follows the art instead
+  of the circle, so the silhouette comes out ragged and parts sit outside the
+  badge. Keep one geometry, add a one-cell ring so the cream fill survives a
+  white ground, and export every theme from the same SVG.
 
 ## Verify before delivering
 

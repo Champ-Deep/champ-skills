@@ -75,6 +75,16 @@ Grep the whole client for the derived predicates (`hidden =`, `classList.toggle`
 each. The symptom in the gate is an assertion failing against copy that should never
 be visible, which looks like a timing flake and is not.
 
+## The background server predates your edit
+
+A server launched with `background=true` in an earlier call keeps serving the code
+as it was then, while the files on disk show your new code, so the gate measures
+the previous build and the mismatch surfaces as a puzzling logic bug. Kill and
+relaunch it after every server-side edit, relaunch with the env pinned explicitly
+for this run (the backend path under test, the database, the port) so ambient
+config cannot pick a different path, and confirm the new process is the one
+listening before re-running.
+
 ## Repeat the run before calling it green
 
 A multi-client scenario with vote resolution, timers and reconnects can pass once and
@@ -158,3 +168,5 @@ partial failure is a gate you get exactly one attempt with.
   check existence before creating so a partial run can resume.
 - **Reading CSP or security headers off the dev server.** Dev and deploy middleware
   differ; assert against the staged deploy bundle instead.
+- **Driving a server started before the edit.** Files new, process old; restart
+  with a pinned env and confirm the listener, or the gate grades the old build.

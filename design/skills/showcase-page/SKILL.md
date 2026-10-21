@@ -33,6 +33,15 @@ The first Onex partner page (Oct 2026) looked good but failed on basics Deep not
 11. **Selected states read in both themes.** Tabs, toggles and segmented buttons take a dedicated token pair (light: ink fill, white text; dark: brand fill, ink text) plus an accent underline or ring. Check the selected state in the 390 dark screenshot.
 12. **Build the interactive section as a semantic control, then prove its behaviour.** Filter pills, tabs and the rail are a `radiogroup` with roving focus, a live count of what is shown, and a selected fill that reads in both themes; a travelling reading line and a click lock on the rail. Behaviour rules and tested vanilla ports live in `frontend-design/reference/interior-rules.md`. Prove them with console probes, not screenshots: the selected fill's rect against the selected button's rect at every width, clicks in rapid succession, the copy failure path, and a reduced-motion pass.
 
+## Inbound enquiry pages
+
+When the page's job is to turn curiosity into a contact (opportunity pages, process and FAQ explainers for a new offer), the hard rules above apply plus these:
+
+1. **The page collects nothing.** The controls summarize broad, non-sensitive categories into a message the visitor reviews: no file input, no upload, no form POST, and the page says so on its face. Raw records, customer names and personal details must not fit into any prefilled text.
+2. **Prepare, hand off, never send.** Ship a mailto draft plus a copy action. Copy failure degrades to auto-selected text with a retry and a status line stating that nothing was sent. There is no "Send" button the page does not own.
+3. **Answer legitimacy before you sell.** Permissions, ownership, onward use, deletion, fees, pricing and the no-match outcome each get a direct FAQ answer; a young market is labelled as developing, and no line promises a price, a buyer, anonymity, or removal from data a model was already trained on.
+4. **Publish gate: three approvals, not one.** A purpose-specific privacy notice covering this enquiry (a marketing policy written before the offer existed does not cover it), a named owner and routing for inbound enquiries, and the fee policy. Until all three exist the files stay local and the handoff says so plainly.
+
 ## Step 1: Evidence and brand
 
 - Gather the numbers and their sources into a short evidence table (figure, source file, allowed or not). Read the raw client files for per-row data the chart needs (per account, per market, per send).
@@ -79,7 +88,7 @@ Section order for a Case Study: sticky nav with the real logo on the page ground
 ## Step 7: Deliver
 
 1. Publish each page with the Artifact tool (title is the page's 2 to 4 word name; one-sentence description; republish the same file path to keep the URL).
-2. Save to the vault beside the client or entity material (for LakeB2B: `Atlas/Context Docs/Lake B2B/Case Studies/v2/`; for meeting pages: `Calendar/Meetings/`): standalone HTML, one-page PDF, 2x PNG, plus an index note listing live links and status (ready, hold, do-not-send conditions).
+2. Save to the vault beside the client or entity material (for LakeB2B: `Atlas/Context Docs/Lake B2B/Case Studies/v2/`; for meeting pages: `Calendar/Meetings/`): standalone HTML, one-page PDF, 2x PNG, plus an index note listing live links and status (ready, hold, do-not-send conditions). Copy from the audited build output and assert SHA-256 equality on the destination, so the path you hand over is provably the bytes the audit ran against.
 3. The message to Deep is two lines: what shipped, and the one decision he needs to make.
 
 ## References

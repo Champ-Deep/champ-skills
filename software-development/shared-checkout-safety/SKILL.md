@@ -100,6 +100,10 @@ git worktree add /tmp/<name> <branch>
   the wrong tree. Verify `git rev-parse HEAD` matches the remote you intended
   before writing code.
 
+## Shared scratch evidence
+
+Give every parallel lane its own scratch subdirectory for screenshots, scripts, logs and temporary databases. Never run wildcard cleanup in the shared scratch root: it can erase another lane's verification evidence even when git worktrees are isolated. Move or remove only files whose ownership is established.
+
 ## Reporting
 
 When you find a concurrent writer, report it as a finding in its own right:

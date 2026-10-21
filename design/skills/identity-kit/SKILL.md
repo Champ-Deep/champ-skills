@@ -13,6 +13,8 @@ The bar has two halves. **Depth** is a studio identity sheet: a monogram badge, 
 
 Run `design-trends` after this skill as the final pass. Brand locks from any existing brand skill (`deependhq-design-system`, `champions-group-brand`, `lakeb2b-brand-guidelines` and the rest) are absolute unless the user says the new identity replaces them.
 
+Every image generation goes through Higgsfield (see `higgsfield-generate`): Recraft in vector mode for the marks, a second Higgsfield pass with both renders as references to merge a detail from one generation into another. Never draw the marks in code when a generative model is the tool for the job, and never splice paths between two generated vectors by hand: the grids differ and the seam only shows at favicon size.
+
 ## What depth means
 
 Use these as the checklist.
@@ -84,7 +86,7 @@ Known failure modes to check for: garbled letters in anything longer than one sh
 
 ## Step 4: Clean and systematise in code
 
-**Merge, don't transplant.** When the approved mark needs a detail taken from a second render (a prop, a face detail, a recolour), send both renders back to Higgsfield as image references and ask for a pixel-exact composite with only that change. Generated vectors sit on different grids, so moving paths between two renders misaligns by a cell and fails at favicon size. See `references/pixel-art-to-vector.md` in the `higgsfield-generate` skill for the prompt shape, the two-model A/B, and grid fitting.
+**Merge, don't transplant.** When the approved mark needs a detail taken from a second render (a prop, a face detail, a recolour), send both renders back to Higgsfield as image references and ask for a pixel-exact composite with only that change. Generated vectors sit on different grids, so moving paths between two renders misaligns by a cell and fails at favicon size; the failure hides until you overlay the two at the same coordinates, so compare before believing a transplant landed. See `references/pixel-art-to-vector.md` in the `higgsfield-generate` skill for the prompt shape, the two-model A/B, and grid fitting.
 
 The picks become a system in Python (`svgkit.py` and `marks.py` in the worked example's `src/`). Recraft SVGs are flat lists of `<path fill="rgb(...)">` with a full-canvas background path first.
 
@@ -145,6 +147,7 @@ Every item fails the kit if it fails:
 - **Cookie-cutter tells:** initials in a plain circle, a gradient blob, library icons, an unaltered script font, more than four colours, clip-art mascots, a tagline that names a category.
 - **Constants hold** in every mark; name them and point at them.
 - **Small sizes:** favicon cut at 16 and 32, mascot at 32, icons at 24, on both grounds. Render every mark on the real light ground before showing it: a cream badge on cream vanishes, so it needs a one-pixel ink ring (flood the outside from the corners, outline every outside cell touching a paper cell).
+- **One geometry per mark, all schemes.** Ship a single badge file that survives every ground it will meet: white and navy browser tab bars, light and dark pages, an app icon mask. The ring above is what buys that. A separate "light version" traced from an inverted render is a second drawing that drifts: it was traced around the art instead of sharing the circle, and the silhouette came out ragged with the shoulders hanging outside the badge. Derive light from the same vector path, then verify on every ground at 16 and 32 before shipping.
 - **Collisions:** nothing touches a frame or label; text on covers and posts clears the mascot.
 - **Legibility:** every icon nameable at 24 px without a caption; marigold or other accent never used for body text on the light ground.
 - **IP:** no known characters, logos or brand marks; references teach grammar, never surface.

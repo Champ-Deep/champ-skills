@@ -35,7 +35,7 @@ Deep's reference is the Harbinger signal globe (live at https://champharbinger-p
 - Dark sphere, dot-matrix land, slow rotation that stops under the pointer with inertia. Solid colour blobs and unlabelled shapes are the failure mode he named.
 - Every region pin shows its count; hover or focus reveals companies, contacts, and source.
 - Globe and US choropleth read from `/api/counts` plus a technology selector, never from hard-coded numbers.
-- The US opens on double-click AND on a visible button, because touch and keyboard users cannot double-click. Escape returns to the globe.
+- The US opens on double-click AND with the keyboard: while the globe canvas has focus the caption switches to the arrow-key and Enter hint, Enter opens the state map, Escape returns. Deep's direction is no control chrome on the canvas itself (no rotate arrows, no reset, no "Open US map" button): drag and double-click carry pointer interaction, and the focused caption carries the keyboard path. A visible button on the globe is the failure he named.
 - Captions state the data source, both themes pass contrast, and `prefers-reduced-motion` stops auto-rotation.
 
 ## Procedure
@@ -46,6 +46,26 @@ Deep's reference is the Harbinger signal globe (live at https://champharbinger-p
 4. UI change: `cd ui && nvm use default && npm run typecheck && npm run build`.
 5. Visual gate, then commit with a message naming what landed. Report what changed, what is verified, and what is left, then wait for the go on any deploy.
 
+## Hero and home-page layout
+
+- **Dead space under the hero copy is fixed by relocating content, not by trimming margins.** When one column of a two-column hero runs much taller than the other, do not just top-align or nudge gaps: move an existing panel (the "Build a search" filter bar is the natural candidate) from the tall column into the short one, so the copy column runs heading, text, search bar, panel with even gaps. Measure the gaps before and after with bounding boxes rather than eyeballing the screenshot.
+- The hero grid is `align-items:start` with the left column as its own grid (`.ch-left`), so both columns hang from one top line. Centring the short column leaves symmetric air above and below and still reads as dead space.
+- Side effect to name in the report: moving a panel between columns reorders it at 390 too (the globe then follows the filters on mobile).
+
+## Admin access
+
+- `/admin` (UI and its API) is gated by one shared token in the `SPAN_ADMIN_TOKEN` env var, read at request time: rotate by editing the variable in Railway, which invalidates the old token on the next request; there is no username/password and no per-user account. Point a teammate at the URL plus the variable name, and never paste the value into chat.
+- The gate is presentation only. The API stays bearer-token protected, and a token check that runs only in the client is a door with no lock.
+
+## Local runs and ports
+
+- 127.0.0.1 is shadowed by another app on this machine, so test servers are driven through the machine's LAN address (`ipconfig getifaddr en0`), not localhost. Re-derive the address rather than hardcoding it.
+- Parallel runs need one `PORT` and one copied `SPAN_DB` file per server; sharing a database file between two servers produces write contention that looks like an app bug.
+
+## Verification scripts
+
+- Playwright selectors must disambiguate canvases: once the page has more than one `<canvas>` (the search orb plus the globe), `canvas` resolves to whichever comes first in DOM order and a focus or keyboard test silently drives the wrong element. Target `canvas[tabindex]` for the globe and assert the caption text changed after focusing, not just that focus moved.
+
 ## Pitfalls
 
 - `npx shadcn@latest add` can emit `import { cn } from "cn"` when it cannot resolve the `@/` alias. Rewrite those imports to `@/lib/utils`, make sure `ui/src/lib/utils.ts` exports `cn`, typecheck, and never `npm install cn`.
@@ -53,6 +73,8 @@ Deep's reference is the Harbinger signal globe (live at https://champharbinger-p
 - An unknown `dimension` on `/api/counts` returns 400 naming the allowed values. Take the list from that error instead of hardcoding it, and let the 400 guard new callers.
 - A brand-new test failing on counts usually means the seed and fixtures hold different numbers than assumed. Check the fixture before suspecting the code.
 - Never write imports for a component that was only planned (see `references/ui-stack.md` on 21st.dev). Typecheck is the proof that something is installed.
+- A guard you write to protect a file edit (`assert` on a match count) will trip on its own earlier lines if the pattern appears more than once in the file. Verify the count against the real number of intended sites before the write, or the edit silently does not land and the next step runs against stale code.
+- Adding or renaming a component requires regenerating the spec (`cd ui && npm run gen:prompt`) before anything downstream runs: the server validates component names against `harness/openui/system-prompt.json`, and a component name absent from the spec fails at runtime, not at build.
 
 ## References
 
