@@ -40,6 +40,9 @@ Companies that added or dropped the company's main product in the last 90 days, 
 7. Interlink: the profile links to every product users list, rival profiles and comparison pages; each of those links back with anchor text "<Company> company profile".
 8. Run the gates.
 
+## Build from data, not by hand
+Reuse `Efforts/Active/SPAN Content/Oracle Users Page/build_oracle_page.py` (Celsus vault): data at the top, asserts that the region, industry and size cuts reconcile, one build for the HTML and the `.md` twin. It inherits the Zoho CSS but fixes two of its contrast bugs: in dark mode `.btn.primary` needs dark ink (#06331c) because `--green-d` turns light, and amber pill text needs #7a4d00 on light. Check vision-pass claims about bar lengths or clipped cells with a DOM probe first. On these pages they were false.
+
 ## Gates
 1. `no-ai-slop` Gate mode and zero em or en dashes
 2. The Page Extras Gate in `span-answer-page`

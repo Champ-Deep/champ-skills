@@ -54,6 +54,9 @@ Tick every line before handoff:
 4. `agent-ready` (markdown twin, llms.txt entry, JSON-LD, raw HTML content)
 5. `visual-verify` at 390 and 1440, light and dark, when a designed page is built
 
+## Reference build
+The Oracle users list (`Efforts/Active/SPAN Content/Oracle Users Page/`) is the worked tech-page example. It has a region by size segment counter fed from the data team's breakdown sheet, real sample rows at company level only, and build notes for anything still unconfirmed. Unsourced "top customers" tables and estimated industry shares get removed, not published.
+
 ## Output
 - The page copy as Markdown (for the editor) and, when asked, the WordPress-safe HTML with inline styles (SGS editor does not accept style or script blocks; extras scripts go in the site template).
 - The brief updated with status, URL and publish date, saved in `Efforts/Active/SPAN Content/` in the Celsus vault.
