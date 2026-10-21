@@ -120,6 +120,24 @@ Fix forward (tighten `.gitignore`, confirm `git add -An` no longer stages the
 file) and leave history rewrite to Deep. Never rewrite history unilaterally, and
 never commit or push as part of an audit.
 
+## Storing passwords and confidential data in code you write
+
+Deep's standing preference (stated 2026-10-19): password storage uses a slow, salted
+password hash, not a fast hash and not reversible encryption.
+
+- **Passwords:** Argon2id first choice. bcrypt with a per-user salt (cost 12 or
+  higher) is acceptable where Argon2 is not available. Use the library's own
+  salt generation and verify function, never hand-roll the compare.
+- **Never SHA-256 (or MD5/SHA-1) for passwords**, salted or not. It is a fast hash
+  built for speed, so a leaked table is brute-forced at billions of guesses per
+  second. Also not "encrypted": a hash is one-way, encryption is two-way.
+- **Confidential data that must be read back** (API tokens, PII fields) is the one
+  case for encryption: AES-256-GCM with the key held outside the database
+  (env or KMS), never in the same repo or table.
+- When reviewing existing code, flag any `sha256(password)` or reversible
+  password storage as a finding with the fix, and do not migrate live hashes
+  unilaterally (rehash on next login is the usual path).
+
 ## Pitfalls
 
 - **Do not ask for a credential in chat, ever**, not even after one was offered,
