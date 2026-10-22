@@ -41,6 +41,10 @@ One pass creates and subscribes dozens of cards in under a minute; temp files av
 
 **Pair cards with staged artifacts.** When a card's action is "Deep sends the thing you drafted", the body names the artifact precisely enough to find it unaided: surface and exact title (e.g. `Outlook Drafts, "<subject>"`), what still has to be filled (an empty To field), and the closing reply (`sent` or `A on <id>`). A card that says "send the recap" without saying where the recap lives strands the next reader.
 
+**A staged draft is not done.** If the card's last mile is Deep sending, posting or paying, the card ends blocked with a decision card naming the exact draft, never `kanban_complete`. In Oct 2026 at least 8 cards closed as done with the send still on Deep and the TASKS.md rows stayed open, which is how tasks slipped. Batch the day's staged sends into one blocked `Send Pack <date>` card instead of one card each.
+
+**Kanban-only (standing 2026-10-22).** Deep handles all tasks on the board. Deep-only rows also become cards (created blocked, decision-card body); TASKS.md stays the record and never moves. Lanes: `default`, `worker`, `frontend`, `inbox` (mail drafts), `content` (social posts and video scripts; its SOUL carries the value-first, no-pitch voice). Profile SOULs live at `~/.hermes/profiles/<name>/SOUL.md` and are re-read at each worker spawn; `hermes profile describe <name> --text` sets the routing description.
+
 ## 2. What "blocked" means
 
 `kanban_block(kind=...)` routes by cause. Only two kinds need Deep.
