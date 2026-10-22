@@ -1,0 +1,3 @@
+date,account,signal_type,source,detail,score,action_taken,owner
+EXAMPLE,Acme Robotics,funding,Trade news article,Raised Series B with hiring plans stated,82,Sent first touch,SDR-A
+EXAMPLE,Bright SaaS,competitor_engagement,LinkedIn post comment,Asked a pricing question on a rival post,64,Added to day one list,SDR-B

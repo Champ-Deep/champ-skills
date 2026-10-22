@@ -1,0 +1,3 @@
+account,contact,role,stage,fit_score,last_signal,last_touch,next_step,next_date,owner,notes
+EXAMPLE,Jan Doe,VP Sales,Discovery,82,Funded round 12 days ago,2026-10-12,Send recap email,2026-10-24,SDR-A,Replied once and asked for pricing
+EXAMPLE,Kai Roe,Head of RevOps,Evaluation,64,Commented on rival post,2026-10-18,Book technical call,2026-10-26,SDR-B,No reply yet after two touches
