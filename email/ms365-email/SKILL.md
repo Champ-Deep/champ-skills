@@ -42,6 +42,7 @@ Don't use for: inbox triage or reply policy (`email-inbox-triage`), terminal IMA
 5. **Replace a stale attachment.** If the local file changed after it was attached, the draft still serves the old bytes. Re-run `add_mail_attachment` with the new content, then `delete_mail_attachment` the old attachment id (`confirm: true`), then `list_mail_attachments` again and confirm the list contains exactly the intended set: new file present, old id gone, expected count.
 6. **Deep asks "confirm it has the changes".** Filename and size are not proof of content. Download the attached bytes with `mcp__ms365__download_bytes_to_file` (target `/me/messages/{messageId}/attachments/{attachmentId}/$value`, write to a scratch path that does not exist yet) and byte-compare against the canonical local file before answering.
 7. **Hand back.** Reply with the clickable `webLink`, recipient, subject, attachment filename, and any body content still awaiting Deep's decision. The draft stays unsent.
+8. **Batch staging for a handoff pack.** When a task batch needs many mails staged: resolve every recipient first by searching the vault (regex a person-name fragment against `[a-z0-9._-]+@domain` across `Atlas/`, `_config/`, `Calendar/`, `Efforts/`); then create the drafts, several `create_draft_email` calls per turn is fine. Deliver them as a per-day pack at `Atlas/Ops/Dispatch/Ready to Send <date>.md` with four sections: **GO** (table: subject | To | Kanban card id), paste-ready WhatsApp/Flock texts, **WAIT** (drafts held and why), and work running without Deep. Each GO row ties to a card whose body names the exact draft subject, so one reply (`sent`) closes both surfaces. Address discovery, batch drafting and card pairing are coordinated with `kanban-task-intake`.
 
 ## Pitfalls
 
@@ -55,6 +56,7 @@ Don't use for: inbox triage or reply policy (`email-inbox-triage`), terminal IMA
 - Parsing the `mcp_servers` block out of `config.yaml` inside `execute_code`: the sandbox has no `yaml` module. Read the block with `search_files`/`read_file` or parse it in `terminal`, which has the project interpreter.
 - Draft body naming a shareable page or document link that was never actually published.
 - Stating an assumption as a fact. If the draft needs a detail nobody confirmed (who approves an access request, which domain TLD to buy), write the conditional sentence Deep can delete, then list every such assumption in the reply so he can strike it before sending.
+- Guessing a recipient's address because the person is obviously real: a wrong address turns a review step into a sent misfire. Search the vault; if no address exists in the vault or the mailbox, leave `toRecipients` empty, put the draft under WAIT in the pack, and flag the missing address in your reply. Empty To is recoverable, a wrong To is not.
 - Reporting old vault rows as open work without saying their state is unverified. Mail threads and task rows drift apart: label each bucket (live now, unconfirmed) and name the sources checked and not checked.
 
 ## Verification

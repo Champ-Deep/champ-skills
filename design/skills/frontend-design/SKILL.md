@@ -138,6 +138,12 @@ Commit to a BOLD aesthetic direction. "Clean and modern" is not a direction. It'
 
 **CRITICAL**: Bold maximalism and refined minimalism both work. The key is intentionality, not intensity.
 
+**A rejected first build is an architecture complaint, not a styling one.** When Deep comes back with "the template is really bad" or worse, stop patching colors, spacing and radii: that repairs the surface of a composition already judged worthless, and the next reply will reject it too. Restart the page architecture instead, around one concrete structural metaphor, then re-derive palette and type from it. Name the metaphor in one line before writing markup.
+
+For prose-heavy editorial, service or data pages the strongest anti-generic metaphor is the **document**, not the landing page: title block, numbered clauses, a sticky margin index with scroll spy, hairline-ruled dense tables, line-drawn figures labelled Fig. N, one accent color reserved for links and callouts and a second reserved only for defects or warnings, no cards, no shadows, no fade-up entrances. Editorial or technical *object* beats editorial *skin*: a page that reads as a spec sheet, ledger, dossier or field guide passes the swap test where a recolored card grid never does.
+
+**Prove the direction on one section before building the site.** An open-ended "what direction do you want" costs a full rejected build; a screenshot of one representative section, headline through tables, costs one turn. Build that single section end to end, screenshot it, and only then extend the grammar to the remaining pages (the homepage as the index sheet of the same document system). Derive every later page from the proved section rather than re-inventing per page, and carry the same tokens, rules and figure style across all of them.
+
 ---
 
 ## Step 3: Build with the Priority System

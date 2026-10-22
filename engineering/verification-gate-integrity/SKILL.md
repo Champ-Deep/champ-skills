@@ -159,6 +159,17 @@ snapshot times out later in the same flow.
 - Return structured objects from `page.evaluate` and print them; a `"".join is not a
   function` trace means a DOM property, not a string, reached a string method.
 
+## A green gate does not clear a human hold
+
+Technical verification and human approval are separate claims about the same artifact.
+Once the owner has rejected a design, every later gate passing on that build says
+nothing about the rejection, and a completed verification child must never be the thing
+that releases it. Keep the hold as an explicit dependency on the publishing task (parent
+gating, not a comment), so completing verification cannot satisfy the publish gate on
+its own, and confirm the hold still stands immediately before any release step. Name the
+hold in the report's verdict line, not only in a comment, or the green checklist reads
+as sign-off.
+
 ## Report the shortfall
 
 When a gate turns out not to have been running, say so plainly and quantify it. Do not

@@ -2,7 +2,7 @@
 
 Shared agent skills for the Champions Group teams. Published for collaborators to clone and drop into any Claude Code / Cursor / Gemini / agent-skill runtime.
 
-**179 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
+**181 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
 
 ## Categories
 
@@ -17,7 +17,7 @@ Shared agent skills for the Champions Group teams. Published for collaborators t
 | Engineering & Dev | `engineering/` | MCP, testing, frontend build, auth, scraping, codebase tools | 50 |
 | Productivity & Meetings | `productivity/` | Meetings, quizzes, onboarding, interviews, leaderboards | 8 |
 | Science & Research (champ-science plugin) | `science/` | Bio models, literature, figures, Claude Science platform skills | 28 |
-| Personal Ops (champ-science plugin) | `personal/` | Champ's vault, daily start, site ops, agent runtime and workspace skills | 18 |
+| Personal Ops (champ-science plugin) | `personal/` | Champ's vault, daily start, site ops, agent runtime and workspace skills | 20 |
 
 ## Layout
 

@@ -148,6 +148,23 @@ died instead of only the selector it died on, and make creation steps idempotent
 dies on a duplicate during its second run, and a gate that cannot be re-run after a
 partial failure is a gate you get exactly one attempt with.
 
+## A third party's origin allowlist is not your bug
+
+A widget served from an allowlisted host rejects your preview origin with no
+`Access-Control-Allow-Origin`, and every state of the gate goes red at once. That is the
+service enforcing its policy, not a defect in the site or the service, so never widen
+the allowlist, weaken CSP, or deploy the build to production just to make the gate
+color-change: each trades a test result for a real security or traffic change.
+
+Serve the exact build under an origin the third party already allows: run the local
+server, then map the allowed hostname to it in the browser only
+(`--host-resolver-rules=MAP <allowed-host> 127.0.0.1:<port>`), and re-run the identical
+gate. The third party sees an origin it trusts, nothing on the network or in config
+changes, and the pass is honest. Report the method with the result (local origin
+mapping, no CORS/CSP change, no deploy) plus what stayed untested (real provider call,
+physical devices, other browsers), so a mapped-origin pass is never read as a test of a
+production deploy.
+
 ## Pitfalls
 
 - **Reading `os.environ` after a conftest override.** Reports the fixture, not the server.
@@ -170,3 +187,7 @@ partial failure is a gate you get exactly one attempt with.
   differ; assert against the staged deploy bundle instead.
 - **Driving a server started before the edit.** Files new, process old; restart
   with a pinned env and confirm the listener, or the gate grades the old build.
+- **Widening an origin allowlist to make a preview gate pass.** Buys green with a real
+  security change; map the allowed hostname onto the local build instead.
+- **Reporting a mapped-origin pass as a production test.** Same origin string, different
+  deployment; state the method and the untested remainder with the verdict.

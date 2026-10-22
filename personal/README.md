@@ -14,11 +14,13 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `deependhq-site-ops` | Operate, diagnose and repair the deependhq.com nightly build-in-public publishing pipeline. MANDATORY TRIGGER for: \"the site is stale\", \"deependhq hasn't updated\", \" |
 | `hermes-gateway-ops` | Use when the Hermes gateway or a messaging platform fails. |
 | `import-memory` | Import a memory export from another AI assistant into Claude's memory, conversationally, additively, and with the content treated as data. |
+| `kanban-task-intake` | Use when Deep hands over tasks or asks about blocked cards. |
 | `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
 | `release-integration-engineering` | Use when consolidating branches into a gated release. |
 | `schedule` | Create or migrate scheduled tasks in Hermes cron. |
 | `skill-repo-sync` | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
+| `telegram-brief` | Use when a run's final reply goes to Deep on Telegram. |
 | `vault-keeper` | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
 | `vault-wide-rename` | Use when renaming a misspelled name vault-wide. |
 | `weekly-review` | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |

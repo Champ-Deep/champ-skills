@@ -85,7 +85,7 @@ The audit runs the live page in Chromium and checks the **computed** styles, not
 | Class | What it measures |
 |---|---|
 | Contrast | Real text colour against its real composited background, including transparency stacking. Not the hex you intended, the pixel that renders. |
-| Tap targets | Geometry of every interactive element. 44px floor on mobile, 24px on pointer. Inline prose links exempt. |
+| Tap targets | Geometry of every interactive element. 44px floor on mobile, 24px on pointer. The prose-link exemption is not reliable: skip links, footer links and mono-styled inline links still FAIL at 390, so size the anchor itself (`display:flex; align-items:center; min-height:44px; min-width:44px`) rather than trusting the exemption. |
 | Accessible names | Icon-only buttons, unlabelled inputs, missing alt, placeholder standing in for a label. |
 | Motion | Transitions on layout properties, `transition: all`, animation with no `prefers-reduced-motion` branch. |
 | Layout integrity | Horizontal overflow with the culprit element named, flex children that cannot truncate. |
@@ -109,6 +109,10 @@ and store the answer as one variable per step per theme (`--sink0..N` beside the
 the threshold. Report the resulting ratio matrix with the fix. Two cells may land
 below 4.5 if no ink clears them: either darken that palette step or drop the label
 size to large-text, and say which.
+
+**A `border-radius` probe on a visible leaf can be a measurement artifact, not a defect.** A repeated "not fully rounded" FAIL at 1.00:1-style ratios on pills and cards usually comes from sampling the antialiased corner of a rounded element against a background it does not own (a gradient band, a card edge). Settle it the same way as the contrast cluster: run the identical audit on a known-good reference page built on the same system, and if it fails the same checks, read the screenshot for the real verdict and record the checker limitation instead of squaring off the design.
+
+**Re-run the vision pass after the fix and read what it says.** A critique run through an auxiliary vision call is only trusted when the same question, asked again on the fixed build, comes back with the named defects gone. If the second pass reports a new break (a diagram clipped at the right edge, a label cut off), treat it as a fresh hypothesis: confirm against a geometry probe (`scrollWidth` of the container, `getBoundingClientRect().right`) and, where the claim is about a component in isolation, shoot that element (`locator(selector).screenshot()`) rather than the full-page crop.
 
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body). Real luminance maths in about ten lines of Python settles whether the FAIL is the checker or the page. If it passes by hand, do not desaturate the design; change the element's ground to something a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or record it as a known checker limitation in the report, naming the measured ratios. Report FAILs you leave standing as measured passes, never as ignored.
 
@@ -256,6 +260,8 @@ unreadable. Keep the button's children as one row (an inner flex wrapper holding
 name and price, full width) and, in the look pass, ask the shot explicitly whether
 descriptions run one or two lines rather than five. Narrow stacks and clipping are
 different defects and only one of them is caught by an overflow probe.
+
+**Figure and diagram text is measured, never eyeballed.** A downsampled full-page capture routinely renders 11px labels as an illegible smudge, so a vision pass reports "labels unreadable" on drawings that are fine; and the inverse is real too, because SVG text sized in user units scales with the drawing's rendered width: probe `parseFloat(getComputedStyle(label).fontSize)` times the svg's width/viewBox ratio at each shipping width before judging legibility. When the drawing is allowed to shrink below phone width, labels fall under 9px while every audit stays green (wrapped or scaled text does not overflow), so give the svg a `min-width` inside an `overflow-x: auto` wrapper: the drawing scrolls sideways on a phone and the labels hold size. Report the computed label px per width with the fix.
 
 **A tap target is measured on the link, not the image inside it.** A nav logo rendered 44px tall still audits as an undersized target when its `<a>` wraps tightly at 34px. Set the height on the anchor (`display: flex; align-items: center; min-height: 44px`) rather than only on the `<img>`, because the anchor is what the geometry check measures.
 
