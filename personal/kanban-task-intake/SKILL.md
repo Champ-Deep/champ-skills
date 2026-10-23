@@ -49,7 +49,21 @@ Then approve the boundary where it lands: comment the ruling on the card **and**
 
 **A staged draft is not done.** If the card's last mile is Deep sending, posting or paying, the card ends blocked with a decision card naming the exact draft, never `kanban_complete`. In Oct 2026 at least 8 cards closed as done with the send still on Deep and the TASKS.md rows stayed open, which is how tasks slipped. Batch the day's staged sends into one blocked `Send Pack <date>` card instead of one card each.
 
-**Kanban-only (standing 2026-10-22).** Deep handles all tasks on the board. Deep-only rows also become cards (created blocked, decision-card body; body = `Row: TASKS.md line N` plus the section 3 shape with Do it / Already done / Drop as A/B/C, so one swipe answers it); TASKS.md stays the record and never moves. The backlog migration (2026-10-23) ticked CLOSE/ARCHIVE/MERGE rows in place with a `[migrated <date>: ...]` note; the scripts are `~/.hermes/scripts/tasks_migration_classify.py` and `tasks_migration_apply.py`. A process that carries `HERMES_DELEGATED_CHILD_CONTEXT` (some kanban workers do) cannot use `hermes kanban create`; use the `kanban_create` tool there, or run the script from a normal shell or cron, and pass `workspace_kind=scratch` (the tool defaults to a vault worktree). The symptom of forgetting: the card dies at spawn with `git worktree add failed for /Users/deep/Celsus/.worktrees/<id> ... fatal: invalid reference: HEAD` (the vault is not a git repo), after the dispatcher's two retries. Recreate it as scratch, link it where the dead one sat, comment "superseded by" on the dead card, and `rmdir` the empty `/Users/deep/Celsus/.worktrees` it leaves behind. Lanes: `default`, `worker`, `frontend`, `inbox` (mail drafts), `content` (social posts and video scripts; its SOUL carries the value-first, no-pitch voice). Profile SOULs live at `~/.hermes/profiles/<name>/SOUL.md` and are re-read at each worker spawn; `hermes profile describe <name> --text` sets the routing description.
+**Kanban-only (standing 2026-10-22).** Deep handles all tasks on the board. Deep-only rows also become cards (created blocked, decision-card body; body = `Row: TASKS.md line N` plus the section 3 shape with Do it / Already done / Drop as A/B/C, so one swipe answers it); TASKS.md stays the record and never moves. The backlog migration (2026-10-23) ticked CLOSE/ARCHIVE/MERGE rows in place with a `[migrated <date>: ...]` note; the scripts are `~/.hermes/scripts/tasks_migration_classify.py` and `tasks_migration_apply.py`. A process that carries `HERMES_DELEGATED_CHILD_CONTEXT` (some kanban workers do) cannot use `hermes kanban create`; use the `kanban_create` tool there, or run the script from a normal shell or cron, and pass `workspace_kind=scratch` (the tool defaults to a vault worktree). Section 6 covers the whole failure class this produces, board-wide as well as one card. Lanes: `default`, `worker`, `frontend`, `inbox` (mail drafts), `content` (social posts and video scripts; its SOUL carries the value-first, no-pitch voice). Profile SOULs live at `~/.hermes/profiles/<name>/SOUL.md` and are re-read at each worker spawn; `hermes profile describe <name> --text` sets the routing description.
+
+## 1b. Clearing a blocked backlog (`~/.hermes/scripts/kanban_clear.py`)
+
+Never present 300 blocked cards one by one. The sweep once carded every DEEP row individually, including September rows, and left 364 blocked cards. The fix is packs and expiry, then one reply line:
+
+```bash
+python3 ~/.hermes/scripts/kanban_clear.py triage      # ~/.hermes/cache/blocked-triage.md: EXPIRED / SEND / CALENDAR / KEEP, Deep approves the lists
+python3 ~/.hermes/scripts/kanban_clear.py expire      # archives EXPIRED (title dated more than 3 days past) with a comment, TASKS.md row stays
+python3 ~/.hermes/scripts/kanban_clear.py fold send   # one running inbox card carrying every send card's body, originals archived with a pointer
+python3 ~/.hermes/scripts/kanban_clear.py sheet       # RETRY / ACCESS / DECIDE sheet for what is left
+python3 ~/.hermes/scripts/kanban_clear.py apply "go t_a t_b; drop t_c; done t_d; retry all"
+```
+
+Buckets are regex on title and body, so Deep approves the triage lists before `expire` or `fold` runs. The sweep now never cards a send row alone (it goes into the day's `Send Pack <date>` inbox card) and never cards a row dated more than 3 days past (tagged `[kanban:stale]`).
 
 ## 2. What "blocked" means
 
@@ -100,3 +114,29 @@ For "hold" or "cut": `hermes kanban archive <id>` with a comment, do not leave i
 ## 5. Reading the board for Deep
 
 "What is waiting on me" = `kanban_list(status="blocked")`, then present one decision card per task in the section 3 shape. Never paste a worker's full block paragraph; rewrite it as a decision card and add the rewrite as a comment on the card so the dashboard shows it too.
+
+## 6. Board-wide spawn failures: diagnose and repair the class, not the card
+
+Several cards dying at spawn with `git worktree add failed for <vault>/.worktrees/<id> ... fatal: invalid reference: HEAD` is one fault, not many. The vault is not a git repo and the nearest ancestor repo can have an unborn branch (zero commits), so no worktree command can ever succeed there. A card inherits its workspace kind from the board, so a whole board can be pointed at an impossible workspace while every card body looks fine.
+
+Diagnose in this order, in one batch, before touching anything:
+
+```bash
+sqlite3 -header ~/.hermes/kanban.db "select status,count(*) from tasks group by status"   # blast radius first
+<board dir>/board.json   # project_id: if set, open cards inherit project worktrees
+git -C <vault> rev-parse --git-dir --is-inside-work-tree; git -C <parent-repo> log -1 --oneline 2>&1
+node -e 'require("os").totalmem()'; grep -n max_in_progress ~/.hermes/config.yaml
+```
+
+The repair has three parts, in this order:
+
+1. **Fix the cause before releasing work.** Unscope the board from the project (edit `board.json` / the board setting) and set `kanban.max_in_progress` explicitly. `max_in_progress` is the only concurrency brake: when unset the dispatcher derives a default from `/proc/meminfo`, which does not exist on macOS, so it silently returns None and spawns every ready card at once (200+ workers, load in the hundreds). Write the config with `hermes config set kanban.max_in_progress 6`; the file patch tool refuses to write `config.yaml` on purpose.
+2. **Retarget open cards in one SQL pass, not card by card.** Back up `kanban.db` with a timestamped copy first, then set the open cards to a workspace kind that cannot fail (`workspace_kind='dir'`, `workspace_path` at the vault, `project_id` NULL) with a single UPDATE. Thousands of cards become repairable in one call.
+3. **Then unblock.** Cards blocked *only* by the spawn failure: clear the block, reset `consecutive_failures` to 0, leave the error text so the history stays readable. Cards blocked for a real reason stay blocked (their `consecutive_failures` stands: those are real crashes); only their workspace is fixed.
+
+Order matters, because unblocking releases the queue. A mass unblock on an uncapped dispatcher starts hundreds of workers in one tick, and mass-terminating them afterwards is gated on user consent and can time out silently. Set the cap first, unblock in small batches if the cap is new, and never report a kill you did not watch return 0.
+
+Pitfalls:
+- **Read the cap logic in the shipped source, not the config schema.** `resolve_max_in_progress` / `configured_max_in_progress` in `hermes_cli/kanban_db_dispatch.py` is the authority on what unset means on this machine.
+- **The breaker counts every requeue.** A killed or crashed worker is one strike against a limit of two, so a wholesale kill of a just-unblocked batch walks every card to the edge of the dispatcher's circuit breaker.
+- **Verify with counts, not intent.** Re-run the status GROUP BY and the worker process count (`pgrep -f 'hermes_cli.main -p .* --cli' | wc -l`) after each step; a repair that changed the DB but not the running processes is not done.
