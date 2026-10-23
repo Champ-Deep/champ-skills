@@ -15,6 +15,11 @@ Brand guidelines for Lake B2B, enabling creation of on-brand content and materia
 
 The name "LakeB2B" symbolizes depth (data reservoirs) and collaborative B2B partnerships.
 
+## Company Facts (use in copy)
+
+- Database size: 800M+ B2B contact database (Deep, 2026-10-23). Earlier calls quoted 660M to 737M decision makers; contacts and decision makers are different counts, so label which one you mean.
+- About 100+ logos onboarded a month. Strong in tech and healthcare. US about 75%, then Europe and APAC.
+
 ## Solution Verticals
 
 | Name | Tagline |
