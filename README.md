@@ -2,13 +2,13 @@
 
 Shared agent skills for the Champions Group teams. Published for collaborators to clone and drop into any Claude Code / Cursor / Gemini / agent-skill runtime.
 
-**183 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
+**189 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
 
 ## Categories
 
 | Category | Folder | What's inside | Count |
 |---|---|---|---|
-| Design & Creative | `design/skills/` | UI/UX, frontend design and design pro, decks, visuals, infographics, art | 24 |
+| Design & Creative | `design/skills/` | UI/UX, frontend design and design pro, decks, visuals, infographics, art | 30 |
 | Brand Guidelines | `design/brand-guidelines/` | Official brand systems for Champions Group companies, one skill per brand | 6 |
 | Branded Documents | `branded-docs/` | Print-ready branded PDF documents per company (LakeB2B, Champions Ranch) | 2 |
 | Marketing & Content | `marketing/` | Blog, campaign, SEO, copywriting, social, thought leadership | 25 |

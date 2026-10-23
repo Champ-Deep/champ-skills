@@ -18,6 +18,7 @@ Full design skills (each has a `SKILL.md` plus its own `reference/`, `scripts/`,
 
 - frontend-design, the default visual-artifact skill; design-system generator + impeccable design language
 - impeccable, out-of-distribution frontend craft, audit, polish, live-browser iteration
+- awwwards-inspiration (Awwwards MCP references and motion study), genjutsu (cast, paint, bunshin anti-slop pipeline), dembrandt-ux (45 UX skills plus live-site design extraction), responsive-viewport-qa, app-store-screenshots, brag-slim
 - power-design, ui-polish, design-trends, canvas-design, deck-doctor, prospect-deck, prospect-creative-campaign-builder, b2b-visuals, b2b-visuals-to-deck, client-to-12-growth-visuals, vk-b2b-visuals, visual-report-builder, visual-verify, web-artifacts-builder, algorithmic-art, page-refresh, notebooklm-slide-deck, pdf-to-html, figure-composer, figure-style, theme-factory, landing-page, frontend-handoff
 
 ## references
