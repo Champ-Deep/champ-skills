@@ -1,0 +1,2 @@
+# false positive: .sync/account-manifest.json holds 64-char sha256 content hashes (110 of 110 verified), not keys
+08d315748dc898dbb1cf080c94fb706f7180c993:.sync/account-manifest.json:generic-api-key:20
