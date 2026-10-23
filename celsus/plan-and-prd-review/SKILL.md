@@ -37,8 +37,35 @@ The most common defect is a plan whose definition of done cannot fail.
 Measure 8 percent, report it honestly, and the plan is satisfied. There is no
 threshold anywhere, so nothing was ever at risk.
 
-**The test: could you measure a bad number and still honestly report success?**
+The test: could you measure a bad number and still honestly report success?
 If yes, the plan is not falsifiable and needs thresholds before anything else.
+
+## Map the requirements to code you already own, first
+
+Before judging the plan's gaps, build the plan's own requirement list against the
+repos this team already owns. One row per requirement: the section, what exists
+(file, module, service, licence), and a state of exists, partial, or absent.
+Absent rows are the gap list; partial rows are the real work, because the plan
+usually assumes "exists" for something that imports but never runs.
+
+**Let an existing caller's code define the contract.** When two systems must interoperate and one side already has a client, that client is the spec: name its file paths in the plan as read-only, and have both sides implement against it rather than a freshly invented interface. It removes a whole class of guesswork from parallel builds.
+
+Check the absent ones against sibling repos too, not only the repo under review:
+a component written for another product often answers this plan's requirement
+outright.
+
+**When most requirements already exist, the headline verdict is a build decision,
+not a gap list.** "Do not start this; wire these three together and build only
+these seven items" changes what happens next more than any number of missing
+sections, and it is the finding the reader will act on. Lead with it, then give
+the gaps.
+
+Prove the mapping with a run, not a read: an existing module counts as existing
+only after it has been imported or executed. A file that reads like infrastructure
+can be a stub that reports success without doing the work, and the plan built on
+it is wrong in a way no amount of gap-filling will fix. The code claim, not the
+doc claim, is the one that survives.
+
 
 Every acceptance criterion is one of two kinds:
 
@@ -75,7 +102,8 @@ credible build sequence.
 | Feedback loop | What is collected, reviewed on what cadence, and which single number is trended |
 
 `references/plan-audit-checklist.md` has the per-section question list to walk
-a document against.
+a document against. It also carries the requirement-mapping table shape and the
+run-not-read proof standard for claiming a module already exists.
 
 **Report the cheap wins as arithmetic, not as features.** Cost modelling
 frequently inverts a standing assumption about what the constraint is, and that
@@ -138,6 +166,16 @@ numbers as **proposals until ruled**, not as decisions taken.
 - **Do not claim a gap is real without checking the sibling docs and the code.**
   Another PRD may already own the subsystem, and a doc section with no working
   code behind it is a docs fix, not a rewrite.
+- **Do not count a module as existing because it reads well.** A service file that
+  imports, looks complete and reports success without performing the work will be
+  planned around as infrastructure; run it once before the plan depends on it.
+- **Do not confuse a passing gate with a revivable codebase.** A branch may boot
+  clean while two subsystems both own the same table, a sequence write lands in
+  the wrong foreign key, or nothing creates the migration-version table the ORM
+  expects. Those are structural, so lifting a short list of donor files beats
+  reviving the tree. Fixing five runtime blockers is evidence the gate works, not
+  evidence the structure is sound; run the gate again after the fixes before you
+  recommend revive.
 - **Do not bury the ownership conflict in a list of improvements.** It changes
   what gets built next and belongs near the top.
 - **No em dashes in any vault write.** Verify on the whole file after splicing,

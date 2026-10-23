@@ -70,6 +70,21 @@ When the ask is to move a batch of tasks from another scheduler (Claude Desktop,
 
 Substitution-header contents, the no-agent script contract and the registry row format live in `references/migrating-schedules.md`.
 
+## Reconcile dedupe state before producing anything
+
+An agent job that picks "today's item" from a state file (a log, a queue, a manifest) must reconcile that state against the artifacts actually on disk before it creates anything new. State and disk drift apart whenever items are written outside the job: a batch pre-written into one file, a run that died between state append and file write, or a human who edited the file. Without the check the job re-produces an item the state says already exists, and the duplicate lands in a real destination (a card, a post, a send) before anyone notices.
+
+Assert both directions: a state row with no artifact means draft it from the batch source; an artifact with no state row means stop and report, do not overwrite. Put the assertion in the prompt as an explicit early step, because a fresh session sees only the prompt, never the drift it was written against.
+
+## Changing a rule across jobs that already exist
+
+When a standing rule (voice, formatting, addressing, delivery target) is wrong for several existing jobs, do not leave the old wording in place and add a note: each job's prompt is independent, so a stale sentence keeps firing until it is edited out.
+
+1. Write the rule once as a skill, then attach it with `--add-skill` rather than pasting the rule into every prompt.
+2. Edit each prompt in one batched pass, replacing the stale sentence (not appending a correction below it), via `hermes cron edit <job_id> --prompt "$(cat <scratch-file>)" --add-skill <skill>`. Write each long prompt to a scratch file first: quoting a multi-line prompt inline through the shell is where edits fail silently.
+3. Re-read the job records from disk and assert three things per job: the old sentence is gone, the skill is attached, the new rule is present. A zero exit code only proves the CLI accepted the edit.
+4. Never fire an agent job as a test run (see migration step 4); the first scheduled fire is the test.
+
 ## Related
 
 [[Skills MOC]]

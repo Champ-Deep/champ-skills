@@ -80,6 +80,12 @@ with sync_playwright() as p:
 ❌ **Don't** inspect the DOM before waiting for `networkidle` on dynamic apps
 ✅ **Do** wait for `page.wait_for_load_state('networkidle')` before inspection
 
+⚠️ **Exception: animated pages never go idle.** A page with a continuous canvas
+animation, globe, ticker, or polling loop keeps issuing requests, so `networkidle`
+times out even though the app is healthy. On those pages wait for `load` plus
+`page.wait_for_selector('<known element>')` and a short `wait_for_timeout` instead,
+and treat the timeout as a property of the page, not a failure of the app.
+
 ## Waiting without `eval`: respect the page's CSP
 
 `page.wait_for_function("...")` passes a **string**, which Chromium evaluates with

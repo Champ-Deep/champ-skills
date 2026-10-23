@@ -1,6 +1,13 @@
 ---
 name: "deependhq-site-ops"
-description: "Operate, diagnose and repair the deependhq.com nightly build-in-public publishing pipeline. MANDATORY TRIGGER for: \"the site is stale\", \"deependhq hasn't updated\", \"publish the site\", \"why is the journal stuck\", \"backfill the missing days\", \"the nightly job failed\", \"check the pipeline\", \"did the site publish\", any question about the daily note to journey entry to live site loop, or any report that a scheduled task is silently succeeding without producing output. Also use when adding fields to the journey entry schema or changing what the nightly authoring step writes."
+description: "Operate and repair the deependhq.com nightly build-in-public publishing pipeline: stale site, failed publish, backfill, journey-entry schema. Also: Worker secrets and bindings (references/cloudflare-secrets.md)."
+version: 1.1.0
+author: Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [deependhq, cloudflare, publishing, worker, secrets, pipeline]
+    related_skills: [deependhq-design-system, deependhq-bot, railway-deployment-ops]
 ---
 
 # deependhq.com Site Ops
@@ -13,7 +20,9 @@ A nightly scheduled task named `daily-note-recap` runs at 01:03 IST. Part A writ
 
 Repo worktree: `Efforts/Active/TheDeepEndHQ/deependhq-site/` inside the vault. **It is a worktree only. Never run a writing git command against its `.git` from a sandbox.** `publish.sh` clones fresh and rsyncs onto the clone, which is why it works from anywhere.
 
-The live refresh work happens in `/Users/deep/repos/deependhq-refresh` (branch `refresh/2026-10`), not the vault checkout, which has no commit history on `main`. Brand assets and the icon sprite rebuild through `references/brand-assets.md`.
+The live refresh work happens in `/Users/deep/repos/deependhq-refresh` (branch `refresh/2026-10`), not the vault checkout, which has no commit history on `main`. Brand assets and the icon sprite rebuild through the brand-assets recipe in the
+deependhq-site repo (look for `scripts/brand` or `og/` there); no copy exists in
+this skill yet, so read the repo rather than trusting a link here.
 
 ## Diagnose first, in this order
 
@@ -125,7 +134,7 @@ One rewrite permitted. If neither a metric nor an artifact can be extracted hone
 
 `arc_color`: green = building and shipping, blue = thinking and exploring, gold = a real outcome, money, something signed.
 
-## A publish that says PUBLISHED may not have deployed (2026-09-26)
+## A publish that says PUBLISHED may not have deployed
 
 Two separate failures looked like successful publishes. Check the live site, not
 the publish output, before believing a deploy landed.
@@ -168,7 +177,7 @@ of bug as the first naming matcher, where `pip` and `hospitali` matched
 "pipeline" and "hospitality". Both times the fix was to verify the premise, not
 to trust the green. When a gate passes unexpectedly, suspect the test.
 
-## One file per entity, or Google indexes one page for all of them (2026-10-01)
+## One file per entity, or Google indexes one page for all of them
 
 `post.html` was prerendered once with `search: ''` in the sandbox, so
 `params.get('slug')` was null at build time and `posts[0]` was baked into the
@@ -215,7 +224,7 @@ exist yet, redirect to the route that does. `scripts/link-check.mjs` fails the
 build on any link to a missing page, and runs after prerender because it reads
 the built HTML.
 
-## CSP blocked Cloudflare's own analytics beacon: resolved 2026-10-01
+## CSP blocked Cloudflare's own analytics beacon: resolved
 
 `static.cloudflareinsights.com` was missing from `script-src` and was refused on
 every page. It is now allowed, in both the `/showcase` branch and the plain
@@ -227,7 +236,7 @@ publish. Cloudflare Web Analytics is cookieless and does not set identifiers, so
 the claim stays true. Do not re-add a tracker that needs consent without
 revisiting that sentence.
 
-## A new page class must be added to four places, or it half-exists (2026-10-02)
+## A new page class must be added to four places, or it half-exists
 
 Adding `/privacy` needed all four on the same day. Missing any one of them
 produces a page that looks fine locally and fails in a different way:
@@ -280,7 +289,7 @@ module-scope `root` for the site directory. A second `const root` is a
 SyntaxError that kills the whole bundle, and it surfaces only as a browser-side
 exception. Name it `dhRoot`.
 
-## A property and a method with the same name blanked the whole site (2026-10-02)
+## A property and a method with the same name blanked the whole site
 
 The costliest bug in this repo's history, and the pattern to check first if the
 site ever returns 200 with a body of about sixteen bytes.
@@ -343,6 +352,15 @@ the tree got restored. If `prerender: FAILED ... ENOEXEC` appears again, check
 `file` first and delete any `*.linux.bak`. Note `workerd` has the same problem,
 which is why `wrangler` cannot run locally on this machine; the CF API is still
 reachable with curl if a token is exported.
+
+## Worker secrets, bindings and rows
+
+The full recipe (bulk secret set, key inventory, what fails closed when a key
+is missing, the `.dev.vars` / `.gitignore` traps) is in
+`references/cloudflare-secrets.md`. The one rule that saves the most time: run
+`npx wrangler secret bulk .dev.vars` from the repo instead of the dashboard, and
+never confuse a secret with a `wrangler.jsonc` binding or a D1 settings row,
+because the feature stays silently off until the third one exists.
 
 ## Known traps
 

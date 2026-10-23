@@ -14,7 +14,7 @@ metadata:
 
 Every email an agent drafts for Deep (team nudges, meeting recaps, follow-ups, inbox replies, intros) must read like he wrote it, be structured for a reader who skims, and be addressed so that pressing Send is the only step left. `ms365-email` owns the Outlook commands; this skill owns what the draft says and how it is laid out.
 
-Calibrated 22 Oct 2026 from his Sent Items, including a bot nudge he rewrote by hand before sending. The rewrite is the strongest evidence: he turned a clipped, numbered, order-style nudge into warm prose with a polite ask.
+Calibrated from his Sent Items. When this skill feels stale, re-derive it rather than guessing: find an earlier bot draft he rewrote before sending, diff the two, and turn each correction into a rule. That diff is the method; `email-inbox-triage` step 4 documents it. Editing this file in place is the update path, never an appended note.
 
 ## 1. Voice
 
@@ -70,7 +70,7 @@ Resolve every recipient before creating the draft, in this order, and stop at th
 
 If still unresolved, or two different people match the name: leave `toRecipients` empty, keep the subject clean, and list the draft under NEEDS YOU as `add To: <name>`. Outlook will not send a draft with no recipient, so the gap cannot misfire.
 
-Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subject. A self-addressed placeholder draft was sent to Deep's own inbox on 22 Oct with the real recipient never reached.
+Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subject: a self-addressed placeholder draft means the recipient was never resolved, so the intended person still has not been reached, yet Outlook will happily send it to Deep.
 
 ## 5. Before you save, check every draft
 
@@ -82,7 +82,7 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 
 ## Worked example (bot draft, then the fix)
 
-Bot draft: `Hi Ajay, Quick nudge so nothing slips at the end of the week. 1. Your own plan through the 30 Oct demo: due tonight, Thu 22 Oct. Send it tonight even if it is rough. If anything is blocking you, name it and I will unblock it. Reply here or ping me on Flock. Thanks, Deep`, addressed to Deep, subject `[FILL TO: Ajay] ...`.
+Bot draft: greeting, one clipped order, a single-item numbered list, a command to send tonight, sign-off glued to the last sentence, addressed to Deep with a `[FILL TO: Ajay]` subject.
 
 In Deep's voice, addressed to the intern's own mailbox:
 

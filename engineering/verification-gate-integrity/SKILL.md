@@ -49,6 +49,11 @@ success while the file is unchanged. Run edit and check scripts unpiped (or read
 pipeline exited 0, and confirm the write the way any edit is confirmed: grep the
 target file for the new value before reporting it applied.
 
+The same discipline applies to processes: stop a test server you started by its own
+PID or its background-job handle, never a broad `pkill -f <script name>`. The pattern
+matches every process with that name on the machine, so it takes down whatever else is
+running under it, and your own run reports success either way.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,

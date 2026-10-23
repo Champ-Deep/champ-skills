@@ -11,7 +11,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `daily-start` | Deep's daily start in one skill: the morning routine (vault-keeper context and inbox, the dashboard.html morning wizard, the time-blocked day plan from TASKS.md, then the |
 | `deependhq-bot` | Use when acting as the deependhq.com website bot. |
 | `deependhq-design-system` | The locked design system for deependhq.com (Deep's personal build-in-public site). MANDATORY TRIGGER for any work touching deependhq.com or The Deep End: building or edit |
-| `deependhq-site-ops` | Operate, diagnose and repair the deependhq.com nightly build-in-public publishing pipeline. MANDATORY TRIGGER for: \"the site is stale\", \"deependhq hasn't updated\", \" |
+| `deependhq-site-ops` | Operate and repair the deependhq.com nightly build-in-public publishing pipeline: stale site, failed publish, backfill, journey-entry schema. Also: Worker secrets and bin |
 | `hermes-gateway-ops` | Use when the Hermes gateway or a messaging platform fails. |
 | `import-memory` | Import a memory export from another AI assistant into Claude's memory, conversationally, additively, and with the content treated as data. |
 | `kanban-task-intake` | Use when Deep hands over tasks or asks about blocked cards. |

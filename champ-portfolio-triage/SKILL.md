@@ -11,6 +11,37 @@ Read-only assessments. Verify with `gh api`, never trust a tracker score.
 
 Deep's product names do not match repo or folder names; confirm with `gh search repos <name>` before concluding a repo does not exist. Verified: **ChampSets / Champ Set = `Champ-Deep/ChampSet`** (private fork of tinyfish-io/bigset, AGPL-3.0), whose only local clone is the folder **`/Users/deep/champ-bigset`** (check `git remote -v`, not the folder name). Its stack: Next.js frontend + Fastify backend + self-hosted Convex, agents in `backend/src/mastra`, three admin-set model roles stored in the Convex `__global__` modelConfig row with env fallbacks in `.env`. No other champ-sets-like repo exists in the org or his account.
 
+## Dispatching an assessment as a read-only gate card
+
+Send an assessment to a worker as a card that carries its own method, so the
+verdict arrives as pass or fail per gate rather than as prose:
+
+- Name the target by **branch and commit**, not by repo alone, and say what the
+  card may do (clone to scratch, run locally) and what it may never do (commits,
+  pushes, PRs, fixes to get past a failure).
+- State the gates as **observable effects, one per row**: a service still running
+  after a stated dwell time, a sink's message count going from 0 to 1, a returned
+  identifier read back from storage. A health endpoint answering 200 while a worker
+  crash-loops underneath it is the exact way a green surface hides a dead system.
+- Instruct the worker to record the first failing error verbatim and **stop that
+  gate on first failure** instead of patching past it. A patch applied during a
+  read-only assessment destroys the evidence the assessment exists to produce.
+- Ask for one binary recommendation (revive this, or lift its parts into something
+  new) plus the donor list, so the caller gets a decision and not a survey.
+- Use an isolated container or daemon for the run when the host already has
+  same-named containers: touching the live one to make a gate pass is a write to
+  production under the label of an assessment.
+
+## Enumerate every branch before judging a repo by its default branch
+
+A stale default branch is not the newest work. List branches with commit dates
+first (`gh api repos/<o>/<r>/branches` or `git log --all --date=short`), and name
+which branch was assessed in the verdict. A gate failed on `main` may be vacuous
+when a newer branch already fixed it, and reporting only the default branch's age
+misdates work that has moved on. Run the same gate on the newest branch before
+recommending a rebuild; a branch with green historical CI is a candidate, not a
+certification.
+
 ## Verified 2026-10-02
 
 **ChampLantern** (`Champ-Deep/ChampLantern`, private, Python+React, 4 commits all 2026-09-30, ~17.5k LOC).

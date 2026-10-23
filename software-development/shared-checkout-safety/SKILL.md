@@ -104,6 +104,20 @@ git worktree add /tmp/<name> <branch>
 
 Give every parallel lane its own scratch subdirectory for screenshots, scripts, logs and temporary databases. Never run wildcard cleanup in the shared scratch root: it can erase another lane's verification evidence even when git worktrees are isolated. Move or remove only files whose ownership is established.
 
+## Compound commands and approval gates
+
+A terminal call that pairs a process kill (`pkill`, `kill`) with a state-changing git
+operation (push, merge) can be rejected as unconsented in its entirety: the gate
+blocks the whole chain, so the push never runs and the only output is a timeout. Keep
+destructive process operations in their own terminal call, ahead of the git chain that
+carries the actual intent.
+
+Likewise, `git checkout <main-branch>` fails when another worktree holds that branch
+(`'main' is already used by worktree at ...`), and the failure aborts the rest of the
+chain. Push the release without switching: `git push origin <your-branch>:main` when
+fast-forward, or cut a temp release branch off `origin/main`, merge, verify
+`git diff <branch> HEAD` is empty, and `git push origin HEAD:main`.
+
 ## Reporting
 
 When you find a concurrent writer, report it as a finding in its own right:

@@ -5,9 +5,9 @@ description: "Use when tearing down a web product with the REA CLI."
 
 # REA web teardown
 
-REA (`npx -y rea-agents@latest`, repo NabilRFG12/Reverse-Engineer-anything) reverse engineers a web app from what its client ships. Use it when Deep says "recreate this product" for a SaaS: the public JS bundle of the logged-in portal usually leaks the route map, permission flags, and API shapes, which is a product map no marketing page gives you.
+REA (`npx -y rea-agents@latest`; GitHub mirrors exist under several owners, e.g. NabilRFG12/Reverse-Engineer-anything and morluto/rea — the npm package name is the stable handle, not the repo URL) reverse engineers a web app from what its client ships. Use it when Deep says "recreate this product" for a SaaS: the public JS bundle of the logged-in portal usually leaks the route map, permission flags, and API shapes, which is a product map no marketing page gives you.
 
-## Pipeline that works (v6.5.0)
+## Pipeline that works (v6.5.0, still clean at 6.7.0)
 
 ```bash
 source ~/.nvm/nvm.sh; mkdir -p ~/.hermes/cache/scratch/rea-<target> && cd $_
@@ -24,7 +24,9 @@ EOF
 npx -y rea-agents@latest capture-browser-scenario portal-scenario.json --format json --full-output > portal-capture-raw.json
 # 3. strip the npm warn line and the {ok,data} envelope: export-web-scripts wants the evidence object, not the envelope
 python3 -c "import json;t=open('portal-capture-raw.json').read();json.dump(json.loads(t[t.index('{'):])['data'],open('portal-evidence.json','w'))"
-# 4. export scripts into an ABSENT directory, then static analysis
+# 4. triage BEFORE exporting: what hosts does this page actually load?
+grep -oh 'https\?://[a-z0-9.-]*' portal-evidence.json | sort | uniq -c | sort -rn | head -30
+# 5. export scripts into an ABSENT directory, then static analysis
 npx -y rea-agents@latest export-web-scripts "$PWD/portal-evidence.json" "$PWD/portal-scripts" --format json --full-output > portal-export-raw.json
 npx -y rea-agents@latest analyze-javascript-application "$PWD/portal-scripts/files" --format json --full-output > portal-static.json
 ```
@@ -47,4 +49,6 @@ Unauthenticated captures only fetch the chunks the login page loads; `*.generate
 - A capture that reports `terminal status unavailable` can still hold a valid evidence envelope; check `dropped events` before trusting network counts.
 - `business.*` style subdomains often redirect to the marketing site; the capture then holds ad-tech, not product.
 - Pair REA with the vendor's help center. REA gives structure and names; the docs give behaviour (cadence, limits, process). The PRD needs both, tagged [REA] vs [DOC].
-- Copy the artifacts out of `~/.hermes/cache/scratch` into the vault effort folder; scratch is pruned after 24h.
+- **A capture whose only hosts are marketing/analytics third parties (Framer, GTM, cookie consent, session replay) and zero first-party product requests is a finding, not a failed capture**: it means the vendor no longer ships the capability on its own site, usually a pivot or discontinuation. Confirm with one web search on the vendor's current positioning, then stop widening the capture. The capability spec moves to dated docs and third-party reviews, tagged [DOC], and the kill decision itself becomes a market prior you must weigh in the recommendation.
+- Copy the scenarios and a distilled hosts-summary out of `~/.hermes/cache/scratch` into the vault effort folder; scratch is pruned after 24h. Raw captures run 1-3 MB each, keep them in scratch unless the writeup needs them.
+- When third-party reviews of the same product disagree on a number (pricing tiers, limits), quote both with attribution instead of picking one; the disagreement is signal.

@@ -13,12 +13,23 @@
      you use, in order, to the `allQ` array near the bottom of the <script>
      block. If a button's data-q isn't in that array, its score is silently
      ignored, this is the most common way this template breaks.
-  5. If one question is decisive (a gating question that should override an
-     otherwise-good total, like "does this answer reveal a dealbreaker"),
-     wire it into the verdict logic inside updateScore() the way the example
-     does with a placeholder gating check, otherwise delete that branch and
-     let the plain total/percentage thresholds decide the verdict.
-  6. Delete this comment block before saving the final file.
+  5. If one or more questions are decisive (gating questions that should override an
+     otherwise-good total, like "does this answer reveal a dealbreaker"), wire them
+     into the verdict logic inside updateScore() the way the example does. The example
+     uses an array of ids so ANY gate scoring low fails the call; with a single gate,
+     set gates to a one-element array. Delete that branch entirely if nothing gates
+     and let the plain total/percentage thresholds decide the verdict.
+  6. Verify before saving (the fill step is where this template silently breaks):
+       - grep the file for '{{' and for '}}' after filling: both must print 0,
+         an unfilled placeholder ships as literal text on screen.
+       - count data-q attributes and compare against allQ.length: mismatch means
+         some scores are silently dropped from the total.
+       - run the em dash check (see SKILL.md Step 4): HTML entity forms like
+         '&mdash;' and '+'&'+'ndash style entities are literal ASCII and pass a byte-level
+         grep while still rendering a dash on screen, so grep for 'mdash' and for
+         the en dash entity too.
+       - drive the verdict logic headlessly once (see SKILL.md Step 4), don't trust the math by eye.
+  7. Delete this comment block before saving the final file.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -155,7 +166,7 @@
 <header class="top">
   <div class="topbar">
     <div class="badge">{{COMPANY_OR_GROUP}}</div>
-    <h1>Interview Scorecard <span>&mdash; {{CANDIDATE_NAME}}, {{ROLE}}</span></h1>
+    <h1>Interview Scorecard: {{CANDIDATE_NAME}}, {{ROLE}}</h1>
     <div class="score-readout">
       <div class="score-pill"><span class="num" id="pillNum">0</span><span class="lbl">/ {{MAX_SCORE}}</span></div>
       <div class="verdict-chip" id="verdictChip">Not started</div>
@@ -211,7 +222,7 @@
       <div class="ans bad"><span class="lab">Red flag</span><p>{{WHAT_A_WEAK_OR_CONCERNING_ANSWER_SOUNDS_LIKE}}</p></div>
       <div class="scorerow"><span class="sl">Score</span><div class="dots" data-q="A1">
         <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
-      </div><span class="scl">1 weak &mdash; 5 exceptional</span></div>
+      </div><span class="scl">1 weak, 5 exceptional</span></div>
     </div>
 
   </section>
@@ -271,13 +282,13 @@
     let verdict = 'No recommendation yet';
     let chipVerdict = 'Not started';
     if (answered.length === allQ.length){
-      // OPTIONAL gating check: if one question is decisive (e.g. the must-ask
-      // that should override an otherwise-good total), reference its id here.
-      // Delete this block entirely if there's no single gating question.
-      const gatingId = 'A1'; // <-- set to the decisive question's id, or delete this branch
-      const gatingScore = scores[gatingId] || 0;
-      if (gatingScore <= 2){
-        verdict = 'No hire: fails the gating question';
+      // OPTIONAL gating check: if one or more questions are decisive (the
+      // must-asks that should override an otherwise-good total), list their ids
+      // here. ANY gate scoring 2 or less fails the call.
+      // Delete this block entirely if nothing gates.
+      const gates = ['A1']; // <-- set to the decisive question id(s)
+      if (gates.some(g => (scores[g] || 0) <= 2)){
+        verdict = 'No hire: fails a gating question';
         chipVerdict = 'No hire (gate fail)';
       } else if (pct >= 75){
         verdict = 'Strong yes: advance';

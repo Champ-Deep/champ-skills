@@ -14,8 +14,10 @@ The prep note is for reading beforehand and re-reading afterward, it's the narra
 ## Step 1: Gather what you have
 
 - If a resume or CV was attached (PDF, docx, or pasted text), read it fully. Don't skim, the details that matter most (a date overlap, a vague claim next to a specific one, a certification from a course mill versus a real credential) are easy to miss on a fast pass.
-- Note the role and company/team if given. If it's ambiguous, check the vault: `Atlas/Companies/`, `Atlas/Products/`, any existing job description, and prior notes in `Atlas/Hiring/` for the same or an adjacent role. Reaching 95% confidence on WHO this is for and WHAT seat it is matters more here than in most tasks, because a prep built against the wrong seat is actively misleading in the room.
+- Note the role and company/team if given. If it's ambiguous, check the vault: `Atlas/Companies/`, `Atlas/Products/`, any existing job description, and prior notes in `Atlas/Hiring/` for the same or an adjacent role. Reaching 95% confidence on WHO this is for and WHAT seat it is matters more here than in most tasks, because a prep built against the wrong seat is actively misleading in the room. If no job description exists anywhere, infer the seat from the team's actual products and say so explicitly in the note, naming which products the inference came from and telling the user to correct you if their version differs. An inferred seat that is flagged stays useful; an inferred seat that is stated as fact misleads the interviewer in the room.
 - Check the user's calendar if you have access, to confirm the meeting exists and get the time right. If you can't find it, say so plainly rather than assuming it's fine, a wrong meeting-time assumption in a prep doc is a bad look.
+- While you have the invite open, verify three things and report them: (a) does the invite title name the same role you were told this is, invites get reused across seats and a mismatch means nobody knows which seat this actually is; (b) does any attendee email match a contact on the resume, a mismatch is worth one line in the note; (c) does the entry actually carry a join link, calendar APIs often return a null online-meeting field even when the invite body has one, so check and tell the user where to find it instead of letting them discover a missing link at start time.
+- Check the candidate's public footprint where the resume claims one: a linked npm package, a GitHub profile, a portfolio. Verify existence and read what is really there, then write what you found into the note as a `Checked online` block. A verified public artifact (package published, repos pinned or absent) is far stronger evidence in the room than any resume bullet, and "1 weekly download" style facts are exactly what turns a "production use" claim into a fair question to ask.
 - Look for prior candidate reviews or scorecards in `Atlas/Hiring/` for context on how this team has evaluated similar roles before, and to keep scoring dimensions and tone consistent across candidates.
 
 ## Step 2: Understand what "good" looks like for this seat
@@ -43,8 +45,12 @@ tags: [hiring, prep]
 
 **Meeting:** <time/logistics, flag if you couldn't confirm it on calendar>
 
+**Meeting:** <time/logistics: invite title (flag if it names a different role), attendee emails, whether a join link exists and where to find it>
+
 ## Candidate snapshot
 <table: current role, tenure, prior roles, education, certifications, core domain, relevant technical/functional fluency>
+
+**What I checked online:** <verified public footprint: package published or not, repo profile, portfolio, plus what was absent. One or two lines>
 
 ## Why they're in the room
 <grounded fit analysis: what specifically about their background maps onto this seat's actual needs, referencing real project/product context, not generic "strong communicator" filler>
@@ -79,8 +85,21 @@ Start from `assets/scorecard-template.html` in this skill's directory. It has th
   - `good` / `bad` / `probe` boxes: what a strong answer, a red-flag answer, and a "push here" moment look like
   - a `scorerow` with 1 to 5 score buttons, `data-q` attribute matching a unique question ID
 - Update the JavaScript `allQ` array at the bottom to list every question ID you used, in the same order they appear. This array drives the running total, the progress bar, and the auto-verdict, if it's out of sync with the buttons on the page the scoring will silently break.
-- If one question is decisive (the equivalent of the "must-ask" that gates the whole hire), wire it into the verdict logic the same way the template does, so a low score on that question overrides an otherwise-good total. Not every scorecard needs this, only add it if there's a genuine gating question.
+- If one or more questions are decisive (the "must-ask"s that gate the whole hire), wire their IDs into the verdict logic the same way the template does, so a low score on any of them overrides an otherwise-good total. The template carries a `gates` array; with one gate, use a one-element array. Not every scorecard needs this, only add it if a question genuinely gates.
 - Save as `Atlas/Hiring/<Candidate Name> - <Role short> Interview Scorecard.html`.
+
+**Verify the scorecard before you hand it over.** Filling a multi-question template by hand is the failure-prone part: two independent breakages are invisible to the eye and to a static screenshot. (a) Grep the saved file for `{{` and `}}`, both must print 0, an unfilled placeholder ships as literal text. (b) Count `data-q` attributes and compare against `allQ.length`, a mismatch silently drops scores from the total. (c) Run the em dash check, this template historically shipped `—` entities that a byte-level grep counts as zero while the dash renders on screen. (d) Prove the verdict logic runs, not just that the page looks right: the buttons and the gate are JavaScript, and no screenshot exercises them. Headless Chrome in one shell loop, swapping an injected `<script>` before `</body>` per scenario, is enough and needs no browser tooling:
+
+```bash
+C="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"  # probe your own path
+mk(){ sed "s#</body>#<script>$1</script></body>#$F" > t.html;
+  "$C" --headless=new --disable-gpu --virtual-time-budget=2000 --dump-dom file://$PWD/t.html 2>/dev/null \
+    | grep -o 'id="dockVerdict">[^<]*'; }
+mk "document.querySelectorAll('.dots').forEach(d=>d.querySelector('[data-v=\"5\"]').click())"   # expect Strong yes
+mk "...click all 5s, then click a gate's data-v=2 button"                                        # expect No hire (gate fail)
+```
+
+Cover at least: all-high (advance), a gate scored 2 or low (gate fail), a middling total (borderline), and a low total with the gate cleared (capability gaps). That is four verdict paths, each a separate scenario, and they are the whole point of the file: a scorecard whose math you did not exercise is an unverified deliverable regardless of how it renders. Then shoot the page once and open the image (see Step 5 and the visual-verify gate) for layout, contrast and clipping.
 
 ## Step 5: Wrap up
 

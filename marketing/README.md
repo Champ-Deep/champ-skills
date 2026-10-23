@@ -16,6 +16,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `chatgpt-query-spy` | Reveal the exact web search queries ChatGPT runs behind any prompt (its fan-out sub-queries) by reading the conversation response in browser DevTools, then place that exa |
 | `compact-keywords` | Find compact keywords (short, warm, low difficulty buyer phrases) for SPAN, LakeB2B or any Champions Group site and turn each into a one-page brief routed to the right pa |
 | `content-dispatch` | Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, cr |
+| `deep-social-voice` | Use when drafting any social post as Deep (LinkedIn, X, Bluesky, Substack). His daily post formula, modeled on Nick Saraev and Nate Herk: bold hook, proof, tight list, on |
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
 | `lead-gen-playbook-builder` | Turns a one-line campaign idea into a complete, rep-ready lead-gen playbook: intake, personas, multi-channel cadence, exact pitches per channel, reply-handling flowcharts |
 | `nostalgia-angle-ads` | Turn a campaign theme into ad concepts by borrowing a world the buyer grew up with and mapping its objects to their data pain, then A/B test two looks per brand (the Lake |

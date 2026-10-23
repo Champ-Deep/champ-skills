@@ -34,6 +34,14 @@ comparison produces a plan built on what runs.
 Corollary: a **roadmap is not a feature.** When the user asks "what can we implement from
 X", check whether the item is shipped, in-progress, or aspirational before ranking it.
 
+Second corollary: **the product may no longer be the thing in the docs.** Vendors pivot and
+kill feature lines. Before building a parity list against a competitor's documented
+capability, verify they still sell it: one search on current positioning, or a network
+capture of their own site (pair with `rea-web-teardown`). If they discontinued it, the
+parity spec comes from dated docs and third-party reviews tagged [DOC], and their decision
+to walk away from a category they defined is the strongest market prior you have; it must
+appear in the recommendation, not as a footnote.
+
 ## Phase 1: own ground truth first, before delegating
 
 Do not open with a fan-out. Establish the baseline yourself, because you need it to judge
@@ -114,7 +122,12 @@ deciding what to do this week.
    code and no cell-level diffing, which was the user's single best feature.
 2. **Where the competitor is weak, so the user does not chase it.** Their dead code and
    broken tools are as useful to you as their good ideas.
-3. **Open questions only the user can answer.** Name the specific decision and why code
+3. **A parity map when the comparison is product against product.** One table:
+   capability / ours (with file:line) / state (exists, partial, absent). End with the
+   count and where the gaps concentrate, e.g. "9 exist or partial on the data side, 7
+   absent, all on the render side: it has their brain and none of their hands." The count
+   turns a feature list into a verdict.
+4. **Open questions only the user can answer.** Name the specific decision and why code
    cannot settle it. When a prompt legend and a validator disagree on a scale, do not infer
    the intent and proceed: write it up as a decision they own, because a scoring change
    built on a guess is worse than no change.

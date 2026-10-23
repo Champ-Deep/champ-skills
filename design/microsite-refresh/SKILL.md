@@ -1,6 +1,13 @@
 ---
 name: "microsite-refresh"
 description: "Use when refreshing a site via the microsite-refresh plugin."
+version: 1.1.0
+author: Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [microsite, refresh, plugin, templates, gates]
+    related_skills: [visual-verify, no-ai-slop, frontend-design-pro]
 ---
 
 # Microsite Refresh
@@ -25,6 +32,24 @@ Work folder per site, beside the site's own source: one `build/` folder holding 
 ## Corporate and portfolio motion template
 
 For a corporate group or product-suite homepage, use the opt-in `skills/venture-story/SKILL.md` route when that sibling is present in the plugin checkout. Its separate JSON contract represents ecosystems, ventures and attributed proof. Do not force corporate content through `build_site.py`, which requires a list catalog and verification offer. Keep the default verify-skin unchanged. Inspect the live reference's scroll behavior before borrowing its design language; static palette extraction does not capture scroll craft. Treat preview noindex policies separately from production crawler gates, and never report an isolated template as installed or deployed.
+
+## Adding a new opt-in skin
+
+A new visual direction (brutalist, editorial, terminal) ships as a sibling skill of `refresh-site` in the plugin checkout, never as a branch of `refresh-site` itself. Copy the `venture-story` shape: `SKILL.md` (when to use it and its JSON contract), `DESIGN.md`, `template.html` + `styles.css` + `motion.js`, a `build.py` with `tests/`, and `THIRD_PARTY.md` naming every vendored asset's licence. Bump `.claude-plugin/plugin.json` version and description in the same commit, or the plugin advertises a skill its checkout does not contain. Ship one worked `examples/` site and a build test that renders it, so the template is provably runnable rather than a described intention.
+
+The dark palette of an existing site is often declared untouchable while its light mode is open for change: scope the skin's tokens to the light branch only and prove both themes still render (both widths, both schemes) before reporting it applied.
+
+## Paid-campaign landing pages
+
+A single-offer page behind an ad click routes to the plugin's `skills/campaign-landing/SKILL.md`: one headline set per ad group, one four-field form, `site.json` driving a tokenized `template.html` through `build.py`. It is a sibling of `refresh-site`, not a replacement: refresh-site needs a list catalog and a verification offer, campaign-landing needs neither.
+
+Three section shapes to build the right way from the start, because each has already been rejected once:
+
+- **A slider that crops one of two data lists is a curtain, not a comparison.** Every position of the drag shows the same numbers with half of them hidden, so the visitor never compares anything and the control reads as decoration. When the underlying facts are counts, shares and ratios, put them on screen simultaneously: size the items as areas (a treemap whose region widths follow each side's total, tiles shaded by size), then show count, share of book, rank and, on hovering a rival, the ratio, in a strip beside the map. Interaction may preview or pin; it must never be the only route to a number.
+- **An FAQ or objections block ships one visual per answer, not five paragraphs.** Each answer gets a small graphic that states it (two openers side by side, sources flowing into one record, a notice-window timeline, a stamped sample, role chips), with the copy underneath explaining it. A text-only FAQ on a paid page reads as a wall and gets skimmed past.
+- **Absolutely positioned data tiles need an overlap probe, not just an area sum.** Border-box means a tile shorter than its own padding still renders at padding height, so region areas can sum to 1.0 while two tiles overlap by a couple of pixels. Zero the padding on tiles too small to label, and probe pairwise rect intersection alongside the sums.
+
+When a hand-built page is converted into a tokenized template, prove the conversion before shipping: build from the template and diff the output against the known-good artifact, normalizing only the attributes the tokens legitimately change (data labels, derived rows). Every other byte must match. After that, the template's build tests and build-time validators (dash guard, count reconciliation against stated totals, HTTPS-only URLs, escaping) become the standing gates, so copy edits land in `site.json` and never in the built HTML.
 
 ## Gate order, always
 

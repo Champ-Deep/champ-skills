@@ -28,13 +28,14 @@ Always read the playbook, the corpus assessment, and the relevant master before 
 1. Mutual master Clause 12.3 survival list cites "14 (Remedies)" but 14 is Publicity and 16 is Remedies. Correct survival list: Clauses 5, 6, 9, 10, 11, 13, 14, 16.
 2. Database master has NO exclusions clause and no Affiliate definition. Import both from the Mutual master (4-part exclusions + no-residuals).
 3. Both masters' Affiliate lists omit the real estate and club brands. Add: InfraTech, Aventura, Champions Ranch, Beach Cities, Champions Club, and "any special purpose vehicle promoted or controlled by" the contracting entity.
-4. Never leave internal pre-execution checklists inside a sendable .docx. Checklists live in the vault assessment note only.
+4. Never leave internal-only text inside a sendable .docx: pre-execution checklists, how-to blocks, "Note N" guidance, master-version footers, and Annexure "Use when/Use where ... Examples: <client names>" lines. The Examples lines name other clients, so a third party receiving them learns who we work with, which breaches those clients' own confidence. Strip every one; that guidance lives in the playbook and vault notes only. Module names and their on/off state stay.
 5. Give every Schedule 1 row a stated default so an unfilled row never leaves forum or modules undetermined.
 
 ## Workflow
 
 ### Step 0: Intake (one AskUserQuestion round max; skip what context answers)
 Determine: counterparty legal entity + jurisdiction, purpose (pull the client note in `Atlas/Clients/` first), whether records/data move and in which direction, which Champions companies and properties are involved, whether physical site access happens, dates/terms already agreed.
+Identify the counterparty by searching first (`Atlas/Clients/`, Outlook, Wispr, Notion), not by asking: if no source names the entity, draft anyway on `[CONFIRM: ...]` placeholders and hand the user a numbered confirm list. An unknown counterparty stalls nothing, and is never guessed.
 
 ### Step 1: Pick the document(s)
 
@@ -93,7 +94,7 @@ Base: `Data_Security_NDA_Marketing_Pilot.docx` control set. Add: guest/member pr
 
 | Term | Champions position |
 |---|---|
-| Governing law / venue | India / exclusive jurisdiction Bengaluru (arbitration optional). Never cede venue by default (Moneybee ceded Mumbai, ZebPay ceded Hyderabad; both were mistakes). |
+| Governing law / venue | India / exclusive jurisdiction Bengaluru (arbitration optional). Never cede venue by default (Moneybee ceded Mumbai, ZebPay ceded Hyderabad; both were mistakes). Counterparty outside India: prefer arbitration seated Bengaluru over court jurisdiction, because an award enforces abroad under the New York Convention while an Indian court judgment often will not; a foreign seat is still ceding venue. Counsel confirms the seat. |
 | Term | 2 years |
 | Survival | 3-5 years **from termination** (never "from disclosure"); trade secrets and Personal Data perpetual |
 | Non-circumvention | 24 months where purpose involves referral, introductions, revenue share, brokers, or capital sourcing. With fee/commission recovery and 10-day prior-relationship notice. Never disclaim NC/NS against a vendor touching lead flow (the Arkentech mistake). |
@@ -122,11 +123,13 @@ Base: `Data_Security_NDA_Marketing_Pilot.docx` control set. Add: guest/member pr
 ### Step 6: Deliverables
 - **Drafting:** .docx via the docx skill, built from the relevant master with Schedule 1/2 completed, modules toggled, and the Known Bugs fixes applied. Filename: `NDA_Champions_x_{Counterparty}_{Mutual|Database|RE|Club|Tour|Staff}_{YYYY-MM-DD}.docx`. Save to `Atlas/Clients/{client}/`; Legal folder copies stay canonical.
 - **Reviewing:** vault note `Atlas/Context Docs/Legal/NDA Assessment - {Counterparty} {YYYY-MM-DD}.md`: Verdict up top (patch vs reissue-on-master), what the draft gets right, defects table in priority order, actions checklist, wikilinks throughout.
+- Where masters were modified, the accompanying note carries a deviations-from-master table (change, why, what counsel must review). Counsel reads that table, not the whole draft.
 - Unresolved facts stay as visible `[CONFIRM: ...]` placeholders plus a closing "Items to confirm before sending" checklist, delivered SEPARATELY from the sendable file. Never invent entity names, addresses, dates, or terms.
+- **Send gate, run on the sendable file itself** (the note never gets this pass): extracted text must show no em dashes, no other client's name, and no `Examples:` / `Note N` / how-to / version-footer remnants; the count of `[CONFIRM` markers must equal the count of highlighted runs, so every placeholder is highlighted and nothing else is; then `docx_validate.py` plus a visual first-page check. Nothing leaves until all of it passes, and if no renderer exists say in your reply that only the first page was seen.
 - End every deliverable: "Commercial drafting for internal use, not legal advice." Recommend a counsel pass on modified clauses; India s.27 restraint-of-trade risk on NC/methodology bars is specifically flagged for counsel.
 
 ## Clause library (harvest sources when drafting)
-Seeding + reversed burden of proof (EGS 6.3 / DB master 9.2) · NC fee recovery + prior-relationship notice (EGS 10.3-10.4) · deal-team ring-fence + agency consent gate + disclosure log (EGS 4.2-4.3) · residuals exclusion + no-combination (EGS/Gorisco 7) · AI outputs deemed CI (EGS 23) · LD formula + no-notice audit (DB master 13.2/9.3) · individual personnel acknowledgment table (Cirralogix vendor template) · LinkedIn Profile access/ownership/platform-compliance trio (LakeB2B archive; the only part of that form to keep) · data ownership absent SOW (Arkentech 4b) · liability-cap disapplication for confidentiality/data breaches (Moneybee 11 / Gorisco 16.2).
+Seeding + reversed burden of proof (EGS 6.3 / DB master 9.2) · NC fee recovery + prior-relationship notice (EGS 10.3-10.4) · deal-team ring-fence + agency consent gate + disclosure log (EGS 4.2-4.3) · residuals exclusion + no-combination (EGS/Gorisco 7) · AI outputs deemed CI (EGS 23) · LD formula + no-notice audit (DB master 13.2/9.3) · individual personnel acknowledgment table (Cirralogix vendor template) · LinkedIn Profile access/ownership/platform-compliance trio (LakeB2B archive; the only part of that form to keep) · data ownership absent SOW (Arkentech 4b) · liability-cap disapplication for confidentiality/data breaches (Moneybee 11 / Gorisco 16.2) · lead handoff to a partner: outcome-disclosure (any deal or payment from an introduced lead reported within N business days) plus a lead-status register the partner must update on a fixed cadence, both written as Database NDA obligations, which is what makes a per-lead fee or revenue share enforceable without CRM access.
 
 ## Style rules
 - No em-dashes anywhere.

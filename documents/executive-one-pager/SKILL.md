@@ -250,7 +250,7 @@ Then look once: open the 390 light, 390 dark, and 1440 full screenshots with the
 1. **Five-second test.** From the 1440 top alone, write one sentence: what the page recommends and what it asks. If you cannot, fix the verdict.
 2. **Visual ratio.** Every section's visual survives the removal test.
 3. **Claim audit.** Counts in the headline and lead match what renders (rule 6).
-4. **Crowding.** Labels on bars do not collide at 390; key-date text does not wrap awkwardly at 1440.
+4. **Crowding.** Labels on bars do not collide at 390; key-date text does not wrap awkwardly at 1440. On a date rail with tick labels, probe it rather than eyeball it: give alternating labels a class so they sit on two rows (the .up/.dn pattern), anchor the first label flush left and the last flush right so a centered label does not hang outside the container, then compare label rects pairwise across widths (including the narrowest desktop width where the two grid columns collapse) and reject any pair sharing a row whose boxes intersect. The rail is the one visual whose labels sit at arbitrary x positions, so it is the only place an overlap probe finds what the eye misses.
 5. **The Paddle bar.** Would Paddle ship this? Numbers sit on hairlines with mono labels, every section has a real visual, every button and row responds to hover and focus. If a section is a text box with a number in it, add its visual or cut it.
 6. **Width.** At 1440 the content spans the page with a gutter, not a narrow column.
 
@@ -259,6 +259,7 @@ Make one pass of fixes, re-run the script, and publish. In Presenter mode, count
 ## Phase 7: Deliver
 
 1. Publish with the Artifact tool. The `<title>` is a short name specific to the subject (the reader and occasion), stable across redeploys; a one-sentence `description`; a favicon on first publish. Updating an existing page: pass its URL so the link stays the same.
+1a. **When the deliverable is a file rather than a published page** (Deep asked for "a quick page on X", or there is no Artifact publisher in this session), build a self-contained HTML file and hand it over as a `MEDIA:/absolute/path` card. Two build rules make that path work: no external requests at all, so system fonts in the stack instead of a fonts `<link>` (offline_check then proves the file opens from disk), and any brand logo with light and dark variants carried as base64 data URIs toggled by the dark-mode media query rather than as relative file paths, which break the moment the file moves. Report the same measured heights as for a published page.
 2. Save a copy in the vault beside the counterpart's materials: `Atlas/Clients/{name}/` for a client, `Atlas/Context Docs/{entity}/` for a partnership, `Atlas/Meetings/{date} {topic}/` for internal prep, `Calendar/Meetings/` for readouts. File name carries the date and the reader. Presenter pages are marked internal in the name and are not for the external counterpart. If the recipient has had deliverability trouble with the sender, recommend the hosted link or a chat app over an email attachment.
 3. The delivery message is two lines: what the page asks of the reader, and the measured heights at 1440 and 390 with the fold result. Deep reads about a third of any output.
 
