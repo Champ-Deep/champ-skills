@@ -1,7 +1,7 @@
 ---
 name: content-dispatch
 description: >
-  Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, creates a vault insight note with next steps, and plants reminders in the daily note Tasks section plus a Content Queue for the morning routine. MANDATORY TRIGGER when the message is primarily a URL (bare link, "check this out [link]", "thoughts on this [link]"). Also trigger on "dispatch this", "apply this to my business", "what can I learn from this". Do NOT trigger when the link is part of a larger request like "write a blog about this" or "summarize for my team". This is the "paste link, get business intel + vault note + task reminders" workflow.
+  Activates when a user pastes a bare URL (YouTube, blog, podcast, Twitter/X thread) with little or no text. Extracts content, analyzes business relevance via CLAUDE.md, creates a vault insight note with next steps, and plants reminders in the daily note Tasks section plus a Content Queue for the morning routine. MANDATORY TRIGGER when the message is primarily a URL (bare link, "check this out [link]", "thoughts on this [link]"). Also trigger on "dispatch this", "apply this to my business", "what can I learn from this". Also trigger on any YouTube or repo-roundup link Deep sends with a "use case or save" ask (see the Video and Repo Links section). Do NOT trigger when the link is part of a larger request like "write a blog about this" or "summarize for my team". This is the "paste link, get business intel + vault note + task reminders" workflow.
 ---
 
 # Content Dispatch
@@ -197,6 +197,21 @@ Append a new row to the Pending table:
 ```
 
 When an item is acted on (the user completes the task or explicitly skips it), update its status to `done` or `skipped`. Vault-keeper can clean up old done/skipped items during its regular triage.
+
+## Video and Repo Links: Use Now or Save (standing rule from Deep, 2026-10-23)
+
+For YouTube, tool and repo links, the output is a decision, not a summary. For every tool or idea in the link, put it in one of three buckets:
+
+1. **Use now**: name the current project (check the live chat-watch list and TASKS.md, not memory) and the first concrete step.
+2. **Save**: one line plus the trigger that should bring it back ("when we build a newsletter channel for Harbinger").
+3. **Skip**: one line why, usually "we already have X".
+
+Rules:
+- Check the repo before filing: `gh api repos/<owner>/<repo>` for license, last push, archived. Flag AGPL and missing licenses. Claims from the video are labelled as claims, not tested.
+- Check the existing skills first and say when a tool duplicates one (for example `rea-web-teardown`, `opencode`, `computer-use`).
+- Save entries to `Atlas/Research/Tool Radar.md` (one dated section per video, no wikilinks). Do not create one vault note per video for roundups.
+- If the link teaches a repeatable method (a security routine, a workflow), build or extend a skill and push it to champ-skills. Say which.
+- Reply format: use-now first, then save, then skip, in under 15 lines. Decision first.
 
 ## How This Connects to the Morning Routine
 
