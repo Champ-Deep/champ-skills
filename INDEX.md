@@ -191,7 +191,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `model-api-capability-verification` | Personal Ops (champ-science plugin) | Use before claiming a model API can or cannot do something. |
 | `release-integration-engineering` | Personal Ops (champ-science plugin) | Use when consolidating branches into a gated release. |
 | `schedule` | Personal Ops (champ-science plugin) | Create or migrate scheduled tasks in Hermes cron. |
-| `skill-repo-sync` | Personal Ops (champ-science plugin) | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
+| `skill-repo-sync` | Personal Ops (champ-science plugin) | Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo. |
 | `sprint-mode` | Personal Ops (champ-science plugin) | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
 | `telegram-brief` | Personal Ops (champ-science plugin) | Use when a run's final reply goes to Deep on Telegram. |
 | `vault-keeper` | Personal Ops (champ-science plugin) | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
@@ -450,7 +450,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
 | `release-integration-engineering` | Use when consolidating branches into a gated release. |
 | `schedule` | Create or migrate scheduled tasks in Hermes cron. |
-| `skill-repo-sync` | Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same |
+| `skill-repo-sync` | Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo. |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
 | `telegram-brief` | Use when a run's final reply goes to Deep on Telegram. |
 | `vault-keeper` | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |

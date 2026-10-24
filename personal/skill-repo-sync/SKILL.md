@@ -1,6 +1,13 @@
 ---
 name: "skill-repo-sync"
-description: "Use whenever a Claude/Cowork skill is created, updated, or finalized for Champ, to sync it into his shared champ-skills GitHub repo so every agent and team reads the same library."
+description: "Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo."
+version: 1.1.0
+author: Champ
+license: MIT
+metadata:
+  hermes:
+    tags: [skills, sync, github, library]
+    related_skills: [skill-creator, customize]
 ---
 
 # Skill Repo Sync
@@ -15,10 +22,12 @@ Champ runs one shared skill library for every agent and team: the GitHub repo `C
 
 ## Steps
 
+Taking skills from another repo or another agent's library into this one has its own procedure: see `references/skill-vendoring.md` (license check, class-izing the structure, provenance, index rebuild).
+
 1. Identify the skill's category from the repo's existing structure (see `README.md` and `INDEX.md` at the repo root). Category folders: `design/skills`, `design/brand-guidelines`, `branded-docs`, `marketing`, `sales`, `documents`, `engineering`, `productivity`, `research`, `science`, `personal`, `celsus`, `champ-suite`, `creative`, `security`, `software-development`, `video-clip-editing`, `autonomous-ai-agents`. Several finished skills also sit loose at the repo root (`adapter-seam-extension`, `first-ci-workflow`, `fleet-status-dashboard`), so root is a valid home for a standalone skill with no natural category. There is no `vault` folder: it was renamed to `personal`, so never recreate it. Match by what the skill actually does, not its name. Ask Champ once only if genuinely ambiguous.
 2. Get access to `~/champ-skills` on his Mac via the remote-devices bridge (`device_request_folder_access` if this session has not already connected it). In a session that already has a direct shell on the Mac (Hermes desktop), skip the bridge entirely and run the copy and git steps straight in the terminal: the bridge routing is only for sessions that have no local shell.
 3. The account's live skill files and Champ's Mac are different machines, so route the copy through this container: copy the skill's current files (`SKILL.md` plus any `references/`, `scripts/`, `assets/`, `examples/`) into `/mnt/user-data/outputs/<category-path>/<skill-name>/...`, mirroring the target repo layout exactly, then use `device_commit_files` to write each one to `/Users/deep/champ-skills/<same-path>` (batch up to 50 files per call).
-4. Update `INDEX.md`: add or refresh the skill's row in its category table, using a one-line description pulled from the skill's frontmatter `description`, truncated to match the file's existing row length exactly (currently a hard 170 characters, verify against neighboring rows rather than assuming). Bump the total skill count in the header.
+4. Refresh `INDEX.md`: after a bulk add, run `python3 scripts/build_index.py` from the repo root (it regenerates every category table and the counts). For a single skill, edit its row by hand: one-line description pulled from the skill's frontmatter `description`, truncated to match the file's existing row length exactly (currently a hard 170 characters, verify against neighboring rows rather than assuming), and bump the total skill count in the header.
 5. Update `README.md`: bump the total count and the affected category's count in its table.
 6. In `~/champ-skills`: run `git status` FIRST, before any add. This clone is the live skills path that several agents edit, so the tree routinely carries other sessions' uncommitted work alongside yours. If the only changes are the files this sync just wrote, `git add -A` is fine. If anything else is dirty, stage only the explicit paths this change wrote and list the untouched dirty paths in your report; a broad add sweeps unrelated work into your commit and makes it unreviewable. Then `git commit -m "<what was added or updated>"`, then `git push`.
 7. The sandboxed device shell has no access to Champ's personal SSH keys or agent, so `git push` can fail with a publickey error even though the commit itself succeeds. When that happens: do not treat it as done. Tell Champ plainly that the commit is made and clean but still local, give him the exact command to run himself (`cd ~/champ-skills && git push`), and mention that a dedicated deploy key for this repo (added once in GitHub's repo settings, kept inside the mounted `~/champ-skills` folder, never typed into any web form as a secret) would remove this manual step going forward, if he wants it set up.

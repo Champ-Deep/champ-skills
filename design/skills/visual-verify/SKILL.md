@@ -47,7 +47,7 @@ Only install into a fresh environment if no interpreter probes clean. Re-running
 install against the PATH python while a working one already exists elsewhere just
 repeats the same failure with a different interpreter.
 
-In sandboxes where Chromium is preinstalled, it is already on the path and no download is needed. When neither script's browser works, the one-shot fallback that still lets you LOOK is a headless Chrome screenshot fed to a vision call: `"<chrome>" --headless=new --disable-gpu --hide-scrollbars --window-size=1200,<full height> --screenshot=out.png <file>` then `vision_analyze` on the PNG. Size the window tall enough to cover the whole page, or say plainly which sections the shot did not reach: a partial screenshot reported as a full check is the same false pass the gate exists to prevent. If a page must be served rather than opened as a file, start the static server as a background process in one call and run the audit or shoot script in a separate call: chaining `python3 -m http.server` and the Playwright script in one foreground command gets rejected as a long-lived process and runs neither. If a browser genuinely cannot be obtained, say so plainly, fall back to the manual checklist in `reference/critique-protocol.md`, and label the output **unverified**. Never silently skip the gate and imply it passed.
+In sandboxes where Chromium is preinstalled, it is already on the path and no download is needed. When neither script's browser works, the one-shot fallback that still lets you LOOK is a headless Chrome screenshot fed to a vision call: `"<chrome>" --headless=new --disable-gpu --hide-scrollbars --window-size=1200,<full height> --virtual-time-budget=10000 --screenshot=out.png <file>` then `vision_analyze` on the PNG. Keep `--virtual-time-budget` in that line: without it the shutter can fire before webfonts and images finish loading, and the look pass then judges fallback typefaces and empty boxes instead of the build. Size the window tall enough to cover the whole page, or say plainly which sections the shot did not reach: a partial screenshot reported as a full check is the same false pass the gate exists to prevent. If a page must be served rather than opened as a file, start the static server as a background process in one call and run the audit or shoot script in a separate call: chaining `python3 -m http.server` and the Playwright script in one foreground command gets rejected as a long-lived process and runs neither. If a browser genuinely cannot be obtained, say so plainly, fall back to the manual checklist in `reference/critique-protocol.md`, and label the output **unverified**. Never silently skip the gate and imply it passed.
 
 ---
 
@@ -125,6 +125,20 @@ report. Geometric claims from a downsampled full-page capture are the weak case;
 a colour or identity claim is weaker still, because the model reads the design
 expectation, not the pixel. Treating the critique as fact spends a fix round on a
 defect that was never there.
+
+**A composite of image assets gets a fabricated punch list, and the single asset is
+the only probe.** When the deliverable is a set of exported PNGs (a profile grid, a
+contact sheet, an ad tile set) there is no DOM to measure, so an open "critique this
+as an art director" prompt run over the composite invents per-asset defects: overlay
+text reported illegible on every tile when each tile read alone is legible, subjects
+reported cropped out of frames that contain them, artefacts blamed on photos the
+prompt never resolved. Treat that critique as a hypothesis list and settle each claim
+by opening the one asset at full size and asking a narrow literal question: what text
+is present exactly, what sits directly behind it, does the frame cut anything. Keep
+only what the per-asset read confirms, report which claims it disproved, and open
+every type tile plus a sample of the photo tiles rather than judging the set from the
+grid shot. A literal question is answerable from pixels; an evaluative one invites
+the model to supply the answer.
 
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body). Real luminance maths in about ten lines of Python settles whether the FAIL is the checker or the page. If it passes by hand, do not desaturate the design; change the element's ground to something a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or record it as a known checker limitation in the report, naming the measured ratios. Report FAILs you leave standing as measured passes, never as ignored.
 

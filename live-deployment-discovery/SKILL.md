@@ -106,6 +106,14 @@ still running the last successful one, and fixing the build must come first.
    those three survive a request. When a user asks for an edge platform, say
    plainly which half cannot move, then offer the split that works. Static
    frontend on the edge, stateful API where it can hold a volume.
+4b. **Probe the serving stack before writing any build or output spec for a
+   replacement site.** `curl -sIL <domain>` reveals the runtime (Plesk/nginx with
+   `X-Powered-By: PHP` and no Node means the host only serves files), so the
+   deliverable becomes a self-contained static folder plus a deploy doc rather
+   than a framework project the host cannot build. The same probe shows redirects
+   and the real apex (`bake.fit` 301s to `www.bake.fit`), which decides which
+   hostname the deploy doc targets. Specifying the stack first and probing later
+   produces a repo the live host cannot run.
 5. **Report credentials as a presence table, never as values.** Show which vars
    are set, which are missing, and what each missing one blocks.
 
