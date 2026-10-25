@@ -81,8 +81,14 @@ number is reported as a bad phone number and not masked by a missing key.
 ChampVoice is Deep's Dograh fork; every provider decision in it follows these
 unless he says otherwise in the moment:
 
-- **No ElevenLabs anywhere in the ChampVoice stack**, including as a fallback.
-  Explicit standing direction, not a cost call.
+- **Voice runs on our own models first** (Speaches: Whisper STT + Kokoro TTS, a
+  first-class Dograh provider). ElevenLabs is allowed only as the BYOK fallback when
+  the self-hosted path is down. Deep reversed the earlier blanket ban on 2026-10-25.
+- **Numbers run on our own trunk first** (IP Momentum via Asterisk ARI, stack in
+  `deploy/voice-core/`). Twilio, Exotel and Telnyx are the fallbacks, added from the UI.
+- **The voice core cannot live in Cloudflare Containers**: SIP and RTP need UDP ingress,
+  which Containers do not offer. Own server behind Cloudflare Tunnel; Cloudflare holds
+  the UI, webhooks and the ChampBeam link loop (`champvoice-edge` Worker).
 - **Indian voices come from Sarvam** (Bulbul v2/v3, named voices like `anushka`,
   `hitesh`, `vidya`); keep its registry entries and BYOK path working.
 - **Multiple providers must be addable from the frontend, for numbers AND for

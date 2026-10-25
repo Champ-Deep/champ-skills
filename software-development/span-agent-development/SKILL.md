@@ -77,6 +77,15 @@ Deep's reference is the Harbinger signal globe (live at https://champharbinger-p
 
 - Playwright selectors must disambiguate canvases: once the page has more than one `<canvas>` (the search orb plus the globe), `canvas` resolves to whichever comes first in DOM order and a focus or keyboard test silently drives the wrong element. Target `canvas[tabindex]` for the globe and assert the caption text changed after focusing, not just that focus moved.
 
+## Live progress and the feedback factory
+
+- `/api/progress?id=` streams the agent trace as server-sent events; the browser picks the id and sends it in the `/api/ask` body. `harness/progress.py` turns each trace entry into one line in the user's words. Publish a start line before each tool and model call (`_Trace.started`) or the user sees nothing for the whole model call. The tray gives every line 900 ms minimum on screen, because tool results and the next start arrive in one flush.
+- `ThinkingTray.tsx` is the follow-up wait state; the home orb is the first question's. Keep both: the orb is the hero moment, the tray is the Claude Code feel. EventSource cannot send `x-span-token`, so the stream uses `fetch` + reader.
+- `/api/feedback` stores was-this-clear ratings in `answer_feedback` (same SQLite). `evals/feedback_sweep.py` files one fix card per question with 3+ complaints in 14 days and one backlog improvement after a quiet week with nothing open; cron `0e4a2f37395c` runs it 21:00 daily via `~/.hermes/scripts/span_feedback_sweep.sh`. It reads the admin token from Railway at run time; never copy it into a file.
+- `evals/edge_cases.py <url> <admin> [token]` is the live ingest-to-answer suite (18 checks, uploads then rolls back). Run it against production after any ingest change; it leaves no card behind.
+- Pushing to main mid prompt-suite produces 502s during the container swap. Push, wait for SUCCESS, then run suites.
+- The browser test for the sample flow writes rows into `data/span_mock.db` (gitignored but the seed for every eval): `DELETE FROM list_requests WHERE client='site'` and `DELETE FROM answer_feedback` before running evals that count rows.
+
 ## Pitfalls
 
 - `npx shadcn@latest add` can emit `import { cn } from "cn"` when it cannot resolve the `@/` alias. Rewrite those imports to `@/lib/utils`, make sure `ui/src/lib/utils.ts` exports `cn`, typecheck, and never `npm install cn`.
