@@ -1,0 +1,16 @@
+Icons. Tap any /i_ link for what it means.
+
+🙋 Needs you  /i_ask
+🚨 At risk  /i_risk
+🚧 Stuck  /i_stuck
+📬 Draft ready  /i_draft
+✅ Done  /i_done
+👀 Watching  /i_watch
+⬆️ Not pushed  /i_push
+📝 Unsaved  /i_unsaved
+💤 Snoozed  /i_later
+⚙️ Jobs  /i_jobs
+📎 File  /i_file
+☀️ Heartbeat  /i_beat
+
+Decide: /next · snooze: /later · dismiss: /drop
