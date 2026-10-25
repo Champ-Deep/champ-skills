@@ -163,6 +163,10 @@ Use for hero sections, presentations, dark-mode tools, and SEO landing pages.
 
 ---
 
+## Section Rhythm (standing rule, Deep 2026-10-25)
+
+A stat band (contact counts, refresh date, provider counts) that follows a dark or brand-filled hero is always the inverse scheme: Surface White ground, SPAN Green #1B6B3A figures in Montserrat 800, Dim Text labels, Surface Border hairlines between figures. Never fill it with green. It exists to break the page between the dark hero and the body; a green band reads as the hero continuing. Keep this in every skin and iteration of a SPAN landing page.
+
 ## Logo Rules
 
 - Source: `Atlas/Context Docs/SPAN Global Services/` (PPTX and HTML brand book)
