@@ -55,6 +55,14 @@ Deep's reference is the Harbinger signal globe (live at https://champharbinger-p
 - The hero grid is `align-items:start` with the left column as its own grid (`.ch-left`), so both columns hang from one top line. Centring the short column leaves symmetric air above and below and still reads as dead space.
 - Side effect to name in the report: moving a panel between columns reorders it at 390 too (the globe then follows the filters on mobile).
 
+## Cards-only production mode
+
+- Production runs `SPAN_CARDS_ONLY=1`. The invariant: the agent, Connect tools, facets, maps and prompts read `data_cards` and nothing else; the demo company tables stay in the file for local work. Enforced in `harness/tools.py` by a SQLite authorizer (`con.set_authorizer`, deny `SQLITE_READ` on every non-card table), not by regex over the SQL. A regex table allowlist misses comma joins and bare subqueries; the authorizer catches all of them at prepare time and still allows CTEs. Error text to match: both "not authorized" and "access to X is prohibited".
+- Every layer that names the demo schema needs its cards branch: `schema_brief`, the tool list (`score_companies` dropped, `SCORE_SPEC` kept for Connect), `RULES_CARDS` in `agent.py`, the Jev `GATE_CARDS` in `jev.py`, `card_facets()` and `/api/config` (`cards_only`, `coverage`, examples) in `server.py`, and the UI copy that reads from them. The Jev gate was the silent one: with the demo-schema gate, "How does X split by region?" was judged off-topic and never reached the model, and the page showed demo follow-ups. Grep `tech_installs|companies\.|contract renewal` after any prompt edit.
+- Proof is `python3 evals/prompt_suite.py <url> <token>`: ten showcase prompts, every 4+ digit figure in each answer checked against that server's own `/api/counts` cards (not the local seed), and a fail on any "no model was called" answer. Run it against local (needs `ANTHROPIC_API_KEY`; the shared OpenRouter key hits its weekly cap) and again against production after the deploy.
+- `evals/test_cards.py` and `test_ingest.py` must restore `tools.DB_PATH` in `tearDown`, or whichever suite runs after them opens a deleted temp file and fails with `unable to open database file` in a way that looks like your change.
+- Production auth header is `x-span-token` (or `?token=`), not `Authorization: Bearer`. The access token is `SPAN_ACCESS_TOKEN` in Railway, the admin gate token is `SPAN_ADMIN_TOKEN`; `railway variables --kv` reads them without printing to chat if you pipe through `sed 's/=.*/=[set]/'`.
+
 ## Admin access
 
 - `/admin` (UI and its API) is gated by one shared token in the `SPAN_ADMIN_TOKEN` env var, read at request time: rotate by editing the variable in Railway, which invalidates the old token on the next request; there is no username/password and no per-user account. Point a teammate at the URL plus the variable name, and never paste the value into chat.
