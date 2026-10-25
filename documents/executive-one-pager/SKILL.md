@@ -42,6 +42,7 @@ The rules and the house kit below exist to stop each of those.
 13. **No invented specifics.** No dates, durations, effort estimates or causes that the source does not state. "Restore this week" never becomes "by Fri 18 Sep"; "small task" never becomes "a few minutes".
 14. **Full width, never a narrow column.** The page container runs to 1440px with a fluid gutter (`clamp(16px,4vw,64px)`). Deep dislikes pages that sit in a narrow centered column with dead space either side.
 15. **Considered, not static.** Every interactive element has a hover and focus response from the shared micro-interaction set, and the evidence visuals animate to their values once (transform only, see rule 9). A flat page with boxes of numbers fails the "would Paddle ship this?" bar in Phase 6.
+16. **Spotlight cards are standard.** Every card-type block (settled, option, risk, quote and slide cards, boxed number cells) carries `.gc`: a neutral ink spotlight and lit hairline that follow the pointer, from `references/spotlight-card.md`. Neutral only, since the accent belongs to the reader (rule 7). The ask panel, hairline rows and the verdict band do not take it.
 
 ## Phase 1: Ingest and distill into a verdict brief
 
@@ -161,6 +162,7 @@ Build order that keeps the budget honest:
    - Rows and status board: hover tint plus a brand accent bar on the first cell; chevron rotation on `<details>`.
    - Evidence visuals: bars grow, tick strips fill, steppers draw once when they enter view, using transform only so the content is readable at rest (rule 9). Count-ups end on the exact stated value, which is also the value in the HTML.
    - Visible `:focus-visible` outlines, `prefers-reduced-motion` honoured, a `?static=1` mode for PDF and PNG exports.
+   - Cards: paste the CSS and JS from `references/spotlight-card.md` once and add `class="gc"` to each card. Touch devices and `?static=1` get the plain card.
    - No ambient particles or auroras in Docket or Deal Room; no tilt cards (that belongs to showcase pages).
 
 **House kit (Docket tokens and core components).** Copy, then swap the brand values:
@@ -271,6 +273,7 @@ Make one pass of fixes, re-run the script, and publish. In Presenter mode, count
 | `references/charts-tables.md` | any chart or table: which chart fits the data, labels on marks, two scales, computed columns |
 | `references/motion.md` | reveal timings, easing, reduced motion, static export mode |
 | `references/micro-interactions.md` | hover, focus and touch responses (MicroKit patterns, ported) |
+| `references/spotlight-card.md` | any card-type block (CSS, JS, where it goes) |
 | `references/verification-gates.md` | over budget, contrast audit code, trim levers, badge and marker rules |
 | `references/templates.md` | proposing a page template and locking a brand |
 | `references/design-language.md` | the Warm Editorial language, only when it is the right call |

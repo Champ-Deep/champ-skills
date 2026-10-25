@@ -95,6 +95,17 @@
     addEventListener('scroll',function(){requestAnimationFrame(spy);},{passive:true}); spy();
   }); }
 
+  /* spotlight cards on .panel and .gc: pointer position inside each card, once per frame (references/spotlight-card.md) */
+  if(!isStatic && matchMedia('(hover:hover) and (pointer:fine)').matches){
+    var gcs=[].slice.call(document.querySelectorAll('.gc,.panel')), gp=null, graf=0;
+    if(gcs.length){
+      addEventListener('pointermove',function(e){ gp=e; graf=graf||requestAnimationFrame(gcPaint); },{passive:true});
+    }
+    function gcPaint(){ graf=0; var xp=(gp.clientX/innerWidth).toFixed(3), rs=gcs.map(function(c){return c.getBoundingClientRect();});
+      gcs.forEach(function(c,i){ c.style.setProperty('--gc-x',(gp.clientX-rs[i].left).toFixed(1));
+        c.style.setProperty('--gc-y',(gp.clientY-rs[i].top).toFixed(1)); c.style.setProperty('--gc-xp',xp); }); }
+  }
+
   /* sortable tables */
   document.querySelectorAll('table[data-sortable]').forEach(function(tb){
     var ths=[].slice.call(tb.querySelectorAll('thead th'));

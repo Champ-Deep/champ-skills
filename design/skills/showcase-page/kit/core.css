@@ -428,3 +428,34 @@ table.data tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 0 var(--purple
 .nav.light .nav-pill .lbl{color:var(--ink)}
 .nav.light .nav-pill .sep{background:var(--line)}
 @media (max-width:760px){.nav-pill{padding:4px 0}}
+
+/* ---------- spotlight cards (see references/spotlight-card.md) ---------- */
+/* Spotlight card. Vanilla port of 21st.dev "spotlight-card" (GlowCard): a soft spot on the surface plus a lit hairline ring that follow the pointer.
+   Needs the page tokens --line (hairline) and the card's own background and border-radius. JS sets --gc-x, --gc-y (px inside the card) and --gc-xp (0 to 1 across the viewport). */
+.gc,.panel{
+  --gc-base:220; --gc-spread:0; --gc-sat:0%;            /* hue, hue sweep across the viewport, saturation. 0% = neutral ink glow */
+  --gc-b:1px; --gc-size:220px;                          /* ring width (also the card's border width), spotlight radius */
+  --gc-l:38%; --gc-hl:0 0% 0%; --gc-hl-a:.55; --gc-fx:none; --gc-spot-a:.08;
+  --gc-hue:calc(var(--gc-base) + var(--gc-xp,0) * var(--gc-spread));
+  position:relative; border:var(--gc-b) solid var(--line);
+  background-image:radial-gradient(var(--gc-size) var(--gc-size) at calc(var(--gc-x,-9999) * 1px) calc(var(--gc-y,-9999) * 1px),
+    hsl(var(--gc-hue) var(--gc-sat) 50% / var(--gc-spot-a)), transparent);
+}
+.gc::before,.gc::after,.panel::before,.panel::after{
+  content:""; position:absolute; inset:calc(var(--gc-b) * -1); border:var(--gc-b) solid transparent; border-radius:inherit; pointer-events:none;
+  background-origin:border-box; background-repeat:no-repeat;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0); -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0); mask-composite:exclude;
+}
+.gc::before,.panel::before{
+  background-image:radial-gradient(calc(var(--gc-size) * .75) calc(var(--gc-size) * .75) at calc(var(--gc-x,-9999) * 1px) calc(var(--gc-y,-9999) * 1px),
+    hsl(var(--gc-hue) var(--gc-sat) var(--gc-l)), transparent 100%);
+  filter:var(--gc-fx);
+}
+.gc::after,.panel::after{
+  background-image:radial-gradient(calc(var(--gc-size) * .5) calc(var(--gc-size) * .5) at calc(var(--gc-x,-9999) * 1px) calc(var(--gc-y,-9999) * 1px),
+    hsl(var(--gc-hl) / var(--gc-hl-a)), transparent 100%);
+}
+/* dark ground: lighter ring, white inner edge. Use .gc-dark on a dark section, or wire to the page's dark tokens. */
+.gc,.panel{--gc-base:276; --gc-sat:70%; --gc-l:42%; --gc-spot-a:.07}  /* LakeB2B purple; override per brand */
+.gc-dark,.panel.gc-dark{--gc-sat:0%; --gc-l:62%; --gc-hl:0 0% 100%; --gc-hl-a:.8; --gc-fx:brightness(1.6); --gc-spot-a:.1}  /* on a dark section */

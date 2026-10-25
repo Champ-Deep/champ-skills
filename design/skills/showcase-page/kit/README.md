@@ -5,7 +5,7 @@ Vanilla HTML, CSS and JS. No framework, no build tool beyond Python 3, Playwrigh
 | File | What it is |
 |---|---|
 | `core.css` | tokens (LakeB2B by default), every component, motion, micro-interactions, responsive rules |
-| `core.js` | static and reduced-motion detection, headline word split, unit charts, count-up, reveal on scroll, progress bar, nav state, pointer tilt, button glow, scroll-spy rail, sortable tables with row motion |
+| `core.js` | static and reduced-motion detection, headline word split, unit charts, count-up, reveal on scroll, progress bar, nav state, pointer tilt, button glow, spotlight cards on `.panel` and `.gc`, scroll-spy rail, sortable tables with row motion |
 | `build.py` | `python3 build.py 02 03` assembles `cases/<id>.html` + `cases/<id>.json` into `dist/<slug>.html` (standalone) and `dist/<slug>.artifact.html` (Artifact fragment); fails on any em or en dash |
 | `shoot.py` | `python3 shoot.py <slug> [--export]` screenshots 1440 and 390 (motion top and static full page), reports overflow, small tap targets and console errors; `--export` writes `export/<slug>.png` (2x) and a one-page `export/<slug>.pdf` with the hero flattened |
 | `cases/02.*`, `cases/03.*` | worked examples: map, unit chart, sortable table, callout, timeline |

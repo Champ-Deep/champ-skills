@@ -23,6 +23,7 @@ Small responses to a hover, focus, tap or scroll that tell the reader the page i
 | Step lists | a glowing brand rail slides to the step nearest the reading line; that step's title takes the brand colour | spotlight-indicator | `.steps` (JS appends `.rail`, toggles `.active`) |
 | Pills and chips | lift 2px, brand rail grows across the top edge | social-highlight-cards | `.pill`, `.tag:hover` |
 | Floating stat cards | perspective tilt toward the pointer with a lavender sheen; touch-hold works on phones | 21st.dev Optimized Tilt Card (27139) | `.fcard`, JS sets `--rx`, `--ry`, `--px`, `--py` |
+| Cards | soft ink spot under the pointer and a lit hairline ring | 21st.dev spotlight-card (GlowCard), vanilla port | `.gc`; see `spotlight-card.md` |
 | Sortable tables | rows glide to their new position, the sort arrow flips | 21st.dev Sortable Data Table (35036) | `table.data[data-sortable]` (FLIP in JS) |
 | Table rows | brand accent bar appears on the first cell | spotlight-indicator, simplified | `table.data tbody tr:hover` |
 | Heat tiles, unit dots | lift and scale on hover, risk outline intensifies | none | `.tile:hover`, `.udots i:hover` |
