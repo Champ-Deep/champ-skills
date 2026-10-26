@@ -33,6 +33,12 @@ Run the steps in order. Each step fixes a reason AI-built websites fail:
 | 10. Re-score | Proves the result | A claim instead of a score |
 | 11. Ship | It only exists on localhost | Nobody ever sees it |
 
+## When to use it
+
+Run end to end (steps 1 to 11) when a real site is being rebuilt to a score: pick it up with `/ten-out-of-ten <url>` or "make my website a 10/10".
+
+Use only the scorecard (`references/scorecard.md`, steps 2 and 10) when a build pipeline already owns the rebuild. Under Hermes, Deep's Champ microsites are built by the `microsite-refresh` plugin, which chains this scorecard as its last gate: run this skill to score, never to rebuild over its output. Score the built handoff at 1440px and 390px with Playwright measurements, write the n/10 plus one evidence line per check into the build's `brief.md`, and hand failing proof checks to the owner rather than filling them.
+
 ## Ground rules (never break)
 
 - **Never invent.** No made-up stats, testimonials, client logos, prices, awards or phone numbers. Every number, quote and logo on the page comes from step 1. If a section needs proof the business doesn't have, cut the section or leave a clearly marked `TODO` for the owner, don't fill it.

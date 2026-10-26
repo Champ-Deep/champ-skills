@@ -55,3 +55,5 @@ Ten checks, one point each. A check passes only if its test passes; no half poin
 ```
 
 Evidence is something a reader can check: a quote from the page, a measurement, a screenshot reference. Never "looks good".
+
+Counting evidence: proof fails when nothing names a client or gives a specific number, not when the page is merely light on it, and a labelled sample report or a row of marketplace names is not proof. Measure speed with real transfer sizes from the page's own requests rather than a guess: a big library loaded on first view fails check 9 even when every image is optimised, and a library only needed after the visitor acts must load then, not at first paint.
