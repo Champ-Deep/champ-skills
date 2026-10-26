@@ -112,6 +112,123 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn('<script>alert', text)
         self.assertIn('&lt;script&gt;alert', text)
 
+    def check_new_visual(self, kind):
+        site = json.loads((ROOT / 'examples/span-msp-us/site.json').read_text())
+        item = next(i for i in site['faq']['items'] if i['visual'] == kind)
+        rendered = module.visual(item, interactive=True)
+        self.assertIn('class="diagram ', rendered)
+        self.assertIn('role="group" aria-label=', rendered)
+        payload = '<img src=x onerror="alert(1)">&'
+        for key, value in item['visualData'].items():
+            with self.subTest(kind=kind, field=key):
+                altered = json.loads(json.dumps(item))
+                altered['visualData'][key] = [payload] * len(value) if isinstance(value, list) else payload
+                output = module.visual(altered, interactive=True)
+                self.assertNotIn(payload, output)
+                self.assertIn('&lt;img', output)
+                del altered['visualData'][key]
+                with self.assertRaises(ValueError):
+                    module.visual(altered, interactive=True)
+                altered['visualData'][key] = [] if isinstance(value, list) else ''
+                with self.assertRaises(ValueError):
+                    module.visual(altered, interactive=True)
+
+    def test_fanout_contract(self):
+        self.check_new_visual('fanout')
+
+    def test_loop_contract(self):
+        self.check_new_visual('loop')
+
+    def test_narrow_contract(self):
+        self.check_new_visual('narrow')
+
+    def test_anatomy_contract(self):
+        self.check_new_visual('anatomy')
+
+    def test_path_contract(self):
+        self.check_new_visual('path')
+
+    def test_sheet_and_market_contract(self):
+        source = ROOT / 'examples/span-msp-us'
+        site = json.loads((source / 'site.json').read_text())
+        text = module.render(site, source)
+        self.assertEqual(text.count('class="sample-record__panel'), 5)
+        self.assertEqual(text.count('class="record__row"'), 4)
+        self.assertEqual(text.count('<td data-column='), 36)
+        self.assertEqual(text.count('"formValue":'), 4)
+        self.assertNotIn('<ul class="ticks">', text)
+        self.assertIn('sheet__stamp', text)
+        site['dossier']['sheet']['fields'][0] = '<script>bad</script>'
+        site['orbit']['items'][0]['title'] = '<script>bad</script>'
+        text = module.render(site, source)
+        self.assertNotIn('<script>bad', text)
+        self.assertIn('&lt;script&gt;bad', text)
+        site['orbit']['items'][0]['formValue'] = 'not an option'
+        with self.assertRaises(ValueError):
+            module.validate(site, source)
+        del site['dossier']['sheet']['fields']
+        with self.assertRaises(ValueError):
+            module.sheet(site['dossier'])
+
+    def test_picker_rendering_omission_and_validation(self):
+        site = json.loads((ROOT / 'examples/span-msp-us/site.json').read_text())
+        site['picker'] = {'title': 'Pick your list', 'hint': 'Choose a list', 'items': [dict(item, size='wide') for item in site.pop('orbit')['items']]}
+        text = self.build(site)
+        self.assertIn('id="picker"', text)
+        self.assertNotIn('class="market__map"', text)
+        self.assertNotIn('class="market__legend"', text)
+        self.assertNotIn('id="picker"', self.build())
+        without = json.loads(json.dumps(site))
+        del without['picker']
+        self.assertNotIn('id="picker"', self.build(without))
+        self.assertNotIn('{{', self.build(without))
+        for field, bad in [('id', 'INVALID'), ('id', 'mssp'), ('size', 'huge'), ('formValue', 'unknown')]:
+            altered = json.loads(json.dumps(site))
+            altered['picker']['items'][0][field] = bad
+            with self.assertRaises(ValueError):
+                self.build(altered)
+
+    def test_orbit_rendering_omission_and_icon_boundary(self):
+        site = json.loads((ROOT / 'examples/span-msp-us/site.json').read_text())
+        text = self.build(site)
+        self.assertEqual(text.count('class="ot-node ot-hidden"'), 4)
+        self.assertIn('id="orbitCard"', text)
+        self.assertNotIn('id="picker"', text)
+        self.assertNotIn('class="market__legend"', text)
+        self.assertNotIn('ot-root', self.build())
+        without = json.loads(json.dumps(site))
+        del without['orbit']
+        self.assertNotIn('ot-root', self.build(without))
+        self.assertNotIn('{{', self.build(without))
+        payload = '</script><svg onload="alert(1)">'
+        site['orbit']['items'][0]['title'] = payload
+        site['orbit']['items'][0]['text'] = payload
+        escaped = self.build(site)
+        self.assertNotIn(payload, escaped)
+        self.assertIn('&lt;/script&gt;', escaped)
+        self.assertIn('\\u003c/script\\u003e', escaped)
+        for field, value in [('icon', payload), ('icon', 'unknown'), ('id', 'mssp'), ('formValue', 'unknown')]:
+            altered = json.loads(json.dumps(site))
+            altered['orbit']['items'][0][field] = value
+            with self.assertRaises(ValueError):
+                self.build(altered)
+
+    def test_fictional_records_masking_titles_and_escaping(self):
+        site = json.loads((ROOT / 'examples/span-msp-us/site.json').read_text())
+        for record in site['sampleRecords']:
+            for key in ('name', 'email', 'company'):
+                self.assertIn('•••', record[key])
+                self.assertNotRegex(record[key], r'[\w.]{4,}•')
+            self.assertIn(record['jobTitle'], site['jobTitles'])
+        for key, value in [('name', 'Unmasked'), ('email', 'test@example.com'), ('company', 'Longprefix•••'), ('jobTitle', 'Not allowed')]:
+            altered = json.loads(json.dumps(site))
+            altered['sampleRecords'][0][key] = value
+            with self.assertRaises(ValueError):
+                self.build(altered)
+        site['sampleRecords'][0]['name'] = '<img src=x onerror=alert(1)>•••'
+        self.assertNotIn('<img src=x', self.build(site))
+        self.assertIn('&lt;img src=x', self.build(site))
+
     def test_rejects_dash_bad_url_and_overflowing_counts(self):
         for mutate in [
             lambda s: s['hero'].__setitem__('lede', 'a \u2014 b'),

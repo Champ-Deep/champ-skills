@@ -1,7 +1,7 @@
 ---
 name: span-landing-page
 description: Use when building or refreshing a SPAN landing page.
-version: 1.0.0
+version: 1.1.0
 author: Champions Accelerator
 metadata:
   hermes:
@@ -20,6 +20,8 @@ Load span-brand-guidelines, frontend-design and visual-verify. Main owns content
 Keep the established Dither Grid hero, prominent offer line, four primary fields, visual question rail and halftone footer behind the links. Verified count comparisons use separate adjustable bento boards, not one combined board or a reveal slider.
 
 A stat band after the dark hero is always white with SPAN Green figures, readable muted labels and hairlines. Preserve this inverse scheme across future skins. If source counts are absent, omit the band, do not invent figures to fill it.
+
+Every section explains with a playable component, never a static diagram or wireframe: masked realistic sample records (fictional, at most three leading characters visible, job titles in full) in the hero card and the sample sheet, the Orbit selector (vanilla port of the 21st.dev Orbit Timeline) for segment choice wired to the form, and one interactive widget kind per FAQ answer (see assets/campaign-landing/VISUALS.md). Empty bars, Venn rings and hand-drawn SVG were rejected by Deep three times; do not reintroduce them.
 
 Optional band, clients, compare and citations disappear when unsupported. Never inherit PEO figures, dates, clients, SLAs, verification or compliance claims into a different offer. Sample layouts are clearly illustrative. Preserve the source's optional phone and custom-requirement semantics.
 

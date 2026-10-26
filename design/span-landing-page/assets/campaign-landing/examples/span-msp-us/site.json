@@ -24,11 +24,17 @@
     "eyebrow": "MSP email list and contact database",
     "lede": "Put your software, services or partner offer in front of relevant MSP decision makers.",
     "ledeEmphasis": "Request a sample to see whether the available contacts fit your target market.",
-    "ticks": [
-      "Contact name, business email, job title and company information",
-      "MSP, MSSP and cloud MSP segments, or a custom slice",
-      "Available fields and coverage vary by segment, the sample shows you which"
-    ],
+    "visual": {
+      "visual": "anatomy",
+      "visualData": {
+        "label": "Illustrative contact card with name, business email, job title and company. MSP, MSSP, Cloud MSP or a custom slice. No real contact data.",
+        "title": "Illustrative contact",
+        "fields": ["Name", "Business email", "Job title", "Company"],
+        "pills": ["MSP", "MSSP", "Cloud MSP"],
+        "custom": "Custom slice",
+        "note": "Available fields and coverage vary by segment."
+      }
+    },
     "callout": {
       "lead": "Not sure which list fits?",
       "text": "Choose Not sure yet in the form and tell us the region you sell into.",
@@ -61,6 +67,7 @@
   "account": {
     "title": "Does This Cover My Market?",
     "lede": "Choose the closest fit in the form and tell us the region you sell into.",
+
     "groups": [
       "MSP: managed service providers for general B2B outreach",
       "MSSP/cybersecurity: providers that focus on managed security services",
@@ -69,9 +76,32 @@
     ],
     "fit": "Look at the job titles in your sample to see which roles you could reach before you commit to anything."
   },
+  "sampleRecords": [
+    {"name":"Mar••• Hen•••","email":"m.h•••@nor•••-it.com","jobTitle":"Director of Managed Services","company":"Nor••• IT Partners","location":"Austin, TX","state":"TX","segment":"MSP"},
+    {"name":"Sam••• Kel•••","email":"s.k•••@vel•••-it.com","jobTitle":"Owner","company":"Vel••• Managed Systems","location":"Denver, CO","state":"CO","segment":"MSP"},
+    {"name":"Ari••• Mor•••","email":"a.m•••@jun•••-cloud.com","jobTitle":"VP Service Delivery","company":"Jun••• Cloud Services","location":"Raleigh, NC","state":"NC","segment":"Cloud MSP"},
+    {"name":"Dev••• Sol•••","email":"d.s•••@tal•••-security.com","jobTitle":"CTO","company":"Tal••• Security Partners","location":"Boston, MA","state":"MA","segment":"MSSP"},
+    {"name":"Lee••• Fen•••","email":"l.f•••@bri•••-it.com","jobTitle":"Owner","company":"Bri••• IT Services","location":"Portland, OR","state":"OR","segment":"MSP"},
+    {"name":"Ren••• Val•••","email":"r.v•••@kel•••-cloud.com","jobTitle":"VP Service Delivery","company":"Kel••• Cloud Partners","location":"Atlanta, GA","state":"GA","segment":"Cloud MSP"}
+  ],
+  "jobTitles": ["Director of Managed Services", "Owner", "VP Service Delivery", "CTO"],
+  "orbit": {
+    "items": [
+      {"id": "msp", "title": "MSP", "text": "Managed service providers for general B2B outreach.", "icon": "server", "formValue": "MSP contact list"},
+      {"id": "mssp", "title": "MSSP/cybersecurity", "text": "Providers that focus on managed security services.", "icon": "shield", "formValue": "MSSP/cybersecurity list"},
+      {"id": "cloud", "title": "Cloud MSP", "text": "Providers that focus on cloud environments.", "icon": "cloud", "formValue": "Cloud MSP list"},
+      {"id": "custom", "title": "Custom requirements", "text": "Certain job titles or a narrower slice.", "icon": "sliders", "formValue": "Custom list"}
+    ]
+  },
   "dossier": {
     "title": "What the sample may include",
     "tag": "Illustrative sample layout, not real data",
+    "sheet": {
+      "label": "Illustrative sample sheet with six fictional masked records. No real data.",
+      "hint": "Explore a column. Click its heading to rearrange the illustrative rows.",
+      "fields": ["Name", "Business email", "Job title", "Company"],
+      "chips": ["Segment: MSP, MSSP or Cloud MSP", "Region: your target market"]
+    },
     "providerLabel": "Segment",
     "provider": "MSP contact list",
     "columns": [
@@ -121,83 +151,58 @@
         "q": "Sell software to MSPs",
         "lead": "Reach MSPs that could use your security, backup, monitoring or billing tools.",
         "detail": "An MSP list puts your product in front of the providers who buy and bundle tools on behalf of their clients, rather than the end customers one at a time.",
-        "visual": "roles",
+        "visual": "fanout",
         "visualData": {
-          "roles": [
-            "Security",
-            "Backup",
-            "Monitoring",
-            "Billing"
-          ],
-          "at": "Sold to",
-          "companies": [
-            "MSPs",
-            "MSSPs",
-            "Cloud MSPs"
-          ]
+          "label": "Vendor tools such as security, backup, monitoring and billing reach MSPs, who bundle tools for their clients. Illustrative relationships, not customer counts.",
+          "tools": ["Security", "Backup", "Monitoring", "Billing"],
+          "hub": "MSPs",
+          "clients": ["Their clients", "Their clients", "Their clients"]
         }
       },
       {
         "q": "Grow your partner program",
         "lead": "Find providers who might resell, refer or build on your product.",
         "detail": "Check the available job titles in your sample before planning a partner campaign.",
-        "visual": "roles",
+        "visual": "loop",
         "visualData": {
-          "roles": ["Resell", "Refer", "Build"],
-          "at": "Potential partner fit",
-          "companies": ["MSPs", "MSSPs", "Cloud MSPs"]
+          "label": "Resell, refer and build form a cycle of possible partner routes. These are opportunities to assess, not confirmed partnerships.",
+          "center": "Potential partner routes",
+          "steps": ["Resell", "Refer", "Build"]
         }
       },
       {
         "q": "Run focused outreach",
         "lead": "Invite MSPs to a webinar, a demo or a regional event, not the whole IT industry.",
         "detail": "Choose the closest segment in the form and describe your target region in Custom requirements. Check the sample before planning outreach.",
-        "visual": "sample",
+        "visual": "narrow",
         "visualData": {
-          "card": "Focused list",
-          "stamp": "Scoped",
-          "ticks": [
-            "One segment, not all of IT",
-            "The region you sell into",
-            "Job titles you can act on",
-            "Check the sample for fit"
-          ]
+          "label": "Narrow outreach from the whole IT industry to an MSP segment, a target region and an event. Band widths are illustrative, not contact volumes.",
+          "stages": ["Whole IT industry", "MSP segment", "Target region", "Your event"],
+          "captions": ["Start beyond the general IT audience.", "Choose the closest provider segment.", "Describe the region you sell into.", "Invite them to a webinar, demo or event."]
         }
       },
       {
         "q": "What the sample may include",
         "lead": "Contact name, business email, job title and company information.",
         "detail": "Available fields and coverage vary by segment. The sample exists so you can check the fields before you decide.",
-        "visual": "sources",
+        "visual": "anatomy",
         "visualData": {
-          "sources": [
-            "Contact name",
-            "Business email",
-            "Job title",
-            "Company information"
-          ],
-          "record": "Your sample",
-          "laws": []
+          "label": "An illustrative contact record with name, business email, job title and company. Sample fields and coverage vary by segment. No real data.",
+          "title": "Illustrative contact",
+          "fields": ["Name", "Business email", "Job title", "Company"],
+          "pills": ["MSP", "MSSP", "Cloud MSP"],
+          "custom": "Custom slice",
+          "note": "Illustrative layout, not real data. Fields and coverage vary."
         }
       },
       {
         "q": "Not sure which list fits?",
         "lead": "Choose Not sure yet and tell us who you want to reach.",
         "detail": "Our team reviews your needs and sends a relevant sample. Need certain job titles or a narrower slice? Choose Custom list and describe it.",
-        "visual": "roles",
+        "visual": "path",
         "visualData": {
-          "roles": [
-            "MSP",
-            "MSSP",
-            "Cloud MSP",
-            "Custom"
-          ],
-          "at": "For",
-          "companies": [
-            "Software vendors",
-            "Partner programs",
-            "Event and webinar teams"
-          ]
+          "label": "Not sure yet leads to team review and then a relevant sample. This describes the request process, not a delivery deadline. This preview sends nothing.",
+          "steps": ["Not sure yet", "Team review", "Relevant sample"]
         }
       }
     ],

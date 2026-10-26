@@ -17,3 +17,11 @@ Favicons in the sources stack are fetched from Google's favicon service at runti
 
 ## Dither Grid gradient (21st.dev community gradients)
 - Upstream: the operator-supplied gradient spec (palette Pine, Moss, Fern, Sprout; pixel mode, 25x15 cells, 62deg, dither 76, gap 7, speed 71, motion 60). Rebuilt on canvas in `template.html` rather than the CSS radial approximation. Grain and vignette layers omitted; the wash over the canvas replaces the vignette.
+
+## MSP semantic diagrams
+
+The hero record, product sample sheet and interactive fanout, loop, narrow, anatomy and path widgets are original HTML/SVG/CSS compositions for the supplied MSP specification. The optional legacy picker reuses the existing 21st.dev Draggable Widget Grid engine, but is not rendered in the MSP example. The hero and sheet now show explicitly fictional masked records, as approved in task t_9f17246d. Full names and addresses are never stored in the page. See VISUALS.md for contracts and claim boundaries.
+
+## Orbit Timeline (21st.dev)
+
+Source: operator-supplied orbit-timeline.tsx and demo, captured at /Users/deep/.hermes/cache/scratch/span-landing-page-qa-v6/orbit-source.txt. Vanilla HTML/CSS/JS port in template.html, .ot-* and the Orbit Timeline script. Retains masked conic rings, label gaps, blob core, emitters, growth intro, radius geometry, velocity, RAF loop, hover/selection pause, keyboard cycling and narrow bottom docking. Theme mapped to SPAN tokens. One segment per orbit and a form handoff replace timeline events. Omitted: React, demo control bar, configurable themes/speed/direction, unused multi-event data, runtime icons. Accessibility adaptations: 44px targets, corresponding phone edge clearance, readable label opacity, inert closed card, focus handoff and close button. Reduced motion also disables rotation and intro. No shadcn install or runtime dependency is needed for this single-file vanilla port. Attribution is not an upstream license grant.
