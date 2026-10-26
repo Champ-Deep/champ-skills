@@ -102,6 +102,7 @@ sentence read at normal speed finishes long before the animation does.
   prompt pins it, and raise stability plus a slightly faster speed when it does.
   A voice with built-in echo or processing needs no reverb added on top.
 - **Deep rejects generic and cozy fix voices.** On the CRT data video he dropped a stock deep narrator (Brian) and a soft receptionist voice (Lauren B), then chose a whispery crime narrator (True, `tZssYepgGaQmegsMEXjK`) for the fix half. Offer a fix voice with texture and a human edge, and pin its register in words (`calm, clinical, case closed`) so a dark or whispery voice does not read the closing claim as creepy.
+- **A character voice taunts, it does not narrate.** Lines that read out the on-screen text ("I have been scanning your contacts", "Data integrity failure") were rejected as flat. Write the character as a person reacting to the viewer ("I see you're trying to scan your contacts. Too bad for you.") and keep one special register, such as the whisper, for the single question line.
 - **Say what you did not verify.** You cannot audition audio without a key or a
   player. Cast from the library description and sample text, name the voice ID,
   and tell Deep to listen to the closing line first. Never write as if you heard
