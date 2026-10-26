@@ -65,6 +65,30 @@ python3 ~/.hermes/scripts/kanban_clear.py apply "go t_a t_b; drop t_c; done t_d;
 
 Buckets are regex on title and body, so Deep approves the triage lists before `expire` or `fold` runs. The sweep now never cards a send row alone (it goes into the day's `Send Pack <date>` inbox card) and never cards a row dated more than 3 days past (tagged `[kanban:stale]`).
 
+## 1c. Swipe triage: let Deep clear blocked cards one gesture at a time
+
+`kanban_clear.py` is list mode (he approves a bucket). When he asks for cards "one by one" or a swipe or decision interface, use the card mode instead: `~/.hermes/scripts/swipe_triage.py`, a single-file stdlib HTTP server reading `kanban.db` read-only on `127.0.0.1:3177`.
+
+```bash
+nohup python3 ~/.hermes/scripts/swipe_triage.py >/tmp/swipe.log 2>&1 &   # restart if it is not listening
+lsof -nP -iTCP:3177 -sTCP:LISTEN                                          # prove which process owns the port
+curl -s localhost:3177/api/cards | python3 -c "import sys,json,collections as c;d=json.load(sys.stdin);print(len(d),c.Counter(x['kind'] for x in d))"
+```
+
+Report the composition (how many are `human` to-dos, `needs_input` decisions, `capability` blocks, how many have a lapsed default date) before he starts swiping: the mix decides whether he should run the Decisions chip first. He answers a decision by tapping an option button or pressing its letter, which comments the choice and unblocks, so a card whose options parse gets answered in one gesture instead of a chat round trip.
+
+The three destructive-ish CLI semantics the interface is built on, all verified by running them on throwaway cards rather than from the help text:
+
+- `hermes kanban complete` works straight from `blocked` (no unblock first); `hermes kanban archive` also works from `blocked`.
+- `hermes kanban unblock` only accepts `blocked` or `scheduled`, so it fails with "not blocked/scheduled" on an already-archived card, and neither archive nor complete can be undone: there is no reopen for them.
+- Therefore build the undo window in the client, not in the CLI: hold the action ~5 s behind an Undo toast and commit only when the timer fires, flushing any pending action with `navigator.sendBeacon` on unload so a tab close still commits it instead of silently dropping his decision. An immediate-fire action with an "undo" button is a lie on an irreversible command.
+
+Prove the write path before he touches it: create a throwaway card, block it, drive the endpoint (pick, drop, malformed id), and archive the test cards. A POST that only returns 200 proves nothing; read the card's status back. Validate the id server-side (`^t_[0-9a-f]+$`) since the id arrives from the browser and goes straight into a shell command.
+
+Always show why a card is blocked, not just the title: the reason lives in the latest `task_events` row of `kind='blocked'` (payload `reason`), not in a `tasks` column, and a reason of `initial_status` means "created blocked with no cause" and should render as empty rather than as noise. Surface a `Default if silent by <date>` that has passed as a visible flag on the card, because a lapsed default is the fastest thing to rule on. Options only become buttons when the reason follows the section 3 `A:` / `B:` shape; cards that do not, show their text only, which is the argument for keeping the format mandatory.
+
+Serve it on 127.0.0.1 with the port read from one constant and probe the port with `lsof` before shipping the script, because ports in the 3100+ range on this machine are already claimed by other Hermes scripts and a bind failure is silent from the browser's side (the page just fails to load). Card writes go through the `hermes kanban` CLI, never raw SQL: the CLI is what records events, comments and notifications the dispatcher and dashboard read.
+
 ## 2. What "blocked" means
 
 `kanban_block(kind=...)` routes by cause. Only two kinds need Deep.
