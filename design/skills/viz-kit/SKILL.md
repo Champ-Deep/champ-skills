@@ -5,6 +5,17 @@ description: "Use when building a viz kit, ad kit, or data visual. Create varied
 
 # Viz Kit
 
+## Mechanism figure: the Anatomy skill (verified 2026-10-26)
+
+When a page must explain HOW something works and the idea has a physical mechanism (rate limiter, cache, pipeline, deploy flow, verification gate), an `anatomy` isometric figure can replace a whole paragraph: a real object built from shaded parts, SVG output, optional WebGL, one HTML file the reader can poke.
+
+- Installed at `~/.hermes/skills/creative/anatomy` (wheresryan22/anatomy, MIT, 0 npm deps, Node 20.10+). Verified here: its 290 tests pass and `examples/push-button/build.mjs` builds a complete framed figure with a live readout.
+- It is NOT a chart library: no axes, no series, no data plots. Numbers appear only as a live readout inside the figure. Charts stay with this skill's chart set.
+- It is slow to build on purpose (parts list, geometry, audit of every joint). Budget one long session; use it only when the figure earns its place over a flat diagram.
+- Capture scripts need Chrome. Build with `node <example>/build.mjs` (`--light` for a light card).
+- Trigger words from the user: isometric, exploded view, cutaway, "how it works" as a figure. Otherwise keep the existing flat style.
+
+
 Two modes, selected by the deliverable: campaign creative and data visualization. Do not treat an advertising request as a chart page, or turn a single-chart request into an advertising package.
 
 ## Route before building

@@ -65,6 +65,25 @@ Substack has no posting API and Postiz does not support it: the weekly issue is 
 - One giveaway per post, one comment word per post, words never reused within 30 days.
 - The comment word maps to a real path in `champ-skills` and the post log records it.
 
+
+## Background music taste for reels and shorts (added 2026-10-27)
+
+Modelled on the bed under Adrien's Short "Why Long-Term Plans Break With AI" (youtu.be/shorts/Pc9ICx0K4kc), measured on this machine. The exact track was not identifiable (Shazam: no match; the Short credits no sound), so this is the measured profile, not a track name.
+
+| Measured on the reference | Value | Use it as |
+|---|---|---|
+| Tempo | 129 BPM (beats well under speech) | mid-tempo 100-130 BPM |
+| Key | A minor (low confidence: voice-over dominates) | minor for data and hard truths, major for wins |
+| Brightness | 1,924 Hz centroid, warm not tinny | warm low-mid bed, no shrill top |
+| Dynamic range | 20.7 dB, calm | near-static bed that never spikes over the voice |
+
+Rules when picking a track:
+- Instrumental only, no vocals, no sung hooks: the voice-over owns attention.
+- Bed sits clearly under speech (roughly 15-20 dB below), duck on speech if the track has drum hits.
+- Dark minimal electronic / lo-fi pulse for AI and data posts; brighter percussive for launch and milestone posts.
+- Verified free sources: YouTube Audio Library (copyright-safe on YouTube, some tracks need attribution, check per track) and Pixabay Content License (free, no attribution required, may not be resold standalone).
+- Never reuse one track across a whole week of posts; rotate 3-4 tracks and keep a favorite star on the ones that work.
+
 ## Daily draft process (cron `social-daily-draft`)
 
 1. Read the last 14 entries in `/Users/deep/Celsus/Efforts/Active/Social Posts/log.md` to avoid repeating a topic or a comment word. Then reconcile against the dated files: a `log.md` row with no `<date>.md` next to it means the post was pre-drafted in a batch, so pull that day's cuts out of the batch file (`Week 1 Posts.md`, sections `## Day N (<date>)`) instead of drafting a duplicate. Stop if `<date>.md` already exists.
