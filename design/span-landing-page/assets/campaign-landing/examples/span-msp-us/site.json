@@ -1,0 +1,276 @@
+{
+  "brand": {
+    "name": "Span Global Services",
+    "domain": "https://www.spanglobalservices.com",
+    "logo": "logo.png",
+    "phone": "877.755.0023",
+    "phoneHref": "+18777550023",
+    "privacyUrl": "https://www.spanglobalservices.com/privacy"
+  },
+  "meta": {
+    "title": "MSP Email List and Contact Database | Span Global Services",
+    "description": "MSP email list and contact database from SPAN Global Services. Request a sample to see whether the available contacts fit your target market.",
+    "canonical": "https://share.lakeb2b.com/f/iZ0AciBa/span-msp-landing-us-preview__1_.html"
+  },
+  "headlines": {
+    "default": "Your Next MSP Customer Starts With The Right Contact.",
+    "variants": {
+      "mssp": "Reach The MSSPs That Sell Managed Security.",
+      "cloud": "Reach The MSPs That Run Cloud Environments.",
+      "partner": "Find The MSPs That Could Resell Your Product."
+    }
+  },
+  "hero": {
+    "eyebrow": "MSP email list and contact database",
+    "lede": "Put your software, services or partner offer in front of relevant MSP decision makers.",
+    "ledeEmphasis": "Request a sample to see whether the available contacts fit your target market.",
+    "ticks": [
+      "Contact name, business email, job title and company information",
+      "MSP, MSSP and cloud MSP segments, or a custom slice",
+      "Available fields and coverage vary by segment, the sample shows you which"
+    ],
+    "callout": {
+      "lead": "Not sure which list fits?",
+      "text": "Choose Not sure yet in the form and tell us the region you sell into.",
+      "link": "Request a sample"
+    }
+  },
+  "form": {
+    "title": "Who is on your target list?",
+    "sub": "Share a few details to request your MSP data sample. Our team reviews your needs and sends a relevant sample.",
+    "subChosen": "A sample for {label}. Available fields and coverage vary by segment.",
+    "phoneRequired": false,
+    "segmentLabel": "Requirement",
+    "providerLabel": "Custom requirements",
+    "providerError": "Please describe the list you need",
+    "segments": [
+      "MSP contact list",
+      "MSSP/cybersecurity list",
+      "Cloud MSP list",
+      "Not sure yet"
+    ],
+    "specific": "Custom list",
+    "providerPlaceholder": "Job titles, region or the slice you need",
+    "consent": "I agree to Span Global Services contacting me about this request and I have read the",
+    "submit": "Let's find your MSP fit",
+    "sticky": "Find my MSP fit",
+    "foot": "Tell us who you want to reach. Our team will review your needs and send a relevant sample.",
+    "thanksTitle": "Preview only, nothing sent",
+    "thanksText": "Your entries passed local validation and remain in this form. No sample request was sent."
+  },
+  "account": {
+    "title": "Does This Cover My Market?",
+    "lede": "Choose the closest fit in the form and tell us the region you sell into.",
+    "groups": [
+      "MSP: managed service providers for general B2B outreach",
+      "MSSP/cybersecurity: providers that focus on managed security services",
+      "Cloud MSP: providers that focus on cloud environments",
+      "Custom requirements: certain job titles or a narrower slice"
+    ],
+    "fit": "Look at the job titles in your sample to see which roles you could reach before you commit to anything."
+  },
+  "dossier": {
+    "title": "What the sample may include",
+    "tag": "Illustrative sample layout, not real data",
+    "providerLabel": "Segment",
+    "provider": "MSP contact list",
+    "columns": [
+      {
+        "title": "Contact",
+        "rows": [
+          {
+            "label": "Name",
+            "value": "Contact name"
+          },
+          {
+            "label": "Business email",
+            "value": "Business email"
+          },
+          {
+            "label": "Job title",
+            "value": "Job title"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "rows": [
+          {
+            "label": "Company",
+            "value": "Company information"
+          },
+          {
+            "label": "Segment",
+            "value": "MSP, MSSP or cloud MSP"
+          },
+          {
+            "label": "Region",
+            "value": "The region you sell into"
+          }
+        ]
+      }
+    ],
+
+    "footer": "Want to check the fields before you decide? That is what the sample is for. Available fields and coverage vary by segment."
+  },
+  "faq": {
+    "title": "How U.S. Teams Use An MSP List",
+    "sub": "Look at the job titles in your sample to see which roles you could reach.",
+    "items": [
+      {
+        "q": "Sell software to MSPs",
+        "lead": "Reach MSPs that could use your security, backup, monitoring or billing tools.",
+        "detail": "An MSP list puts your product in front of the providers who buy and bundle tools on behalf of their clients, rather than the end customers one at a time.",
+        "visual": "roles",
+        "visualData": {
+          "roles": [
+            "Security",
+            "Backup",
+            "Monitoring",
+            "Billing"
+          ],
+          "at": "Sold to",
+          "companies": [
+            "MSPs",
+            "MSSPs",
+            "Cloud MSPs"
+          ]
+        }
+      },
+      {
+        "q": "Grow your partner program",
+        "lead": "Find providers who might resell, refer or build on your product.",
+        "detail": "Check the available job titles in your sample before planning a partner campaign.",
+        "visual": "roles",
+        "visualData": {
+          "roles": ["Resell", "Refer", "Build"],
+          "at": "Potential partner fit",
+          "companies": ["MSPs", "MSSPs", "Cloud MSPs"]
+        }
+      },
+      {
+        "q": "Run focused outreach",
+        "lead": "Invite MSPs to a webinar, a demo or a regional event, not the whole IT industry.",
+        "detail": "Choose the closest segment in the form and describe your target region in Custom requirements. Check the sample before planning outreach.",
+        "visual": "sample",
+        "visualData": {
+          "card": "Focused list",
+          "stamp": "Scoped",
+          "ticks": [
+            "One segment, not all of IT",
+            "The region you sell into",
+            "Job titles you can act on",
+            "Check the sample for fit"
+          ]
+        }
+      },
+      {
+        "q": "What the sample may include",
+        "lead": "Contact name, business email, job title and company information.",
+        "detail": "Available fields and coverage vary by segment. The sample exists so you can check the fields before you decide.",
+        "visual": "sources",
+        "visualData": {
+          "sources": [
+            "Contact name",
+            "Business email",
+            "Job title",
+            "Company information"
+          ],
+          "record": "Your sample",
+          "laws": []
+        }
+      },
+      {
+        "q": "Not sure which list fits?",
+        "lead": "Choose Not sure yet and tell us who you want to reach.",
+        "detail": "Our team reviews your needs and sends a relevant sample. Need certain job titles or a narrower slice? Choose Custom list and describe it.",
+        "visual": "roles",
+        "visualData": {
+          "roles": [
+            "MSP",
+            "MSSP",
+            "Cloud MSP",
+            "Custom"
+          ],
+          "at": "For",
+          "companies": [
+            "Software vendors",
+            "Partner programs",
+            "Event and webinar teams"
+          ]
+        }
+      }
+    ],
+    "ask": {
+      "title": "Ready to see who fits?",
+      "text": "Tell us who you want to reach, and we will send a relevant sample.",
+      "button": "Let's find your MSP fit"
+    }
+  },
+  "closer": {
+    "title": "Ready To See Who Fits?",
+    "text": "Tell us who you want to reach, and we will send a relevant sample.",
+    "button": "Let's find your MSP fit",
+    "small": "Our team reviews every request before anything is sent."
+  },
+  "footer": {
+    "wordmark": "span",
+    "meta": "© 2026. A Champions Group Company",
+    "columns": [
+      {
+        "title": "Visit",
+        "items": [
+          {
+            "label": "2710 Media Center Drive"
+          },
+          {
+            "label": "Building 6, Suite 120"
+          },
+          {
+            "label": "Los Angeles, CA 90065"
+          }
+        ]
+      },
+      {
+        "title": "Contact",
+        "items": [
+          {
+            "label": "877.755.0023",
+            "href": "tel:+18777550023"
+          },
+          {
+            "label": "spanglobalservices.com",
+            "href": "https://www.spanglobalservices.com"
+          }
+        ]
+      },
+      {
+        "title": "Legal",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "https://www.spanglobalservices.com/privacy"
+          },
+          {
+            "label": "Data Security Policy",
+            "href": "https://www.spanglobalservices.com/data-security-policy"
+          },
+          {
+            "label": "Refund Policy",
+            "href": "https://www.spanglobalservices.com/refund-policy"
+          },
+          {
+            "label": "Do Not Sell My Data",
+            "href": "https://www.spanglobalservices.com/do-not-sell-my-data"
+          }
+        ]
+      }
+    ]
+  },
+  "tracking": {
+    "offer": "msp_us_sample",
+    "campaign": "msp_us",
+    "form": "msp_us_sample",
+    "conversionLabel": "AW-XXXXXXXXX/XXXXXXXXXXXXXXX"
+  }
+}

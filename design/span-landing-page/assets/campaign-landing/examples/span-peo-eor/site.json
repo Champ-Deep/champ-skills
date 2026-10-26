@@ -1,0 +1,460 @@
+{
+  "brand": {
+    "name": "Span Global Services",
+    "domain": "https://www.spanglobalservices.com",
+    "logo": "logo.png",
+    "phone": "877.755.0023",
+    "phoneHref": "+18777550023",
+    "privacyUrl": "https://www.spanglobalservices.com/privacy"
+  },
+  "meta": {
+    "title": "PEO And EOR Install Base Data. 331,816 Contacts | Span Global Services",
+    "description": "See which companies run Insperity, TriNet, ADP TotalSource, Deel and 25 more PEO and EOR platforms. Named contacts, tagged by provider. Free sample.",
+    "canonical": "https://www.spanglobalservices.com/lp/peo-eor-users-data"
+  },
+  "headlines": {
+    "default": "Which Of Their Clients Should Be Yours?",
+    "variants": {
+      "peo": "Which Of Their Clients Should Be Yours?",
+      "book": "We Mapped 28 PEO And EOR Client Books.",
+      "blind": "Your Reps Are Calling In The Dark.",
+      "insperity": "Who Is On Insperity? We Can Tell You.",
+      "trinet": "Who Is On TriNet? We Can Tell You.",
+      "deel": "Who Is On Deel? We Can Tell You."
+    }
+  },
+  "hero": {
+    "eyebrow": "PEO and EOR competitive intelligence",
+    "lede": "233,000 US businesses already run a PEO. The thirty largest providers hold 64% of worksite employees, up from 58% three years ago.",
+    "ledeEmphasis": "Those books are changing hands, and we know who sits on each one.",
+    "ticks": [
+      "Every account tagged to the provider it runs today",
+      "The decision maker, the account size and the rest of the stack",
+      "Documented sourcing, provenance on request"
+    ],
+    "callout": {
+      "lead": "Licence the full PEO and EOR install base, or only the providers you compete with.",
+      "text": "Pricing comes with your briefing.",
+      "link": "Request a quote"
+    },
+    "sourcesLabel": "Sources for these figures",
+    "sources": [
+      {
+        "domain": "napeo.org",
+        "url": "https://napeo.org/wp-content/uploads/2026/10/PEOIndustryFootprint_WhitePaper2026.pdf",
+        "title": "PEO Industry Footprint 2026, NAPEO and McBassi & Company",
+        "snippet": "At the end of 2025, 502 PEOs served 5.4 million worksite employees at 233,000 client businesses. The thirty largest hold 64% of worksite employees, up from 58% three years earlier."
+      },
+      {
+        "domain": "spanglobalservices.com",
+        "url": "https://www.spanglobalservices.com",
+        "title": "Span Global Services install base data, October 2026",
+        "snippet": "331,816 named contacts tagged to 28 PEO and EOR providers. Counts refreshed every 30 days."
+      }
+    ]
+  },
+  "form": {
+    "title": "See what we hold on one competitor",
+    "sub": "Name the provider you compete with. A specialist replies within one business day.",
+    "subChosen": "Counts and a sample for {label}. We reply within one business day.",
+    "segments": [
+      "Both PEO and EOR",
+      "PEO platform users",
+      "EOR platform users"
+    ],
+    "specific": "A specific provider",
+    "providerPlaceholder": "Insperity, Deel, TriNet...",
+    "consent": "I agree to Span Global Services contacting me about this request and I have read the",
+    "submit": "Request my competitor briefing",
+    "sticky": "See my competitor briefing",
+    "foot": "We ask what you are trying to achieve before we send anything. Scoped samples follow that conversation.",
+    "thanksTitle": "Preview only, nothing sent",
+    "thanksText": "Your entries passed local validation and remain in this form. No competitor briefing request was sent."
+  },
+  "band": [
+    {
+      "value": "331,816",
+      "label": "Total contacts"
+    },
+    {
+      "value": "28",
+      "label": "Providers tagged"
+    },
+    {
+      "value": "70+",
+      "label": "Intelligence fields"
+    },
+    {
+      "value": "30 days",
+      "label": "Refresh cycle"
+    }
+  ],
+  "clients": {
+    "label": "Trusted by",
+    "names": [
+      "VMware",
+      "Cisco",
+      "Bank of America",
+      "Nationwide",
+      "S&P",
+      "Applied Biosystems"
+    ]
+  },
+  "compare": {
+    "title": "Who Is On Which Platform",
+    "sub": "Each book as its own board, every provider a tile sized by its share. Click one to pin it and every other tile shows the ratio. Drag tiles to put two rivals side by side.",
+    "note": "Tile size follows each provider's share of its own book. All provider names are trademarks of their respective owners. Span Global Services is not affiliated with, endorsed by or sponsored by any of them.",
+    "left": {
+      "name": "PEO platforms",
+      "segment": "PEO platform users",
+      "total": 223488,
+      "otherLabel": "All other PEOs",
+      "items": [
+        {
+          "name": "Insperity",
+          "count": 57561
+        },
+        {
+          "name": "Paychex PEO",
+          "count": 42595
+        },
+        {
+          "name": "Vensure",
+          "count": 29496
+        },
+        {
+          "name": "ADP TotalSource",
+          "count": 27715
+        },
+        {
+          "name": "TriNet",
+          "count": 23024
+        },
+        {
+          "name": "CoAdvantage",
+          "count": 9065
+        },
+        {
+          "name": "Tandem HR",
+          "count": 8186
+        }
+      ],
+      "short": "PEO"
+    },
+    "right": {
+      "name": "EOR platforms",
+      "segment": "EOR platform users",
+      "total": 108328,
+      "otherLabel": "All other EOR platforms",
+      "items": [
+        {
+          "name": "Deel",
+          "count": 54311
+        },
+        {
+          "name": "TMF Group",
+          "count": 16038
+        },
+        {
+          "name": "Globalization Partners",
+          "count": 6991
+        },
+        {
+          "name": "Papaya Global",
+          "count": 3206
+        },
+        {
+          "name": "Safeguard Global",
+          "count": 2805
+        },
+        {
+          "name": "Velocity Global",
+          "count": 2805
+        },
+        {
+          "name": "Oyster HR",
+          "count": 2259
+        }
+      ],
+      "short": "EOR"
+    },
+    "strip": {
+      "idle": "Pick a provider",
+      "idleName": "Click any tile",
+      "hint": "Hover to preview, click to pin. Then hover a rival for the ratio.",
+      "share": "Share of its book",
+      "rank": "Rank",
+      "all": "Share of all 331,816",
+      "vs": "Versus",
+      "of": "of",
+      "rest": "The long tail",
+      "preview": "Previewing",
+      "pinned": "Pinned",
+      "contacts": "contacts",
+      "cta": "Brief me on {label}"
+    },
+    "bento": {
+      "lgAt": 20,
+      "wideAt": 10,
+      "hint": "Drag to rearrange. On touch, press and hold first. Keyboard: Alt plus arrow keys.",
+      "hintStatic": "Largest books first. Click a tile to pin it.",
+      "reset": "Reset order",
+      "rank": "#{rank} of {n}",
+      "tail": "Long tail",
+      "share": "{share}% of {book}",
+      "tailLabel": "Everything outside the named providers",
+      "all": "{share}% of all 331,816 contacts"
+    }
+  },
+  "account": {
+    "title": "What We Hold On Every Account",
+    "lede": "Not a list of names. A profile of an account you are trying to take, across 70+ fields in six groups.",
+    "groups": [
+      "Decision maker",
+      "Verified email and direct dial",
+      "Firmographics",
+      "Incumbent provider",
+      "Rest of the HR stack",
+      "Renewal signals"
+    ],
+    "fit": "Accounts run 50 to 5,000 employees and 10M to 250M in revenue, the band where switching actually happens. The average PEO client carries 23.2 worksite employees, so this sits well above the industry median.",
+    "sourcesLabel": "Source",
+    "sources": [
+      {
+        "domain": "napeo.org",
+        "url": "https://napeo.org/wp-content/uploads/2026/10/PEOIndustryFootprint_WhitePaper2026.pdf",
+        "title": "PEO Industry Footprint 2026, NAPEO and McBassi & Company",
+        "snippet": "The average PEO client employs 23.2 worksite employees. PEO penetration among businesses with 20 to 499 employees is 14%."
+      }
+    ]
+  },
+  "dossier": {
+    "title": "One account, in full",
+    "tag": "Illustrative record",
+    "providerLabel": "Incumbent provider",
+    "provider": "TriNet",
+    "columns": [
+      {
+        "title": "Who signs",
+        "rows": [
+          {
+            "label": "Name",
+            "value": "Dana Whitfield"
+          },
+          {
+            "label": "Role",
+            "value": "VP People Operations"
+          },
+          {
+            "label": "Email",
+            "value": "d.whitfield@northline.com",
+            "verified": true
+          },
+          {
+            "label": "Direct dial",
+            "value": "+1 614 555 0172",
+            "verified": true
+          },
+          {
+            "label": "Signed by",
+            "value": "Named, with title"
+          }
+        ]
+      },
+      {
+        "title": "The account",
+        "rows": [
+          {
+            "label": "Company",
+            "value": "Northline Industrial"
+          },
+          {
+            "label": "Employees",
+            "value": "310"
+          },
+          {
+            "label": "Revenue",
+            "value": "50M to 100M"
+          },
+          {
+            "label": "Also runs",
+            "value": "Workday, Gusto Benefits"
+          },
+          {
+            "label": "Renewal timing",
+            "value": "Where available"
+          }
+        ]
+      }
+    ],
+    "verifiedLabel": "Verified",
+    "footer": "Shown to explain the attributes, not as a data sample. Names, numbers and companies here are invented."
+  },
+  "faq": {
+    "title": "Questions We Hear On The First Call",
+    "sub": "Pick the question. The answer comes with the picture.",
+    "items": [
+      {
+        "q": "What would this actually change for my team?",
+        "lead": "Your reps stop opening calls blind.",
+        "detail": "They know the incumbent, the size of the account, who signed it and what else runs alongside it, before they dial. Displacement pitches land differently when you can name the provider the prospect is already paying.",
+        "visual": "calls",
+        "visualData": {
+          "beforeLabel": "Blind opener",
+          "before": "Hi, this is Sam from a PEO. Do you have a minute to talk about your HR outsourcing?",
+          "afterLabel": "Informed opener",
+          "after": "Dana, you have been on *TriNet* since you passed *300 people*. Before the next renewal, want to see what the switch would look like?"
+        }
+      },
+      {
+        "q": "Where does this data come from?",
+        "lead": "Public records, professional profiles and opt in sources, each traceable to a source category.",
+        "detail": "Public filings and business registries, company websites and careers pages, professional profiles and submitted resumes, event and webinar registrations, opt in surveys, and partner and recruitment networks. We will document provenance for any field you ask about before you buy. Processing follows GDPR, CCPA and CAN SPAM requirements, and opt out requests are honoured.",
+        "visual": "sources",
+        "visualData": {
+          "sources": [
+            "Public filings and registries",
+            "Company sites and careers pages",
+            "Professional profiles and resumes",
+            "Event and webinar registrations",
+            "Opt in surveys",
+            "Partner and recruitment networks"
+          ],
+          "record": "One verified record",
+          "laws": [
+            "GDPR",
+            "CCPA",
+            "CAN SPAM"
+          ]
+        }
+      },
+      {
+        "q": "Can you tell me when a contract renews?",
+        "lead": "Where it is observable, yes. Where it is not, we say so rather than guess.",
+        "detail": "Most of the value sits elsewhere: knowing the incumbent lets you time your own outreach against the provider's renewal season instead of calling at random.",
+        "visual": "renewal",
+        "visualData": {
+          "window": [
+            10,
+            11
+          ],
+          "keys": [
+            "Contract year, month by month",
+            "Notice window, where the account is in play",
+            "Auto renewal"
+          ],
+          "pin": "We carry the renewal date where it is observable, and say so where it is not"
+        }
+      },
+      {
+        "q": "Can I see a sample first?",
+        "lead": "Yes, once we understand what you are building.",
+        "detail": "A scoped sample is there to show you the framework, which attributes come with an account and how they are structured, rather than as a free batch of leads. Teams that start with the briefing get to a usable file faster than teams that start with a download.",
+        "visual": "sample",
+        "visualData": {
+          "card": "Scoped sample",
+          "stamp": "Scoped",
+          "ticks": [
+            "Your competitor only",
+            "Every attribute group shown",
+            "Structure you can load into your CRM",
+            "Not a free batch of leads"
+          ]
+        }
+      },
+      {
+        "q": "Who is this built for?",
+        "lead": "Revenue leaders selling into PEO and EOR accounts.",
+        "detail": "At PEO and EOR providers running displacement campaigns, and at HRIS, HCM, payroll, benefits administration and insurance brokerage firms selling into the same accounts. Typically a CRO, VP of sales, head of growth or demand generation director.",
+        "visual": "roles",
+        "visualData": {
+          "roles": [
+            "CRO",
+            "VP Sales",
+            "Head of Growth",
+            "Demand Gen Director"
+          ],
+          "at": "At",
+          "companies": [
+            "PEO and EOR providers",
+            "HRIS and HCM",
+            "Payroll",
+            "Benefits administration",
+            "Insurance brokerage"
+          ]
+        }
+      }
+    ],
+    "ask": {
+      "title": "Something we have not answered?",
+      "text": "Ask it on the briefing call. One conversation, no obligation either way.",
+      "button": "Request my competitor briefing"
+    }
+  },
+  "closer": {
+    "title": "Know The Incumbent Before You Call",
+    "text": "Name one provider you compete with. We will show you what we hold against their book and you can decide whether it is worth anything to you.",
+    "button": "Request my competitor briefing",
+    "small": "One conversation. No obligation either way."
+  },
+  "footer": {
+    "wordmark": "span",
+    "meta": "© 2026. A Champions Group Company",
+    "columns": [
+      {
+        "title": "Visit",
+        "items": [
+          {
+            "label": "2710 Media Center Drive"
+          },
+          {
+            "label": "Building 6, Suite 120"
+          },
+          {
+            "label": "Los Angeles, CA 90065"
+          }
+        ]
+      },
+      {
+        "title": "Contact",
+        "items": [
+          {
+            "label": "877.755.0023",
+            "href": "tel:+18777550023"
+          },
+          {
+            "label": "spanglobalservices.com",
+            "href": "https://www.spanglobalservices.com"
+          }
+        ]
+      },
+      {
+        "title": "Legal",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "https://www.spanglobalservices.com/privacy"
+          },
+          {
+            "label": "Data Security Policy",
+            "href": "https://www.spanglobalservices.com/data-security-policy"
+          },
+          {
+            "label": "Refund Policy",
+            "href": "https://www.spanglobalservices.com/refund-policy"
+          },
+          {
+            "label": "Do Not Sell My Data",
+            "href": "https://www.spanglobalservices.com/do-not-sell-my-data"
+          }
+        ]
+      }
+    ]
+  },
+  "tracking": {
+    "offer": "peo_eor_free_sample",
+    "campaign": "gads_peo_eor_install_base",
+    "form": "peo_eor_sample",
+    "conversionLabel": "AW-XXXXXXXXX/XXXXXXXXXXXXXXX"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "skill_name": "span-landing-page",
+  "evaluation_type": "functional acceptance, not an A/B model benchmark",
+  "evals": [
+    {
+      "id": 1,
+      "name": "msp-count-free-source",
+      "prompt": "Use the SPAN landing-page skill on https://share.lakeb2b.com/f/iZ0AciBa/span-msp-landing-us-preview__1_.html. Preserve its offer and source qualifications and deliver a static preview.",
+      "expected_output": "Source-backed MSP page with the established SPAN hero and footer, optional phone, offer-specific Custom list requirements, illustrative field layout, no invented proof or sent confirmation.",
+      "assertions": [
+        "Builds through the bundled builder with no unresolved tokens.",
+        "Omits unsupported stat counters, clients, quantitative comparison, citations and PEO figures.",
+        "Gmail and outlook.co.uk are rejected with a visible error; a blank optional phone is accepted on an otherwise valid preview request.",
+        "Custom list reveals a labelled custom-requirements field and rejects an empty requirement.",
+        "A valid preview request shows nothing was sent and triggers no POST or lead conversion.",
+        "All five visual panels are reachable by click and keyboard.",
+        "No errors or element overflow at 390, 834 and 1440, with reduced-motion and footer canvas checks."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "peo-eor-count-backed-regression",
+      "prompt": "Rebuild the bundled PEO and EOR example with the SPAN landing-page skill without changing its counts or merging its adjustable boards.",
+      "expected_output": "A generated count-backed preview with the white stat break and separate PEO and EOR bento boards, with no production send behavior.",
+      "assertions": [
+        "Counts reconcile to PEO 223488, EOR 108328 and total 331816.",
+        "The stat band has a white background and SPAN Green figures.",
+        "Eight tiles appear in each board, with reorder confined to that board and shared pin/ratio feedback.",
+        "Provider CTA populates the specific-provider field and keeps required-phone behavior.",
+        "Both examples pass boundary tests including inline-script escaping and optional-section omission."
+      ]
+    }
+  ]
+}
