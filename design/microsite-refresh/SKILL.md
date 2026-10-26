@@ -55,7 +55,7 @@ When a hand-built page is converted into a tokenized template, prove the convers
 
 ## Gate order, always
 
-Build (reference-string guard and dash guard), then no-ai-slop `slop_lint.py`, then `agent_audit.py`, then `click_depth.py`, then `visual-verify` (`audit.py` at mobile and desktop width, both themes; `shoot.py`; the written critique). Every gate clean before the handoff ships. The reference-string guard means copy is never fixed in built HTML: change it in intake, rebuild, and let the guard prove every string has a home.
+Build (reference-string guard and dash guard), then no-ai-slop `slop_lint.py`, then `agent_audit.py`, then `click_depth.py`, then `visual-verify` (`audit.py` at mobile and desktop width, both themes; `shoot.py`; the written critique). Then score the built handoff with the `ten-out-of-ten` scorecard (`references/scorecard.md`, 10 checks, evidence per check) and put the n/10 and the failing checks in `build/brief.md`; a failing proof check is an owner to-do, never filled with invented content. Every gate clean before the handoff ships. The reference-string guard means copy is never fixed in built HTML: change it in intake, rebuild, and let the guard prove every string has a home.
 
 ## Always-on rules
 
@@ -68,6 +68,9 @@ Build (reference-string guard and dash guard), then no-ai-slop `slop_lint.py`, t
 7. Never run sub-skills alone. Partial or single-step runs are unsupported: they skip the intake contract and the step 7 gates (slop lint, dash guard, `visual-verify`, `agent_audit`, `click_depth`), and `build_site.py` needs the intake files and the copy step or its reference-string guard stops the build. The demo's partial-quality result (good hero and micro-interactions, weak rest) matches this, but no specific failure was root-caused.
 
 ## Pitfalls
+
+- The plugin gates passing is not a 10/10. SellerLedger passed slop lint, agent audit (0 fail) and click depth yet scored 7/10: no named proof, and the 880 KB `xlsx.full.min.js` loaded on first view although it is only needed when a file is picked. Lazy-load heavy libraries on the first user action.
+- Headless Chrome `--window-size=390` renders wider than 390 and crops the screenshot, which looks like overflow. Measure `document.documentElement.scrollWidth` at a 390 viewport in Playwright instead.
 
 - `click_depth.py` crashes on `"hub": null` groups in `page-map.json` (`g["hub"][1]` indexes a null). Null hubs are valid per the intake contract, so either list a hub per group or patch the script to `g.get("hub")`.
 - The signature hero workshop can promise a scroll-scrubbed scene the site has no animation runtime for. When the refresh is meant to include scroll craft, load `scroll-journey-kit` (the LakeKit motion layer) as the sanctioned runtime and follow its checks; otherwise ship the motif as a static or CSS-only scene at every width and record the scrub version as v2 rather than pulling an arbitrary animation library in at build time.
