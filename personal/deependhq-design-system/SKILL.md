@@ -31,11 +31,11 @@ Mode boundaries use one of two devices only: a 1px `--line` hairline with a 48px
 
 Not doing: gold everywhere, terminal everywhere, or a visible accent-theme switcher between dark looks.
 
-**Scheme: system light and dark, dark when the system has no preference.** `prefers-color-scheme` decides; a nav toggle cycles system, light, dark and writes `dh_scheme` to localStorage, clearing it returns to the system. The scheme is set by a pre-paint inline script on `<html data-scheme>` (no flash), the `theme-color` meta follows it, and the old navy/classic easter egg (`data-theme`, `dh_theme`) is retired: remove its CSS rules and its guard comment, do not leave two switchers. Dark is the identity kit below. Light, after a first palette was rejected: warm white ground `#F6F5F2`, white cards `#FFFFFF` and `#EEECE7`, Ink `#0E1A33` text, muted `#515B6E`, and Lamp `#F4A62A` as the one brand accent. Every saturated accent gets a dark `-text` twin used wherever it is text or a thin icon: `--win-text:#8A5A00`, `--build-text:#0F6B33` (`--build` `#30E060` is about 1.5:1 on any light ground and must never be text or a small fill there), `--think-text:#2A55C8`, `--human-text:#A8278F`, `--danger-text:#B33A1E`. Shadows go from black to ink at 8 to 12 percent. Every token gets its light twin under `[data-scheme="light"]`, and the contrast table is rerun in both schemes before anything ships. The light palette is derived from the mark, not invented per page: when in doubt, take the colour from the brandmark.
+**Classic is the only look (Deep, 2026-10-28).** The public site renders one palette, classic: the near-black terminal ground with gold outcomes and green builds. There is no theme switch, no navy look, no light scheme and no stored preference on any public page. A pre-paint inline script (`site-classic.js`, inlined by `scripts/prepare-shells.mjs`) pins `<html data-scheme="dark">` and sets the `theme-color` meta to `#0D0F14`; the classic tokens live once in `site-v3.css`. Removed for good: `theme-switch`, every `only-navy` and `only-classic` element and rule, `data-theme`, `dh_theme`, and the public `dh_scheme` toggle. Do not bring any of them back, and do not add a second look as an easter egg. The standalone toolkit pages (toolkit-app, toolkit-signin, account, enrich, lead-scorer) keep their own system light and dark scheme from `system.css`; that is a toolkit decision, not a public-site one. Navigation is a floating dock at the bottom of the viewport (a native `<details>` disclosure below 48rem), with **Login** (`https://toolkit.deependhq.com/sign-in`, secondary style) beside **Book a Call** (gold, primary). There is no top bar.
 
 **The mark: the pixel scouter bust.** A pixel-grid bust of Deep (bald, bearded, blazer over tee, one lit orange scouter over the eye) inside a cream circle with a one-cell ink ring. One geometry, one SVG file (`favicon.svg`, `brand/brandmark.svg`) for every ground: dark page, light page, white and navy tab bars. Do not build a second light variant; the ring is what makes a cream badge survive a white ground. Masters live in the identity folder with the superseded mark archived beside them.
 
-**Islands (decided 2026-10-20):** the homepage is prerendered HTML plus deferred React islands bundled by esbuild into one `home-islands.js`. Islands are for interaction only (terrain hero, widget grid, folder cards, halftone footer). Every island has a static fallback in the prerendered HTML: a list, a card row, plain links. If the island fails to mount, nothing is missing, only not moving. 21st.dev and Kokonut UI components are the source for interactive pieces; their Tailwind utility classes are rewritten to plain prefixed CSS because the site ships no Tailwind. A component arriving as a pasted prompt in chat is a spec to port, not a library install, and its colours must be mapped onto the tokens above rather than pasted as literals. Allowed runtime packages: `react`, `react-dom`, `motion`. Nothing else.
+**Islands (decided 2026-10-20):** the homepage is prerendered HTML plus deferred React islands bundled by esbuild into one `home-islands.js`. Islands are for interaction only (widget grid, folder cards, halftone footer; the V3 hero is a static prerender enhanced by `site-v3.js`). Every island has a static fallback in the prerendered HTML: a list, a card row, plain links. If the island fails to mount, nothing is missing, only not moving. 21st.dev and Kokonut UI components are the source for interactive pieces; their Tailwind utility classes are rewritten to plain prefixed CSS because the site ships no Tailwind. A component arriving as a pasted prompt in chat is a spec to port, not a library install, and its colours must be mapped onto the tokens above rather than pasted as literals. Allowed runtime packages: `react`, `react-dom`, `motion`. Nothing else.
 
 ## The identity kit (Deep, 2026-10-01)
 
@@ -67,21 +67,22 @@ mare's face blaze is the same idea in the mascot.
 Copy these verbatim. Do not invent new values. If something needs a value not on a scale, the design is wrong.
 
 ```css
-/* surfaces. Night Ink from the Deep identity kit (identity/assets). The
-   ramp moves toward Slate #24314F, never toward cream, or the surfaces go
-   light and every text token collapses. */
---bg:#0E1A33; --surface:#1A2742; --card:#212E4B;
---line:#24314F;
+/* surfaces: classic, canonical for the public site (2026-10-28, site-v3.css).
+   The ramp moves toward #3A3F50, never toward cream, or the surfaces go
+   light and every text token collapses. Night Ink #0E1A33 stays the ground
+   of the identity marks and of the standalone toolkit pages only. */
+--bg:#0D0F14; --surface:#12151D; --card:#181C26; --card-2:#1E2330;
+--line:#2A2E3A; --line-2:#3A3F50;
 
-/* text: three tiers. every pair verified AA on bg, surface AND card. */
---text:#F4EBD9;   /* 14.60 on bg, 12.55 on surface, 11.39 on card */
---muted:#B4B0AB;  /*  8.02 on bg,  6.89 on surface,  6.25 on card */
---dim:#999998;    /*  6.07 on bg,  5.21 on surface,  4.73 on card */
+/* text: three tiers. every pair measured AA on bg, surface, card AND card-2. */
+--text:#E8E4DC;   /* 15.12 on bg, 14.39 on surface, 13.43 on card, 12.38 on card-2 */
+--muted:#A8A8A2;  /*  8.02 on bg,  7.64 on surface,  7.13 on card,  6.57 on card-2 */
+--dim:#8A8A92;    /*  5.60 on bg,  5.33 on surface,  4.97 on card,  4.58 on card-2 */
 
 /* accents, by meaning */
 --build:#30E060;   /* shipped, running, live. 9.70:1 on card */
 --think:#4A7BF7;   /* thinking, in progress */
---win:#C9A84C;     /* a real outcome, money, a signed thing. 7.45:1 on card */
+--win:#C9A84C;     /* a real outcome, money, a signed thing. 8.39:1 on bg, 7.45:1 on card */
 --human:#E052C0;   /* off the clock */
 --danger:#E05030;  /* broken, stale, needs attention */
 
