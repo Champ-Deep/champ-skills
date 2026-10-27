@@ -23,3 +23,11 @@ The Ask Deep widget is `https://assistant.deependhq.com/static/widget.js` and it
 
 ## Toolkit go-live state
 D1 `toolkit-db` (78b99395-186d-44f5-854d-94aa85530f04) is bound as `TOOLKIT_DB` and migrated. Until Clerk keys and provider keys are set as Worker secrets, `/api/toolkit/config` returns `configured:false` and the toolkit shows "Setup needed". That is the correct fail-closed state, not a bug.
+
+## Clerk production (ToolKit app, live since 2026-10-28)
+- App `app_3L6R5PZikLJFYyRAruI825weYnm` ("ToolKit"), production instance on deependhq.com, FAPI `clerk.deependhq.com`. The DNS CNAMEs (clerk, accounts, clkmail, clk._domainkey, clk2._domainkey) are DNS only, not proxied. The wrangler OAuth token has no DNS scope; edit DNS through the Cloudflare connector EXECUTE tool.
+- The Clerk MCP strips secret keys. Use `clerk env pull --app <id> --instance prod --file <0600 scratch file>`, pipe each value into `wrangler secret put`, and delete the file only after both report Success.
+- `wrangler secret put` fails with "latest version isn't currently deployed" when a branch push left a newer preview upload. Redeploy main first, then set the secret.
+- `/api/toolkit/config` reports configured only when `CLERK_JS_URL` is set. It is pinned in wrangler.jsonc vars to clerk-js 5.128.1. v6 splits out @clerk/ui, so don't bump it blindly.
+- Password sign-in has device trust on, so a new browser gets an email code (`#/factor-two`). For a production smoke test, create a throwaway user through the Backend API with `bypass_client_trust: true` and a User-Agent header (Cloudflare returns 1010 to the default urllib UA), sign in through the real page, then DELETE the user. Script: ~/.hermes/cache/scratch/clerk_e2e.py.
+- Credits live in remote D1 `toolkit_settings`: default_daily_credit_cap 1000 ($1/day), welcome_credits 2000, trial_pool_credits 200000, global_daily_cap_micro 25000000, default_daily_row_cap 1000. Each smoke-test user consumes a $2 welcome grant from the pool.
