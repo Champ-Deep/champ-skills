@@ -13,7 +13,7 @@ metadata:
 
 Turn a source URL, HTML file or approved brief into a single-offer SPAN Global Services landing-page preview. Deliver HTML, editable site.json and VERIFICATION.md. For the complete workflow read references/workflow.md, then reuse assets/campaign-landing/build.py and its examples. Do not write a second renderer.
 
-Load span-brand-guidelines, frontend-design and visual-verify. Main owns content judgments and review; route UI implementation to a frontend Kanban card, never delegate_task. Keep full microsites on microsite-refresh and corporate homepages on venture-story.
+Load span-brand-guidelines, frontend-design and visual-verify. Main owns content judgments and review; route UI implementation to a frontend Kanban card, never delegate_task. Keep full microsites on microsite-refresh and corporate homepages on venture-story. For the toy microsite genre Deep calls "dopamine sites" (single-screen brand toy, no conversion goal, shared result card), use `references/dopamine-sites.md`.
 
 ## Standing rules
 
