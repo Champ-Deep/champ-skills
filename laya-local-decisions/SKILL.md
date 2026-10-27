@@ -10,7 +10,8 @@ Laya (convaiinnovations/laya, 0.4B ModernBERT) answers typed questions about a t
 ## Run
 
 ```bash
-echo '{"state": "<text or JSON>", "questions": {"q": {"type": "choice", "instructions": "...", "criteria": {"a": "...", "b": "..."}}}}' | ~/.hermes/scripts/laya_decide.py
+cd /Users/deep/laya-local/decider && ../.venv/bin/python decider.py ask "<situation>" [--shadow]   # gate verdict, optional Clef-flash shadow (~7 s warm)
+# Arbitrary typed questions (choice/score/noul, Jev shape): mcp_clef_ask via the `clef` MCP server, or decider/mcp_server.py directly.
 ```
 
 Question types: `choice` (criteria is a dict), `score` (criteria is an ordered list), `noul` (yes/no). Output has `choice`/`score`/`noul`, `confidence`, `probabilities`. Each CLI call reloads the model (about 20s first, then cached by the OS).
