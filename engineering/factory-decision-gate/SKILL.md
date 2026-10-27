@@ -19,6 +19,13 @@ Actions: `decide` = open_pr, push_feature_branch, create_branch, create_card, un
 
 For a business or people decision (not a code action) use `decider.py ask "<situation>"`; it matches Deep's precedents in the Celsus Decision Desk and abstains when none covers it.
 
+## Meeting follow-through gate (Deep's ruling, 28 Oct 2026, precedent P41)
+
+The meeting watcher (cron `d741846ee693`) and intake sweep (`9a042ac04419`) act on Deep's items without him: emails he committed to, docs, NDAs (champions-nda), and 30-minute ideation slots with a prep note in `Efforts/Active/Ideation/`. Only DECISION items gate: hard-hold list first (spend, pricing, payments, signing other than the standard NDA, HR and reporting lines, credentials, legal disputes, Chief-owned), then `decide` (precedent), then one `clef_ask`; proceed only if `auto_proceed >= 0.95`. Everything else is a blocked decision card on the board, never only a Telegram line.
+
+- `clef_ask` criteria must be a dict `{label: description}`; a list raises inside `systemone` and the tool returns a bare "Error executing tool".
+- Clef is conservative, not calibrated: a routine internal deadline-confirmation email scored auto_proceed 0.34, a contract signing 0.05. At a 0.95 bar Clef alone frees almost nothing; the pre-approved action classes and precedents do the work. Grow coverage by adding precedents (Decision Desk `Task Decision Precedents.md`, verify with `decider.py ask`), not by lowering the bar.
+
 ## The decision model's place
 
 Clef-flash (Cloudflare, Apache 2.0, 9B; installed under /Users/deep/laya-local, weights in ~/.cache/huggingface, runs offline) replaced Laya on 2026-10-18 (15 of 18 vs 7 of 18 on the Celsus suites). It is a classifier, not a chat model, so it cannot be a Hermes provider, worker or computer-use driver. It is about 7 s per call on this Mac, so it is a gate, not a per-click loop. It runs in shadow only (`ask --shadow`) and never changes a verdict until 300 Deep-adjudicated labels (60+ per class) show it beating the rules on date-held-out rows.
