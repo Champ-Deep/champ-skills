@@ -18,6 +18,8 @@ When a page must explain HOW something works and the idea has a physical mechani
 - It is slow to build on purpose (parts list, geometry, audit of every joint). Budget one long session; use it only when the figure earns its place over a flat diagram.
 - Capture scripts need Chrome. Build with `node <example>/build.mjs` (`--light` for a light card).
 - Trigger words from the user: isometric, exploded view, cutaway, "how it works" as a figure. Otherwise keep the existing flat style.
+- Fastest honest path: copy the smallest example whose mechanism maps (a gauge plus a needle reads as any meter, so `examples/dial-indicator`), re-purpose it, and recompute every engraved label, tick time and readout string from your own model; example text is example truth. The copy-and-repurpose build runs in one sitting, but the capture and look pass stay mandatory.
+- Embed the built figure into the page as an `iframe srcdoc` (the figure HTML through `html.escape(..., quote=True)` at a placeholder), so the deliverable stays one self-contained file that opens offline. Size the frame per breakpoint by loading the figure page alone and reading `document.documentElement.scrollHeight` at 390 and 1440, then set the iframe height in the base CSS plus a media query: a guessed height leaves a scroll strip inside the frame or dead space under it.
 
 ## What went wrong before (do not repeat)
 
@@ -212,7 +214,7 @@ h1 .you{color:var(--accent-ink)}
 .g-m{border-radius:50%;background:conic-gradient(var(--prog) 0 50%,transparent 0);box-shadow:inset 0 0 0 1.5px var(--prog)} /* moving */
 .g-t{border-radius:50%;background:var(--green)}               /* on track: dot */
 details.row{border-bottom:1px solid var(--line)}
-details.row>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:14px 1fr 18px;gap:4px 12px;padding:13px 4px;min-height:44px}
+details.row>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:14px minmax(0,1fr) auto 18px;gap:4px 12px;padding:13px 4px;min-height:44px}
 details.row>summary:hover{background:var(--sunk)}
 .ticks{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:2px;max-width:260px}
 .ticks i{display:block;height:12px;background:var(--line)} .ticks i.on{background:var(--ink)}
@@ -222,6 +224,8 @@ details.row>summary:hover{background:var(--sunk)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 ```
+
+A summary row that ships a metadata cell (owner or due tag) needs a track for it at every breakpoint: a template with fewer tracks than children drops the extras into the narrow chevron track or an implicit row, and a `white-space:nowrap` chip landing in a fixed track pushes the page past 390 while `min-width:0` on the text track does nothing. Declare one track per child in the base CSS (glyph, text, metadata `auto`, chevron), not only under `min-width:860px`.
 
 A full worked example (Readout, Docket, both themes) lives at `Other/Skills/executive-one-pager/docket-readout.html` in the Celsus vault and is published as the "Deep's Work, Walked Through" artifact. Start from it when the vault is mounted; match its quality when it is not.
 

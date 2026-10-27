@@ -12,6 +12,14 @@ Reference build: `~/repos/ChampCast` (Worker + R2 media + KV state + static admi
 - Worker handles `/api/*` and byte routes; everything else falls through to `env.ASSETS.fetch(request)`. `/tv` serves `public/tv.html` automatically.
 - Secrets: `printf '%s' "$TOK" | npx wrangler secret put NAME`; mirror into `.dev.vars` (gitignored) for `wrangler dev` and tests.
 
+## Static SPA plus one API route (the Workers + Assets shape)
+
+For a built frontend (Vite) with a small API: `wrangler.jsonc` sets `main` to the worker, `assets.directory` at `./app/dist` with `binding: ASSETS` and `not_found_handling: "single-page-application"`, plus `run_worker_first: ["/api/*"]` so only API paths hit the worker and everything else falls through to `env.ASSETS.fetch(request)`. One deploy serves both; no Pages project needed.
+
+- Local dev: `vite.config.ts` proxies `/api` to `http://localhost:8787` and wrangler dev runs from the repo root in a second terminal; if that stalls, the UI path that never calls the API still ships and can be tested.
+- Deploy proof: the hash check in `verification-gate-integrity` (served index hash vs local dist, then grep the served bundle for a feature string added this round).
+- `wrangler deploy` writes `.wrangler/cache/`, so gitignore `.wrangler/` or the first commit carries junk.
+
 ## Pitfalls (each one was a real failed run)
 - **R2 `get(key, { range: request.headers })` sets `obj.range` even when no Range header was sent.** Only answer 206 when `request.headers.has('range')`, or every full request comes back partial. Default `offset` to 0 and `length` to `size - offset` (suffix ranges).
 - **`wrangler deploy` intermittently fails with `Received a malformed response from the API`.** Transient: sleep 5 and rerun. Always grep the deploy output for `Deployed` before running tests, or the gate runs against the previous build.
@@ -21,6 +29,7 @@ Reference build: `~/repos/ChampCast` (Worker + R2 media + KV state + static admi
 - **KV `list()` is eventually consistent (up to 60s)** even in the same request path. Any test that writes then lists needs a bounded retry; any online indicator built on list metadata needs a window of at least 90s.
 - Wrangler OAuth token may lack `k2.*` scopes; `wrangler kv namespace create` still works, the warning is noise.
 - Uploads streamed through the Worker cap at the plan request limit (100 MB free, 500 MB paid). Past that, use R2 presigned PUT.
+- **A fetch-proxy route must ship its paste fallback before it ships.** Retailers and big consumer sites return 403/404/429 to a Worker's server-side fetch regardless of the user-agent, so a URL-classify feature that only works on bot-tolerant sites looks broken on exactly the prospects Deep will paste first. Build the "paste their copy instead" path in the same commit, and let the API error (with the real status code) auto-open it with a one-line hint naming the block. Add an SSRF allowlist before any customer self-serve; a demo-level proxy that fetches any caller-supplied URL is fine only while the URL is unlisted, and say so in a code comment and the report.
 
 ## Verification pattern
 - Smoke test as `test/smoke.mjs` taking `BASE` and `ADMIN_TOKEN` env, run against the deployed URL, asserting status codes, byte round-trip and a 206 range.

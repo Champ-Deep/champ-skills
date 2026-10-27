@@ -49,6 +49,14 @@ Order: editorial hero, map, ranked bars, heat tiles, sortable table, method note
 Components: dot map, heat tiles, sortable table, `.fine` method notes.
 Owner skill: `showcase-page` or `visual-report-builder`.
 
+## 7. Decision Session (meeting prep page)
+
+For: a negotiation or alignment meeting that must end with named decisions locked; Deep and the counterparty read it together on screen, so every number carries its source and every recommendation carries its owner.
+Order: hero with the one framing number (the ask against the benchmark), stat cards of computed figures, the record so far as a dated timeline, documents delivered with what is open in each (status table), the ask benchmarked (bars with source lines plus a stacked monthly-equivalents list), commercials ledger with a live calculator (named preset buttons restore each side's stated position, a GST input, and outputs ex GST / with GST), the decisions to lock as rows (title, one-line reason, RECOMMENDED value or an explicit owner-call label, tick box, progress counter persisted per device), the inputs only the counterparty can give as a numbered list, our asks with owners, meeting mechanics and next date.
+Components: floating stat cards, timeline, status table, benchmark bars with sources, calculator with preset restores, decision rows with ticks and progress, numbered ask list.
+Budget: 9,000 to 11,000px at 1440, single column at 390 with data rows stacked (stack recipe in `visual-verify`).
+Owner skill: `showcase-page`.
+
 ## Neutral theme (no brand named)
 
 ```css

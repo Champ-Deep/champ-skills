@@ -44,3 +44,8 @@ Rules:
 Confirm every `section N` reference in the body resolves to a heading that
 exists, re-check heading order, and sweep the file for em and en dashes. Cross
 references break silently when sections are inserted.
+
+A plan that ends in open rulings is not finished in the document: give each
+independent ruling its own decision card (see the `kanban-task-intake` skill)
+so it gets answered as a decision instead of waiting for the reader to reopen
+the file.

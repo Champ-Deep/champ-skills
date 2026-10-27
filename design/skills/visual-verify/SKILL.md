@@ -60,7 +60,7 @@ grep -c $'\xe2\x80[\x93\x94]' file.html   # literal UTF-8 dashes, must print 0
 grep -c '—\|–' file.html       # numeric/named entities, must print 0
 ```
 
-The byte pattern only catches raw UTF-8 dashes, and generated markup routinely emits the entity form (`—`) instead, which that grep counts as zero while the dash still renders on screen. Check both forms, fix every hit, then proceed. On a non-UTF-8 locale `grep` can abort on the very bytes you are counting with `illegal byte sequence` and print nothing or an error instead of `0`, so pin the locale for the run (`LC_ALL=C.UTF-8 grep -c $'\xe2\x80[\x93\x94]' file.html`) or count in Python (`text.count('—') + text.count('–') == 0`), and treat an errored grep as unverified rather than as a zero. When a page ships through a build script, put this check in the script so the count gates the build rather than the review.
+The byte pattern only catches raw UTF-8 dashes, and generated markup routinely emits the entity form (`—`) instead, which that grep counts as zero while the dash still renders on screen. Check both forms, fix every hit, then proceed. On a non-UTF-8 locale `grep` can abort on the very bytes you are counting with `illegal byte sequence` and print nothing or an error instead of `0`, so pin the locale for the run (`LC_ALL=C.UTF-8 grep -c $'\xe2\x80[\x93\x94]' file.html`) or count in Python (`text.count('—') + text.count('–') == 0`), and treat an errored grep as unverified rather than as a zero. When the page builds from source through a bundler, the file on disk holds escaped or split string literals, so a byte grep over the bundle can read zero while the rendered text still carries dashes: count in the browser instead, `document.body.innerText` after load, and require both counts to be zero. Put the check in the build script so the count gates the build rather than the review.
 
 ## Step 0.5: did the requested change actually land?
 
@@ -86,7 +86,7 @@ The audit runs the live page in Chromium and checks the **computed** styles, not
 | Class | What it measures |
 |---|---|
 | Contrast | Real text colour against its real composited background, including transparency stacking. Not the hex you intended, the pixel that renders. |
-| Tap targets | Geometry of every interactive element. 44px floor on mobile, 24px on pointer. The prose-link exemption is not reliable: skip links, footer links and mono-styled inline links still FAIL at 390, so size the anchor itself (`display:flex; align-items:center; min-height:44px; min-width:44px`) rather than trusting the exemption. |
+| Tap targets | Geometry of every interactive element. 44px floor on mobile, 24px on pointer. The prose-link exemption is not reliable: skip links, footer links and mono-styled inline links still FAIL at 390, so size the anchor itself (`display:flex; align-items:center; min-height:44px; min-width:44px`) rather than trusting the exemption. Hide a skip link from its own box: `top:0` plus `translateY(-120%)`, released on `:focus`, because an absolute top offset combined with a percentage transform leaves a visible sliver of the link painted at the top of the fold shot (the percentage resolves against the element's height, while the offset already pushed it down) even though the tap-target check measures it fine. |
 | Accessible names | Icon-only buttons, unlabelled inputs, missing alt, placeholder standing in for a label. |
 | Motion | Transitions on layout properties, `transition: all`, animation with no `prefers-reduced-motion` branch. |
 | Layout integrity | Horizontal overflow with the culprit element named, flex children that cannot truncate. |
@@ -140,7 +140,7 @@ every type tile plus a sample of the photo tiles rather than judging the set fro
 grid shot. A literal question is answerable from pixels; an evaluative one invites
 the model to supply the answer.
 
-**Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body). Real luminance maths in about ten lines of Python settles whether the FAIL is the checker or the page. If it passes by hand, do not desaturate the design; change the element's ground to something a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or record it as a known checker limitation in the report, naming the measured ratios. Report FAILs you leave standing as measured passes, never as ignored.
+**Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body), and when that ground is a gradient, against every stop in it, taking the worst. White body copy can clear 4.5:1 over a band's dark end and genuinely fail over its light end, and that split decides the fix: a genuine worst-stop failure moves the band to a dark ground (the same dark warmth, no desaturation), while an artifact that passes on every stop gets an opaque ground a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or is recorded as a known checker limitation. Real luminance maths in about ten lines of Python settles which case each FAIL is. Report FAILs you leave standing as measured passes with their worst-stop ratios, never as ignored. Report FAILs you leave standing as measured passes, never as ignored.
 
 **Prove which app is listening before you shoot it.** A dev server or other project can own loopback while your server owns the wildcard interface, so `localhost:<port>` renders a completely different app that passes every visual check with the wrong content. Run `lsof -nP -iTCP:<port> -sTCP:LISTEN`, then grep the fetched HTML for a string only your build contains, and drive the LAN address when loopback is contested. A green gate run against the wrong app is the one failure that produces no symptom at all.
 
@@ -209,6 +209,8 @@ for i, y in enumerate(range(0, H, 1500)):
     im.crop((0, y, W, min(H, y + 1500))).save(f'.verify/band-{i}.png')"
 ```
 
+You can read the bands without cutting files to disk: call `vision_analyze` on the full-page PNG with `region=[x1,y1,x2,y2]` per band, batched in parallel, each prompt naming the section its band covers. The region is in ORIGINAL image pixel coordinates and the shots are captured at 2x, so double the CSS y-bands (`y 3000..4500` becomes `[0, 6000, 2880, 9000]`). Region reads also leave no intermediates to clean out of the deliverable folder, and the region can be narrowed on a follow-up call to zoom into small text at original resolution.
+
 Nine bands for a landing page is normal and still cheaper than a subagent. Keep the 390px band count separate from the 1440px one: the defect list differs, because the layouts differ, so the two crops cover different sections and the section name in the prompt has to come from the crop's own y-range, not from the other width's list.
 
 → Full procedure in [critique-protocol.md](reference/critique-protocol.md).
@@ -276,7 +278,7 @@ soft and the run still looks green. Sweep the default state instead:
 
 **`document.scrollWidth` does not prove there is no overflow.** A root with `overflow-x: hidden` (or an ancestor clip) reports `scrollWidth === innerWidth` while children are twice the viewport wide and half of them are invisibly cut off. Measure geometry instead: walk `getBoundingClientRect().right > innerWidth + 1` over the page's elements, excluding nodes that scroll by design (table wrappers, the sidebar rail, canvases). The two probes disagree, and the rect walk is the one telling the truth.
 
-**A grid track sized `1fr` cannot overflow; it expands.** `1fr` computes to `minmax(auto, 1fr)`, so a column's min-content floor lets it grow past the viewport while every descendant reports a tidy bounding box. Declare `minmax(0, 1fr)` on the track and `min-width: 0` on the child that must be allowed to shrink (the `main` inside a shell), and re-measure. Fixing a root `overflow` property instead just hides the defect and leaves the clipped content unreachable.
+**A grid track sized `1fr` cannot overflow; it expands.** `1fr` computes to `minmax(auto, 1fr)`, so a column's min-content floor lets it grow past the viewport while every descendant reports a tidy bounding box. Declare `minmax(0, 1fr)` on the track and `min-width: 0` on the child that must be allowed to shrink (the `main` inside a shell), and re-measure. Fixing a root `overflow` property instead just hides the defect and leaves the clipped content unreachable. `min-width: 0` has two blind spots: it cannot make a `white-space: nowrap` child shrink (give such a chip its own `auto` track), and it never applies to a child the template has no track for, because extra children land in the last fixed track or an implicit row. Match the track count to the children at every breakpoint: a row that shows a metadata cell only at the wide width must still declare its track in the base CSS, or the chip overflows at 390 while the rect walk names it as the culprit.
 
 **Give every wide data table its own scroll box.** A table wider than the screen must scroll inside `overflow-x: auto` on its own wrapper. Without one it either forces the page to scroll horizontally or gets cut off by the root clip, and the audit will name the root as the culprit rather than the table.
 
@@ -338,6 +340,19 @@ let the assertion failure, not the missing highlight, drive the fix.
 
 **A panel shorter than its column is a layout defect wearing a vaguer costume.** A two-column section whose detail panel sits at `align-items: start` ends short of the checklist beside it, and the vision pass reads it as "dead space below the card", which is the same complaint in softer words. Set `align-items: stretch` on the grid so the panel fills, re-shoot, and require both columns to end on one baseline before you call it fixed.
 
+**A headline's line count and an intentional overlap are geometry claims, not
+judgements, so measure them.** The Step 6 checklist in `showcase-page` asks for a hero
+headline in three lines or fewer, and a vision pass will report "four lines" and
+"the cards do not overlap the hero edge cleanly" from one downsampled capture. Both are
+settled by probe: `Math.round(h.getBoundingClientRect().height /
+parseFloat(getComputedStyle(h).lineHeight))` for the line count (fix by widening the
+headline's max-width or lowering the clamp, not by shrinking display type below the
+fold budget), and each stat card's `getBoundingClientRect()` top and bottom against the
+hero's own bottom edge for the overlap, where the intended result *is* a card straddling
+the boundary. What an eye calls a messy split and what a design calls a floating card
+are the same pixels, so record which of the two you measured rather than acting on the
+adjective.
+
 **Report honestly.** State what was verified and at what sizes, and when a shot only reached part of a tall page, name the sections it did not cover as unchecked rather than letting the check read as complete:
 
 > Verified at 390 / 834 / 1440, light and dark. Audit clean apart from one INFO on measure in the footer. Two rounds of critique: fixed hierarchy in the hero (headline was competing with the eyebrow) and the card grid collapsing to stretched full-width blocks on mobile.
@@ -354,7 +369,7 @@ Delivery is blocked until all of these are true:
 
 - [ ] Dash count zero on the file (Step 0), any hits fixed before rendering
 - [ ] Every requested change grepped in the files on disk (Step 0.5), with the hit count reported for anything applied in more than one place
-- [ ] `audit.py` run at a mobile width and a desktop width, zero FAILs, every WARN either fixed or justified in one line
+- [ ] `audit.py` run at a mobile width and a desktop width, zero FAILs, every WARN either fixed or justified in one line. A WARN that a brand contract causes (its specified typeface flagged as a default-font) is justified by citing the brand rule, never "fixed" by swapping the face.
 - [ ] Audit and shots cover every state that ships controls (empty, configured, results, signed in), not only the default load
 - [ ] `shoot.py` run and **every PNG opened with the Read tool**
 - [ ] A written critique exists, naming specific elements, not adjectives

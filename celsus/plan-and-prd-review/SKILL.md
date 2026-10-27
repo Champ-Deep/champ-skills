@@ -100,6 +100,7 @@ credible build sequence.
 | Cost model | Cost per interaction, then per outcome, then break-even against the value of one outcome |
 | Failure modes | One row per dependency: what the user sees when it is down, rate limited, or returns empty |
 | Feedback loop | What is collected, reviewed on what cadence, and which single number is trended |
+| Decisions | Is every open ruling listed with a recommendation and an owner rather than buried in prose? Do the enumerated counts in the prose ("pilot on N pages", "three touchpoints") match the items actually listed? |
 
 `references/plan-audit-checklist.md` has the per-section question list to walk
 a document against. It also carries the requirement-mapping table shape and the

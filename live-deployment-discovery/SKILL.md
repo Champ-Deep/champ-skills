@@ -92,9 +92,18 @@ still running the last successful one, and fixing the build must come first.
      build, denied permission, cold-start timeout). Name the candidates rather
      than shipping a speculative code fix.
 2c. **Rule out a stale deployment by comparing bytes, not by trusting the
-   dashboard.** Hash the served HTML and its chunks against the local branch:
-   identical hashes mean the deployed build is the branch you are reading, so the
-   bug is not "an old deploy" and no redeploy will fix it.
+dashboard.** Hash the served HTML and its chunks against the local branch:
+identical hashes mean the deployed build is the branch you are reading, so the
+bug is not "an old deploy" and no redeploy will fix it. When several hosts serve
+the same product (apex, www, workers.dev, staging), hash each one's index HTML
+and asset filenames against each other too: three different bundle hashes mean
+three different live builds, so "the link works" may be pointing at a stale one.
+2d. **For an SPA behind an auth provider, an HTTP 200 that renders a loading
+message is a failed login config, not a working deploy.** Confirm it with a
+headless browser (the stuck loading text is the evidence), then corroborate at
+the platform: an empty or auth-key-free `secret list` names the missing config.
+You may also scan the shipped JS bundle for a configured key literal as a
+boolean only; never print a found key.
 3. **Check what each credential actually belongs to before setting it.**
    Similar names are different vendors' secrets. An `*_MCP_TOKEN` naming an AI
    gateway is that gateway's own catalog token, not the key for a tool or MCP
@@ -129,11 +138,56 @@ still running the last successful one, and fixing the build must come first.
 
 ## Cloudflare static Worker cutovers
 
+- Query a Worker's real state without cd'ing into its repo: Wrangler OAuth is
+  account-scoped, not repo-scoped, so from any repo where wrangler is installed
+  and authenticated, `npx wrangler deployments list --name <worker>` (which
+  head, when), `secret list --name <worker>` (names only; `[]` means no
+  secrets so nothing can authenticate), `d1 info <db>` (table count,
+  created_at) and `r2 bucket list` all answer against the target account.
+  Run `wrangler whoami` first to confirm which account you are on before
+  trusting any of it.
+- A worker answering `200` proves the link is warm, not that the release is
+  deployed. Pair the HTTP probe with the deployment age and the secret list
+  before saying anything is "working": a warm shell with zero secrets cannot
+  log in, and reporting the 200 alone reads as "the new code is live".
 - Treat Worker code, custom-domain triggers and DNS as separate outcomes. Wrangler can upload and activate a version, then exit nonzero because custom-domain attachment failed. Read deployment versions and fetch the workers.dev host before retrying; never call the custom domain live from an upload message.
 - Inspect apex and www DNS before replacing parking records. An active Cloudflare zone with correct nameservers can still retain registrar parking A/CNAME records. Domain changesets can report no conflicts while attachment rejects externally managed DNS records. Preserve mail records and limit any approved change to the exact web hostnames.
 - Check permissions rather than assuming Wrangler OAuth includes DNS editing. Worker/D1 access and zone metadata can work while DNS record reads return 403. If no authenticated DNS-capable channel is available, request the specific parking-record removal in the dashboard; do not request a token in chat or keep retrying the same denied API.
+- A committed deploy config (`wrangler.jsonc`, a `deploy.sh`, a DEPLOY doc that
+  prints a URL) is intent, not state. Confirm with `wrangler deployments list
+  --name <worker>`: an error that the Worker does not exist means the config was
+  never run, and the documented URL is aspirational.
+- On big platform JSON (`railway status --json` can exceed 50 KB), parse and
+  print a reduced projection inside `execute_code` instead of letting the raw
+  dump hit the terminal: service name, status, sha, domains only.
 - Keep strict CSP during browser verification. String-evaluating waits and injected style tags may be rejected by the page. Prefer locator waits/assertions and the shipped reduced-motion mode rather than weakening CSP to make the harness pass.
 - Verify request capture through the real browser and database: submit synthetic records, repeat one request id, read the exact rows, then delete only those synthetic ids and verify absence. A mocked UI success proves interaction states, not persistence or delivery notifications.
+
+## Host and domain migrations
+
+When the task is moving an app to a new host, these orderings decide whether
+the cutover is safe:
+
+- **Separate three claims that sound alike:** the zone already resolves through
+  Cloudflare NS (DNS only), the app now runs on Cloudflare (hosting), and the
+  domain's account/zone moved to a different owner (account transfer). Verify
+  each independently; NS records prove nothing about where the app runs, and
+  response headers (`server:`, `cf-ray`, `x-railway`, `x-vercel`) say which one
+  is really serving.
+- **Order: replacement fully proven before any traffic flip.** Login, existing
+  deep links, file/data integrity and TLS on the real hostname all pass first;
+  then flip the one record that routes traffic. Never flip a host record to a
+  target that has not yet served a real authenticated session.
+- **Keep the old origin running through verification, and write the rollback
+  before the change.** A rollback after users have written to the new backend
+  needs a data-reconciliation step, not just the old DNS record back.
+- **Nameserver and cert propagation run on their own clock.** Do not promise a
+  same-hour window that includes a zone move; prefer flipping traffic inside a
+  zone that is already propagated, and stage cert/ownership TXT records a day
+  ahead.
+- **Limit external help to the exact record.** For a partner-owned zone, ask IT
+  for one CNAME plus the generated TXT records with the saved prior value, never
+  a nameserver or mail change.
 
 ## Reporting honestly
 

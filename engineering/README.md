@@ -23,6 +23,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `jev-typesafe-integration` | Use when working with Jev or TypeSafe in ChampSet. |
 | `link-graph-visualization` | Visualize crawled site and link data as a readable graph. |
 | `live-server-browser-gates` | Use when a browser test drives a real server. |
+| `llm-model-benchmarking` | Use when assessing a model on Deep's LLM bake-off suite. |
 | `mcp-builder` | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MC |
 | `optional-input-degradation` | Use when an optional or external input can be absent. |
 | `permissioned-send-lane` | Use when adding an outbound send path to a read-only system. |

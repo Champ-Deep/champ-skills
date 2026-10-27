@@ -102,6 +102,18 @@ grep -rnE 'Literal\["cuda"\]|Literal\["cpu"\]|mps|device\.type' <server module>
 A device selector reading `Literal["cuda"] | Literal["cpu"]` with the consumer
 branch commented out means that path was abandoned, not merely slow.
 
+## Thinking-on-by-default skews every token and latency number
+
+Qwen3-family builds (and R1-style distills) frequently default to narrated reasoning
+IN the content stream. Before benchmarking or sizing: probe once with a one-line
+task, and if the reply is a monologue, disable thinking for the real run.
+OpenRouter: `"reasoning": {"enabled": false}` in the request body. Ollama:
+`"think": false` at the TOP level of the chat body (message-level think is ignored).
+On a small Mac this is often the difference between a 5s answer and a 150s one,
+and thinking tokens count against max_tokens / num_predict, so a "cut off"
+deliverable is usually a thinking-budget artifact, not a model failure. Re-run
+truncated outputs with thinking off before scoring a model down.
+
 ## Reporting
 
 Lead with the verdict and the probe that produced it. If a probe killed the

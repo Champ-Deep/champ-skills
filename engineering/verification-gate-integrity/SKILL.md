@@ -75,7 +75,12 @@ Deploying is a chain (find the version, deploy it, promote it), and the tool's s
 message is not proof the chain did what you intended. Assert each link: match the version
 you uploaded by its own identifier, never by list position or a timestamp sort; confirm the
 returned version id and traffic percentage against what you requested; then fetch the live
-artifact and grep it for a string only the new code contains. If a wrong version does go
+artifact and grep it for a string only the new code contains. For a bundled SPA
+the cheapest form is to diff the hashed entry asset: read the `index-<hash>.js`
+name out of the served `index.html`, compare it to the hash in the local
+`dist/index.html`, then fetch that asset and grep it for the feature strings
+added this round. A mismatched hash means the old build is still being served
+even though the deploy command printed success. If a wrong version does go
 live, say so in the report with the corrected version id rather than letting the original
 success message stand.
 

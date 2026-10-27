@@ -28,6 +28,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `responsive-viewport-qa` | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |
 | `showcase-page` | Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots, partner check-ins) with animated data visuals, MicroKit micro- |
+| `ten-out-of-ten` | Use when scoring or rebuilding a website to 10/10. |
 | `text-art-eggs` | Make ASCII, block-letter and braille art (figlet logos, animated braille pictures, Nike-style robots.txt, humans.txt, agents.txt, console art) plus page eggs. Use for any |
 | `theme-factory` | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
 | `visual-report-builder` | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |

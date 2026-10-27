@@ -1,6 +1,6 @@
 ---
 name: intern-month-plan-dashboards
-description: "Per-intern month dashboards, handover emails and 1:1 agenda."
+description: "Per-intern month dashboards, handover emails, 1:1 agenda, and coverage handoffs when someone is out."
 version: 1.0.0
 license: MIT
 metadata:
@@ -16,7 +16,7 @@ The monthly process behind a standing intern cohort: every intern gets their own
 
 ## When to Use
 
-Trigger on: monthly plan for the interns, send the October plans out, per-person dashboards, KRA handoff, intern cadence, monthly intern process, run sheet for one-on-ones.
+Trigger on: monthly plan for the interns, send the October plans out, per-person dashboards, KRA handoff, intern cadence, monthly intern process, run sheet for one-on-ones. Coverage handoff: "handoff for <person> who is out", "split <person>'s work between A and B", "give the covers everything they need", cover document for an absent developer or lead.
 
 Do not use for a new joiner's first month: that is `intern-onboarding-planner`, which starts from a resume and a role brief. This skill starts from plans that already exist and covers distribution plus the operating rhythm for a cohort.
 
@@ -171,6 +171,53 @@ Verification gate for the checklist:
 - Playwright: gate refuses blank completion, accepts after evidence, revokes when evidence clears, statuses persist across reload, timesheet math and warnings behave, export blocked while a warning stands.
 - Open the downloaded filled copy in a fresh browser context with localStorage denied; state must load from the embedded payload, and script-looking evidence must stay inert text.
 - Then `visual-verify` offline-check plus audit at 390 / 834 / 1440, and open every screenshot.
+
+## Coverage handoff: one absence, several covers
+
+The short-horizon brief assigns ONE person's next days to that person. A coverage handoff is the other shape: someone is out and their live work splits between two or more covers, who must start today with no follow-up question. The document is self-sufficient by rule: access, credentials, system logic, current state and the future plan all live in it, because a cover who has to ask for a key cannot start. Scaffolding: `templates/coverage-handoff.md`.
+
+### Step 1: ground the ask in the call it came from
+
+The request arrives as dictated text: acronyms garbled, names mangled, referencing a call you have not seen. Build nothing before resolving it.
+
+1. Find the call: `mcp__wispr__search_meetings` with a title fragment plus a date window (project vocabulary, never the person's name: transcripts index titles and summaries, and participants appear only as Speaker 1/2), then `get_meeting` with `view_transcript`.
+2. Resolve what the dictation garbled from the transcript itself: who is out, the priority order Deep stated, which stakeholder wants what. Map speaker labels by content (role, who sets strategy, who owes what) against the vault's person notes.
+3. Anything still unresolved goes into an "Open questions for Deep" table INSIDE the document, each row carrying the nearest-match hypothesis and why it fits. Never silently guess a name, and never block the build on one clarifying question: a document with a flagged open row is useful today, a clarification round costs a day.
+
+### Step 2: gather evidence, in order
+
+1. `Atlas/People/<Cover>.md` for each cover: role, buddy, current plan, what they already own.
+2. The effort folder holding the absent person's plan and its `PLAN.md`: phase scopes and estimates come from here and nowhere else.
+3. `gh repo list <org> --limit 100 --json name,description`, filtered with `test(...)`, to inventory what exists where. Mark which systems live only on Deep's machine: a cover outside that machine cannot reach them at all, so that gap becomes an open-question row, never a silent omission.
+4. Recent `TASKS.md` rows and daily notes for what is mid-way, plus the transcript for today's fires.
+
+### Step 3: the section order Deep expects
+
+1. **Priority order**, in his own words as he stated them (he usually says it: onboarding first, then the rest).
+2. **Task split table**: one row per cover, lane name plus concrete tasks. Ownership, not isolation: state that lanes may swap, and that one name owns each line so nothing is orphaned.
+3. **Combined study**: day 0 to 1 joint read of this document plus the effort's PLAN, then one architecture note each; day 2 cross-teach 30 minutes each; then the existing cadence (daily standup, midweek pair, Friday demo). Name the study outputs so "combined study" is checkable rather than a mood.
+4. **Access and credentials**: a repo table (system, where it lives, state) plus the manifest below, plus run basics (how to start the thing).
+5. **System logic**: how each system works at the level a cover will debug it.
+6. **Current state and today's fires**: what broke, what stopped mid-way, what nobody may touch.
+7. **Future plan**: phases with estimates from the existing PLAN.md only.
+8. **Open questions for Deep**, from step 1.
+
+### Credentials manifest rules (always)
+
+- Never write key values into the document. The manifest lists slots only: what credential, which system, who delivers, which policy applies.
+- Values travel from Deep through a private channel after the doc goes out; say so in the doc so covers never expect values in it.
+- State the policies in the document, because covers do the opposite by default: one key per app and per heavy feature or user (spend tracking dies on shared keys), rotate an unused key before first use, never reuse a key across tools.
+- No value in chat, in git, or pasted into a third-party tool, ever.
+
+### Verify before handing over
+
+- Dash count zero, wikilinks resolve per `_config/link-policy.md`.
+- Grep the file for key-shaped strings (`sk-`, `api_key=`, `Bearer `): zero hits.
+- Each lane names exactly one owner, and every system in the access table answers "where does a cover get it" or appears as an open-question row.
+
+### Close
+
+A staged document is not done: end the chat reply with a decision card naming the exact file Deep must send (the card shape lives in `kanban-task-intake` section 3), and add a fenced row to `## Active` in `TASKS.md` for that send.
 
 ## The month map must be a real calendar
 
