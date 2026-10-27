@@ -1,0 +1,12 @@
+{
+  "target": "file:///Users/deep/Celsus/Efforts/Active/Celsus%20OS/Decision%20Desk/2026-10-27%20Hemang%20WFH%20Plan.html",
+  "shots": [
+    ".verify-hwf/light-390-fold.png",
+    ".verify-hwf/light-390-full.png",
+    ".verify-hwf/light-834-fold.png",
+    ".verify-hwf/light-834-full.png",
+    ".verify-hwf/light-1440-fold.png",
+    ".verify-hwf/light-1440-full.png"
+  ],
+  "console_errors": []
+}

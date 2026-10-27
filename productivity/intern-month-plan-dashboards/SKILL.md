@@ -1,6 +1,6 @@
 ---
 name: intern-month-plan-dashboards
-description: "Per-intern month dashboards, handover emails, 1:1 agenda, and coverage handoffs when someone is out."
+description: "Per-intern month dashboards, handover emails, 1:1 agenda, coverage handoffs when someone is out, and re-indexing an existing plan after days off to decide what a returning person focuses on and what to hand them."
 version: 1.0.0
 license: MIT
 metadata:
@@ -16,7 +16,7 @@ The monthly process behind a standing intern cohort: every intern gets their own
 
 ## When to Use
 
-Trigger on: monthly plan for the interns, send the October plans out, per-person dashboards, KRA handoff, intern cadence, monthly intern process, run sheet for one-on-ones. Coverage handoff: "handoff for <person> who is out", "split <person>'s work between A and B", "give the covers everything they need", cover document for an absent developer or lead.
+Trigger on: monthly plan for the interns, send the October plans out, per-person dashboards, KRA handoff, intern cadence, monthly intern process, run sheet for one-on-ones. Coverage handoff: "handoff for <person> who is out", "split <person>'s work between A and B", "give the covers everything they need", cover document for an absent developer or lead. Re-index and re-focus: "update the intern plan for <name>", "<name> was off <days>, back today", "what should <name> focus on now", "which project can I hand off to <name>".
 
 Do not use for a new joiner's first month: that is `intern-onboarding-planner`, which starts from a resume and a role brief. This skill starts from plans that already exist and covers distribution plus the operating rhythm for a cohort.
 
@@ -107,6 +107,20 @@ New scope from a call changes three artifacts, and missing any one leaves an int
 
 Re-verify KRA weights sum to 100 after every edit, by parsing `PEOPLE` rather than reading it.
 
+## Re-indexing and re-focusing an existing plan after an absence
+
+Trigger: a person was out for days and is back, and Deep asks what to focus on now given their skills and the active projects, plus which project to hand them. The plan already exists; this is an edit and a re-focus, never a rebuild.
+
+Artifacts come in two shapes and the edit differs. A run-sheet-derived dashboard is edited in `PEOPLE` and rebuilt per the section above. A standalone plan HTML (single file carrying its own `weeks`/`PLAN` data object, possibly authored outside this skill) is edited in place:
+
+1. Ground the re-focus in two evidence sources before touching the file: the person's skill evidence (interview prep or plan note in the vault: what they demonstrably built, how they reason about evals) and `TASKS.md` for the handoff candidate. The right project to hand over is unowned, deadline-carrying, and already committed to someone, meaning an open row that names the outcome but no doer. Pick one, map it to the evidence, and park every non-serving plan item with a named owner rather than deleting it, so nothing silently vanishes.
+2. Edit only the data: swap the weeks/days/tasks block and the START/END constants. Leave the shell (date resolver, checkboxes, localStorage, sync) untouched. It is proven code, and a rewrite loses the state the reader already has.
+3. Re-date from the real calendar: shift START to today, reassign every date, and fold the missed days' setup tasks into the new Day 1 instead of pushing the end date out. The end date usually sits inside a notice period or another fixed commitment. Assert zero weekend dates and check each weekday against Python datetime.
+4. Keep the localStorage key unchanged so checked progress survives a re-index; bump it only when the content shape deliberately changes.
+5. Verify even when no browser is up: regex the data block out, `node`-eval it, and print day count, first and last date, weekend violations, total task count, and the owes/people lists. Label the page render unverified in the reply rather than skipping verification silently.
+6. Stage the decision: the re-focused plan plus the handoff choice reach Deep as a needs_input fenced block in `TASKS.md`, recommendation first with the alternatives, naming the staged file. Nothing reaches the person before he approves.
+7. If the re-focus also transfers a project or ownership, the accompanying doc gets a first-sprint section: pre-start confirmations (access, invites), the gate tasks in order with their exit proofs, one first improvement per owner aimed at a dated demo, and an explicit held-not-cancelled list for everything gated behind those.
+
 ## Short-horizon brief: WFH days, a crunch week, a two-day push
 
 The month plan says what a person owns for the month. When the next one to three days must be assigned because the shape of the work changed (working from home, a stalled build, a fresh set of issues that just burned two days), write a short brief instead: `Efforts/Active/<Team> <Month>/<Name> WFH Brief <DD>-<DD>.md`, built from evidence, never from the month plan alone. Copy and modify `templates/short-horizon-brief.md`.
@@ -182,7 +196,7 @@ The request arrives as dictated text: acronyms garbled, names mangled, referenci
 
 1. Find the call: `mcp__wispr__search_meetings` with a title fragment plus a date window (project vocabulary, never the person's name: transcripts index titles and summaries, and participants appear only as Speaker 1/2), then `get_meeting` with `view_transcript`.
 2. Resolve what the dictation garbled from the transcript itself: who is out, the priority order Deep stated, which stakeholder wants what. Map speaker labels by content (role, who sets strategy, who owes what) against the vault's person notes.
-3. Anything still unresolved goes into an "Open questions for Deep" table INSIDE the document, each row carrying the nearest-match hypothesis and why it fits. Never silently guess a name, and never block the build on one clarifying question: a document with a flagged open row is useful today, a clarification round costs a day.
+3. Anything still unresolved goes into an "Open questions for Deep" table INSIDE the document, each row carrying the nearest-match hypothesis and why it fits. Pre-fill a recommended-answer column with the vault-grounded draft so Deep's pass over the table is an edit rather than authoring, and keep the row open until he confirms. Never silently guess a name, and never block the build on one clarifying question: a document with a flagged open row is useful today, a clarification round costs a day.
 
 ### Step 2: gather evidence, in order
 
@@ -321,7 +335,7 @@ Shape that worked: **Deep's lanes first** (the four things only he can move), th
 
 - **Do not let a generated page hardcode a scratch path for its CSS.** The builders live in the vault and must survive next month, so read the published CSS straight out of the run sheet (`src.split("\n").slice(3,144)`) instead of `/Users/deep/.hermes/cache/scratch/published.css`. A scratch path makes the vault copy fail on rerun with `ENAMETOOLONG`, because a later `fs.readFileSync(CSS)` treats the CSS *string* as a filename. Keep CSS as content end to end.
 - **A gate check can pass while measuring nothing.** `s.count(chr(39)+'s critical link'+chr(39))` printed `got 0` and still passed, because the needle did not match the text it claimed to count. Any check whose expected value and needle disagree should be printed and read, not just asserted. Prove each new assertion fails on a seeded copy before trusting it.
-- **Never slice the `PEOPLE` array with a bracket or quote counter.** Apostrophes inside task strings (`"reps' hands"`) and brackets inside them make every such scanner truncate silently or throw on a valid file. Slice between `const PEOPLE = [` and the `/* ---------- state ---------- */` comment, then `new Function("return " + body)`. This cost two debug cycles in Oct 2026.
+- **Never slice the `PEOPLE` array with a bracket or quote counter.** Apostrophes inside task strings (`"reps' hands"`) and brackets inside them make every such scanner truncate silently or throw on a valid file. Slice between `const PEOPLE = [` and the `/* ---------- state ---------- */` comment, then `new Function("return " + body)`. This cost two debug cycles in Oct 2026. The rule is generic: any embedded data block in a single-file page (run-sheet `PEOPLE`, standalone plan `PLAN`) gets partitioned between stable markers, such as a `const X={` opener plus a known comment or closing line, then parsed. Never count delimiters.
 - **A trailing comma can leave an array unclosed and still look correct in the diff.** `["Team",10,[...]],` on the last KRA row closes the inner list and the row but not the `kra:[` block, and every later field then reads as a syntax error far from the cause. Parse `PEOPLE` and assert each object's KRA weights sum to 100 after any edit.
 - **Do not name intern colleagues in a dashboard or pack** if they are not already in the vault as people. Confirm the spelling first.
 - **Do not redesign the individual pages.** Reuse the published CSS. Consistency is the product.

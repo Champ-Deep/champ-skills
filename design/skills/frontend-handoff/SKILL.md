@@ -42,7 +42,7 @@ Steps 1 and 2 are mechanical and should be thorough. Step 3 is where the judgeme
 
 ## Step 1: Inventory the backend
 
-Read `reference/backend-inventory.md` for the full capture spec. Fill `assets/BACKEND-MAP-template.md`.
+Capture spec: method, path, purpose, auth, roles, request shape, response shape, every error code, pagination, latency, idempotency, per endpoint.
 
 ### Introspect before asking
 
@@ -68,7 +68,7 @@ These are the highest-value part of the inventory and they are almost never volu
 
 ## Step 2: Translate to screens and states
 
-Read `reference/translation.md`. Fill `assets/SCREEN-MAP-template.md`.
+Output: endpoint-to-screen matrix, then the full state list per screen.
 
 ### Endpoint to screen matrix
 
@@ -103,6 +103,26 @@ A rule that converts schema facts into design constraints:
 | Money or quantity | Needs alignment, tabular numerals, and a currency or unit rule |
 | Foreign key | Implies a link, a hover preview, or an embedded summary. Decide which. |
 
+### Journeys the matrix also owes
+
+Endpoints that run as a sequence, not a single fetch, need their own shape on top
+of the matrix:
+
+- **Authenticated file download.** If the API guards downloads with a header,
+  a plain `<a href>` or `window.open` cannot carry it and the user gets a 401 on
+  the one action they came for. The journey is fetch-as-blob with the credential
+  header, then save. State it explicitly in the brief, with the auth mode named,
+  because a builder's default is the link.
+- **Spend-gated job.** Upload (or submit) → free preflight that returns an
+  estimate of what the paid step will cost → an explicit confirm naming that
+  cost → start → poll for progress → download results. The estimate and the
+  confirm that names it are the product's trust moment; never let the paid call
+  fire implicitly, and design the interrupted run (quota or provider failure
+  mid-job) as a banner over partial results rather than an error page.
+- **Offline pass before paid pass.** Where a free check can narrow the set, run
+  it first and show how much it saved: valid, invalid, and duplicates removed
+  before any quota is spent.
+
 ### Permissions produce variants, not just hiding
 
 Build the role matrix. For each role, per screen: what is visible, what is enabled, what is hidden entirely.
@@ -113,7 +133,9 @@ Two rules that keep this honest. Hiding a control is a UX courtesy, never a secu
 
 ## Step 3: Write the frontend brief
 
-Read `reference/design-brief.md`. Fill `assets/FRONTEND-BRIEF-template.md`.
+Output: `FRONTEND-BRIEF.md` at the repo root, the file the frontend card will be handed.
+
+Read `references/journey-shapes.md` first: it names the recurring multi-endpoint journeys and their built-in decisions, so the brief describes them whole instead of endpoint by endpoint.
 
 **This is the step that stops the output being a CRUD panel.** Steps 1 and 2 describe what the software can do. This step decides what it should feel like to use, and it is deliberately written as a perspective to react to rather than a specification to obey.
 
@@ -132,7 +154,7 @@ Then hand to `design-trends` and `frontend-design`. This skill produces the brie
 
 ## Step 4: Verify, then block on gaps
 
-Run `assets/intake-questions.md` against the map. **Do not paper over gaps with assumptions.** An assumed field type or an invented error message costs more to unwind than the day it takes to get an answer.
+Run the gap check below against the map. **Do not paper over gaps with assumptions.** An assumed field type or an invented error message costs more to unwind than the day it takes to get an answer.
 
 Classify every gap:
 
@@ -187,11 +209,6 @@ This is a small ask that removes an enormous amount of back and forth, and it is
 
 | File | Use |
 |---|---|
-| `reference/backend-inventory.md` | Capture and introspection spec, including Supabase MCP, OpenAPI, and code paths. |
-| `reference/translation.md` | Endpoint-to-screen matrix, state derivation, data-shape rules, permission variants. |
-| `reference/design-brief.md` | How to write a perspective brief, archetypes, direction options, trend routing. |
-| `assets/BACKEND-MAP-template.md` | Fill-in backend inventory. |
-| `assets/SCREEN-MAP-template.md` | Fill-in screen, journey, and state map. |
-| `assets/FRONTEND-BRIEF-template.md` | Fill-in design brief for the frontend team. |
-| `assets/intake-questions.md` | Blocking question set to run against any incomplete handoff. |
-| `assets/triggers.md` | Complete trigger phrase list. |
+| `references/journey-shapes.md` | Recurring multi-endpoint journeys: authenticated download, spend-gated job, offline-then-paid. |
+
+The three outputs (`BACKEND-MAP.md`, `SCREEN-MAP.md`, `FRONTEND-BRIEF.md`) are written into the target repo, not stored in this skill.

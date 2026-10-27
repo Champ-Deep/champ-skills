@@ -103,6 +103,13 @@ not blocked.
 
 ## Secrets in repos
 
+When you scaffold a tool that will hold a key, the ignore comes first: write
+`.gitignore` containing `.env` before any key is generated into it. Reversing
+the order leaves a tracked file with a live value for as long as it takes to
+notice, and `git add -A` stages it without complaint. Report such a key as a
+name plus "generated, stored in `.env`, untracked"; the proof it works is a
+status code, never a printout.
+
 When auditing a file that may hold live values, report key NAMES, value LENGTH,
 and a token-shaped yes or no. Never print the value, not even truncated.
 

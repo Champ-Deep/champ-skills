@@ -1,6 +1,6 @@
 ---
 name: "deependhq-site-ops"
-description: "Operate and repair the deependhq.com nightly build-in-public publishing pipeline: stale site, failed publish, backfill, journey-entry schema. Also: Worker secrets and bindings (references/cloudflare-secrets.md)."
+description: "Operate and repair the deependhq.com nightly publishing pipeline: site, Worker, hosts, secrets."
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -13,6 +13,14 @@ metadata:
 # deependhq.com Site Ops
 
 Operate and repair the nightly loop that publishes deependhq.com from Deep's Obsidian vault.
+
+## When to Use
+
+- The live site is stale, blank, or a publish says `PUBLISHED` but nothing moved.
+- You are adding a page, a second hostname (a subdomain Worker host), or wiring Worker secrets and bindings (`references/cloudflare-secrets.md`).
+- You are dispatching UI lanes across the refresh branches (`references/refresh-lanes.md`).
+- A journey entry, backfill, analytics event or prerendered page looks wrong.
+- Not for design tokens or brand rules: that is `deependhq-design-system`.
 
 ## The system in one paragraph
 
@@ -252,42 +260,39 @@ Plus: the `.jsx` must load before `page.jsx` in the HTML, and the shell's script
 order must match the other shells exactly (Sys, Nav, Footer, page body,
 Palette, page.jsx, widgo-gate, analytics).
 
-## Analytics: first-party, and how to prove it works
+## A second hostname (toolkit.deependhq.com) is the same checklist plus DNS
 
-The site collects its own events via `analytics.js` to `/api/collect`, stored in
-Workers Analytics Engine. **PostHog was considered and rejected:** a third-party
-script on a site whose footer says "no cookies, no trackers", needing a wide CSP
-relaxation, and unverifiable from the vault. If PostHog is ever wanted, forward
-the existing payload from `/api/collect` rather than adding a script tag.
+A subdomain served by this Worker is the page-class problem one level up.
+Confirm the assumption with the live domain before writing any of it:
+`dig +short toolkit.deependhq.com` returning nothing means the record does not
+exist, and on a catch-all asset route an unrouted hostname serves the main
+site's assets, so a new host can look alive while it is really serving the
+wrong app.
 
-The dataset `deependhq_events` **must exist in the Cloudflare dashboard before
-the `analytics` binding is added to wrangler.jsonc**, or the deploy fails on the
-binding. The endpoint answers 204 when the binding is absent, so once the
-dataset exists it starts recording with no code change.
+1. `wrangler.jsonc` `routes` entry with `"custom_domain": true` for the new host
+   (Workers Builds creates the record when the zone is on the same account; if
+   `dig` stays empty after a deploy, the record has to be added by hand in the
+   dashboard).
+2. Host dispatch in `worker/index.js` keyed on the `Host` header, serving that
+   host's shell at `/` and 404 for paths outside its own API.
+3. The four places from the section above, for the new shells.
+4. CSP frame origins listed exactly where a page frames another product;
+   `frame-src` never gets a wildcard to make an iframe work.
+5. Verification: `curl -sI https://<host>/` and `curl -s https://<host>/ | wc -c`
+   against the new host, not the root domain. The root-domain check proves
+   nothing about the subdomain.
 
-`scripts/query-analytics.mjs` reads it back. It exits 2 with setup instructions
-when `CLOUDFLARE_API_TOKEN` and `CF_ACCOUNT_ID` are absent, and never prints
-placeholder numbers. Analytics Engine indexes are **exactly 20 bytes**, so
-queries must truncate with the same rule the write path uses.
+## Analytics and entry-schema depth
 
-### Proving a beacon works needs CDP, not a screenshot
+How first-party analytics is wired and proved (CSP, dataset-before-binding
+ordering, why a beacon needs CDP rather than a screenshot), and the optional
+fields worth adding to the journey-entry schema, live in
+`references/analytics-and-schema.md`. Read it before touching `/api/collect`,
+`analytics.js` or `query-analytics.mjs`, or before proposing a schema change.
 
-`sendBeacon` returning `true` proves nothing: the browser queues the request and
-discards it silently if the response lacks CORS headers, and a Blob with
-`type: application/json` triggers an OPTIONS preflight that must be answered.
-Headless `--screenshot` and `--dump-dom` never flush these, so events appear to
-"not work" when the code is correct. The reliable check is
-`scripts/`-adjacent CDP with `Fetch.enable` intercepting the collect URL, which
-removes CORS, server timing and beacon flush timing from the equation entirely.
-Verified that way: 7 events, correct path, scroll marks, outbound click labelled
-`book_a_call`, and the easter egg.
-
-### A module-scope `root` collides with the prerender sandbox
-
-`analytics.js` is bundled into the prerender sandbox, which already has a
-module-scope `root` for the site directory. A second `const root` is a
-SyntaxError that kills the whole bundle, and it surfaces only as a browser-side
-exception. Name it `dhRoot`.
+The standing rules from those sections: PostHog stays out (the footer says no
+trackers), and new entry fields are always optional so existing entries never
+need migrating.
 
 ## A property and a method with the same name blanked the whole site
 
@@ -389,15 +394,5 @@ When asked to make this more reliable, these are the fixes that matter, in order
 - [ ] Derive every computed number at build time. Stored counts drift: `weekly_narratives_count` is why the site has rendered "week 38 of 31".
 - [ ] Emit a `health` object into `data.js` on every build: `built`, `newest_entry`, `weekdays_stale`, `missing_days`, and a `stale_sections` list computed from every `*.updated` field. The site's stale banner and per-section age affordances read from it, so the site tells the truth about itself without anyone remembering to update a string.
 - [ ] Delete or wire the hardcoded `status` fields (`weather`, `listening`, `uptime_d`). A fake liveness signal is worse than none.
-
-## Extending the entry schema
-
-New fields must be **optional**, so all existing entries stay valid and nothing needs migrating. The set worth adding, because the design can render them as visuals instead of prose:
-
-- `metrics[]` of `{k, v, unit?}` — every number worth writing in the prose is worth being a chip. Cap 4.
-- `artifacts[]` of `{kind, label, href?}` where kind is `doc|repo|deck|site|deal|hire` — what exists now that did not exist yesterday. Cap 3. `href` only when public, never a client name.
-- `signals[]` from a controlled vocabulary only: `shipped, hosted, external-meeting, budget-unlocked, hire, blocked, unblocked, launch, deal`. Never invent one.
-- `energy` 1 to 5, honest. A 5 every day is noise, not signal.
-- `github_commits` — already accepted by `ingest-entry.mjs` but routed to `status` and discarded per-entry. Store it on the entry. It is the most credible number on the site and it is currently thrown away nightly.
 
 Sign off with: *That's the deep end.*

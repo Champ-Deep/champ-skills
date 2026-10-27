@@ -77,6 +77,13 @@ with sync_playwright() as p:
 
 ## Common Pitfall
 
+- **The launching shell's environment can shadow the venv.** A `PYTHONPATH`
+  inherited from the agent runtime makes the venv interpreter import the wrong
+  packages (or fail on a module that is plainly installed), so the app dies at
+  import time and looks like a missing dependency. Start the server with the
+  variable unset (`env -u PYTHONPATH .venv/bin/python -m ...`, or a wrapper
+  script that unsets it) and hit one route before debugging application code.
+
 ❌ **Don't** inspect the DOM before waiting for `networkidle` on dynamic apps
 ✅ **Do** wait for `page.wait_for_load_state('networkidle')` before inspection
 

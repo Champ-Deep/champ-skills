@@ -64,9 +64,11 @@ No `<p>` inside `<li>` (it renders as `1.` on its own line). No `\n` inside html
 Resolve every recipient before creating the draft, in this order, and stop at the first hit:
 
 1. `Atlas/People/<Name>.md` and `_config/people.md`.
-2. Outlook Sent Items: `list_mail_folder_messages(mailFolderId="sentitems", search="\"to:<first name>\"")`.
-3. Whole mailbox: `list_mail_messages(search="\"<first name>\"")`, take the `from` address of a mail they sent Deep. Prefer internal domains (championsmail.com, lakeb2b.com, championsgroup.com, cirrologix.com, ampliz.com, spanglobalservices.com, metricfox.com).
-4. When an address is found in steps 2 or 3 and the People note lacks it, add the address to the People note.
+2. Vault-wide pattern grep: `(?i)<name>[\w.'_-]*@[\w.'-]+\.[a-z]{2,}` with `search_files` across the vault. Triage and meeting notes carry addresses the People notes never got, and one search beats two Outlook round-trips.
+3. Wispr: when Deep and the person were both on a recorded call, `get_meeting_participants_enriched` on that meeting returns each participant's emails directly; find the meeting with `search_meetings` on their name.
+4. Outlook Sent Items: `list_mail_folder_messages(mailFolderId="sentitems", search="\"to:<first name>\"")`.
+5. Whole mailbox: `list_mail_messages(search="\"<first name>\"")`, take the `from` address of a mail they sent Deep. Prefer internal domains (championsmail.com, lakeb2b.com, championsgroup.com, cirrologix.com, ampliz.com, spanglobalservices.com, metricfox.com).
+6. When an address is found in steps 2 to 5 and the People note lacks it, add the address to the People note.
 
 If still unresolved, or two different people match the name: leave `toRecipients` empty, keep the subject clean, and list the draft under NEEDS YOU as `add To: <name>`. Outlook will not send a draft with no recipient, so the gap cannot misfire.
 
