@@ -5,6 +5,8 @@ description: "Use when consolidating branches into a gated release."
 
 # Release Integration Engineering
 
+> **Security gate (mandatory):** every deploy runs `ultimate-security`'s deploy gate (pre-push hook, `predeploy`, or publish.sh) plus a `security-audit` guidance-mode review of the diff. A bare CLI deploy runs `python3 ~/champ-skills/security/ultimate-security/scripts/deploy_gate.py check .` first. `AUDIT-REQUIRED` means a full Cloudflare audit before shipping. Never override without Deep.
+
 Build one testable release branch from multiple feature branches without hiding merge risk or weakening verification. Treat the release plan as an executable contract: preserve its order, stop on unexpected conflicts or missing prerequisites, and collect evidence while the work is performed.
 
 ## 1. Inventory before changing history

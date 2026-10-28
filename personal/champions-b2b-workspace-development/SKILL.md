@@ -5,6 +5,8 @@ description: "Use when building Champions B2B Workspace features."
 
 # Champions B2B Workspace development
 
+> **Security gate (mandatory):** every deploy runs `ultimate-security`'s deploy gate (pre-push hook, `predeploy`, or publish.sh) plus a `security-audit` guidance-mode review of the diff. A bare CLI deploy runs `python3 ~/champ-skills/security/ultimate-security/scripts/deploy_gate.py check .` first. `AUDIT-REQUIRED` means a full Cloudflare audit before shipping. Never override without Deep.
+
 Use this for product work in the Champions B2B Workspace, including vendor access, client operations, mailbox intake, file delivery, and workflow automation. This is not Champbeam.
 
 ## Start with the shipped product

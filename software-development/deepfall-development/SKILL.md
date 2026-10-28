@@ -5,6 +5,8 @@ description: "Use when changing or deploying the Deepfall game repo."
 
 # Deepfall development
 
+> **Security gate (mandatory):** every deploy runs `ultimate-security`'s deploy gate (pre-push hook, `predeploy`, or publish.sh) plus a `security-audit` guidance-mode review of the diff. A bare CLI deploy runs `python3 ~/champ-skills/security/ultimate-security/scripts/deploy_gate.py check .` first. `AUDIT-REQUIRED` means a full Cloudflare audit before shipping. Never override without Deep.
+
 Deep's couch co-op pixel RPG: one TV stage, phones as controllers, a DM console. Repo
 `/Users/deep/repos/deepfall`, production at `https://deepfall-production.up.railway.app`.
 The repo carries the game design and loop; read it in-repo instead of restating it here.

@@ -1,7 +1,7 @@
 ---
 name: ultimate-security
-description: "Use when securing or auditing a codebase before launch."
-version: 1.0.0
+description: "Use when securing, auditing or deploying any repo. Every deploy runs its gate."
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [macos, linux]
@@ -21,7 +21,7 @@ touching auth or billing.
 
 ## When to Use
 
-A repo is about to ship, take payments, or change auth or billing. Deep asks for a security
+Any deploy of Deep's repos (the deploy gate below is mandatory). A repo is about to ship, take payments, or change auth or billing. Deep asks for a security
 check, a leak scan, or "is this safe". A secret may have landed in git. A new repo needs
 pre-commit and CI guards.
 
@@ -43,6 +43,58 @@ pre-commit and CI guards.
 - The bug class AI agents write most: auth present but **ownership check missing** (logged in,
   but no check the record belongs to your org), delete or export with no tenant scope,
   hardcoded session secrets. Scanners cannot see these.
+
+## Deploy gate: every internal deployment runs through this
+
+Standing order from Deep: no internal deploy ships without this skill and the Cloudflare
+`security-audit` skill. `scripts/deploy_gate.py` is the enforcement; it is wired into the deploy
+paths so it runs without anyone remembering.
+
+What the gate checks, in one run:
+1. Gitleaks over git history (respects the repo's `.gitleaksignore`), values redacted.
+2. Trivy on the tree: HIGH/CRITICAL vulns with a fix available, plus file secrets.
+3. Cloudflare trigger: hashes every sensitive file (auth, session, token, billing, payment,
+   webhook, admin, tenant, middleware, migrations, CI workflows, Dockerfile). If that surface
+   differs from every recorded state, the deploy stops with `AUDIT-REQUIRED` and lists the files.
+
+Exit 0 pass, 1 secret or vuln, 3 audit required, 2 tool failure. It fails closed.
+
+Where it is wired (`deploy_gate.py install <repo>` does all three, idempotent):
+
+| Deploy path | Hook |
+|---|---|
+| `git push` to main/master/production/prod/release (Railway, CF Workers Builds, Pages) | `pre-push` hook; husky repos get `.husky/pre-push`, kept out of commits via `.git/info/exclude`. Gates the pushed commit, not the dirty tree |
+| `npm run deploy` (`wrangler deploy`) | `predeploy` script in package.json |
+| `scripts/publish.sh` (deependhq family, nightly publisher) | gate runs on the mirrored clone, before commit; `PUBLISH_SKIP_GATES` does not skip it |
+
+Agent rules for every deploy:
+- Bare `wrangler deploy`, `railway up` or any CLI deploy bypasses the hooks: run
+  `python3 ~/champ-skills/security/ultimate-security/scripts/deploy_gate.py check .` first.
+- Before shipping, run `security-audit` in **guidance mode** over the diff being deployed (focused
+  review, no artifacts). Cheap, catches the ownership-check class scanners miss.
+- On `AUDIT-REQUIRED`: run `security-audit` in **full audit mode** (`standard`; `deep` for auth or
+  billing) on a clean commit. When `run_status` is `complete`, record it:
+  `deploy_gate.py stamp <repo> --run ~/security-audit-skill/<repo>/run-N`. Stamp refuses
+  incomplete runs, invalid findings.json, dirty source refs, and any confirmed high/critical.
+  Missing sandbox means most leads land in `needs_validation`; that still completes the run.
+- `DEPLOY_GATE_OVERRIDE="<reason>"` passes and is logged. Only with Deep's explicit approval.
+- Warn-only repos: `~/security-audit-skill/gate-config.json` `warn_only` lists repos with a
+  pre-existing finding backlog. The gate runs and logs but does not block. Remove a name once its
+  backlog is triaged; never add one to get a deploy out.
+- Log of every gate run: `~/.hermes/logs/deploy-gate.log`. State and stamps:
+  `~/security-audit-skill/<repo>/gate-stamps.json`.
+- New deploy repo: `deploy_gate.py install <repo>`. Fleet check: `deploy_gate.py coverage
+  ~/repos "~/Apps&Projects"`. A daily cron (`deploy-gate coverage`) runs `coverage --fix` and
+  reports only when it wired something or failed to.
+- `baseline` accepts the current sensitive surface without an audit (trust on first use). Only
+  `install` should call it. Re-baselining to clear `AUDIT-REQUIRED` defeats the gate.
+- Test: `python3 scripts/test_deploy_gate.py` (11 scenarios, throwaway repos).
+
+Gate pitfalls learned on rollout:
+- `git rev-parse` inside a plain folder under `~` resolves to the home repo. The gate treats a
+  folder as git only when it is the toplevel, or installs land in `~/.git/hooks`.
+- Baselines must cover both HEAD (what pre-push checks) and the working tree (what predeploy and
+  publish.sh check), or a dirty worktree reads as an unaudited change on the next push.
 
 ## Level 1: do this now (per repo)
 
