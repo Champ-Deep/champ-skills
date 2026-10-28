@@ -1,7 +1,7 @@
 ---
 name: credential-and-secret-handling
 description: "Use when a credential lands in chat or a URL needs auth."
-version: 1.0.0
+version: 1.0.1
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -112,6 +112,12 @@ status code, never a printout.
 
 When auditing a file that may hold live values, report key NAMES, value LENGTH,
 and a token-shaped yes or no. Never print the value, not even truncated.
+
+The same applies to scanner output: gitleaks, trivy and similar tools print the
+matched value in their own human-readable results even when redaction flags are
+set, and tool output reaches the transcript exactly like a paste. Run them with
+`--format json` / `--report-format json` and quote only target, rule and severity;
+treat a value the tool printed as exposed, same as a pasted one.
 
 ```bash
 git ls-files --error-unmatch <file>       # tracked?
