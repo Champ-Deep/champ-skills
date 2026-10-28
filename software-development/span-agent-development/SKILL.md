@@ -69,6 +69,7 @@ Deep's reference is the Harbinger signal globe (live at https://champharbinger-p
 
 - `/admin` (UI and its API) is gated by one shared token in the `SPAN_ADMIN_TOKEN` env var, read at request time: rotate by editing the variable in Railway, which invalidates the old token on the next request; there is no username/password and no per-user account. Point a teammate at the URL plus the variable name, and never paste the value into chat.
 - The gate is presentation only. The API stays bearer-token protected, and a token check that runs only in the client is a door with no lock.
+- **Granting a teammate access: Cloudflare cannot share one Worker.** Resource-scoped roles cover Access, Tunnel, Mesh and Gateway only; Workers Platform Admin/Read-only span every Worker, KV and R2 on Deep's account (ChampCast included). The Worker is a proxy, so default to no Cloudflare access and deploy `cloudflare/` changes for them. Railway workspace Member exposes variables for all ~26 projects; keeping juniors out of the workspace makes their pushes land as NEEDS_APPROVAL, the only deploy gate available because the private repo on a free account cannot protect `main`. Verify that gate on their first push before relying on it. Access plan of record: `Efforts/Active/SPAN Tech Data Product/2026-10-28 SPAN Agent Access and Credentials Handoff.md`.
 
 ## Admin card mapping (plan then load)
 
