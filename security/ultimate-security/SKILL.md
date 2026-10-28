@@ -1,7 +1,7 @@
 ---
 name: ultimate-security
 description: "Use when securing, auditing or deploying any repo. Every deploy runs its gate."
-version: 1.1.0
+version: 1.1.1
 author: Hermes Agent
 license: MIT
 platforms: [macos, linux]
@@ -89,12 +89,27 @@ Agent rules for every deploy:
 - `baseline` accepts the current sensitive surface without an audit (trust on first use). Only
   `install` should call it. Re-baselining to clear `AUDIT-REQUIRED` defeats the gate.
 - Test: `python3 scripts/test_deploy_gate.py` (11 scenarios, throwaway repos).
+- What the hooks do NOT cover, and say so in the report: the GitHub web UI's merge button,
+  another person's machine, and any bare CLI deploy. Local hooks guard local pushes only, so
+  merges made in the browser or pushed by a teammate skip them; that gap closes with a CI
+  workflow running the same gate as a required check, not with more local hooks.
 
 Gate pitfalls learned on rollout:
 - `git rev-parse` inside a plain folder under `~` resolves to the home repo. The gate treats a
   folder as git only when it is the toplevel, or installs land in `~/.git/hooks`.
 - Baselines must cover both HEAD (what pre-push checks) and the working tree (what predeploy and
   publish.sh check), or a dirty worktree reads as an unaudited change on the next push.
+- **A partial install is worse than no install.** Every unwired path skips the checks silently,
+  and an unwired fleet is indistinguishable from a clean one. Wire every path in one pass, fail
+  loudly on the path that fails, and base any "the fleet is covered" claim on a measured count
+  of wired repos rather than on the install command exiting 0.
+- **A warn-only exemption needs provenance.** Record why each name is exempt (the pre-existing
+  finding backlog), remove it the moment the reason clears, and never add one to get a fix out:
+  without that record an exemption becomes the standing route for emergencies and the gate dies
+  by a thousand exceptions.
+- **A coverage watchdog must report only on change.** A cron that messages on every run trains
+  the reader to ignore it; stay silent when the measurement is unchanged, and speak when it
+  wired something or failed.
 
 ## Level 1: do this now (per repo)
 
@@ -106,7 +121,8 @@ Gate pitfalls learned on rollout:
    (chmod +x) or in a `.pre-commit-config.yaml` entry.
 3. **Dependencies and files:** `trivy fs --quiet --scanners vuln,secret --severity HIGH,CRITICAL .`
    For triage use `--format json` and print only Target, RuleID, Severity, line, never the
-   match: the text output prints partial key bodies.
+   match. Report every scanner finding this way (gitleaks included): the human-readable output
+   of both tools echoes the captured secret, and that output reaches the report.
 4. **One plain prompt before shipping:**
    "Review the codebase for security vulnerabilities. Name the file and what an attacker gets."
 5. If the same mistake repeats (for example unscoped queries), write the rule into the repo's
