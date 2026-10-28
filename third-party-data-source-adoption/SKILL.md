@@ -37,6 +37,15 @@ These fail independently and each kills the feature differently:
 | Terms forbid the use | Works in dev, unlawful in the product | Legal exposure, takedown, rebuild |
 | Corpus lacks the data | Feature runs, returns nothing | The feature is the pitch; the pitch is empty |
 
+**First: reuse the connection broker if one exists.** When the platforms the feature
+needs already sit behind a broker Deep uses (Treg, treg.to), build the adapters against
+the broker's documented endpoint shapes instead of implementing per-platform OAuth,
+app review and token storage: the broker holds every platform credential and your code
+holds none. Verify the broker's auth before promising a live pull (`treg connections`);
+a broker 401 is a human login step, so stage the exact login and token-mint commands as
+a blocked decision rather than retrying or stubbing the pull. If the broker bills per
+call, pass its cost-cap and attribution headers so one retry loop cannot run the bill.
+
 ## Procedure
 
 1. **Read the terms page, not the pricing page.** Fetch the terms and search for
@@ -117,6 +126,9 @@ a symptom.
 
 ## Pitfalls
 
+- **Writing per-platform OAuth when a broker already holds the connections.** App
+  review, refresh rotation and secret storage are the broker's job; duplicating them
+  buys you credentials that rot and a compliance review you did not need.
 - **Reading the pricing page for rights.** Rights live in the terms, and the two
   are written by different teams.
 - **Treating a free key as a commercial right.** It is access, not resale.

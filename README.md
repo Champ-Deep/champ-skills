@@ -2,7 +2,7 @@
 
 Shared agent skills for the Champions Group teams. Published for collaborators to clone and drop into any Claude Code / Cursor / Gemini / agent-skill runtime.
 
-**196 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
+**198 skills** across 10 categories. Start at **[`INDEX.md`](INDEX.md)** for the full searchable list.
 
 ## Categories
 
@@ -11,10 +11,10 @@ Shared agent skills for the Champions Group teams. Published for collaborators t
 | Design & Creative | `design/skills/` | UI/UX, frontend design and design pro, decks, visuals, infographics, art | 31 |
 | Brand Guidelines | `design/brand-guidelines/` | Official brand systems for Champions Group companies, one skill per brand | 6 |
 | Branded Documents | `branded-docs/` | Print-ready branded PDF documents per company (LakeB2B, Champions Ranch) | 2 |
-| Marketing & Content | `marketing/` | Blog, campaign, SEO, copywriting, social, thought leadership | 25 |
+| Marketing & Content | `marketing/` | Blog, campaign, SEO, copywriting, social, thought leadership | 26 |
 | Sales & Outreach | `sales/` | REACH, growth showcase, prospecting, negotiation, lead gen, outreach | 11 |
 | Documents & Contracts | `documents/` | NDAs, docs co-authoring, one-pagers, writing quality | 9 |
-| Engineering & Dev | `engineering/` | MCP, testing, frontend build, auth, scraping, codebase tools | 54 |
+| Engineering & Dev | `engineering/` | MCP, testing, frontend build, auth, scraping, codebase tools | 55 |
 | Productivity & Meetings | `productivity/` | Meetings, quizzes, onboarding, interviews, leaderboards | 8 |
 | Science & Research (champ-science plugin) | `science/` | Bio models, literature, figures, Claude Science platform skills | 28 |
 | Personal Ops (champ-science plugin) | `personal/` | Champ's vault, daily start, site ops, agent runtime and workspace skills | 22 |

@@ -186,8 +186,57 @@ the cutover is safe:
   zone that is already propagated, and stage cert/ownership TXT records a day
   ahead.
 - **Limit external help to the exact record.** For a partner-owned zone, ask IT
-  for one CNAME plus the generated TXT records with the saved prior value, never
-  a nameserver or mail change.
+  for one CNAME plus the generated TXT records with the saved prior value, never a
+  nameserver or mail change.
+
+### Re-verify a claimed migration before reporting it as done
+
+A card completion summary and a subagent's report are self-reports, and a migration
+claim ("now on <new platform>, no <old platform> left") is exactly the claim a
+summary is most likely to get wrong or stale: a parallel session can finish that work
+between your answer and his next question. Re-run the whole battery yourself before
+repeating any part of a claim:
+
+1. Platform state, not the config: `wrangler deployments list --name <w>`,
+   `wrangler containers list` (name, state, live instance count), `wrangler d1 list`
+   plus `wrangler d1 info <db>` (`num_tables`, `write_queries_24h`, `rows_written_24h`).
+   `wrangler d1 list` can report `num_tables: 0` for a database that is in fact
+   populated, so read `d1 info` before reporting an empty schema, and compare its table
+   count against the migration SQL files' table count.
+2. Response identity: `curl -sSI <url>` and read `server:`, `cf-ray`, `x-railway`,
+   `x-vercel`, plus any auth-provider header naming the provider that was removed.
+3. Old provider absent from what actually ships: grep the **working tree** (not the
+   last commit) for old hostnames and for the removed driver's imports (`from 'pg'`,
+   `pg-boss`, `postgres`), excluding tests, docs and archived migrations. A database
+   swap leaves old hostnames alive in comments, `.env.example` and docstrings; a hit is
+   a finding to report, not a pass.
+4. Settings presence table by name only: an `awk` one-liner printing
+   `LINE: NAME set|empty` per variable, plus `git check-ignore` on any backup file in
+   the deploy folder, so a stale `.bak` holding old keys is not committed by a later
+   worker.
+5. Run the repo's own check and smoke scripts unpiped and read their exit codes:
+   `./deploy/.../deploy.sh --check` (its `REQUIRED` list is the authority on what the
+   deploy needs, not the example env file, which lags a redesign) and
+   `./deploy/.../smoke.sh <url>` against production, confirming the smoke run cleans up
+   the throwaway account it creates.
+
+Then report three lists in this order: findings table, the open decisions (as numbered
+options when more than one independent ruling must fit one reply), and what was **not**
+ exercised. A smoke suite covering auth and one write proves the plumbing, never
+ drafting, mail connect, approved send or enrichment, and the unstated list is what he
+ will hit first in real use.
+
+- **Live code that exists only as uncommitted local changes is a decision, not a
+  note.** After a migration, run `git status --porcelain | wc -l` and
+  `git ls-remote --heads origin <branch>`: if the deployed build's source is nowhere
+  upstream, the app's only copy is that disk and losing it loses the running product.
+  Card it as a decision (commit and open a draft PR, versus hold), rather than
+  mentioning it in prose where it reads as trivia.
+- **A platform left running after a successful migration is a cost and a data
+  decision.** Name the leftover services and their sizes, say the new build does not
+  use them, and card the retirement with the data question attached (keep as fallback
+  for a stated window, copy the data across, hold). Never fold "shut it down" into a
+  verification report; stopping a service that holds data is his call.
 
 ## Reporting honestly
 

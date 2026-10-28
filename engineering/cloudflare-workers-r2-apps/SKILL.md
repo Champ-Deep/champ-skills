@@ -39,6 +39,9 @@ For a built frontend (Vite) with a small API: `wrangler.jsonc` sets `main` to th
 - Apply D1 migrations in the deploy script before `wrangler deploy`, never at container boot. `--secrets-file` is additive, so a redeploy never wipes keys added later.
 - Never `set -a; . env.env` in a persistent terminal: later test runs inherit the secrets and fail on leaked env. Source it inside `bash -c` only.
 
+## Pushing the built site
+- **A repo whose working branch is not `main` will not fast-forward `main` when you push it.** Build lanes create `build/<name>` branches, and a later hand-built round usually runs on that branch with no local `main` at all, so `git push origin main` either rejects as non-fast-forward or silently pushes a stale branch. Push the checked-out commit explicitly (`git push origin HEAD:main`), then confirm with `git fetch` plus `git rev-parse --short HEAD origin/main` that both hashes match. Before forcing anything, prove the divergence is harmless: `git merge-base --is-ancestor origin/main HEAD` says the remote's extra commits are already contained in what you hold, and only then is a plain push safe.
+
 ## Verification pattern
 - Smoke test as `test/smoke.mjs` taking `BASE` and `ADMIN_TOKEN` env, run against the deployed URL, asserting status codes, byte round-trip and a 206 range.
 - Browser gate with Playwright against the live URL, driving the signed-in state before auditing (visual-verify's `audit.py` cannot inject localStorage; import its `PROBE` and run it after login).

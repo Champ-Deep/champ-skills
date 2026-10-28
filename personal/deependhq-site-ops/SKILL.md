@@ -273,6 +273,13 @@ wrong app.
    (Workers Builds creates the record when the zone is on the same account; if
    `dig` stays empty after a deploy, the record has to be added by hand in the
    dashboard).
+   **List EVERY custom domain you serve, not just the new one.** A `wrangler
+   deploy` replaces the Worker's whole custom-domain set (the CLI POSTs
+   `/domains/changeset?replace_state=true` then PUTs the full origin list), so a
+   `routes` array containing only the new host silently detaches the apex and
+   `www` and takes the site down on a green deploy. Config also carries the D1
+   binding (`d1_databases` + `migrations_dir`) and `wrangler.jsonc` top-level
+   `vars` for non-secrets; secrets never go there.
 2. Host dispatch in `worker/index.js` keyed on the `Host` header, serving that
    host's shell at `/` and 404 for paths outside its own API.
 3. The four places from the section above, for the new shells.
@@ -280,7 +287,26 @@ wrong app.
    `frame-src` never gets a wildcard to make an iframe work.
 5. Verification: `curl -sI https://<host>/` and `curl -s https://<host>/ | wc -c`
    against the new host, not the root domain. The root-domain check proves
-   nothing about the subdomain.
+   nothing about the subdomain. After a routes change, also re-check the OTHER
+   hosts (`curl -sI https://deependhq.com/ | head -1` plus body size) before
+   reporting anything as deployed.
+
+## Releasing a big change through main
+
+Deep's standing instruction for a site-wide upgrade: test it end to end, merge
+to main, prove it live, and make sure the chatbot still works. Full step list
+and pre-merge checklist in `references/release-and-merge.md`. The four rules
+that are never optional:
+
+- Build on a branch, merge `origin/main` INTO it (content keeps moving), and
+  gate the merge on verification you ran yourself, not a lane's `done` claim.
+- Re-check every other host after a routes change; the deploy replaces the
+  Worker's whole custom-domain set.
+- Copy the deployed tree back into the vault checkout the publisher reads, or
+  tonight's rsync silently reverts the release while printing `PUBLISHED`.
+- A feature with no backend behind it says `setup needed` honestly; secrets go
+  in gitignored `.dev.vars` and upload with `wrangler secret bulk`, never chat,
+  and no cap ever defaults to a value that can spend money.
 
 ## Analytics and entry-schema depth
 

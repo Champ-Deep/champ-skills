@@ -357,6 +357,8 @@ the boundary. What an eye calls a messy split and what a design calls a floating
 are the same pixels, so record which of the two you measured rather than acting on the
 adjective.
 
+**Probe interactivity as behavior, not as a screenshot, in one batched run.** A page with a live input, tickable items or a tab strip can pass every geometry gate while its logic is dead: nothing in `audit.py` computes what a control does. After the audit, drive the loaded page once at each shipping width and print in a single loop: the computed output after a representative input (including the empty input and one that exceeds the cap, where clamping must show), the overflow rect-walk, the disabled sweep, the dash count off `document.body.innerText`, and the console error list. Then prove persistence for any state the page claims to keep (reload, read it back), because a storage write that silently fails on `file://` or in a locked-down profile turns a stated feature into a lie the screenshot cannot show. An asserted text output beats pixels here: a recalculated number proves the handler ran, while a shot of the number only proves it rendered once.
+
 **Report honestly.** State what was verified and at what sizes, and when a shot only reached part of a tall page, name the sections it did not cover as unchecked rather than letting the check read as complete:
 
 > Verified at 390 / 834 / 1440, light and dark. Audit clean apart from one INFO on measure in the footer. Two rounds of critique: fixed hierarchy in the hero (headline was competing with the eyebrow) and the card grid collapsing to stretched full-width blocks on mobile.
@@ -382,7 +384,7 @@ Delivery is blocked until all of these are true:
 - [ ] Any scrubbed or staged sequence sampled at a mid-state as well as settled: no element visible before its driver reaches it
 - [ ] Console is free of errors
 - [ ] Overflow checked by element rect against the viewport, not by `document.scrollWidth` (a clipped root lies), and any "text is clipped / element is missing" claim from a vision pass first confirmed against the full-page height, since a crop's own edge is the usual culprit
-- [ ] Every interactive control the page ships, console-checked: no control is disabled in its default state without an explicit source attribute, and each one advances page state when driven
+- [ ] Every interactive control the page ships, driven in one batched behavior probe at each shipping width: no control is disabled in its default state without an explicit source attribute, each one advances page state when driven, computed outputs recompute (empty and over-cap inputs included), and any state the page claims to keep survives a reload
 - [ ] Local-only or self-contained claims proved with `scripts/offline-check.py`, browser offline: zero external requests, zero storage writes
 - [ ] The swap test passes: this could not be any other brand's page
 
@@ -399,6 +401,7 @@ If a browser is unavailable, every unchecked line above appears in the handoff a
 | `landing-page` | The five-second test and the swap test are the whole point. Run at 390 first, because that is where the traffic is. |
 | `web-artifacts-builder`, `power-design`, `theme-factory`, `page-refresh` | Same gate, same scripts. |
 | `executive-one-pager`, `visual-report-builder`, `graphify` | Convert to PNG and read it. Overflowing text boxes and clipped axis labels are invisible in source. |
+| `sdlc-review` | Visuals are half the gate. The other half is what the pixels SAY: run the client-facing leak-gate reference in that skill (the `sdlc-review` skill, `references/client-facing-leak-gates.md`) for internal citations, placeholders and unconsented client names across every format the deliverable ships in, because an audit and a dash count both pass while an internal source note sits in the proof panel. |
 | `microsite-refresh` | The plugin's site-refresh pipeline ends at this gate. Run these scripts and this critique as the closing step of every refresh. |
 | `showcase-page` | Run the interaction test recipe from `frontend-design/reference/interior-rules.md` in Step 3 for any page with a copy button, filter pills or a section rail: the slider geometry, the failure path and the reduced-motion variant are console probes, not screenshots. |
 

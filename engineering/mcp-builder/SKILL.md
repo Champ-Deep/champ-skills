@@ -144,6 +144,28 @@ Review for:
 - Verify syntax: `python -m py_compile your_server.py`
 - Test with MCP Inspector
 
+**Prove the agent path from an external client, not from your own handlers.** An HTTP
+test that posts JSON to a handler you wrote proves the handler, not the MCP wiring:
+protocol negotiation, the auth header, schema serialization and the launch entry point
+all sit outside it. Ship a script (and run it as a test) that starts a real SDK client,
+stdio for a local server and streamable HTTP for a remote one, lists the tools, calls
+one representative tool, and asserts the returned result including its error flag.
+
+Python SDK traps that surface only in that external script:
+
+- The streamable-HTTP session manager starts once per process, so build one client per
+  test session (a session-scoped fixture). A fresh client per test dies with an
+  already-started error that reads like a server bug.
+- Read result field names from the installed SDK before asserting them (the error flag
+  is `is_error` on the result object). A guessed attribute name raises inside your own
+  script and sends you debugging the server.
+- Send the `Authorization` header explicitly on the client. A bearer-protected server
+  rejects an unauthenticated call before any tool runs, and the failure reads like a
+  transport or tool-name problem.
+- Configure the server's host allow-list for deployment (the DNS-rebinding guard): an
+  unconfigured streamable-HTTP server rejects any Host header it was not told to accept,
+  again before a single tool executes.
+
 See language-specific guides for detailed testing approaches and quality checklists.
 
 ---

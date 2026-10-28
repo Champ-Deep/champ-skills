@@ -6,6 +6,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 
 | Skill | What it does |
 |---|---|
+| `agent-first-products` | Use when building a standalone agent-first product or suite. |
 | `android-twa-packaging` | Package a web app or PWA into an installable Android APK. |
 | `clerk-auth` | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
 | `cloudflare-workers-r2-apps` | Use when building a Cloudflare Worker with R2 or KV. |

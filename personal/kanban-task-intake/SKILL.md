@@ -17,7 +17,7 @@ For each task Deep gives (a list, a pasted plan, a run sheet):
 | Needs Deep's own hands (send a WhatsApp, call Chief, approve money, sign) or a ruling only he can make | `kanban_create(initial_status="blocked")` with the body written as a **decision card** (section 3) | Sits in Blocked from birth, no worker burnt, his answer unblocks it and a worker does the follow-through |
 | Already a TASKS.md row | Still create the card; put `[TASKS.md: <row title>]` in the body so the vault row and the card are the same work | One surface for "what is waiting on me" |
 
-Assignees: `default` for vault, email and ops work; `worker` for cheap mechanical lanes; `frontend` for UI. Set `parents` when a card cannot start until another finishes (dependency, not a block).
+Assignees: `default` for vault, email and ops work; `worker` for cheap mechanical lanes; `frontend` for UI. Set `parents` when a card cannot start until another finishes (dependency, not a block). Before naming a lane, and before telling Deep which model a fan-out will use, read the `model-routing` skill: a `delegate_task` child runs on the root config's `delegation:` provider and model, never the chat's model, and work he asks to run "in this chat" is not delegated at all.
 
 Subscribe every card to Telegram so blocked, review and done events reach Deep without opening the dashboard:
 
@@ -40,6 +40,10 @@ One pass creates and subscribes dozens of cards in under a minute; temp files av
 **Write scope as a boundary, not a literal instruction.** A card that says "lift this file, adapting imports only" blocks the moment the donor code contradicts it, because the worker cannot tell whether fixing a hard FK, a wrong default or a missing test is in scope. The block is the card's fault, not the worker's: state the intent ("minimal behavioral and schema changes inside these named files where the target requires them") next to what stays out (unrelated modules, other subsystems), and the worker proceeds without asking. A literal rule reads as precise but is the fragile version of a boundary.
 
 Then approve the boundary where it lands: comment the ruling on the card **and** on any sibling or sub-card that inherits the original wording, and unblock. Approvals exist only on cards, so a ruling scoped to one card leaves the next worker to guess the same boundary again.
+
+**When a worker blocks because the brief conflicts with the source material, the brief is usually the defect.** Read the source lines it cites, decide the ruling, and write it into the source file itself (a doc, a spec, a copy pack) rather than only into a chat reply, then comment the ruling on the blocking card and `hermes kanban unblock`. The source file is what the next worker reads verbatim, so a conflict resolved only in chat re-litigates at the next card. The common shape is a blanket prohibition in the brief ("no client numbers", "no placeholders") that the real source violates; narrow the rule to what it was protecting (keep company facts, strip other clients' figures, keep a safe placeholder) instead of scrapping the copy.
+
+**Close satisfied parents before completing their children.** `hermes kanban complete` refuses a card with open parents, so when one card's completion covers several sub-cards, check each parent first and complete or unlink the ones this work already settled, then complete the child. Report the cleanup in the summary so it reads as part of the work, not as scope creep, and never unlink a parent just to force a completion through.
 
 **Pin the spec, not the workspace.** Name the spec's absolute path in every card body as read-only, and state where work may live (scratch, `~/repos/<name>`). Never let a card imply a checkout inside the Obsidian vault: a codebase in the vault breaks every vault-wide script. When a card body does name a wrong path, correct it with a comment on the next worker's card before it runs, not in chat.
 
@@ -128,6 +132,8 @@ Reply: "A on <task id>" (or comment on the card)
 ```
 
 The recommended option comes first and is the one that is reversible or cheapest. If no option can be recommended honestly, say "no recommendation, need X from you" and name X.
+
+One card, one question: swipe triage renders buttons from a single `DECISION:` with `A:`/`B:` options, so a card carrying two questions gets no buttons at all. Create a second card instead. Only when both rulings genuinely belong to one reply, stack them as `1.` / `2.` each with its own `A/B/C`, and instruct `Reply with the numbers, e.g. "1A 2B"`, so one message still answers both. Do not bury the second question in a comment: comments are evidence, not decisions.
 
 Put the same contract in every card body you create, under a heading `If you must block`, so workers on other profiles inherit it without a config change.
 
