@@ -5,7 +5,7 @@ version: 1.0.0
 metadata:
   hermes:
     tags: [visualization, graph, svg, force-layout, seo, internal-linking, verification]
-    related_skills: [internal-link-audit, visual-verify, site-growth-audit]
+    related_skills: [site-interlink-audit, visual-verify, site-growth-audit]
 ---
 
 # Link graph visualization
@@ -17,7 +17,7 @@ me what is already connected versus what should be, make this readable at a glan
 analysis may already be correct while the picture is the actual deliverable, and the
 picture is the thing the user reads.
 
-Companion to `internal-link-audit`, which produces the scored findings. This skill
+Companion to `site-interlink-audit`, which produces the scored findings. This skill
 covers turning those findings into something a person can interpret in one look.
 
 ## The request is for a graph, not a table

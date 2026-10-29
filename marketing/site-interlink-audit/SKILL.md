@@ -244,6 +244,10 @@ matching rule that was confident and wrong.
   the page-type tail leaves the preposition behind, so `from-dormant-data-to-349k` yields
   `from`. This is the rule to check first when a suggested entity sounds absurd.
 
+## Judgment layer: the three findings that reorder the job
+
+Before proposing any link edit, read `references/link-opportunity-findings.md` (merged from the former `internal-link-audit` skill). It holds the three findings that have inverted plans in practice (the sitemap is a claim, not an inventory; orphan detection; scoring with a rule engine before a model sharpens it), the delivery shape (ranked, grouped action list plus one visual) and its pitfalls. The scripts here produce the data; that file decides what the data means.
+
 ## Files
 
 All code lives in `scripts/`. Run from that directory so the relative imports resolve:

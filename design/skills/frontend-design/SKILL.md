@@ -3,11 +3,6 @@ name: "frontend-design"
 description: "Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data visualizations, or apps on any platform (web, mobile, desktop, foldable, screenless companion). Avoids generic AI aesthetics. Includes a Design System Generator, 50+ styles, 161 palettes, 57 font pairings, 25 chart types across 10 stacks, a gated Expressive Tier (3D carousels, endless and scattered galleries, shader distortion), liquid-glass navigation rules, and device-class guidance for wide foldables and screenless wearables. MANDATORY TRIGGER for any UI/UX work, frontend code, design system creation, component building, dashboard design, chart creation, or mobile, foldable, and wearable companion UI."
 ---
 
----
-name: "frontend-design"
-description: "Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data visualizations, or apps on any platform (web, mobile, desktop, foldable, screenless companion). Avoids generic AI aesthetics. Includes a Design System Generator, 50+ styles, 161 palettes, 57 font pairings, 25 chart types across 10 stacks, a gated Expressive Tier (3D carousels, endless and scattered galleries, shader distortion), liquid-glass navigation rules, and device-class guidance for wide foldables and screenless wearables. MANDATORY TRIGGER for any UI/UX work, frontend code, design system creation, component building, dashboard design, chart creation, or mobile, foldable, and wearable companion UI."
----
-
 This skill creates distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. It combines two systems: the **Impeccable** design language (anti-patterns and principles by Paul Bakaus, Apache 2.0) with a **Design System Generator** (concrete styles, palettes, fonts, and product-type intelligence inspired by UI UX Pro Max).
 
 ## Standing gate: load before you build
@@ -15,6 +10,15 @@ This skill creates distinctive, production-grade frontend interfaces that avoid 
 Any HTML, page, form, checklist, dashboard or single-file artifact deliverable starts by loading this skill, the applicable brand skill (for Champions work, `champions-group-brand`), and `visual-verify`, before a line of markup is written. Building first and styling after, or shipping the first render without running visual-verify's audit and screenshot gate, is the failure this order exists to prevent: the deliverable arrives broken or generic-looking and the whole thing gets rebuilt. The design skills decide the look; visual-verify is the only proof the look survived contact with a browser.
 
 **21st.dev components are non-negotiable for all front-end work** (Deep's standing rule). Before hand-writing a filter bar, command palette, data table, date picker, or any component class 21st offers, check the registry and install through the shadcn CLI. Full procedure, the env-var setup, and the registry quirks (keyframes-only CSS, shadcn overwriting your edits, proving the address under test serves your build) are in [21st-registry reference](references/21st-registry.md). Only write custom components when 21st genuinely has no equivalent, and say so in the report. When the deliverable is static single-file HTML rather than a React app, the shadcn install path does not apply: port the component into vanilla CSS and JS against the page's own tokens, credit the id in a CSS comment, and say plainly in the report that a vanilla port was used. The full recipe (source capture, theme-variable remap, reduced-motion and static-export branches, and the probes that prove the ported behaviour) is in [21st vanilla port reference](references/21st-vanilla-port.md). **Kokonut UI is the companion library to check and try alongside 21st.dev for all frontend development**, especially buttons, cards and interaction patterns. Verify the existing API key through the live MCP/registry, install the chosen source with shadcn, adapt it to the project, and name the actual mounted or build-rendered components in the handoff. A catalog lookup or unused installation is not adoption. For static sites, build-time React rendering is valid for CSS-only components and avoids a client-framework migration.
+
+## Companion skills (chain, do not pick one)
+
+| Need | Load with this skill |
+|---|---|
+| Marketing page that must convert or look premium, outcome-first refresh keeping the copy, 21st.dev sourcing in every mode | `frontend-design-pro` |
+| A part, page or site that must not read as generic AI output | `genjutsu` (the anti-generic checklist) |
+| Critique, polish or audit of an existing UI rather than a new build | `impeccable` |
+| A visual page built from text (report, one-pager, showcase) | start at `research-to-visual`, which routes to the format skill; this skill supplies the design system underneath |
 
 ## Two-phase pipeline: build, then polish
 

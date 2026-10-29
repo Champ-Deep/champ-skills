@@ -1,16 +1,4 @@
----
-name: internal-link-audit
-description: Use when auditing a site's internal links or sitemap.
-version: 1.0.0
-license: AGPL-3.0
-author: Deep
-metadata:
-  hermes:
-    tags: [seo, internal-linking, crawl, sitemap, wordpress, graph, scoring]
-    related_skills: [site-growth-audit, seo-toolkit, defensible-data-counts, visual-verify]
----
-
-# Internal link audit
+# Link opportunity findings (merged from internal-link-audit)
 
 ## When to use
 

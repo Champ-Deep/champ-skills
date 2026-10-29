@@ -5,6 +5,8 @@ description: "Turns a dull campaign report (vendor rollouts, lead sheets, meetin
 
 # Campaign Visualization
 
+Entry point: `research-to-visual` routes a campaign report to the Report format; load `visual-report-builder` for the report craft and this skill for the full-width sales and marketing review layout (Virtusa and Epicor pattern).
+
 A campaign report arrives as tables in emails, a lead workbook, and a meeting recap. This skill turns that into one page a sales or marketing leader can read in three minutes and act on: what ran, what came out, what the calls and emails taught us, what we own, what changes. The reader may be the client (Li zhen at Epicor, Aseem at Virtusa) or the internal team. Savvy readers will check the arithmetic, so every chart must sum and every figure must trace to a source.
 
 Reference pages, both from 29 Sep 2026, are the standard. Copy their structure and token system rather than inventing a new look:

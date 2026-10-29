@@ -16,7 +16,7 @@ interactive graph", "make this dashboard clickable", "verify the graph", "the vi
 looks wrong", "add filters to this chart", or any deliverable that must be both correct and
 beautiful.
 
-Companion skills `link-graph-visualization` and `internal-link-audit` produce the findings
+Companion skills `link-graph-visualization` and `site-interlink-audit` produce the findings
 and the picture. This one proves the artefact actually works.
 
 ## Build order

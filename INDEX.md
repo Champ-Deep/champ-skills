@@ -116,7 +116,6 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `human-feedback-learning-loop` | Engineering & Dev | Use when a system learns from human corrections. |
 | `improve-codebase-architecture` | Engineering & Dev | Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, |
 | `interactive-data-app-verification` | Engineering & Dev | Verify interactive HTML data apps by measuring the DOM. |
-| `internal-link-audit` | Engineering & Dev | Use when auditing a site's internal links or sitemap. |
 | `jev-typesafe-integration` | Engineering & Dev | Use when working with Jev or TypeSafe in ChampSet. |
 | `knowledge-search-agent` | Engineering & Dev | Use when building a Q&A agent over Deep's notes. |
 | `knowledge-tier-boundaries` | Engineering & Dev | Use when deciding what may sync between Deep's knowledge stores. |
@@ -363,7 +362,6 @@ MCP, testing, frontend build, auth, scraping, codebase tools.
 | `human-feedback-learning-loop` | Use when a system learns from human corrections. |
 | `improve-codebase-architecture` | Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, |
 | `interactive-data-app-verification` | Verify interactive HTML data apps by measuring the DOM. |
-| `internal-link-audit` | Use when auditing a site's internal links or sitemap. |
 | `jev-typesafe-integration` | Use when working with Jev or TypeSafe in ChampSet. |
 | `knowledge-search-agent` | Use when building a Q&A agent over Deep's notes. |
 | `knowledge-tier-boundaries` | Use when deciding what may sync between Deep's knowledge stores. |

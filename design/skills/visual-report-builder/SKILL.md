@@ -23,6 +23,10 @@ structure more navigable, or the story more scannable, it doesn't belong.
 
 ---
 
+## Entry point
+
+`research-to-visual` is the router for every visual page built from text: it picks one-pager, report or showcase and writes the verdict brief. Load it first; this skill is the Report format's craft layer and starts after that brief exists. Sibling format skills: `executive-one-pager`, `showcase-page`.
+
 ## When This Skill Applies (and When It Doesn't)
 
 **Use this skill for:**

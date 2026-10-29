@@ -1,6 +1,6 @@
 ---
 name: research-to-visual
-description: Turns text research (notes, reports, transcripts, briefs, memos, data dumps) into a single-file visual HTML page. Three formats from one pipeline: executive one-pager (decision page), visual report (editorial, multi-section), showcase page (scroll page that proves a result). Use whenever the user wants research made visual, a one-pager, a report page, a leave-behind, a case study page or a "make this look premium".
+description: "Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) into a single-file visual HTML page. Three formats from one pipeline: executive one-pager (decision page), visual report (editorial, multi-section), showcase page (scroll page that proves a result). Use whenever the user wants research made visual, a one-pager, a report page, a leave-behind, a case study page or a 'make this look premium'."
 ---
 
 # Research to Visual
@@ -17,11 +17,15 @@ Cover everything below the first screen. Can the reader still act? If not, the p
 
 If the user named one, use it. Otherwise pick by the reader's job and say which in one line. Ask at most one question, only if the reader or the ask is truly unknowable from the text; otherwise state your assumption and proceed.
 
-| Format | Use when | Shape | Height budget |
-|---|---|---|---|
-| **One-pager** (default) | A decision-maker needs the answer and an ask. Summaries, follow-ups, leave-behinds, status readouts | Verdict, at most 5 evidence sections, next steps | 3,000px at 1440, 6,500px at 390 |
-| **Report** | A reader will study it or come back to it. Campaign results, market scans, competitor landscapes, strategy briefs | Hero with stat strip, 4 to 8 numbered sections each with a thesis heading and a visual, closing question, footer | 4,000 to 6,000px at 1440 |
-| **Showcase** | The page must prove one result to a skeptical buyer. Case studies, campaign wins, event recaps, partner pages | Atmospheric hero with the result as headline, 3 floating stat cards, split challenge/approach, main chart section, stat band, closing fact, CTA | 4,500 to 6,500px at 1440 |
+| Format | Use when | Shape | Height budget | Then load |
+|---|---|---|---|---|
+| **One-pager** (default) | A decision-maker needs the answer and an ask. Summaries, follow-ups, leave-behinds, status readouts | Verdict, at most 5 evidence sections, next steps | 3,000px at 1440, 6,500px at 390 | `executive-one-pager` |
+| **Report** | A reader will study it or come back to it. Audits, campaign results, market scans, competitor landscapes, strategy briefs | Hero with stat strip, 4 to 8 numbered sections each with a thesis heading and a visual, closing question, footer | 4,000 to 6,000px at 1440 | `visual-report-builder`; for a campaign report also `campaign-visualization` for its full-width review layout |
+| **Showcase** | The page must prove one result to a skeptical buyer. Case studies, campaign wins, event recaps, partner pages | Atmospheric hero with the result as headline, 3 floating stat cards, split challenge/approach, main chart section, stat band, closing fact, CTA | 4,500 to 6,500px at 1440 | `showcase-page` |
+
+This skill decides the format and the verdict brief; the "Then load" skill carries the craft for that format (templates, components, export). Load it after Step 2, before any HTML. An audit or pitch document rendered for a chairman or a client is a Report, never a Showcase: a showcase proves a result we delivered, an audit proves a problem we found.
+
+When writing a card for the `frontend` lane, name `research-to-visual` plus the chosen format in the brief ("research-to-visual, Report format, Champions brand"), not the format skill alone. A card that names only `visual-report-builder` skips the format decision and the verdict brief, and the worker starts at the template.
 
 When in doubt between one-pager and report, choose one-pager: shorter wins.
 

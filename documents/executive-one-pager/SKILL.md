@@ -5,6 +5,8 @@ description: "Distills meetings, transcripts, documents, decks, or a week of wor
 
 # Executive One-Pager
 
+Entry point: `research-to-visual` picks the format and writes the verdict brief; load this skill after it for the one-pager craft (length budget, fold test, Artifact publish). Siblings: `visual-report-builder` (Report), `showcase-page` (Showcase).
+
 A decision-maker opens this on a phone, between meetings, and gives it ninety seconds. In that time they learn three things: what the answer is, what the numbers say, and what you want them to do. Everything else is evidence they can open if they choose.
 
 One test judges the page: **cover everything below the first screen. Can the reader still act?** If not, the page failed, however good the rest looks.

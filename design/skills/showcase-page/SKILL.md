@@ -5,6 +5,8 @@ description: "Builds premium scroll pages that prove a result (case studies, cam
 
 # Showcase Page
 
+Entry point: `research-to-visual` picks the format and writes the verdict brief; load this skill after it for the Showcase craft (atmospheric hero, MicroKit, 21st.dev components, PDF and PNG export). A showcase proves a result we delivered. An audit, review or pitch document is a Report (`visual-report-builder`); a decision page is `executive-one-pager`.
+
 A showcase page proves one result to a buyer who skims. It earns a second look the way Paddle and passionfroot pages do: one atmospheric moment at the top, editorial numbers, real charts that animate to their values, and small responses under the pointer that make the page feel built with care. The LakeB2B case study v2 set (Oct 2026) is the reference build: `Atlas/Context Docs/Lake B2B/Case Studies/v2/` in the Celsus vault. The Champions Group x Onex check-in (`Calendar/Meetings/2026-10-07 - Champions Group x Onex Check-in.html`) is the reference for a post-meeting partner page.
 
 The working kit lives in the vault at `Other/Skills/showcase-page/kit/` (`core.css`, `core.js`, `build.py`, `shoot.py`, worked examples). Copy it into the session and build from it. When the vault is not mounted, rebuild the same structure from `references/components.md`.

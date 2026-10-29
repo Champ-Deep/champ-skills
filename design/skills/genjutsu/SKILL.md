@@ -1,6 +1,6 @@
 ---
 name: genjutsu
-description: "Use when a UI must avoid the generic AI look: one part, a page, or a site."
+description: "Use when a UI must avoid the generic AI look: one part, a page, or a site. Checklist layer on top of frontend-design; load both."
 license: MIT
 ---
 
