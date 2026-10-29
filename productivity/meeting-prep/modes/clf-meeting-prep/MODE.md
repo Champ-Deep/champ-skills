@@ -460,6 +460,18 @@ READY TO PROCEED?
 
 ## PHASE 4, Deck Generation Package
 
+### Before the prompt: the five gates
+
+A 15-slide NotebookLM deck built from this mode went to a prospect who had asked two written questions. The answers sat on slides 9 and 13. Run these gates before writing the prompt:
+
+1. **Answer first.** If the prospect asked anything in writing (the pasted thread), the first content slide and the first section of the pitch doc answer those questions verbatim, in their order. Architecture and "how we work" slides come after. The deck opens with their words, not ours.
+2. **Numbers gate.** Every figure on a slide carries one of four labels, visible on the slide: client-stated, our standing figure (vault or brand skill), computed (inputs shown), or illustrative. A modelled slide (max allowable CPL from an assumed ACV, a derived LTV) is illustrative and says so in the headline, or it is cut. Never present the prospect's own product claims (their site's "78% improvement") as our proof; label them "their site reports".
+3. **Proof matches the vertical or says it does not.** A case study from a different buyer audience carries the words "adjacent industry" on the slide.
+4. **Eight slides, not thirteen,** when the deck is one item in a 45-minute first call. Collapse solution, architecture, filtration and pilot ramp into one slide. The rep can speak the rest. NotebookLM pads whatever outline it is given, so the outline must be short.
+5. **The script ships separately.** NotebookLM Studio exports flatten every slide to an image and drop the speaker notes. Write the speaker script as its own file (one block per slide, 90 seconds max, mark which slides to skip live and which slide answers which prospect question), then inject it into the .pptx as notes with python-pptx (`slide.notes_slide.notes_text_frame.text = ...`) and deliver that copy.
+
+The client-facing artifact is a showcase page, not the .pptx. The deck is for the rep's screen share; the page is what gets forwarded inside the prospect's company. Build it with `showcase-page` under the sending brand's skill, as two files (showcase to share, script to keep private), leak-tested for the illustrative figures and internal words, per `meeting-prep` section 11c.
+
 After the pitch document is complete, output this section as a clearly separated block:
 
 ---
@@ -580,7 +592,10 @@ Before delivering the final pitch document, run this internal checklist:
 - [ ] Comparison table competitor column reflects Field 19 (not a generic competitor)
 - [ ] Compliance requirements from Field 28 are explicitly addressed
 - [ ] "With vs. Without" statement is specific, not generic
-- [ ] Next steps are actionable, not aspirational
+- [ ] Next steps are actionable, not aspirational, and carry a date and a named owner on each side
+- [ ] The prospect's written questions (if any) are answered in Section 1 before anything else
+- [ ] Every number is labelled client-stated, standing, computed or illustrative; no modelled figure reads as fact
+- [ ] Case studies from another vertical say "adjacent industry"
 - [ ] No em dashes (, ) in body copy, use colons or restructure
 - [ ] No filler openers ("We are pleased to...", "In today's fast-paced...")
 - [ ] The word "LakeB2B" / "Ampliz" / brand name appears less than the prospect's name
