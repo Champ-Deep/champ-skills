@@ -60,10 +60,12 @@ Ask for Tier A assets on day one of any client build. Ship Tier C as the concept
 3. Scene setup: `PerspectiveCamera` 35 degrees; `Fog` matched to the sky colour; `DirectionalLight` with `castShadow` plus a soft `HemisphereLight`; ground `PlaneGeometry` with `ShadowMaterial` opacity 0.25; `ACESFilmicToneMapping`, `sRGBColorSpace`.
 4. Subject groups: one `Group` per module with its own start offset (x and z apart, slight y lift, 4 to 8 degree yaw). Docked position is `(0,0,0)` with yaw 0.
 5. One GSAP timeline, `scrub: 0.8`, pinned to the stage: 0 to 0.55 modules dock (`power2.inOut`), 0.5 to 0.7 seam emissive flashes once then fades, 0.3 to 0.9 camera orbit on a `CatmullRomCurve3`, 0.85 to 1 camera settles and the CTA reveals. Drive copy from the same timeline so text and geometry never drift.
-6. Materials: shells `MeshPhysicalMaterial` white, roughness 0.5; glass `MeshPhysicalMaterial` with `transmission 0.9`, `thickness 0.3`; interiors as photo-textured planes behind the glass with `emissiveMap` for the lit state.
-7. Textures: fetch them into the build. A host without `Access-Control-Allow-Origin` taints WebGL textures and the scene renders black; `img.waimaoniu.net` (Wishvin) sends none. Download, resize to 1024 or 2048, convert to WebP, list each in THIRD_PARTY.md as client-owned.
-8. Resize handling: `ScrollTrigger.refresh()` on resize and after fonts load; renderer `setPixelRatio(min(devicePixelRatio, 2))`.
-9. Teardown: stop the render loop when the stage leaves the viewport (`onLeave`/`onEnterBack`) and when the tab is hidden.
+6. Lighting is an environment first, lamps second. Load a CC0 HDRI (Poly Haven, 1k or 2k, downloaded into `assets/env/`) through `PMREMGenerator` and set `scene.environment`; `scene.background` stays the painted sky. Set `envMapIntensity` 0.8 to 1.2 on every material. Without an environment map every PBR material reads as plastic whatever its roughness; the Wishvin v2 hero shipped this way and Deep called it a toy. Then the key light for the shadow and a low fill.
+7. Surfaces need micro-detail or they read as CAD: a tiling normal map plus roughness map on shells (painted metal panel, 0.3 to 0.45 roughness, slight anisotropic grain), real texture on any wood or slat element, panel seams and door reveals as geometry with a 4 to 8 mm bevel so light catches the edge, a sand or grass albedo plus normal on the ground, and interiors recessed 150 to 300 mm behind the glass with their own emissive so the glass has depth to show. Glass gets `envMap` reflections, `transmission` 0.9, `ior` 1.5, `roughness` 0.05. Soft shadows: `PCFSoftShadowMap` at 2048 plus a baked contact-shadow plane under each module. Post: SMAA and a light ACES grade; bloom only on the emissive interiors.
+8. Materials: shells `MeshPhysicalMaterial` white, roughness 0.5; glass `MeshPhysicalMaterial` with `transmission 0.9`, `thickness 0.3`; interiors as photo-textured planes behind the glass with `emissiveMap` for the lit state.
+9. Textures: fetch them into the build. A host without `Access-Control-Allow-Origin` taints WebGL textures and the scene renders black; `img.waimaoniu.net` (Wishvin) sends none. Download, resize to 1024 or 2048, convert to WebP, list each in THIRD_PARTY.md as client-owned.
+10. Resize handling: `ScrollTrigger.refresh()` on resize and after fonts load; renderer `setPixelRatio(min(devicePixelRatio, 2))`.
+11. Teardown: stop the render loop when the stage leaves the viewport (`onLeave`/`onEnterBack`) and when the tab is hidden.
 
 ## 5. Verify by driving, never by reading the source
 
@@ -77,6 +79,8 @@ Pass when: module distances to dock decrease monotonically to 0; camera position
 ## 6. Pitfalls
 
 - The stage wrapper sized to 100vh gives a zero scrub range and nothing moves; it must be taller than the viewport.
+- A scene with no `scene.environment` is plastic: clearcoat and roughness cannot fix it, only reflections can. Check `grep -c PMREM` on the scene file before any visual review.
+- Realism gate: alongside the scrub probe, render the final frame beside the client's product photo at the same size and ask one bounded vision question: "same object, same material family, yes or no, and the one biggest difference". Repeat until the answer is yes.
 - A scene with no ground shadow floats; the shadow is what sells depth more than the model.
 - Photo crops stitched in 2D cannot be made seamless; that approach was tried on the Wishvin M7 and rejected. Go to a tier in section 3 instead.
 - Webflow reference sites hide the mechanic in exported custom code; the teardown's library grep over loaded script URLs finds it, the page HTML alone does not.
