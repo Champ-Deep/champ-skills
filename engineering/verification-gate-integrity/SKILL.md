@@ -112,6 +112,12 @@ paid checkout, real provider network call, production migration) instead of lett
 fixture pass read as a live one. Fixture success converted into a live claim fails the
 same way an unarmed gate does: the report looks healthy in both cases.
 
+The boundary can be an environment, not just a fixture: when the full application
+cannot start locally (uninstalled runtime deps, no database), a compile check plus a
+pure-function suite proves the logic layer only. Name the unexercised layer (HTTP
+routes, wiring, migration) as an explicit gap in the report, or land a follow-up card
+covering it, instead of presenting a tiered pass as end-to-end verification.
+
 ## Green lanes are not an integrated pass
 
 When the work is split across branches, worktrees or parallel workers, each lane goes

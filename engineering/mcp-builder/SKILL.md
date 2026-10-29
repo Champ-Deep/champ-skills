@@ -256,3 +256,6 @@ Load these resources as needed during development:
   - XML format specifications
   - Example questions and answers
   - Running an evaluation with the provided scripts
+
+### Remote servers that need sign-in (Load when exposing `/mcp/` over the internet)
+- [🔐 Remote OAuth (Clerk)](./references/remote_oauth.md) - Discovery document chain, token validation against an explicit per-user allowlist, and testing the handshake against a faked issuer when no IdP credentials exist.

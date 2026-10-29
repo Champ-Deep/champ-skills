@@ -163,6 +163,24 @@ Give the user the decisions only they can make, with numbers attached: licence o
 acceptance only they can perform, hardware spend, and which capability gap they accept. Name
 those up front, because nothing runs until they are done.
 
+## Credential-gated work: build it so no key is needed to build it
+
+When the provider key is held by Deep and not on the machine, the integration must
+still be completed and testable, with the live step named as the only thing missing:
+
+- Put the provider behind the existing factory and give it a config-selected
+  substitute that needs no network: rule-based or canned responses, deterministic
+  by input, so tests assert real numbers instead of waiting on a model.
+- Drive the substitute through the SAME tests the real provider will run. Swapping
+  in the live provider must not require new test code, or the seam contract was
+  never provider-agnostic.
+- Verify protocol-shaped pieces (OAuth handshake, webhook signature, sidecar call
+  ordering) against a stand-in built from the upstream API docs, then say plainly
+  which surface has never touched the real service.
+- End with the gate only the user can open as a blocked kanban card listing exactly
+  what to supply (key name, where to set it, which user id, which host), not as a
+  paragraph in chat. Work that is built but credential-gated is staged, not done.
+
 ## Pitfalls
 
 - Do not treat a `base_url` parameter as proof of integrability. It configures a hostname,

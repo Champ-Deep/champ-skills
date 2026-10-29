@@ -402,10 +402,12 @@ because the feature stays silently off until the third one exists.
 | `.git/index.lock` in the worktree | A sandbox cannot delete it. Remove it on the Mac: `rm -f <repo>/.git/index.lock`. `publish.sh` is immune; local git commands are not. |
 | Worktree is on branch `initial-site` | Production is `main`. `publish.sh` hardcodes `main` correctly. `publish-native.sh` pushes `HEAD:main` from whatever is checked out, so verify before relying on the fallback. |
 | `rsync --delete` clobbers newer remote commits | The worktree mirrors onto the clone. If someone fixed something directly on GitHub, reconcile first. Check `git log origin/main` freshness before publishing. |
+| Entity URLs 307 to a trailing slash while canonical and sitemap use no slash (found 28 Oct, 31 URLs) | Canonical, sitemap and served URL must be the same string. Run `python3 ~/.hermes/scripts/dhq_seo_check.py` (no keys, silent when clean, weekly cron `33354671ad24`) after any routing, prerender or sitemap change. |
 | `pending-entry.json` in scripts/ | A fossil from June 2026, gitignored and rsync-excluded. Misleading clutter, not a signal. Safe to delete. |
 | `ingest-shoutouts.mjs` | Orphaned. Nothing calls it. It writes a review queue that is never auto-published, by design. Wire it into a weekly cadence or delete it. |
 | rsync copies `deependhq-next/node_modules` nightly | Hundreds of MB for nothing. `publish.sh` now excludes `node_modules`, `deependhq-next/node_modules`, `**/.next`, `scripts/.prerender-cache`, `scripts/.shots` and `.wrangler`. The excludes are load-bearing: without them the deploy repo gains hundreds of MB every night. |
 | Documentation drift | `PIPELINE.md`, `DEPLOY.md`, the public `Pipeline.jsx`, and two copies of the `daily-note-recap` skill all describe different schedules and deploy targets. Only the vault copy at `Scheduled/daily-note-recap/SKILL.md` is authoritative. Reconcile before debugging by the docs. |
+| Rebuild noise after a deploy | A local `npm run build` regenerates `lastBuildDate` / `Built` stamps across ~40 generated files (feed.xml, every prerendered page). `git checkout -- .` before committing, so the real source diff stays reviewable. |
 
 ## Hardening checklist
 

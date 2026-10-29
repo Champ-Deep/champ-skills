@@ -16,6 +16,8 @@ Every email an agent drafts for Deep (team nudges, meeting recaps, follow-ups, i
 
 Calibrated from his Sent Items. When this skill feels stale, re-derive it rather than guessing: find an earlier bot draft he rewrote before sending, diff the two, and turn each correction into a rule. That diff is the method; `email-inbox-triage` step 4 documents it. Editing this file in place is the update path, never an appended note.
 
+When an email is anchored to a conversation (Deep says "based on my last call with X"), read the filed recap in `Calendar/Meetings/` before drafting: it carries the agreed commitments and the evidence id, and it is faster than API calls. Wispr `search_meetings` is the fallback only when no recap was filed.
+
 ## 1. Voice
 
 | Trait | What he does | What bots got wrong |
@@ -40,6 +42,7 @@ Every draft is: greeting, one context line, the body, one clear ask with a date,
 | Nudge, 2 or more items | One context line, then a numbered list, each item `what: agreed date`, then the ask |
 | Meeting recap | `Thanks for <day>.` then bold mini-heads as plain lines (`Where we landed`, `What I need from you`, `Next steps`), bullets under each, owners and dates on every action |
 | Intro | Who each person is in one line each, why they should talk, the specific first step |
+| Update plus research brief | Two bold mini-heads as plain lines (what changed, what I need from you), each over its own numbered list, then one ask naming the deliverable and a date | One long numbered list mixing changes and asks |
 | Reply in a thread | Answer first, reason second, two to five sentences |
 | Decision ask to a leader | The decision in the first line, options numbered, Deep's recommendation, the date he needs it by |
 
@@ -67,10 +70,13 @@ Resolve every recipient before creating the draft, in this order, and stop at th
 2. Vault-wide pattern grep: `(?i)<name>[\w.'_-]*@[\w.'-]+\.[a-z]{2,}` with `search_files` across the vault. Triage and meeting notes carry addresses the People notes never got, and one search beats two Outlook round-trips.
 3. Wispr: when Deep and the person were both on a recorded call, `get_meeting_participants_enriched` on that meeting returns each participant's emails directly; find the meeting with `search_meetings` on their name.
 4. Outlook Sent Items: `list_mail_folder_messages(mailFolderId="sentitems", search="\"to:<first name>\"")`.
-5. Whole mailbox: `list_mail_messages(search="\"<first name>\"")`, take the `from` address of a mail they sent Deep. Prefer internal domains (championsmail.com, lakeb2b.com, championsgroup.com, cirrologix.com, ampliz.com, spanglobalservices.com, metricfox.com).
+| 5. Whole mailbox: `list_mail_messages(search="\"<first name>\"")`, take the `from` address of a mail they sent Deep. Prefer internal domains (championsmail.com, lakeb2b.com, championsgroup.com, cirrologix.com, ampliz.com, spanglobalservices.com, metricfox.com).
+| 5b. **The failed link Deep is complaining about.** Read the address straight out of the URL he pasted or the one in his complaint: a SharePoint or Google share invite carries an `e=`/`uid=` token scoped to the invited recipient, so the intended To address is in the link and needs no search. Same for a `mailto:` link or an address printed in the share notification mail. |
 6. When an address is found in steps 2 to 5 and the People note lacks it, add the address to the People note.
 
 If still unresolved, or two different people match the name: leave `toRecipients` empty, keep the subject clean, and list the draft under NEEDS YOU as `add To: <name>`. Outlook will not send a draft with no recipient, so the gap cannot misfire.
+
+When Deep hands an address himself but hedges on it (`or something along those lines`, `I think`), treat it as a lookup key, not a literal: verify the exact form against Sent Items before drafting. Internal domains embed dots and initials inconsistently (`pogulaajay.k@` vs `pogulaajayk@`), and only the form in a sent mail is proven.
 
 Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subject: a self-addressed placeholder draft means the recipient was never resolved, so the intended person still has not been reached, yet Outlook will happily send it to Deep.
 

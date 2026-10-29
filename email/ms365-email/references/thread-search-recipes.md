@@ -7,6 +7,7 @@ Recipe for finding what the team or counterparty already said before drafting, u
 `mcp__ms365__list_mail_messages`:
 
 - `search`: one KQL string in double quotes, e.g. `"(to:ithelpdesk OR from:ithelpdesk OR from:nandish OR to:nandish) AND received>=2026-10-14"`. `$search` and `$filter` cannot be combined, so fold the date range into the KQL.
+- **A sender hunt needs KQL `search`, not `$filter`.** `contains(from/emailAddress/address,'fragment')` in `$filter` silently degrades to a date-only filter (Graph answers 200 with the whole date window and drops the `from` condition), so unrelated mail comes back and reads as "this sender has written nothing since the cutoff" when the mail exists. Craft the KQL instead: `search: "\"from:rohan.j@lakeb2b.com AND received>=2026-10-22\""` returns exactly that sender's post-cutoff mail. Run it as a cross-check whenever a `$filter` result looks too broad to be true.
 - `select`: `id,subject,from,receivedDateTime,bodyPreview,isRead`. Never request `body` on a list call.
 - `top`: 25. Follow `@odata.nextLink` for more pages; a result set with `result_has_more: true` is truncated, not exhausted.
 - `orderby: receivedDateTime desc` when the newest items are what matters.

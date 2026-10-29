@@ -22,6 +22,12 @@ office IP makes the company name unsafe to say, drop the name and still deliver 
 help. Blocking outright discards a real buying signal because an office shares an
 egress address.
 
+Undecided is a rotation, not a guess. When a personalised surface cannot pick one
+variant with confidence, rotate through the plausible ones and settle on a single
+variant only once the profile is confident; a guess frozen on the first visit
+teaches the visitor the page is wrong about them, and one wrong claim costs more
+than ten neutral ones.
+
 ## Identity is company-level, and that is a design constraint
 
 Reverse-IP resolution gives an organisation, not a person. Design every downstream

@@ -194,6 +194,21 @@ Removing a paid search API is not removing sources, because the replacement may 
 the same underlying engines by default. Say this explicitly, because the user will otherwise
 assume the surface shrank.
 
+## License before reuse
+
+Before recommending that we take upstream's code, read the repo's license
+structure, not just its root LICENSE file. Monorepos commonly split by path:
+core under AGPL/SSPL/MIT, with `ee/`, `(ee)/`, `pro/`, or `enterprise/`
+subtrees under a separate commercial license. Both halves are load-bearing:
+running an AGPL core as our hosted service obliges us to publish our own
+source (the network-use clause), and a commercial-licensed path is not usable
+at all, however small the copy. When either applies, extract the *pattern*
+instead of the file: the event flow, the schema shape, the dedup key, the
+query parameter names, and reimplement it. State the license reason in the
+deliverable, or the next person "simplifies" the plan by copying the file.
+Evidence is per-directory LICENSE files and in-file headers; a repo-level
+LICENSE alone can misrepresent coverage.
+
 ## Evaluating a third-party tool before adopting it
 
 When a much-hyped dependency lands in the request ("can we use X", "test the new Y system"),

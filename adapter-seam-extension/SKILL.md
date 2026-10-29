@@ -79,6 +79,17 @@ def test_busy_is_fetched_once_for_the_whole_horizon(db):
     assert len(stub.calls) == 1
 ```
 
+## One seam, two providers: substitute first, live second
+
+A seam that cannot yet reach its real provider (no key on the machine) is still
+buildable end to end. Put the substitute behind the same `get_x(provider)` factory
+and select it by config, so the live provider is a config change rather than a
+code change. Make the substitute deterministic and rule-based, never model-based:
+reproducible assertions on scores, picks and counts are the whole point of testing
+without a key. Any scoring rule the substitute encodes is a stand-in for the real
+judgment, so report it as such and name the provider as never-yet-called rather
+than letting the substituted numbers read as provider output.
+
 ## Read the fixture contract before writing tests
 
 Seam tests fail on the fixture long before they test the seam. Grep for an

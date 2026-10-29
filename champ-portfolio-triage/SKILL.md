@@ -32,6 +32,24 @@ verdict arrives as pass or fail per gate rather than as prose:
   same-named containers: touching the live one to make a gate pass is a write to
   production under the label of an assessment.
 
+## Publishing local-only work to the org
+
+A repo built offline has no remote, and the push is where it is usually discovered:
+`gh repo view` answering `Could not resolve to a Repository` means the remote is
+missing, not that the name is wrong. Do it in this order:
+
+1. `git grep` the whole history (every ref, excluding lockfiles) for live credential
+   shapes before anything leaves the machine. A local-only repo has had no such scan,
+   and env-derived or committed keys ride out with the first push.
+2. `gh repo create <owner>/<name> --private --source . --remote origin --description ...`
+   then push every branch that matters, not just the working one, so earlier work
+   stays reachable.
+3. **Assert the push by reading it back.** `gh api repos/<o>/<r>/branches --jq '.[].name'`
+   lists what actually arrived; a bare `git push` that silently failed looks identical
+   to a clean one. Name the branch in the report that carries the work.
+4. Keep the pre-existing default branch as history and push the new work as a branch
+   that PRs into it, so nothing on the remote changes until a reviewer says so.
+
 ## Enumerate every branch before judging a repo by its default branch
 
 A stale default branch is not the newest work. List branches with commit dates

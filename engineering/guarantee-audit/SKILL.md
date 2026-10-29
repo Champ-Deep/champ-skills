@@ -58,6 +58,16 @@ grep -rn -iE "atomically|race|never exceed|always |guarantee|fails closed|exactl
 A comment claiming a property is the highest-yield finding in an unfamiliar
 repo, and checking it costs one script.
 
+Integration promises need the consumer grepped in the DEPLOYING repo, not just
+the emitting one. An event fired, a hook declared, a config key documented, a
+callback passed: grep the site, host page, or caller repo for who reads or
+listens to it. No consumer anywhere means the feature is scaffolded, however
+complete the emitting side looks and however many tests it carries. When
+reporting on a branch, classify every change in three buckets: shipped,
+scaffolded (built, no consumer), absent (promised, not in the diff). Diff the
+code files only; lockfiles and generated files inflate the stat and hide the
+real surface.
+
 ### 3. Probe each claim by executing it
 
 For each claim, write the smallest thing that would prove it false, and run it.
@@ -192,6 +202,10 @@ the author. Run the visual verification gate and open the screenshots.
 - **A docstring claiming a property is a lead, not a proof.** "Atomically" over
   a two-round-trip implementation is the most productive thing to grep for in
   an unfamiliar codebase.
+- **A scaffolded feature reads as shipped.** The emitting half (event, hook,
+  config key) can be complete and tested while the consuming half lives in
+  another repo, unbuilt; grep the deploying repo for the consumer before
+  calling the feature present.
 - **A fake that serialises cannot test a race.** Prove concurrency against the
   real service, and say in the report which double the suite uses.
 - **A subagent's finding is a pointer, not a result.** Re-run it. One in three

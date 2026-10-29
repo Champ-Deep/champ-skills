@@ -25,3 +25,16 @@ Question types: `choice` (criteria is a dict), `score` (criteria is an ordered l
 - Clef-flash (Cloudflare, 9B, Apache 2.0) is the decision model of record since 2026-10-18 and runs on MPS from `/Users/deep/laya-local/.venv` (19 GB in the HF cache, ~7 s per call). Deep's decision gate is `/Users/deep/laya-local/decider/decider.py ask "<situation>" [--shadow]`: rules plus vault precedents decide, Clef answers in shadow only. `desk_eval.py --clef` scores both against the Decision Desk cards.
 - Inside Hermes it is the stdio MCP server `clef` (`decider/mcp_server.py`, tools `mcp_clef_decide`, `mcp_clef_ask`, `mcp_clef_label`; per-call timeout 300 s for the 75 s cold load; the model unloads after 15 min idle to give 18 GB RAM back). Self-check: `env -u PYTHONPATH -u PYTHONHOME ../.venv/bin/python test_mcp_server.py --clef`. Any python run from that venv in a Hermes terminal needs `env -u PYTHONPATH -u PYTHONHOME` or Hermes's 3.14 site-packages leak in (pydantic_core errors, httpx2 timeouts). `noul` answers come back as `{"noul": p}`, not `probability`.
 - Re-downloading Clef: `HF_HUB_DISABLE_XET=1` or the fetch crawls at 300 KB/s on this link (8 MB/s without Xet). Fine-tuning Clef locally is not possible (no training code shipped, 9B bf16 does not train on 32 GB MPS); the model learns the vault through the precedents retrieved into the state, not through weights.
+
+## Training the gate from the swipe decision log
+
+The swipe triage app (`~/.hermes/scripts/swipe_triage.py`) appends every ruling to `~/.hermes/state/decision_log.jsonl` (id, kind, choice, answer, section, ts). That log trains the gate, not Clef's weights:
+
+```bash
+cd /Users/deep/laya-local/decider && ../.venv/bin/python decider.py backfill   # seed the log from card history when thin
+../.venv/bin/python decider.py label   # add a labelled ruling
+../.venv/bin/python decider.py tune    # fit gate weights on the log
+../.venv/bin/python decider.py eval --limit 60   # score against the current baseline
+```
+
+Ship a tune only when held-out accuracy beats the baseline; a regression keeps the old weights. Verify the eval's row count in its output (not exit 0 alone) before comparing numbers, and disable reasoning on any bulk API pass that prepares labels, or the output budget is eaten by hidden thinking.

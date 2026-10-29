@@ -516,13 +516,15 @@ named; options as a proposals-only table; probes; a do-not-say list; after-call 
 footer naming sources and every figure left unverified. Ship it alongside the existing `notes.md`,
 not instead of it.
 11b. **Visual showcase pages**, When Deep asks for a page as well as the note: variants in one
-dated folder under `Calendar/Meetings/`, numbered by role (`01 - ...` to share, `02 - ...` hold
+dated folder under `Calendar/Meetings/`, numbered by role (`01 - ...` to share, `02 - ...` to hold
 back until the counterparty opens the topic), plus the design system they were built from. Most
 counterparties have no brand system in the vault, so derive one from their real logo file rather
 than inventing a palette: measure the dominant colours, take one corner treatment and one
 recurring motif from the mark, and record the asset's source URL in the design-system page so
 the derivation is auditable. Both variants get screenshot at 1440 and 390 and read before
-delivery (see the `visual-verify` skill).
+delivery (see the `visual-verify` skill). When the brand DOES exist in the vault (a LakeB2B or
+SPAN page), load that brand skill and follow it instead of deriving anything: the derivation
+recipe is for counterparties only, and improvising a palette on a brand we own is the failure.
 11c. **Script and showcase are always two separate files.** When Deep wants something to run a
 call from, ship a client-facing SHOWCASE (shared on screen, nothing internal, no toggle that could
 reveal notes) and a private SCRIPT AND NOTES page (countdown, word-for-word lines, cheat sheet,
@@ -532,7 +534,11 @@ Name them `1 - SHOWCASE (share this screen).html` and `2 - SCRIPT AND NOTES (kee
 at the top of the dated folder, with fonts, logos, build files and older versions under
 `_support/`. Each script phase carries a pointer to the showcase section to be on, and the
 showcase top bar links to those sections so he can drive it in one click. Leak-test the showcase
-text for internal words before delivery. Name files by role, never p1, p2 or ds.
+text for internal words before delivery (the do-not-say block's own headings, employee names,
+verdict and candidate labels, vault paths): a zero dash count is not a leak test, and a page can
+pass every visual gate with the internal notes still on screen. Depth on the file pair, the
+localStorage tickables and the routing of the build itself lives in `celsus-client-call-prep`,
+`references/call-artifacts-html.md`. Name files by role, never p1, p2 or ds.
 12. **Source Reference Index**, Every claim footnoted
 
 **Grounding rule.** Every number carries its source or a stated absence of one. Standing brand

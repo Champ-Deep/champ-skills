@@ -68,6 +68,50 @@ tested concurrency guard, and an adapter seam, in which case the plan is "extend
 serving a different channel (outbound versus inbound, say) is a *separate* effort, and saying
 so prevents a wrong merge later.
 
+## Adopting an agent skill or tool repo: screen, then test, then gate
+
+When the ask is "research the popular repos for X and test a couple", the deliverable is a
+screened shortlist plus one tested recommendation, not a star-count table.
+
+1. **Inventory in one batch before judging.** `gh api repos/<owner>/<repo>` for stars,
+   `pushed_at`, `spdx` licence, description, in a loop. Search the vault for what we already
+   own on the topic first; a repo that duplicates an existing skill or brand asset changes
+   the recommendation.
+2. **Screen out key-gated candidates before spending a run on them.** Read each repo's
+   `.env.example`, `requirements.txt` and SKILL.md phases. A candidate whose headline output
+   needs an API key we do not hold can still be tested on its key-free phases; say which
+   phase is gated and skip the rest rather than stalling the test. `license: null` in the API
+   means **no licence**: adoption, vendoring or redistribution is a decision for Deep, not
+   for us.
+3. **Read SKILL.md itself before ranking.** Rigor shows in the file: named phases, scripts
+   with real jobs, mandatory render-and-look steps, a concept checkpoint that stops before
+   expensive work. A README claim is a claim.
+4. **Fan out a skills x subjects matrix, one child per cell, in a single dispatch.** Each
+   child gets the skill's path (instruct it to follow that file as if loaded), a fixed brand
+   brief so no cell asks questions nobody can answer, a dedicated output directory, the
+   phases to run and where to stop, and a `output_schema` that forces overview artifact
+   path, final files, a 1-10 quality rating, and a list of tool failures with exact errors.
+   Pin `provider` and `model` explicitly on every cell. A run landed on the wrong model
+   invalidates the comparison the matrix exists to produce, so confirm from the child's own
+   report which model ran before you treat the cell as comparable.
+5. **In every brief, force evidence over assertion:** render every artifact and *look* at it
+   with a vision tool instead of trusting a script exit code; report which steps failed
+   rather than smoothing them; no paid API calls; no em dashes in any file or reply; no
+   invented facts about the subject; never send, post, push or modify the cloned repo.
+6. **Grade the outputs yourself in the main lane.** Child ratings are self-reports. Look at
+   the rendered overviews, check small-size legibility on your own, and hold the list to the
+   same rubric for every cell before recommending.
+7. **Gate adoption behind licence and intake.** Installing or vendoring a vetted skill still
+   runs `skill-repo-sync` `references/skill-vendoring.md` plus `skill-creator`'s untrusted
+   intake gate, and the adopt-versus-ignore call goes to Deep as a decision card first.
+
+**Community sentiment, when asked:** gather it *before* the runs, because anonymous Reddit
+serves roughly one request per minute per IP. Batch every thread URL into a single background
+loop through the `reddit-reading` skill (`.rss` feeds) writing to a scratch file, then read
+the file once; do not run thread fetches in the foreground one at a time. Interpret the
+result against the repo, not as a verdict: sentiment about the category (AI logos look alike,
+slop risk) is generalizable even when it names a different repo.
+
 ## Phase 1: own ground truth before delegating
 
 Establish the baseline yourself before any fan-out. You need it to judge specialists against,
@@ -97,6 +141,11 @@ save full text to a file: read the file rather than trusting the summary block.
 
 **Re-verify vendor pricing, licence terms, and quota figures taken from a child's
 paraphrase.** Plausible-sounding wrong numbers are worse than no numbers.
+
+**Report what a child ran, not what you dispatched.** The dispatch record describes your
+intent, not the child's execution. When asked what model, tool or version a run used, read
+it from the child's own report or output header; if the two disagree, lead with the
+discrepancy rather than the record.
 
 **Lead with the correction.** When verification changed your conclusion, that correction is
 the headline, not a footnote. Say plainly what you added and what changed.
@@ -190,4 +239,14 @@ with `MEDIA:` plus an absolute path, never a bare path.
 - **Do not let a truncated delegation summary end your verification.** Read the saved file.
 - **Do not rank by effort when the work is defects.** Severity first, effort second.
 - **Do not produce a survey when the deliverable is a decision.**
+- **Do not test a skill you have not read.** Ranking on README or star count spends a run on
+  a candidate whose real gates (API key, licence, phase structure) were visible in the file.
+- **Do not let a child's rating stand in for your own look at the artifact.** Self-reported
+  scores skew high; render and inspect before recommending.
+- **Do not trust a vision model on fine geometry.** Small-size legibility, stroke gaps and
+  concentricity are pixel facts: a vision pass calls eccentric rings concentric and reports
+  closed gaps that pixel dumps show open. Measure with pixel dumps or ASCII renders and
+  let vision handle only the gross read.
+- **Do not fan out Reddit thread reads in the foreground.** The anonymous feed throttles per
+  IP per minute, so serial foreground calls burn minutes a background batch would hide.
 - **Do not add another undated plan to a pile of undated plans.** That is not progress.

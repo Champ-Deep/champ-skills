@@ -148,6 +148,16 @@ Single self-contained HTML file built through `frontend-design` with the company
 
 Save both files to `Efforts/Active/{Name} Onboarding/` with frontmatter (type: effort, status, company, person, owner, start-date, tags), real calendar dates, five-day weeks, and `[[wikilinks]]` that pass `_config/link-policy.md`. Link from the person's `Atlas/People/` note. The Markdown plan holds the full skills mapping, the month arc, and the success criteria in prose; the dashboard holds the daily surface.
 
+## When the new joiner goes quiet: verify the artifact before judging the person
+
+A sponsor reporting "they are doing nothing" is a symptom with three candidate causes, and the deliverable I built is one of them. Check in this order before writing any performance language into a reply, a mail or a card:
+
+1. **Does the plan file actually work?** A single syntax error in the generated JS data array (a doubled `const`, a stray comma) makes the whole page render with zero tasks, so the intern opens a dashboard that says "0 of 0 tasks done" and has literally nothing to do. Extract the inline script, `node --check` it, load the file headlessly (Playwright `chromium`, `file://` URL), assert the Today panel has N tasks and the counter reads "N of M tasks done" with M greater than zero, then open a screenshot. Syntax errors on a `file://` page often do not surface as uncaught page errors, so assert on rendered text, not on the console being quiet.
+2. **Do they have what the plan's day one requires?** Compare the day one tasks against the sponsor's own "what you owe them" list (admin rights, repo access, mailbox, keys) and against any access request in the mailbox. A blocked day one reads identically to idleness.
+3. **Is the attendance source trustworthy?** Check the HR/time tool directly. Roster rows routinely carry mismatched shift labels (General, Night and Mid Day on one person), and late-login or early-logout alerts derived from them are noise. State which source you checked and which you could not (chat apps, badge data).
+
+Only then describe behaviour, and describe it as evidence: what was and was not received, from which channel, not "they are not working". If a source note conflicts with known facts about the person (a departure or replacement row naming someone who is not leaving), correct the record where it lives and leave a dated correction note, because a misattributed meeting-summary name becomes an action item somebody acts on.
+
 ## Verify (mandatory before delivery)
 
 Run the `visual-verify` gate at 390 and 1440, open the screenshots with the Read tool, and add these checks specific to this skill:
@@ -159,7 +169,7 @@ Run the `visual-verify` gate at 390 and 1440, open the screenshots with the Read
 5. **No clipped tables.** At 390px, no element has a scrollWidth larger than the viewport; the audit names the culprit if one does.
 6. **Names.** Every person named on the page appears in a Deep-confirmed source.
 7. **Space utilization.** Measure `scrollHeight` with every week open, then with the default load state. Hidden content behind collapsed sections must be under a third of the page. If it is more, the accordions are hiding the product, not decluttering it. Zero em or en dashes (`grep -cP '\xe2\x80[\x93\x94]' <output.html>` must print 0).
-8. `node --check` on the extracted script; zero console errors; zero em or en dashes.
+8. `node --check` on the extracted script; zero em or en dashes; and a headless render assertion that the Today panel holds at least one task and the progress counter's denominator is greater than zero, with a screenshot of that render read before delivery. A green `node --check` proves the script parses, not that the page populates, so the render assertion is the check that catches a silently blank plan.
 
 Zero FAILs before delivery. If no browser is available, say so and label the output unverified.
 
