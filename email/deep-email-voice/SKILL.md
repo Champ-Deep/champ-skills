@@ -30,7 +30,7 @@ When an email is anchored to a conversation (Deep says "based on my last call wi
 | Sign-off | `Cheers,` or `Best,` or `Thanks,` then `Deep` on its own line | Sign-off glued onto the last sentence |
 | Register | Warmer and softer for interns and juniors; crisp and decision-led for leaders, vendors and the Chief; external clients get the brand voice of the sending company | One register for everyone |
 
-Never: em or en dashes, "I hope this email finds you well" to someone mid-thread, restating their message back, invented dates, prices or commitments. A missing fact becomes `[CONFIRM: what]` and is listed in the run report.
+Never: em or en dashes, "I hope this email finds you well" to someone mid-thread, restating their message back, invented dates, prices or commitments. A missing fact becomes the literal tag `[CONFIRM: what]` inline in the sentence, so the gap is greppable rather than plausible, and it is listed in the run report. A draft still carrying tags is not sendable as-is: name it and its tags on the decision card instead of reporting the draft as ready.
 
 ## 2. Structure
 
@@ -85,6 +85,7 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 - [ ] Would Deep send it without rewording? Greeting, warm line where it fits, polite ask, sign-off on its own line.
 - [ ] No one-item list, no `<p>` inside `<li>`, no em or en dash.
 - [ ] Every date, number and name traces to the source (thread, meeting, TASKS.md row).
+- [ ] Every deadline is either sourced or named as mine in the handback. A deadline I chose is a proposal Deep may strike, so it never goes out silently as a fact.
 - [ ] `toRecipients` holds a real address for the right person, or is empty and flagged. Never Deep.
 - [ ] Subject is what the recipient should see: specific, no bracket tags.
 
