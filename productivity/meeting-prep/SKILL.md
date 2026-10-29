@@ -530,9 +530,13 @@ call from, ship a client-facing SHOWCASE (shared on screen, nothing internal, no
 reveal notes) and a private SCRIPT AND NOTES page (countdown, word-for-word lines, cheat sheet,
 objections, facts, notes box) as two HTML files he opens in two windows. One combined page with a
 hide-internal switch failed his real need: he must read the script while the showcase is on screen.
-Name them `1 - SHOWCASE (share this screen).html` and `2 - SCRIPT AND NOTES (keep private).html`
-at the top of the dated folder, with fonts, logos, build files and older versions under
-`_support/`. Each script phase carries a pointer to the showcase section to be on, and the
+Name every file in the dated folder `{YYYY-MM-DD} {Client} x {Brand} - {ROLE} ({audience}).{ext}`, so
+a file still says what it is once it leaves the folder (Finder search, a Telegram card, a Zoom share
+all strip the folder name). Roles are fixed words: `CLIENT PAGE (send)`, `CALL SCRIPT (private)`,
+`DECK RUN SHEET (private)`, `DECK with speaker notes`, `DECK REVIEW (internal)`, `AGENDA (send)`.
+Example: `2026-10-29 XSYSYS x LakeB2B - CLIENT PAGE (send).html`. Generic names like
+`1 - SHOWCASE.html` were retired because a dozen folders each held one and they got mixed up. Fonts,
+logos, build files and older versions go under `_support/`. Each script phase carries a pointer to the showcase section to be on, and the
 showcase top bar links to those sections so he can drive it in one click. Leak-test the showcase
 text for internal words before delivery (the do-not-say block's own headings, employee names,
 verdict and candidate labels, vault paths): a zero dash count is not a leak test, and a page can
