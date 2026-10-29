@@ -31,6 +31,10 @@ Three of four run the same stack. That is the sanctioned runtime here: **Lenis**
 
 ## 2. Scene grammar
 
+Choreography rule before anything else: **one part per scroll beat, never all parts at once.** Deep rejected three versions of a hero where modules slid together horizontally in a single motion ("plain", "toy", "the sight that kept coming up really sucked"). The pattern he wants is Jesko's: the hero pins, each content section scrolls up over it and lands one part (module, wing, component) with its own copy, and the whole completes on the last beat. Simultaneous docking gives the visitor nothing to follow and reads as a UI transition.
+
+Asset reality check, measured on Wishvin: procedural three.js built from photographs (Tier C) scored 4/10 on the realism gate after HDRI, GTAO, PBR sand and a materials pass. It is a concept stand-in, never "realistic". When the brief says realistic and there is no CAD or render sequence, use the product photographs themselves as the beats (full-bleed photo per part, real assembled photo as the finale, parallax layers for depth) and put the CAD request in the pitch.
+
 Every reference hero decomposes into the same five layers. Build all five or it reads flat.
 
 | Layer | What it is | Wishvin M7 example |
