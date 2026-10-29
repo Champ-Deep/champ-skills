@@ -11,7 +11,8 @@ description: >-
 | **search-intent-audit** | Traffic or rankings are falling. Diagnose first; this mode hands fixes to the other two | `modes/search-intent-audit/MODE.md` |
 | **seo-rapid-ranker** | One page needs to rank higher soon. Tactical, page-level, this week | `modes/seo-rapid-ranker/MODE.md` |
 | **paa-seo-builder** | A site or topic needs a question-led content architecture. Strategic, multi-page | `modes/paa-seo-builder/MODE.md` |
+| **prospect-seo-audit** | A sales prospect's site, no analytics access, deliverable is an audit Champions sends after review. Evidence procedure plus `scripts/crawl_sitemap.py`; document shape comes from `site-growth-audit` | `modes/prospect-seo-audit/MODE.md` |
 
 ## Routing
 
-Decline or loss in the ask means start with `search-intent-audit`, even if the user asks for a fix. A single named page with no decline means `seo-rapid-ranker`. A domain plus seed keywords, or anything about FAQ hubs and PAA, means `paa-seo-builder`. When a mode file says to hand off to another of these skills, read that mode file here. Use Ahrefs data where connected; label anything estimated.
+Decline or loss in the ask means start with `search-intent-audit`, even if the user asks for a fix. A single named page with no decline means `seo-rapid-ranker`. A domain plus seed keywords, or anything about FAQ hubs and PAA, means `paa-seo-builder`. A prospect or pitch ("audit this company's site", "what can we do for them") means `prospect-seo-audit`: crawl every sitemap URL before writing a word, the homepage alone hides duplicate SKU pages, tag-page bloat and templated descriptions. When a mode file says to hand off to another of these skills, read that mode file here. Use Ahrefs data where connected; label anything estimated.

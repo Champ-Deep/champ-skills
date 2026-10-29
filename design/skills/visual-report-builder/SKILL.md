@@ -513,6 +513,8 @@ reports the app generates.
 
 ## Hard Rules
 
+- Section order in the rendered report follows the source document's order, and numbered sections stay in sequence. A build script that appends sections by hand can place "07" between "04" and "05" and every gate still passes (cells preserved, 0 dashes, 0 overflow): check the cover's contents list reads 01 to 07 in order before handoff, because a two-column contents grid flows row-wise and makes any disorder obvious to the reader.
+
 1. **Never use em dashes or en dashes**, including headings, labels, chart text, date ranges and PDF exports. Periods, commas, colons, or restructure.
 1b. **Never use the section sign (§)** or a pill-outlined section tag. Section eyebrows are a bare mono number and topic.
 2. **Always check contrast.** Text on dark or colored backgrounds must be
