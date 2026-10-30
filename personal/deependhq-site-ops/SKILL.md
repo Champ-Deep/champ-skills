@@ -19,6 +19,8 @@ Operate and repair the nightly loop that publishes deependhq.com from Deep's Obs
 ## Toolkit facts that cost a lane a round
 
 - The toolkit's LLM key is one OpenRouter key. The worker reads `OPENROUTER_API_KEY` or the older `JEV_API_KEY` (same key, `llmKey()` in `worker/toolkit.js`); `TREG_API_KEY` is the enrichment provider. "The AI provider is not configured" means `npx wrangler secret list` lacks them, not a code bug.
+- One model switch: `admin_settings_set {model}` sets intake + research together; the `guide` action reuses the intake model. Every chat call carries `provider: cols.routing(llm)` (require_parameters + `max_price` at the reserved rates), because one OpenRouter model id spans endpoints priced up to about 25x apart (deepseek-v4.1-flash: $0.022 to $0.60 per M prompt on 31 Oct). A new chat call without `routing()` can bill above its reserve.
+- `makeTreg` takes `feature`; pass the calling tool's id, or Treg's audit books the spend to lead-scorer.
 - Only the 5 MiB file size is a user-facing limit (jobs up to 20,000 rows, 200 headers). The quote and the daily allowance are the cost control, so never reintroduce row or column rejections.
 - Clerk mounts in light DOM. A rule like `#toolkit-signin-root button` written for fixture controls hits every Clerk button, including the show-password eye, which then paints over the field. Scope fixture rules with `>` and test against live Clerk by disabling the live stylesheet and injecting the branch CSS in Playwright.
 
