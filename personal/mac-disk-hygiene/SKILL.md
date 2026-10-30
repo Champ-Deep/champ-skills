@@ -44,6 +44,13 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 
 ## Pitfalls
 
+- `docker system df` first. Docker (images, build cache, volumes) hid 145GB that no `du` of home surfaced because it lives in one disk image under Library/Containers. `docker builder prune -af` is Tier A (pure regenerable); images are Tier B; volumes and stopped containers are Tier C (they hold Postgres data).
+- `~/.hermes/kanban/workspaces/t_*` of done/archived tasks keep their `node_modules`/`.venv`/`.next`. Join dir names to `~/.hermes/kanban.db` (`select id from tasks where status in ('done','archived')`) and remove only those install dirs. The `kanban/kanban.db` next to the workspaces is an empty decoy.
+- `du` on this 400GB home exceeds the 420s terminal cap even per top-level dir. Run the survey as a background job writing to a scratch file, and use `du -sk <dir>` per directory rather than `du -d1` (which printed nothing).
+- `uv cache clean` blocks for 300s and exits 2 while any long-running `uv run` service holds `~/.cache/uv/.lock` (champoracle uvicorn does). Do not `--force`; report it as held.
+- Chrome's cache cannot be fully removed while Chrome runs (directory not empty, long hang). Skip it.
+- The weekly scheduler is `~/.hermes/scripts/disk_sweep.py` via cron `disk-sweep-weekly` (Sun 16:00 IST). Extend its job list; never add a second disk cron.
+
 - Counting HF space from directory listings overcounts: broken symlinks and shared blobs inflate it. `du -skL` on snapshots per model is the truth.
 - `brew cleanup --prune=all` frees old formula versions and its cache; installed formulae stay. Safe in Tier A.
 - Deleting browser caches (Chrome, playwright, camoufox) always succeeds but pushes a re-download onto the next automation run. Say so before removing, and keep Playwright when QA pipelines are active.
