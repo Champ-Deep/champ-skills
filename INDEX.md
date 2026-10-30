@@ -18,9 +18,9 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `dembrandt-ux` | Design & Creative | Use when reviewing or building UI, or extracting a site's design system. |
 | `editorial-web-direction` | Design & Creative | Art-direct personal sites, portfolios and hero sections like a magazine spread: giant type on a visible grid, margin notes, scanline or dot image treatments. Use for any  |
 | `frontend-design` | Design & Creative | Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data vis |
-| `frontend-design-pro` | Design & Creative | Advanced marketing-site and page design, distinct from standard frontend-design: landing pages that convert, outcome-first page refreshes keeping every word of the copy,  |
+| `frontend-design-pro` | Design & Creative | Pro layer on frontend-design for marketing pages; load both: landing pages that convert, outcome-first page refreshes keeping every word of the copy, AI-default UI polish |
 | `frontend-handoff` | Design & Creative | Turns a backend into a frontend. Ingests routes, endpoints, schemas, auth, roles, and error codes from OpenAPI, Postman, a route file, source code, or live Supabase intro |
-| `genjutsu` | Design & Creative | Use when a UI must avoid the generic AI look: one part, a page, or a site. |
+| `genjutsu` | Design & Creative | Use when a UI must avoid the generic AI look: one part, a page, or a site. Checklist layer on top of frontend-design; load both. |
 | `identity-kit` | Design & Creative | Build a full visual identity at studio depth: brandmark, wordmark, mascot, icon set, tagline and ornaments, drawn as SVG on a labelled brand sheet. Use for any logo, pers |
 | `impeccable` | Design & Creative | Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a |
 | `notebooklm-slide-deck` | Design & Creative | Create a Google NotebookLM notebook from a set of prepared documents (client context files, meeting prep, research briefs, or any other document set for any client) and g |
@@ -28,7 +28,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `power-design` | Design & Creative | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Design & Creative | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
 | `prospect-deck` | Design & Creative | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
-| `research-to-visual` | Design & Creative | Turns text research (notes, reports, transcripts, briefs, memos, data dumps) into a single-file visual HTML page. Three formats from one pipeline: executive one-pager (de |
+| `research-to-visual` | Design & Creative | Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) int |
 | `responsive-viewport-qa` | Design & Creative | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Design & Creative | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |
 | `showcase-page` | Design & Creative | Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots, partner check-ins) with animated data visuals, MicroKit micro- |
@@ -96,6 +96,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `adapter-seam-extension` | Engineering & Dev | Use when adding a new adapter/seam to an existing backend. |
 | `agent-first-products` | Engineering & Dev | Use when building a standalone agent-first product or suite. |
 | `android-twa-packaging` | Engineering & Dev | Package a web app or PWA into an installable Android APK. |
+| `approval-pack` | Engineering & Dev | Sign-off pack a stakeholder approves without a meeting. |
 | `champ-portfolio-triage` | Engineering & Dev | Use when reviving or assessing a Champ-Deep repo. |
 | `clerk-auth` | Engineering & Dev | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
 | `cloudflare-workers-r2-apps` | Engineering & Dev | Use when building a Cloudflare Worker with R2 or KV. |
@@ -222,9 +223,9 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `dembrandt-ux` | Use when reviewing or building UI, or extracting a site's design system. |
 | `editorial-web-direction` | Art-direct personal sites, portfolios and hero sections like a magazine spread: giant type on a visible grid, margin notes, scanline or dot image treatments. Use for any  |
 | `frontend-design` | Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data vis |
-| `frontend-design-pro` | Advanced marketing-site and page design, distinct from standard frontend-design: landing pages that convert, outcome-first page refreshes keeping every word of the copy,  |
+| `frontend-design-pro` | Pro layer on frontend-design for marketing pages; load both: landing pages that convert, outcome-first page refreshes keeping every word of the copy, AI-default UI polish |
 | `frontend-handoff` | Turns a backend into a frontend. Ingests routes, endpoints, schemas, auth, roles, and error codes from OpenAPI, Postman, a route file, source code, or live Supabase intro |
-| `genjutsu` | Use when a UI must avoid the generic AI look: one part, a page, or a site. |
+| `genjutsu` | Use when a UI must avoid the generic AI look: one part, a page, or a site. Checklist layer on top of frontend-design; load both. |
 | `identity-kit` | Build a full visual identity at studio depth: brandmark, wordmark, mascot, icon set, tagline and ornaments, drawn as SVG on a labelled brand sheet. Use for any logo, pers |
 | `impeccable` | Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a |
 | `notebooklm-slide-deck` | Create a Google NotebookLM notebook from a set of prepared documents (client context files, meeting prep, research briefs, or any other document set for any client) and g |
@@ -232,7 +233,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `power-design` | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
 | `prospect-deck` | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
-| `research-to-visual` | Turns text research (notes, reports, transcripts, briefs, memos, data dumps) into a single-file visual HTML page. Three formats from one pipeline: executive one-pager (de |
+| `research-to-visual` | Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) int |
 | `responsive-viewport-qa` | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |
 | `showcase-page` | Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots, partner check-ins) with animated data visuals, MicroKit micro- |
@@ -342,6 +343,7 @@ MCP, testing, frontend build, auth, scraping, codebase tools.
 | `adapter-seam-extension` | Use when adding a new adapter/seam to an existing backend. |
 | `agent-first-products` | Use when building a standalone agent-first product or suite. |
 | `android-twa-packaging` | Package a web app or PWA into an installable Android APK. |
+| `approval-pack` | Sign-off pack a stakeholder approves without a meeting. |
 | `champ-portfolio-triage` | Use when reviving or assessing a Champ-Deep repo. |
 | `clerk-auth` | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
 | `cloudflare-workers-r2-apps` | Use when building a Cloudflare Worker with R2 or KV. |

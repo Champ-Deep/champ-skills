@@ -28,6 +28,13 @@ vault, the effort note, the product's own README. Two documents claiming the
 same subsystem in the same repo is a **real defect in the plan**, and it is the
 finding most likely to change what gets built next.
 
+The decision log is a sibling too. Vault decisions are dated, and a later note
+often reverses or narrows an earlier one, so search the initiative's decision
+notes and read the newest in full. A plan that silently enforces the reversed
+ruling, or reverses a standing one without saying so, has the same defect as two
+PRDs claiming one subsystem: it decides policy by omission. Turn the conflict
+into an explicit decision with a recommendation instead of choosing in prose.
+
 ## The falsifiability gate
 
 The most common defect is a plan whose definition of done cannot fail.

@@ -300,6 +300,36 @@ then apply in full.
 
 ---
 
+## Deck presentation mode (running a slide deck live)
+
+When the call is a slide presentation, the run sheet Deep reads from is not the deck's speaker
+notes alone: it is a pace plan, because his standing question is which slides to spend time on.
+Build it as one table covering every slide, beside the deck (speaker notes injected into a COPY
+of the deck, never the file he might send).
+
+1. **Intro questions before slide 1.** Three to four questions that open the conversation so the
+   deck can start mid-story: what prompted his questions, who takes the next meeting and what
+   makes it a good hour, where the pipeline comes from today, which geography and verticals
+   matter. Slide 1 (who we are) gets skipped on the back of these, not read aloud.
+2. **Give every slide a pace class: LINGER, SPEED, SKIP.** LINGER where his answer becomes the
+   written definition or the commercial term (the qualification gates, the pricing model): those
+   slides ARE the negotiation. SPEED past process and proof slides, one line each. SKIP slides
+   that repeat an earlier point, with one line of what to say if he pulls you back to it.
+3. **One probe per slide, in the same row:** the question that slide earns, plus a "go deeper
+   if" branch on his answer. A slide with no probe earns SPEED or SKIP.
+4. **A relevance test beside each probe** (what his answer unlocks: the ICP, the definition,
+   proof, the timeline), so silence is spent where it changes what we write down afterwards.
+5. **Ask before changing pace** ("want me to run through the process slides?") rather than
+   dropping slides silently, and keep four silence-breaker questions at the bottom of the sheet
+   for when a slide dies.
+6. **Close on a read-back:** restate his own words as the definition we will hold to, then the
+   next step with a name and a date. His edits to the definition on the call become the SLA we
+   send, so the sheet must leave room to write them.
+
+File it under the naming rule in 11c as `DECK RUN SHEET (private)`.
+
+---
+
 ## Data Retrieval Strategy
 
 For every meeting that needs prep, once the date and the set of meetings are confirmed, pull
@@ -516,8 +546,9 @@ named; options as a proposals-only table; probes; a do-not-say list; after-call 
 footer naming sources and every figure left unverified. Ship it alongside the existing `notes.md`,
 not instead of it.
 11b. **Visual showcase pages**, When Deep asks for a page as well as the note: variants in one
-dated folder under `Calendar/Meetings/`, numbered by role (`01 - ...` to share, `02 - ...` to hold
-back until the counterparty opens the topic), plus the design system they were built from. Most
+ dated folder under `Calendar/Meetings/`, each file named by its role under the naming rule in
+ 11c (the one to share first, the one to hold back until the counterparty opens the topic),
+ plus the design system they were built from.
 counterparties have no brand system in the vault, so derive one from their real logo file rather
 than inventing a palette: measure the dominant colours, take one corner treatment and one
 recurring motif from the mark, and record the asset's source URL in the design-system page so
@@ -536,7 +567,11 @@ all strip the folder name). Roles are fixed words: `CLIENT PAGE (send)`, `CALL S
 `DECK RUN SHEET (private)`, `DECK with speaker notes`, `DECK REVIEW (internal)`, `AGENDA (send)`.
 Example: `2026-10-29 XSYSYS x LakeB2B - CLIENT PAGE (send).html`. Generic names like
 `1 - SHOWCASE.html` were retired because a dozen folders each held one and they got mixed up. Fonts,
-logos, build files and older versions go under `_support/`. Each script phase carries a pointer to the showcase section to be on, and the
+logos, build files and older versions go under `_support/`. When the rename lands while a frontend
+card is already building the page, copy the built bytes to the new path yourself, then post the
+card a comment naming the final path and forbidding the retired one: a lane mid-run writes what
+its card body says, and the folder ends up holding two versions of one page under two
+conventions. Each script phase carries a pointer to the showcase section to be on, and the
 showcase top bar links to those sections so he can drive it in one click. Leak-test the showcase
 text for internal words before delivery (the do-not-say block's own headings, employee names,
 verdict and candidate labels, vault paths): a zero dash count is not a leak test, and a page can
@@ -551,7 +586,11 @@ repeating one from memory imports a figure that belongs to a different company. 
 counterparty published about itself are labelled as their claim inside the note ("their site
 reports", "email of date"), never converted into fact. A competitor named from model knowledge is
 marked unverified in the same line. No source found is written as "no source found", never left
-to imply confirmation.
+to imply confirmation. The two outputs differ by audience: in the internal note an unsourced
+figure is LABELLED unverified so Deep knows what he is carrying, but on a page the counterparty
+will see the same figure is CUT, not badged: a visible "unverified" badge on a screen share is a
+confession rather than a caveat, and a number that carries the pitch either gains a source or
+leaves the page.
 
 ---
 
@@ -662,8 +701,8 @@ on the last, across meetings, across months, across team members.
   - Add to today's daily note under Meetings section
   - **Update client context folder** with new research and intel
   - Deliver every artifact with a `MEDIA:` absolute path. A bare path is not a delivery.
-- When there is more than one variant, number them by role in the same dated folder and say in the
-  reply which one to share and which one to hold. The page Deep acts on (next steps, tickable asks)
+- When there is more than one variant, name each file by role in the same dated folder (rule 11c)
+  and say in the reply which one to share and which one to hold. The page Deep acts on (next steps, tickable asks)
   ships; the page that opens a negotiation he has not chosen to open is built and held, and the
   filename carries that decision so it is not a memory he has to keep.
 

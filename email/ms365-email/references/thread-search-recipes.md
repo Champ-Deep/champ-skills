@@ -20,6 +20,7 @@ Recipe for finding what the team or counterparty already said before drafting, u
 
 ## Handoff
 
-- Draft via `create_draft_email`, then return the `webLink` (never the OData id) plus recipient, subject, and any assumption written into the body.
-- Say explicitly that the draft is unsent and list the assumptions as lines Deep can delete.
+- **Search the right folder for the right claim.** `$search` on `/me/messages` reads received mail only. Ask "did they reply" with it; ask "did we ever send this" with `list_mail_folder_messages(mailFolderId="sentitems", search=...)`, and "is there an unsent draft" with `mailFolderId="drafts"`. A hit in neither means unsent, not unwritten: check the vault for a drafted-but-never-filed copy (a triage folder, an effort note) before reporting the message as never composed.
+- Draft via `create_draft_email`, then return the `webLink` (never the OData id) plus recipient, subject, and every `[CONFIRM: field]` tag still in the body.
+- Say explicitly that the draft is unsent and list the tags as lines Deep can delete.
 - State the search window and the surfaces not checked (chat apps, other mailboxes) when the claim is "this is everything pending".

@@ -38,3 +38,18 @@ cd /Users/deep/laya-local/decider && ../.venv/bin/python decider.py backfill   #
 ```
 
 Ship a tune only when held-out accuracy beats the baseline; a regression keeps the old weights. Verify the eval's row count in its output (not exit 0 alone) before comparing numbers, and disable reasoning on any bulk API pass that prepares labels, or the output budget is eaten by hidden thinking.
+
+## Confidence on each swipe card (`~/.hermes/scripts/celsus_jev.py`)
+
+The gate above answers "should we act at all"; per-card confidence answers "which of these decisions is cheap for Deep". Both run after `celsus_compose.py` has composed the pile:
+
+```bash
+cd ~/.hermes/scripts && /Users/deep/laya-local/.venv/bin/python celsus_jev.py score --max 500   # writes ~/.hermes/state/celsus_jev.json
+curl -s localhost:3177/api/cards | python3 -c "import sys,json,collections as c;d=json.load(sys.stdin);print(c.Counter(round(x['confidence'],1) for x in d if x['confidence']))"
+```
+
+Rules that keep the score honest:
+- **Name the scorer.** There is no hosted-Jev credential on this Mac, so a confidence number always says which local scorer produced it; never present it as a hosted model's output.
+- **The auto-execute gate is a separate boolean.** `auto_allowed` is true only when the calibration bucket at the gate confidence holds enough of Deep's own picks and precision holds; with zero labelled rows it stays false regardless of how many cards score above 0.95. Report the bucket histogram, not an average, and never report "N cards above 0.99" without checking `auto_allowed` in the same breath.
+- **Only Deep's picks count as labels.** Rows whose provenance is an agent's evidence comment are not calibration data; counting them makes a gate look earned when it is not.
+- **First-listed options win by construction**, because the composer puts the recommended option first. Expect and disclose that bias instead of reading it as accuracy.

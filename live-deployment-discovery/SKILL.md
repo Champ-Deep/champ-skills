@@ -104,6 +104,32 @@ headless browser (the stuck loading text is the evidence), then corroborate at
 the platform: an empty or auth-key-free `secret list` names the missing config.
 You may also scan the shipped JS bundle for a configured key literal as a
 boolean only; never print a found key.
+
+2e. **Confirm which branch the platform deploys before you trust any merge.**
+Repo default branch and deploy branch are separate settings. A service pinned to
+an old feature branch keeps serving the pre-merge build no matter what lands on
+the default branch, and two services of one product routinely end up pinned to
+different branches for days (frontend from one, API from another), so the app and
+its API become different generations while every dashboard reads green.
+
+Read the pin from the platform API, not the dashboard:
+
+```bash
+# Railway: the CLI has no command for this. Query field path, with the token
+# from user.token in ~/.railway/config.json, POST to backboard.railway.com/graphql/v2:
+#   service(id:$SID) { repoTriggers { edges { node { branch repository } } } }
+# Vercel: deployments API carries errorMessage that `vercel inspect --logs` does not.
+# Token from ~/Library/Application Support/com.vercel.cli/auth.json, then:
+#   GET api.vercel.com/v13/deployments/<deployment-url>  -> readyState, errorMessage,
+#   meta.githubCommitSha
+```
+
+**Before switching a deploy pin, check the pinned branch is not ahead of the
+target.** Merging to the default branch and then repointing the service silently
+drops whatever the pinned branch had that the default does not: live features
+vanish on the next deploy. Diff first with `git log --oneline origin/<target>..origin/<pinned>`,
+land the pinned branch's commits on the target as a reviewed PR, and only then
+switch the pin.
 3. **Check what each credential actually belongs to before setting it.**
    Similar names are different vendors' secrets. An `*_MCP_TOKEN` naming an AI
    gateway is that gateway's own catalog token, not the key for a tool or MCP
@@ -282,3 +308,13 @@ env var) for each pending one.
   the config default usually points at a process that was never deployed.
 - Do not batch credential logins. Each pairing link expires on its own short
   clock, so deliver one, confirm it, then start the next.
+- Do not confirm a deploy from a version string. Two different builds routinely
+  report the same version, so a health field reading the new version is not
+  evidence the new code is live; compare the deployed commit SHA against the
+  commit you merged.
+- Do not read a 0 ms deploy failure with no build logs as a broken build. Nothing
+  was built: the platform rejected the config before building (a schema violation
+  in the deploy config names the offending property), and `vercel inspect --logs`
+  prints only `status Error`. The deployments API's `errorMessage` is the message.
+- Do not treat a green frontend deploy as a deploy of the backend. Each host is
+  pinned and builds independently; verify the commit on every host you claim about.

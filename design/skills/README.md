@@ -14,9 +14,9 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `dembrandt-ux` | Use when reviewing or building UI, or extracting a site's design system. |
 | `editorial-web-direction` | Art-direct personal sites, portfolios and hero sections like a magazine spread: giant type on a visible grid, margin notes, scanline or dot image treatments. Use for any  |
 | `frontend-design` | Create distinctive, production-grade frontend interfaces with high design quality. Use when asked to build web components, pages, artifacts, posters, dashboards, data vis |
-| `frontend-design-pro` | Advanced marketing-site and page design, distinct from standard frontend-design: landing pages that convert, outcome-first page refreshes keeping every word of the copy,  |
+| `frontend-design-pro` | Pro layer on frontend-design for marketing pages; load both: landing pages that convert, outcome-first page refreshes keeping every word of the copy, AI-default UI polish |
 | `frontend-handoff` | Turns a backend into a frontend. Ingests routes, endpoints, schemas, auth, roles, and error codes from OpenAPI, Postman, a route file, source code, or live Supabase intro |
-| `genjutsu` | Use when a UI must avoid the generic AI look: one part, a page, or a site. |
+| `genjutsu` | Use when a UI must avoid the generic AI look: one part, a page, or a site. Checklist layer on top of frontend-design; load both. |
 | `identity-kit` | Build a full visual identity at studio depth: brandmark, wordmark, mascot, icon set, tagline and ornaments, drawn as SVG on a labelled brand sheet. Use for any logo, pers |
 | `impeccable` | Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a |
 | `notebooklm-slide-deck` | Create a Google NotebookLM notebook from a set of prepared documents (client context files, meeting prep, research briefs, or any other document set for any client) and g |
@@ -24,7 +24,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `power-design` | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
 | `prospect-deck` | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
-| `research-to-visual` | Turns text research (notes, reports, transcripts, briefs, memos, data dumps) into a single-file visual HTML page. Three formats from one pipeline: executive one-pager (de |
+| `research-to-visual` | Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) int |
 | `responsive-viewport-qa` | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |
 | `showcase-page` | Builds premium scroll pages that prove a result (case studies, campaign wins, event recaps, data snapshots, partner check-ins) with animated data visuals, MicroKit micro- |

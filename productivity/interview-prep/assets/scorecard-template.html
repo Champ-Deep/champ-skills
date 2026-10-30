@@ -24,11 +24,14 @@
          an unfilled placeholder ships as literal text on screen.
        - count data-q attributes and compare against allQ.length: mismatch means
          some scores are silently dropped from the total.
-       - run the em dash check (see SKILL.md Step 4): HTML entity forms like
-         '&mdash;' and '+'&'+'ndash style entities are literal ASCII and pass a byte-level
-         grep while still rendering a dash on screen, so grep for 'mdash' and for
-         the en dash entity too.
+       - run the em dash check (see SKILL.md Step 4): the page must have zero
+         em dashes and zero en dashes in any form, the literal UTF-8 bytes
+         (grep for \xe2\x80\x94 and \xe2\x80\x93), and the HTML entity forms
+         ('&mdash;', 'ndash'). A grep for 'mdash' alone is not enough, it
+         counts the entity and misses a literal dash the fill step introduced.
        - drive the verdict logic headlessly once (see SKILL.md Step 4), don't trust the math by eye.
+         Shoot the page from a scratch copy with no spaces in its path; an
+         unquoted space splits the URL argument and Chrome writes no image.
   7. Delete this comment block before saving the final file.
 -->
 <!DOCTYPE html>

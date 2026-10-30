@@ -165,6 +165,10 @@ Non-negotiable. Verify, do not assume.
 - Modals: `aria-modal`, focus trap, focus restore, Escape. Close on click, not `mousedown`.
 - Reduced motion is designed, not merely disabled. A paused ticker must still convey what a scrolling one conveys.
 
+## Fixed chrome over the footer
+
+The dock and the Ask Deep button are `position:fixed`, so they cover whatever scrolls under them. The halftone footer is the one place with a 300px graphic, so a dock that is fine everywhere else reads as "the footer is cut off" there. Three footer passes missed it because each tested only the final scroll position (where body padding clears the dock) and each card said "do not touch the dock". Rules: the wordmark is drawn whole (`--hwf-crop:0`), the dock retreats while the footer is in view, and any footer or dock test scrolls the whole page in steps and asserts no intersection at every step. Whoever owns the footer owns the dock-footer interaction.
+
 ## The honesty rule
 
 The site's entire claim is that it is live and self-updating. So:

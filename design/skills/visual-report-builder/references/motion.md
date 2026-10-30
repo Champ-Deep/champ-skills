@@ -28,6 +28,7 @@ Stagger between siblings stays between 60 and 150ms; whole sequences stay under 
 5. **Animate transform and opacity only.** Width, height and top animate only on small elements (the spy rail).
 6. **The one-pager exception.** `executive-one-pager` forbids content parked at opacity 0 waiting on a scroll observer. In one-pagers use transform-only reveals (start at `translateY(12px)`, full opacity) or none.
 7. **No ambient motion that pushes content.** Twinkling stars and the conic shine are fine; marquees pause on hover; nothing autoplays sound.
+8. **Verify the animated build, not only the static export.** `?static=1` proves the end state renders; it cannot prove the live page ever reaches it. Run one capture without the flag, scroll the page section by section, then read each gated element's computed end state (bar `transform`, row `opacity`, reveal class present) and shoot it. Grep the reveal hook selectors against the shipped markup before trusting either pass: a hook bound to a tag or class the template no longer emits (an `h4` hook on `h3` markup, an observer on one child when the siblings are the targets) leaves content hidden forever while static exports and the audit both stay green.
 
 ## Export recipe (from `kit/shoot.py`)
 
@@ -35,3 +36,4 @@ Stagger between siblings stays between 60 and 150ms; whole sequences stay under 
 2. Flatten the hero atmosphere before the PDF: hide the hero text, screenshot the hero as a JPEG, set it as the hero background, hide the SVG clouds and stars. This keeps the PDF near 1 to 2MB instead of 20MB of rasterized filters.
 3. `page.pdf` with width 1440px and height equal to `scrollHeight`, `print_background`, zero margins, one page.
 4. Check the PDF text for dashes with `pdftotext file.pdf - | grep -c` on the two dash characters; it must print 0.
+5. After the export, run the live-motion pass from rule 8: the PDF is a static render and says nothing about what a reader scrolling the HTML will see.
