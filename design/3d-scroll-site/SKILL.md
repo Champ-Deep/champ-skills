@@ -83,6 +83,7 @@ Pass when: module distances to dock decrease monotonically to 0; camera position
 ## 6. Pitfalls
 
 - The stage wrapper sized to 100vh gives a zero scrub range and nothing moves; it must be taller than the viewport.
+- Measure the subject box in every photo before writing a framing criterion. "Subject kept clear of copy" is impossible when the subject fills the frame (Wishvin M7: cabin at 90 percent of the only exterior shot), and the card blocks on a clause nobody can meet. Compute the box, state the allowed overlap in percent, and put the real fix (more photography) in the asset ask.
 - A scene with no `scene.environment` is plastic: clearcoat and roughness cannot fix it, only reflections can. Check `grep -c PMREM` on the scene file before any visual review.
 - Realism gate: alongside the scrub probe, render the final frame beside the client's product photo at the same size and ask one bounded vision question: "same object, same material family, yes or no, and the one biggest difference". Repeat until the answer is yes.
 - A scene with no ground shadow floats; the shadow is what sells depth more than the model.
