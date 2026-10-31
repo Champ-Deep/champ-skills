@@ -10,6 +10,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `android-twa-packaging` | Package a web app or PWA into an installable Android APK. |
 | `clerk-auth` | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
 | `cloudflare-workers-r2-apps` | Use when building a Cloudflare Worker with R2 or KV. |
+| `cross-model-review` | Use when a medium or large change needs a second-model review. |
 | `defensible-data-counts` | Use when a detected or derived number is shown to a buyer. |
 | `deterministic-analysis-pipelines` | Use when a site-wide analysis must run on many inputs. |
 | `dograh-champvoice-provider` | Use when maintaining the Dograh Champvoice provider. |
@@ -30,6 +31,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `permissioned-send-lane` | Use when adding an outbound send path to a read-only system. |
 | `rea-web-teardown` | Use when tearing down a web product with the REA CLI. |
 | `repo-design-probe-first` | Use when designing a repo feature from real file:line proof. |
+| `risky-changes` | Use when a change touches data, billing, defaults or customer-visible behavior. |
 | `skill-creator` | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing sk |
 | `sprite-art-pipeline` | Build layered sprite art and prove every spec renders. |
 | `sqlite-fts5-search-platform` | Use when building faceted search over merged spreadsheets or any row store on SQLite, especially with full-text search, evidence-bearing detections, or many normalised en |

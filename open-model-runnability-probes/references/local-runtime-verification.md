@@ -33,10 +33,33 @@ before anything is wired to it.
    score near chance on a domain task while looking confident. Run your own labelled
    examples before wiring it into a product path, and treat fine-tuning as the step
    that makes it usable rather than an optional extra.
-7. **Price the disk before the download.** Venv plus weights plus framework can
-   cost multiple GB; check free space as part of the go/no-go, not after.
+7. **Price the disk and swap before the download, then again before loading.**
+   Venv plus weights plus framework can cost multiple GB; check free space as part
+   of the go/no-go, not after. On macOS swap lives on the same volume as the
+   weights, so watch `sysctl vm.swapusage` while the download runs: swap growth
+   spends free disk one for one. If swap is near capacity, do not load weights
+   larger than the memory actually left, since the load will be served from disk
+   and the benchmark will measure thrashing instead of the model. Free memory
+   first (close the VMs and browsers), then load.
+8. **Verify the bytes against the repo before trusting the file.** After a
+   resumed (`curl -C -`) download completes, compare the file's size and
+   `shasum -a 256` against the `lfs.oid` from
+   `https://huggingface.co/api/models/ORG/REPO/tree/main`. A resume that retried
+   a partial segment and an interrupted transfer both look finished to `ls`.
+9. **Install into the runtime's own model directory.** Drop the GGUF where the
+   server auto-discovers it (`~/.hermes/models` for Hermes's llama.cpp preset
+   generation, not `~/models`), and keep the load as a separate, deliberate step:
+   landing the file must not start the server or consume the memory yet.
 
 ## Reporting
 
 Lead with: device, warm ms, cold ms, checkpoint size, disk cost, and whether the
 offline rerun passed. Separate what you ran from what the model card claims.
+
+State the swap and free-disk figures next to the timing when the machine was
+under pressure: a load measured while swap was near capacity is a measurement of
+thrashing, not of the model, and saying so is cheaper than a re-run.
+
+A speed number published without those two figures is not reproducible on
+another machine, so quote them in the same sentence as the number rather than in
+a footnote the reader skips.

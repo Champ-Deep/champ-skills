@@ -32,8 +32,9 @@ one settled the question.
 
 Once weights are already downloading, switch to
 `references/local-runtime-verification.md`: device benchmark warm vs cold, offline
-rerun, dependency freeze, and the loader warnings that decide whether the numbers
-can be trusted.
+rerun, dependency freeze, the loader warnings that decide whether the numbers
+can be trusted, and the disk-plus-swap gate that decides whether the load may
+start at all.
 
 ## 1. Parse the config through the loader that would read it
 
@@ -102,6 +103,25 @@ grep -rnE 'Literal\["cuda"\]|Literal\["cpu"\]|mps|device\.type' <server module>
 A device selector reading `Literal["cuda"] | Literal["cpu"]` with the consumer
 branch commented out means that path was abandoned, not merely slow.
 
+## 7. Weigh the disk and the swap before you load
+
+A model file that downloaded cleanly can still be unrunnable on the machine that
+carries it. Weights, venv, framework and the swap the load will need all come out
+of the same volume on a Mac:
+
+```bash
+df -h /             # free disk, after the download, not before
+sysctl vm.swapusage  # swap in use; it lives on the same volume
+du -sh <weights dir> # actual bytes on disk
+```
+
+Swap growth spends free disk one for one, so a machine already near its swap cap
+has no room left to page in the weights: the load will either fail or spend its
+time thrashing, and a benchmark run under that pressure measures swap traffic,
+not the model, making any latency number worthless. Free the memory first (close
+the VMs and browsers), watch swap shrink, then load. Report both numbers next to
+any timing you publish: "fast on a machine that was paging" is not a result.
+
 ## Thinking-on-by-default skews every token and latency number
 
 Qwen3-family builds (and R1-style distills) frequently default to narrated reasoning
@@ -114,9 +134,22 @@ and thinking tokens count against max_tokens / num_predict, so a "cut off"
 deliverable is usually a thinking-budget artifact, not a model failure. Re-run
 truncated outputs with thinking off before scoring a model down.
 
+## A background `uv` lock means something still owns the cache
+
+`uv cache clean` blocks up to `UV_LOCK_TIMEOUT` (default 300 s) on
+`~/.cache/uv/.lock` while an install or daemon holds it, so a cache-clean in a
+timed-out shell looks like a hung command rather than a lock. Do not raise the
+timeout to force it: find the holder (`pgrep -fl uv`) and either wait for it or
+clean the tool caches that have no lock of their own (npm's `_npx` and
+`_cacache`) so the disk win still lands while uv is busy.
+
 ## Reporting
 
 Lead with the verdict and the probe that produced it. If a probe killed the
 proposal, that is the headline. Separate verified from inferred: name the file,
 the line, and the status code. Give the user only the decisions they can make,
 with numbers attached, and say plainly what will not run until they act.
+
+State disk, swap and free memory beside any timing taken under memory pressure:
+such a number measures thrashing, not the model, and belongs in the caveat rather
+than the verdict.
