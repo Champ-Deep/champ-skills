@@ -191,3 +191,7 @@ numbers as **proposals until ruled**, not as decisions taken.
 - **Do not append an `UPDATE:` block under a sentence that was wrong.** Edit the
   sentence; a document that contradicts itself is worse than one that was
   briefly incomplete.
+
+## Zero-context reader pass (from Google's Elephant-Goldfish model)
+
+After you have drafted the findings, hand the plan alone to a fresh `delegate_task` reader (no conversation, only the document and the files it cites) and ask what it cannot answer: unstated assumptions, undefined terms, steps that need knowledge only you have. Anything the cold reader trips on is a gap a future agent will also hit. Use it for plans that will be executed by other lanes. Skip it for one-page plans. Source: github.com/google/elephant-goldfish-model (Apache-2.0); not installed, the technique needs no plugin.
