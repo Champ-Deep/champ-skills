@@ -31,9 +31,9 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
    - A: pure regenerable caches (npm, pnpm store, brew, pip, Chrome/Google caches). Runs on approval, near-zero risk.
    - B: regenerable with re-download cost (camoufox, go modcache). Playwright browsers: **keep** when automations use them; state the re-download cost for anything removed here.
    - C: human review only (Downloads folders, migration archives, app data). Print sizes, never `rm`.
-6. **Execute through `scripts/stage_cleanup.sh`** (dry-run by default, `--apply` to execute, Tier C printed as sizes only). Explicit paths only, no wildcards outside named dirs.
+6. **Reuse the installed `~/.hermes/scripts/disk_sweep.py` and its weekly wrapper.** Read the approval card before execution, then run `test_storage_guard.py` and the dry run. Script comments and skill tiers are not authorization: assert the exact approved path list, and remove any broader deletion branches before `--apply`. Current cache-only approval covers native uv, npm and pip download caches, not pnpm, Homebrew, Docker or workspaces. Use additional cleaners only after explicit scoped approval. Keep tests isolated from real disk free space.
 7. **Verify and report:** df delta in GB, `ollama list`, survivors (`ls hub | grep models--`), personal folders intact. Report as a before/after table, then flag every judgment call taken (items kept, items held back).
-8. **Offer, do not create:** a df watchdog cron; re-install of a removed winner model once free space is shown.
+8. **Verify the ongoing loop, do not duplicate it.** Existing weekly cleanup is Sunday 16:00 IST; the existing factory watchdog checks disk every 30 minutes, warning below 40 GiB and critical below 20 GiB. Inspect actual cron delivery: `deliver=local` only saves output and does not notify Deep, even when registry prose claims Telegram. Stage any delivery change for approval. Do not download missing models as a cleanup side effect.
 
 ## Standing rules
 
@@ -45,9 +45,9 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 ## Pitfalls
 
 - `docker system df` first. Docker (images, build cache, volumes) hid 145GB that no `du` of home surfaced because it lives in one disk image under Library/Containers. `docker builder prune -af` is Tier A (pure regenerable); images are Tier B; volumes and stopped containers are Tier C (they hold Postgres data).
-- `~/.hermes/kanban/workspaces/t_*` of done/archived tasks keep their `node_modules`/`.venv`/`.next`. Join dir names to `~/.hermes/kanban.db` (`select id from tasks where status in ('done','archived')`) and remove only those install dirs. The `kanban/kanban.db` next to the workspaces is an empty decoy.
+- Finished task workspaces can retain large install directories. Inventory them through `~/.hermes/kanban.db`, but do not infer deletion permission from done/archived status: directories may contain deliverables or active previews. All workspaces stay outside the cache-only weekly cleanup. A separate approved retention pass must check processes, git state, remote containment and redirected paths before deletion. The `kanban/kanban.db` next to the workspaces is an empty decoy.
 - `du` on this 400GB home exceeds the 420s terminal cap even per top-level dir. Run the survey as a background job writing to a scratch file, and use `du -sk <dir>` per directory rather than `du -d1` (which printed nothing).
-- `uv cache clean` blocks for 300s and exits 2 while any long-running `uv run` service holds `~/.cache/uv/.lock` (champoracle uvicorn does). Do not `--force`; report it as held.
+- A long-running `uv run` service can hold `~/.cache/uv/.lock` indefinitely. Bound the native cleaner to 35 seconds, inspect the lock owner with `lsof`, report partial cleanup honestly and leave the service running. Never force the lock or stop an app to free caches.
 - Chrome's cache cannot be fully removed while Chrome runs (directory not empty, long hang). Skip it.
 - The weekly scheduler is `~/.hermes/scripts/disk_sweep.py` via cron `disk-sweep-weekly` (Sun 16:00 IST). Extend its job list; never add a second disk cron.
 
@@ -58,6 +58,6 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 
 ## Maintenance cadence
 
-- Monthly: run the script's Tier A (+ Tier B as needed), re-check `df`.
-- Floor: keep at least 15GB free; when free space drops below it, inventory before any new pull.
+- Weekly: run the existing approved native uv/npm/pip cleanup, then re-check `df`; keep additional caches outside that policy until separately approved.
+- Target: 40 GiB free, warning below 40 GiB, critical below 20 GiB. Inventory before a large download and compare free space with its actual peak requirement. These alerts are not a reserved-space guarantee.
 - Model shelf hygiene: dangling 0-byte cache entries and replaced Ollama models get purged in the same pass, not saved for later.
