@@ -1,6 +1,6 @@
 ---
 name: cloudflare-workers-r2-apps
-description: Use when building a Cloudflare Worker with R2 or KV.
+description: Use when building a Cloudflare Worker with R2, KV, Durable Objects, WebSockets or assets.
 ---
 
 # Cloudflare Workers + R2 + KV apps
@@ -22,6 +22,31 @@ For a built frontend (Vite) with a small API: `wrangler.jsonc` sets `main` to th
 - Deploy proof: the hash check in `verification-gate-integrity` (served index hash vs local dist, then grep the served bundle for a feature string added this round).
 - `wrangler deploy` writes `.wrangler/cache/`, so gitignore `.wrangler/` or the first commit carries junk.
 
+## Server-authoritative rooms (Durable Objects + WebSockets)
+
+One DO per room (or per session) behind a WebSocket upgrade route, so state, the
+clock and per-connection filtering live on the server and the browser only renders
+what the server sends. Shape:
+
+- `wrangler.jsonc` declares the DO binding; HTTP endpoints answer `POST /api/...`
+  for create/join and the same path with `?id=` upgrades. Identity is whatever the
+  socket carries (`crypto.randomUUID()` kept in sessionStorage), bound to the socket
+  at connect; host controls require the host's key, everything else is refused for
+  the wrong socket.
+- The server owns timers and runs any AI/bot logic; clients never send ticks. Send
+  each client only its own view (`{view, now, speed, host, debug}`), and let
+  `spriteUrl`-style asset reads fall through to `env.ASSETS`.
+- Local dev is `wrangler dev` on a fixed port plus the frontend proxying `/api`
+  with `ws: true`.
+
+**Deploy the server before the lane that builds its UI, with a holding page in
+place.** Deep asks for the link, so put a real URL out first: a one-screen
+`index.html` saying the server is live and the screens are being built. Then edit
+the running lane's brief to deploy over it and pin the same URL as its preview.
+Say plainly in the report that an unreviewed build will be publicly visible for
+the window between the lane's deploy and your review, and never report the link
+as finished while it serves the holding page.
+
 ## Pitfalls (each one was a real failed run)
 - **R2 `get(key, { range: request.headers })` sets `obj.range` even when no Range header was sent.** Only answer 206 when `request.headers.has('range')`, or every full request comes back partial. Default `offset` to 0 and `length` to `size - offset` (suffix ranges).
 - **`wrangler deploy` intermittently fails with `Received a malformed response from the API`.** Transient: sleep 5 and rerun. Always grep the deploy output for `Deployed` before running tests, or the gate runs against the previous build.
@@ -31,6 +56,21 @@ For a built frontend (Vite) with a small API: `wrangler.jsonc` sets `main` to th
 - **KV `list()` is eventually consistent (up to 60s)** even in the same request path. Any test that writes then lists needs a bounded retry; any online indicator built on list metadata needs a window of at least 90s.
 - Wrangler OAuth token may lack `k2.*` scopes; `wrangler kv namespace create` still works, the warning is noise.
 - Uploads streamed through the Worker cap at the plan request limit (100 MB free, 500 MB paid). Past that, use R2 presigned PUT.
+- **A WebSocket upgrade route cannot be probed with curl or a bare `fetch`.** Node's
+  fetch refuses to send an `upgrade` header, so a status-code probe of a `?id=` or
+  `?ws=` route proves nothing about the upgrade. Drive a real client (browser
+  WebSocket, `ws` package) and assert the first message; keep the HTTP probe only for
+  the plain routes.
+- **A game or session smoke test must play a whole session over the public URL,**
+  through the same socket the real client uses, not just hit the create endpoint.
+  Take `BASE` from env so one script runs against `wrangler dev` locally and against
+  the deployed worker, print the outcome (codes, participants, winner) so the report
+  carries real numbers, and include a hidden-information case: the surface that must
+  not see secrets (TV, other players) is where a leak would land.
+- **A contract edit does not reach a running lane.** Workers read their card body at
+  spawn, so changing the transport or endpoints mid-build needs the
+  reclaim -> resume-comment -> dispatch sequence in model-routing; a comment alone
+  waits for the next run.
 - **A fetch-proxy route must ship its paste fallback before it ships.** Retailers and big consumer sites return 403/404/429 to a Worker's server-side fetch regardless of the user-agent, so a URL-classify feature that only works on bot-tolerant sites looks broken on exactly the prospects Deep will paste first. Build the "paste their copy instead" path in the same commit, and let the API error (with the real status code) auto-open it with a one-line hint naming the block. Add an SSRF allowlist before any customer self-serve; a demo-level proxy that fetches any caller-supplied URL is fine only while the URL is unlisted, and say so in a code comment and the report.
 
 ## Containers + D1 (reference: `~/repos/ChampHarbinger-cf`, `deploy/cloudflare/`)

@@ -57,6 +57,13 @@ Then approve the boundary where it lands: comment the ruling on the card **and**
 
 **A brief that assigns another lane's work is a defect even when it reads complete.** Card bodies get written fast and will hand a backend contract, a schema or a data model to a frontend lane, which then blocks asking who owns it. Before unblocking any blocked card, read its body against the routing table: any step that belongs to your lane you take back and land it yourself on the branch (endpoints, storage, base branch, tests), comment the delivered surface on the card with the commit, and only then unblock. The lane resumes on the part it can actually do; unblocking it to discover its own brief is wrong costs a whole worker cycle.
 
+**A contract that changes while the card is running needs the lane restarted.**
+Workers read the body at spawn and comments only at startup, so an edited body
+never reaches a worker already in flight: edit the body, `reclaim` (uncommitted
+work in the checkout survives), comment a resume note naming what to run first,
+`dispatch`. The full sequence is in `model-routing`; a comment alone waits for
+the next run.
+
 **Fan out as a parent-linked card tree, block only on humans.** When one request splits into several workstreams with no decision only Deep can make, create the whole tree in one pass: an integration card, the lane cards with `parents` set to it, and a final review/gate card parented to the lanes. Gating by `parents` keeps the work in `todo` and releases it automatically; carding agent-owned work as `blocked` puts it in front of Deep for no reason. Only the inputs that genuinely need him (keys, credentials, spending approvals) become a card created with `initial_status="blocked"`, referenced by id from the gate card so the two are linked both ways.
 
 - **Create the children's worktrees before dispatch, then prove each path.** A `workspace_kind=dir` child inherits a path the parent was supposed to create, so the parent must `git worktree add` every sibling path from its final commit before it finishes. Preflight the parent's own path the same way at creation time. Then, immediately after dispatch, run one batched check over every path: the directory exists, it is a git worktree, and `git -C <path> log -1 --oneline` returns the expected commit. An empty directory fails silently on both sides: the child never notices and builds in the wrong folder, and the parent never notices because spawn reported success. A card whose workspace is empty gets a `kanban_comment` naming the real absolute path and branch before its agent has written anything; a comment posted after work has begun may never be read.
@@ -191,7 +198,8 @@ The repair has three parts, in this order:
 
 Order matters, because unblocking releases the queue. A mass unblock on an uncapped dispatcher starts hundreds of workers in one tick, and mass-terminating them afterwards is gated on user consent and can time out silently. Set the cap first, unblock in small batches if the cap is new, and never report a kill you did not watch return 0.
 
-Pitfalls:
+## Pitfalls
+- TASKS.md line must be flipped in the same turn as the merge or deploy: leave it at "PR only, no merge" and the next session reads stale state as current.
 - **Read the cap logic in the shipped source, not the config schema.** `resolve_max_in_progress` / `configured_max_in_progress` in `hermes_cli/kanban_db_dispatch.py` is the authority on what unset means on this machine.
 - **The breaker counts every requeue.** A killed or crashed worker is one strike against a limit of two, so a wholesale kill of a just-unblocked batch walks every card to the edge of the dispatcher's circuit breaker.
 - **Do not bury an open ruling in a delivered document.** When a plan or note ends in a list of decisions, card them: one card per independent ruling, section 3 shape, created blocked. A card holding several questions never renders option buttons (swipe triage parses one DECISION with A:/B:), so he has to type an answer instead of tapping one, and prose decisions with no card sit unanswered until he happens to reread the doc. The document stays the record; the card is the surface.

@@ -84,6 +84,16 @@ even though the deploy command printed success. If a wrong version does go
 live, say so in the report with the corrected version id rather than letting the original
 success message stand.
 
+## Some endpoints cannot be probed with the HTTP client you reach for
+
+A WebSocket upgrade route answers only a real handshake: Node's `fetch` refuses to
+send an `upgrade` header and curl does not complete the handshake either, so a
+status code from either says nothing about whether the route works. Probe the
+plain HTTP routes with curl and the upgrade route with a real client (browser
+WebSocket, `ws` package) that asserts the first message back, and report which
+kind of probe produced which evidence instead of folding both into "the endpoint
+responded".
+
 ## A rejection from one HTTP client is not a deployment verdict
 
 Edge networks and WAFs block default library user-agents, so one client can get 403 while another gets 200 from the identical URL. Before reporting a deployment as down, an asset as missing, or access as broken, retry with a second client (curl, then the browser) and report which client saw what. A single-client failure is a client signal until reproduced.
