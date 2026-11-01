@@ -81,6 +81,11 @@ whether it fits:
   resolution, so write `±1s` and tell the studio agent to snap each line to the
   moment its text appears.
 - **No em dash or en dash** in any line, prompt or on-screen text.
+- **No raw acronym, caps run or digit in any spoken line.** Load `tts-safe-script`
+  and run its respeller and `--check` gate on the spoken copy (`S E O`, `B to B`,
+  `K P I's`, `forty percent`). The table's `on-screen text` column keeps the real
+  spelling; only the `line` column is respelled. Every voice provider gets the
+  respelled copy; a failing check blocks the handover.
 
 If text types on word by word (a terminal, a typewriter reveal), generate **one
 clip per word** with its own start time, not one clip per sentence: a single
