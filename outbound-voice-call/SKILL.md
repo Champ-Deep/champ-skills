@@ -27,6 +27,7 @@ The driver is the `dial` CLI (getdial.ai). Load `dial-cli` for its command surfa
 - One call per person, with that person's own action items written into their instruction. A shared list read verbatim to a group tells people apart from nothing.
 - One closing question, not a survey. The call is an announcement with an exit; the instruction should route a long or commercial discussion back to the principal and end the call.
 - Name the placing platform and number when reporting, so the principal can tell the recipient what to expect on their caller ID.
+- Calling Indian businesses from the US Dial number mostly fails: unknown +1 caller IDs go unanswered (worse on Sundays), and IndiaMART/Justdial relay lines (+91 79..., +91 80 4xxx) drop or garble audio. Prefer the business's own mobile from its website, call Mon to Sat 10:00 to 18:00 IST, and send the written ask in parallel instead of waiting on the call. Measured cost: about 66 cents for 84 s of connected India time.
 
 ## References
 
