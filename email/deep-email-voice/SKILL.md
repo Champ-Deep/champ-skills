@@ -45,8 +45,16 @@ Every draft is: greeting, one context line, the body, one clear ask with a date,
 | Update plus research brief | Two bold mini-heads as plain lines (what changed, what I need from you), each over its own numbered list, then one ask naming the deliverable and a date | One long numbered list mixing changes and asks |
 | Reply in a thread | Answer first, reason second, two to five sentences |
 | Decision ask to a leader | The decision in the first line, options numbered, Deep's recommendation, the date he needs it by |
+| Confirmation of a slot he proposed | One line: does the time work, yes or no, with the exact day, date and zone repeated. No restating the thread, no new asks: he answers "yes" or "move it" and stops |
 
 Length: most drafts fit on a phone screen without scrolling. Recaps may be longer but every line carries a fact.
+
+A confirmation of a proposed slot is always two lines: the greeting with the
+slot repeated in full, then the ask. Anything longer turns a yes or no into a
+reading task, and he replies to the extra sentences instead of the time.
+
+`references/slot-confirmations.md` carries the short patterns: confirming, moving
+and holding a slot, and the three register variants.
 
 ## 3. HTML (Outlook renders exactly what you send)
 
@@ -86,6 +94,7 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 - [ ] No one-item list, no `<p>` inside `<li>`, no em or en dash.
 - [ ] Every date, number and name traces to the source (thread, meeting, TASKS.md row).
 - [ ] Every deadline is either sourced or named as mine in the handback. A deadline I chose is a proposal Deep may strike, so it never goes out silently as a fact.
+- [ ] Before proposing a due date, check the recipient's calendar or leave: a proposal that lands on a colleague's leave, a holiday or a milestone of theirs is called out as its own option (move the date to the next working day) in the handback, never embedded silently in the draft.
 - [ ] `toRecipients` holds a real address for the right person, or is empty and flagged. Never Deep.
 - [ ] Subject is what the recipient should see: specific, no bracket tags.
 

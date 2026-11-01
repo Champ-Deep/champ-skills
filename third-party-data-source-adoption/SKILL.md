@@ -48,10 +48,18 @@ call, pass its cost-cap and attribution headers so one retry loop cannot run the
 
 ## Procedure
 
+0. **Check the account's own dashboard for an account-level default before
+   designing config for a required block.** Many providers (a registrar, a
+   payments processor, an ads platform) accept a contact or profile block once
+   at the account level, or hold one on file already. Read the provider's UI, or
+   an unauthenticated probe, before concluding the block must ship in every
+   payload: the answer decides whether a missing human input blocks the first
+   test at all, and it costs two minutes against a blocked deliverable.
+
 1. **Read the terms page, not the pricing page.** Fetch the terms and search for
    the clause naming your use: commercial use, redistribution, re-serving as an
-   API, white label, monetisation of derived insights. The pricing page
-   advertises tiers; the terms grant rights, and they are written separately. A
+   API, white label, monetisation of derived insights. The pricing page advertises
+tiers; the terms grant rights, and the two are written separately.
    vendor can advertise a free tier and forbid commercial use of it — free
    *access* and the right to *resell* are different grants. See
    `references/licence-and-terms-checks.md` for the clause checklist and the
@@ -103,6 +111,18 @@ call, pass its cost-cap and attribution headers so one retry loop cannot run the
    validation gates, build only the earliest phase a gate has not foreclosed.
    Work done behind an unpassed gate is thrown away rather than extended.
 
+6. **Send the provider its own field names, and its own required-block rules.**
+   A provider validates its documented payload, not your internal model: an
+   unknown field name is rejected or silently treated as absent, so a request
+   shaped like your types fails where your types were wrong. Read the provider's
+   reference (or a captured real response) for the literal names and for which
+   blocks are mandatory, and pin those names in a test so a rename on either side
+   breaks a test instead of a live transaction. Where a block needs data only a
+   human can supply (identity, contact, billing details), send the configured real
+   value or omit the block entirely: a placeholder that would become a real-world
+   fact is accepted by the provider and lands somewhere it cannot be recalled.
+   Stage the missing human input as a decision request listing the exact fields.
+
 ## Attribution is a product requirement
 
 A CC BY source requires visible attribution **wherever its data appears**,
@@ -144,6 +164,13 @@ a symptom.
 - **Letting a name-only match auto-send on a tie.** Two different companies can
   share a name; only an exact identifier hit settles that unattended.
 - **Fixing the assertion instead of the defect** when a test catches a real gap.
+- **Building the payload from our own field names.** The provider validates its
+  contract, not our types, so an invented name surfaces as a missing required
+  field on the first live call while every unit test stays green; pin the
+  provider's literal names in a test.
+- **Filling a required human-only block with placeholder data.** Omit the block or
+  wait for the real value: invented identity or contact data is accepted, then
+  cannot be recalled.
 
 ## References
 

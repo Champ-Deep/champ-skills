@@ -135,8 +135,29 @@ implementation profile and name the shared branch inside the body.
   the PR exists before repeating the word "done".
 - The second scanner run creates nothing (idempotency proved, not assumed).
 
+### 6. Do not start a scan while an earlier batch is still in flight
+
+Dispatch is not instant: cards created earlier in the same window can still be
+`ready`, `todo` or `running` when the next tick fires, and those states are not
+returned by the same `--state open` filter the scanner reads. Re-running then
+treats every in-flight issue as unseen and re-queues the whole batch, which lands
+as duplicate cards on issues that already carry the `agent-queued` label and the
+card id from the first pass in their comment thread.
+
+Before scanning, drop any issue key already in the state map, then gate on the
+board: if a card from a previous run of this batch is still open, print nothing
+to stdout and report that the batch is still dispatching. Only scan again once
+the earlier batch has reached `done` or `blocked`, at which point the state map
+already does the dedupe. Dry-run first so you can see which issues would be
+created.
+
 ## Pitfalls
 
+- **Re-running while the last batch is still dispatching.** In-flight cards sit
+  outside the `--state open` filter the scanner reads, so a re-run reads them as
+  unseen and duplicates the batch onto issues that already carry the label. Gate
+  on the previous batch reaching `done` or `blocked` first; the state map alone
+  does not cover this window.
 - **Chatty watchdog scripts spam the delivery channel.** If every tick prints,
   the user learns to ignore the job and misses the tick that mattered. Keep
   status on stderr; stdout is reserved for events.

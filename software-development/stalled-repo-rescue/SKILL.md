@@ -89,6 +89,26 @@ grep -oE 'error TS[0-9]+' /tmp/tsc.txt | sort | uniq -c | sort -rn
 The error-code histogram is the diagnosis. A single dominant code across many
 files means one structural cause, not many small bugs. Fix the cause.
 
+**A build that stalls on downloading rather than compiling is not a code
+failure.** Read the provider's own progress counter in the log before theorising:
+packages trickling in one or two a minute against an `ETIMEDOUT` on a fetch means
+the network path inside the container is at fault, not a dependency. On a
+container bridge (OrbStack, Docker Desktop on macOS) Node 19+ races the address
+families with a 250 ms happy-eyeballs budget per connection, so an unreachable
+IPv6 answer burns that budget on every attempt and installs crawl or die while
+the same install on the host succeeds. Set the knob in the Dockerfile's build
+stage, because the build does not inherit your shell:
+
+```dockerfile
+ENV NODE_OPTIONS=--network-family-autoselection-attempt-timeout=2000
+```
+
+A retry loop is the wrong fix: it re-rolls the same losing family, while the
+longer timeout lets the IPv4 fallback land. Confirm with the download rate
+moving from roughly one package per 80 s to hundreds in 30 s, then keep the fix
+as a measured result rather than a theory. The same export on the host makes npm
+and npx behave alike there too.
+
 **Prefer package scripts over raw tool invocations** (`npm run build`, not
 `npx vite build`) so you run what CI runs, and redirect to a log file so a
 long output does not trip command guards.
@@ -159,6 +179,13 @@ suite will not otherwise catch.
 Run the full matrix locally, then push and read the provider's own result. A
 build script can pass locally and fail on the runner for quoting, path, or
 version reasons.
+
+**Run the widest suite you have at least once, and name the command behind
+every pass count.** A path-filtered run (`npx vitest run src/lib/x`) is a report
+about those paths and nothing else, yet its total reads as a branch-wide green.
+Run the whole suite once on your branch and once on the baseline, compare the
+totals, and state which command produced each number, so a red test outside your
+filter becomes a finding instead of something never observed.
 
 ```bash
 # each package, from a clean clone of the PUSHED branch
@@ -233,12 +260,18 @@ unverified rather than reported.
   sample of errors.
 - **Do not add features during a rescue.** The deliverable is a reviewable
   branch. Scope creep makes the diff unreviewable, which defeats the point.
+- **Reporting a stalled download as a dependency or code failure.** Read the
+  provider's own progress counter first: a crawling package fetch is the
+  container's network path, and killing the build repeats the same transfer from
+  zero. Widen Node's family-autoselection timeout in the Dockerfile build stage
+  (see `references/node-ci-gotchas.md`) instead of adding retries.
 
 ## Verification
 
 - Every package typechecks and builds with zero errors, run from a clean clone
   of the pushed branch.
-- The test suite passes locally and on the provider's runners.
+- The test suite passes locally and on the provider's runners, and the pass count
+  came from the full suite with its command named, not from a path-filtered run.
 - The image builds, and the container answers a health check and serves its
   entrypoint.
 - CLI or binary entrypoints were actually invoked, not just built.
@@ -251,5 +284,6 @@ unverified rather than reported.
 - `references/reachability-probe.md` - the dead-code analysis method, the
   mixed-runtime detection, and how to read the results.
 - `references/node-ci-gotchas.md` - Node/TS packaging traps that make a
-  resurrected package fail to compile, and local-versus-runner CI divergence.
+  resurrected package fail to compile, the container-build network timeout that
+  reads as a dependency failure, and local-versus-runner CI divergence.
 - `scripts/reach.py` - reachability probe; run it before any deletion decision.

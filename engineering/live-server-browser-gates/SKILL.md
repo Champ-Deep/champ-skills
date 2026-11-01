@@ -135,18 +135,25 @@ Point the repaired gate at the pre-fix build and confirm it reports the old numb
 gate rewritten this session has never been seen failing, so its passing means nothing
 until it has been observed to catch the defect it was written for.
 
-## Run the same gate against every target, and survive your own last run
+## Survive your own last run, and grade only the build that is live
 
-A journey that only ever hit localhost has never seen production's env vars, domain
-or database, and a green deploy status does not substitute: the status reports the
-container, not the journey. Parameterize the base URL and credentials inside the
-script and run the identical file against each deployed URL after every deploy.
+A journey that only ever hit localhost has never seen production's env vars,
+domain or database, and a green deploy status does not substitute: the status
+reports the container, not the journey. Parameterize the base URL and credentials
+inside the script and run the identical file against each deployed URL after every
+deploy. Split that run across a deploy window: checks served by the current build
+(database reads, third-party lookups) are valid while a new image builds, and only
+the rollout-dependent checks wait for the platform's own build-identity signal,
+because a gate run during the window grades the previous code and reports a fix
+as broken. Never edit the working tree while the image builds either: the image
+already snapshotted it, so the edit ships next time and the gate grades old code
+again.
 
 Log one `STEP <what succeeded>` line per stage so a timeout names the stage that
 died instead of only the selector it died on, and make creation steps idempotent
 (check the entity exists before creating it): a journey that assumes a clean world
-dies on a duplicate during its second run, and a gate that cannot be re-run after a
-partial failure is a gate you get exactly one attempt with.
+dies on a duplicate during its second run, and a gate that cannot be re-run after
+a partial failure is a gate you get exactly one attempt with.
 
 ## A third party's origin allowlist is not your bug
 
@@ -181,6 +188,9 @@ production deploy.
   reasons; update selector and markup together.
 - **Running the journey only against localhost after a deploy.** Production env and
   domain differ; re-run the identical parameterized script at the prod base URL.
+- **Running the rollout-dependent checks during the build window.** They grade the
+  old code and read as a failed fix; wait for the build identity, and run only the
+  build-independent probes early.
 - **Creation steps that assume a clean world.** The second run dies on duplicates;
   check existence before creating so a partial run can resume.
 - **Reading CSP or security headers off the dev server.** Dev and deploy middleware

@@ -1,3 +1,8 @@
+---
+name: plan-audit-checklist
+description: Per-section questions to walk a plan or PRD against, plus the requirement-mapping table shape.
+---
+
 # Plan audit checklist
 
 Walk a plan or PRD section by section, in this order. Every question is asked of
@@ -38,6 +43,7 @@ Rules:
 | Feedback loop | What is collected, reviewed on what cadence, and which single number is trended? |
 | Decisions | Is every open ruling listed with a recommendation and an owner, rather than buried in prose? |
 | Compliance / legal | What obligations does the plan carry that it never states? |
+| Third-party payloads | Are the external field names and required blocks taken from the provider's own reference and pinned in a test, rather than from our types? |
 
 ## After landing new sections
 

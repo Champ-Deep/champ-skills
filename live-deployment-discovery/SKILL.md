@@ -152,6 +152,44 @@ switch the pin.
 5. **Report credentials as a presence table, never as values.** Show which vars
    are set, which are missing, and what each missing one blocks.
 
+5b. **Spend the deploy window on the probes the rollout does not affect.** A
+   container rebuild takes minutes, so split the verification first: endpoints
+   served by the *current* build (database reads, third-party lookups, static
+   pages) still answer correctly while the new image builds, and running every
+   read-only probe now costs nothing. Keep only the rollout-dependent checks for
+   after `LIVE` appears, and never edit the working tree during the build: the
+   image has already snapshotted it, so a fix made now ships in the *next*
+   deploy while your after-check silently measures the old code.
+
+   Read the deploy log's own progress as a diagnosis: a package counter moving by
+   the minute is a slow registry, not a broken build, and killing the build
+   discards partial progress to repeat the same transfer. Let it run. Then read
+   the whole log after the rollout line, not only the line itself: some deploy
+   scripts print their own failure summary, including a failed post-deploy smoke,
+   *after* the container is already live, so a green `LIVE` line followed by a
+   red section is a new build that just failed its own gate. Re-read
+   `/api/version` (or the equivalent identity field) after the rollout to confirm
+   the new build id before making any post-deploy claim.
+
+5b. **Spend the deploy window on the probes the rollout does not affect.** A
+   container rebuild takes minutes, so split the verification first: endpoints
+   served by the *current* build (database reads, third-party lookups, static
+   pages) still answer correctly while the new image builds, and running every
+   read-only probe now costs nothing. Keep only the rollout-dependent checks for
+   after `LIVE` appears, and never edit the working tree during the build: the
+   image has already snapshotted it, so a fix made now ships in the *next*
+   deploy while your after-check silently measures the old code.
+
+   Read the deploy log's own progress as a diagnosis: a package counter moving by
+   the minute is a slow registry, not a broken build, and killing the build
+   discards partial progress to repeat the same transfer. Let it run. Then read
+   the whole log after the rollout line, not only the line itself: some deploy
+   scripts print their own failure summary, including a failed post-deploy smoke,
+   *after* the container is already live, so a green `LIVE` line followed by a
+   red section is a new build that just failed its own gate. Re-read
+   `/api/version` (or the equivalent identity field) after the rollout to confirm
+   the new build id before making any post-deploy claim.
+
 6. **Verify a claimed UI change by driving the page, not by reading its HTML.**
    Nav and menu items rendered by delayed scripts do not exist until the page has
    been interacted with (a pointer move, a scroll, a focus keypress), so an
@@ -318,3 +356,19 @@ env var) for each pending one.
   prints only `status Error`. The deployments API's `errorMessage` is the message.
 - Do not treat a green frontend deploy as a deploy of the backend. Each host is
   pinned and builds independently; verify the commit on every host you claim about.
+- Do not kill a slow build on its age alone. Read the provider's progress counter
+  first: a crawling download is a network path problem, and a restart throws away
+  partial progress to repeat the same transfer.
+- Do not run post-deploy checks before the build reports its new identity. Checks
+  issued during the window measure the old code and read as a failed fix.
+- Do not quote the `LIVE` line without reading the log tail after it. A deploy
+  script can report a failed post-deploy smoke test after the container is already
+  live, and the first line alone then reports success for a build that just failed.
+- Do not kill a slow build on its age alone. Read the provider's progress counter
+  first: a crawling download is a network path problem, and a restart throws away
+  partial progress to repeat the same transfer.
+- Do not run post-deploy checks before the build reports its new identity. Checks
+  issued during the window measure the old code and read as a failed fix.
+- Do not quote the `LIVE` line without reading the log tail after it. A deploy
+  script can report a failed post-deploy smoke test after the container is already
+  live, and the first line alone then reports success for a build that just failed.

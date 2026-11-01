@@ -115,6 +115,28 @@ claim.
 State plainly what is not live yet. If per-resource links still come from an env
 setting rather than a table, say the seam is not yet reading any real data.
 
+## Build the payload from the provider's contract, never from our model
+
+A seam that mirrors our own field names onto a foreign API is the version that
+passes every unit test and fails the first real call. Providers validate names,
+not intent: an unknown name is dropped, or rejected as *missing*, so the request
+does not fail where our model was wrong, it fails where the provider looked for a
+value we believed we had sent. Take the field names from the provider's own
+reference or a captured real response, and pin them in the seam's test as literal
+strings so a rename on either side breaks a test instead of a transaction.
+
+Two rules that travel with it:
+
+- **Omit an optional block rather than filling it with a placeholder.** A
+  placeholder that would become a real-world fact (a contact record, an address,
+  an identity field on a registration) is worse than an absent block: the provider
+  accepts it and the false data lands somewhere it cannot be recalled. Send the
+  configured real value or send nothing.
+- **Configure the human-only inputs as one named env set**, and request the
+  missing fields as a single decision listing them exactly. The seam then goes
+  live on one redeploy instead of a redesign, and the same input serves the UI
+  path that writes through the same provider.
+
 ## Ingestion into keyed records: fold, coalesce, isolate
 
 Any writer that upserts into a table keyed by business values (technology,
@@ -161,3 +183,8 @@ always wrong. Say it where the consumer sees it, not only in the schema.
   production run.
 - **Overwriting a file you have not read in full.** Read it, then patch narrowly,
   so an external writer's changes survive.
+- **Payload field names copied from our own types.** The provider validates its
+  contract, not ours, so an invented name surfaces as a missing required field on
+  the first live call while every unit test stays green.
+- **A placeholder standing in for a real-world fact.** Omit the block; never ship
+  invented identity or contact data through a registration or an order.

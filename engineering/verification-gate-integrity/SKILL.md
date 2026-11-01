@@ -201,3 +201,20 @@ as sign-off.
 When a gate turns out not to have been running, say so plainly and quantify it. Do not
 present a prior "passing" claim as still valid. The cost of an unarmed gate is that it
 was believed, and the honest correction is worth more than the quiet fix.
+
+## Split the verification across a deploy window
+
+A rollout takes minutes, and everything run inside that window measures the old
+build. Divide the checks first: probes served by the *current* build (database
+reads, third-party lookups, static pages) are valid now and cost nothing to run
+early; only the rollout-dependent checks wait for the platform's own "LIVE" or
+commit-identity signal. Read that identity field back before any post-deploy
+claim, because a check issued during the window reports the previous code and
+reads exactly like a failed fix. Never edit the working tree while the image
+builds: the snapshot is already taken, so the change ships next time and the
+after-check silently grades the old code again.
+
+Read the whole deploy log after the rollout line, not just the line itself: some
+deploy scripts emit their own failure summary, a failed post-deploy smoke for
+instance, *after* the platform reports the container live. Quoting the first line
+alone reports success for a build that just failed its own gate.

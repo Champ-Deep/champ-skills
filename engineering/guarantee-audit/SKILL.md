@@ -39,7 +39,14 @@ uv venv --python 3.11 .venv-audit && uv pip install --python .venv-audit/bin/pyt
 .venv-audit/bin/python -m pytest -q --tb=short 2>&1 | tee /tmp/pytest.log
 # frontend
 npm ci && npx tsc --noEmit && npm run build && npm run lint
+npm test 2>&1 | tee /tmp/test-full.log   # the WHOLE suite, never a path filter
 ```
+
+**Name the command behind each pass count.** A filtered run (`npx vitest run
+src/lib/x`) reports on those paths only, and its total reads like a branch-wide
+green. Run the unfiltered suite once, record the total, and state the command: a
+red test outside the filter is otherwise a test you never observed rather than
+one that passed.
 
 A lint script that exits non-zero on warnings is part of the baseline, not a
 detail. Record the pass/fail of each gate before analysing anything, so later
@@ -187,6 +194,11 @@ Lead with the verdict and the number of blockers, then the gates that passed,
 so the reader knows the shape of the answer before the detail. Every finding
 carries its reproduction, not adjectives.
 
+When no second-lab model is available for the fan-out in step 5, do that breadth
+pass yourself as a separate read of the diff and say in the report that it was a
+same-family read. A labelled weaker check is auditable; an implied independent
+review that never ran is not.
+
 State the omissions as findings in their own right: what you could not verify,
 what you did not fix, and whether you merged or deleted anything. Silence
 reads as oversight. A cleanup you deliberately did not do, with its size and
@@ -209,6 +221,10 @@ the author. Run the visual verification gate and open the screenshots.
   calling the feature present.
 - **A fake that serialises cannot test a race.** Prove concurrency against the
   real service, and say in the report which double the suite uses.
+- **A contract test that asserts our types, not the provider's fields.** A payload
+  mirrored from our own model passes every unit test and fails the first live
+  call: pin the provider's literal field names in a test, and omit optional
+  blocks rather than filling them with placeholder identity data.
 - **A subagent's finding is a pointer, not a result.** Re-run it. One in three
   does not reproduce, and a child's silence is not an all-clear.
 - **A healthcheck that discards its return value always passes.** Assert on the

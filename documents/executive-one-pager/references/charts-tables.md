@@ -24,6 +24,7 @@ Never mix units on one scale. Accounts and contacts, dials and conversations, se
 
 - Values sit on or beside the mark. The reader never hunts an axis.
 - Bars are `display:block` with width from the stated number (`--w:65.04%`). Compute widths in code, never by eye.
+- A range mark (50,000 to 60,000) is two fills whose widths sum to 100% of the track: the solid fill runs to the low end of the range, the hatched fill covers the remainder. Paint the solid at 100% and overlay the hatch and both fills cover the whole track, so the bar reads as one uniform mark and the range encoding vanishes. Probe the rendered fill widths against the scale (`i.getBoundingClientRect().width / track.width`) rather than trusting the percentages in the source.
 - Bubble and dot sizes scale by area (`r = rmax * sqrt(v / vmax)`), never by radius.
 - Colour encodes one thing per chart. Brand gradient for "ours" or "kept", neutral for "missing" or "to go", red outline for a risk.
 - Every chart has a one-line caption that says what a mark means ("1 dot = 1 account", "Bubble area = contacts").

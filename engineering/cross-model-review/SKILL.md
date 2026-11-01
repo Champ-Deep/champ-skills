@@ -16,6 +16,13 @@ Adapted from David Ondrej's `gpt-review` and `total-review` (davidondrej/skills,
 1. Make a `frontend` profile kanban card pinned to `model="gpt-6-astra", provider="openai-codex"` (the exception in `model-routing`; it burns the ChatGPT window, so mediums can use the default Sol). Read-only: the brief says "review only, do not change files".
 2. Brief is neutral: scope, paths, base revision, intended behavior. Do not name suspected bugs or a verdict. Ask for serious or critical issues, fixes, merge readiness, and verified versus uncertain findings.
 3. Include this sentence word for word: "During your final answer, rate each issue from 1 to 10 on how often it would happen, and 1 to 10 on how bad it would be."
+
+When no second-lab model is available (key capped, lane down), do the second read
+yourself as a separate pass over the diff with the reviewer's questions, and label
+it a same-family read in the report. That is weaker than a cross-lab read and far
+better than one pass that manufactures confidence; never present it as
+cross-model.
+
 4. When it returns, ask yourself for each finding: must fix, or overthinking? Fix frequent and serious items. Skip rare and mild ones. Do not rerun the reviewer to confirm fixes unless the change touches money or customers.
 5. If the card cannot run (key capped, lane blocked), say so. Never present partial output as a finished review.
 

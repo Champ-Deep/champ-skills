@@ -63,7 +63,19 @@ repos this team already owns. One row per requirement: the section, what exists
 Absent rows are the gap list; partial rows are the real work, because the plan
 usually assumes "exists" for something that imports but never runs.
 
-**Let an existing caller's code define the contract.** When two systems must interoperate and one side already has a client, that client is the spec: name its file paths in the plan as read-only, and have both sides implement against it rather than a freshly invented interface. It removes a whole class of guesswork from parallel builds.
+Let an existing caller's code define the contract. When two systems must interoperate and one side already has a client, that client is the spec: name its file paths in the plan as read-only, and have both sides implement against it rather than a freshly invented interface. It removes a whole class of guesswork in parallel builds.
+
+**Let the third party's own contract define the payload.** When the plan routes
+through an external provider (a registrar, a payments API, a data vendor), the
+provider's field names and required-block rules are the contract, not our
+internal types. A payload mirrored from our models passes every unit test and
+fails the first live call, because an unknown field is rejected or treated as
+absent. Name the provider reference (or a captured real response) as a read-only
+input in the plan, require the literal field names pinned in a test, and require
+optional blocks to be omitted rather than filled with placeholder data when a
+human-only value (identity, contact, billing) is not configured yet. That missing
+human input then becomes its own decision row naming the exact fields, instead of
+a code change discovered at the first transaction.
 
 Check the absent ones against sibling repos too, not only the repo under review:
 a component written for another product often answers this plan's requirement
@@ -200,6 +212,16 @@ numbers as **proposals until ruled**, not as decisions taken.
 - **Do not append an `UPDATE:` block under a sentence that was wrong.** Edit the
   sentence; a document that contradicts itself is worse than one that was
   briefly incomplete.
+
+## Deliverable scope across a request with several asks
+
+When the request names several deliverables (a build, a test through one system,
+a batch of purchases), treat each as its own definition of done and map each to
+what already exists before writing any of it. One deliverable blocked on a
+human-only input must not stall the others: finish and verify what the existing
+code already supports, stage the blocked one as its own decision, and report
+three separate lists (shipped, staged, blocked with the exact missing input).
+A single undifferentiated "not done" hides that most of the work landed.
 
 ## Zero-context reader pass (from Google's Elephant-Goldfish model)
 

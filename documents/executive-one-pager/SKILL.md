@@ -42,7 +42,7 @@ The rules and the house kit below exist to stop each of those.
 ## Hard rules (non-negotiable)
 
 1. **Verdict on screen one.** At 390 by 844 the first viewport holds the headline (the answer, not the topic), three numbers with comparators, and the first ask. Summary and Presenter carry one ask; Readout carries at most three.
-2. **Length budget.** Summary and Readout: at most five sections after the verdict, at most 3,000px tall at 1440px, at most 6,500px at 390px. Presenter: the runway before the slide cards is one desktop screen; each slide card is at most 260px tall collapsed.
+2. **Length budget.** Summary and Readout: at most five sections after the verdict, at most 3,000px tall at 1440px, at most 6,500px at 390px. Presenter: the runway before the slide cards is one desktop screen; each slide card is at most 260px tall collapsed. A request for "all the details" (a forwardable brief, a checklist the recipient sends to a third party) is the one stated exception: a bilingual line list cannot fit the budget without gutting what was asked for, so ship the detail and report the measured heights with the rule you relaxed. The deviation is a decision, not a licence: the budget still governs every page nobody asked to be exhaustive, and the fold test still governs all of them.
 3. **Assertion headlines.** Every section heading is a full-sentence conclusion the reader could repeat in a meeting ("Three of nine are blocked, and each one has a known unblock."), never a topic label. Headlines end with a period.
 4. **Visual first, text second.** Every section leads with a visual derived from the content (status mix bar, aging bar, tick strip, rail, split, tree, before/after bars) and carries at most three lines of text. Removal test: if deleting the visual loses no meaning, it is decoration.
 5. **Numbers carry comparators.** Every figure sits beside a target, a deadline, a prior period, or a share of the whole ("2 of 30, 19 days left"). Simple arithmetic on stated figures is allowed (28 to go, about 1.5 a day); extrapolation is not.
@@ -81,6 +81,8 @@ For long sources, delegate extraction to a subagent so raw text stays out of con
 | Per-slide content (Presenter) | Every slide: headline, copy, numbers and sources, the job the slide does. Skip nothing. |
 
 **Verify before building.** Product, company and people's names get checked against public sites and sources Deep confirmed. Transcript-sourced names are suspect by default. In Presenter mode, cross-check deck numbers against any master or fact-verification doc; flag illustrative figures.
+
+**Recover the prior version before rebuilding it.** When the request points at an earlier artifact (an old checklist, the last run's brief), search the vault, connected tools and session history before writing a line: a rebuild from memory cannot match what the reader already holds. When recovery fails, say so in one line in the report and label the page a rebuild, never the original.
 
 **Source integrity, in this order.** A page that reports other people's numbers inherits their errors, so audit the source before the copy:
 
@@ -292,6 +294,7 @@ Make one pass of fixes, re-run the script, and publish. In Presenter mode, count
 | `references/spotlight-card.md` | any card-type block (CSS, JS, where it goes) |
 | `references/verification-gates.md` | over budget, contrast audit code, trim levers, badge and marker rules |
 | `references/templates.md` | proposing a page template and locking a brand |
+| `references/bilingual.md` | the page ships in two languages: toggle contract, per-language copy payloads, probe order |
 | `references/design-language.md` | the Warm Editorial language, only when it is the right call |
 
 When these files are not in the account copy of the skill, read them from the Celsus vault at `Other/Skills/executive-one-pager/references/`.

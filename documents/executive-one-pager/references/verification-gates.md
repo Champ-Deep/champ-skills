@@ -89,5 +89,14 @@ footer. One failing row fails the page.
 
 `data-fold` goes on the headline, each of the three numbers, and the first ask heading; the
 gate asserts each has `bottom <= innerHeight` at 390. Put the marker on the shortest copy
-that still carries the claim. When the fold fails, the fix is usually shortening that
-heading, not relocating the numbers.
+that still carries the claim.
+
+When the fold fails, recover it in this order and re-probe after every step: (1) push
+non-fold content below the fold, which is nearly free and never damages the verdict, for
+example by pulling the lead paragraph out of the verdict grid so it becomes its own row
+under the ask panel and the numbers climb; (2) compact the number cells' label and
+comparator copy to one short line each; (3) trim panel and header padding. Shorten the
+headline last, because it carries the verdict and a headline cut to fit the fold fails the
+five-second test instead. Never buy pixels by shrinking display type first, and never
+delete a number's comparator (rule 5): both fixes move the defect from the fold to the
+brief.

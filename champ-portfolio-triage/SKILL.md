@@ -60,6 +60,14 @@ misdates work that has moved on. Run the same gate on the newest branch before
 recommending a rebuild; a branch with green historical CI is a candidate, not a
 certification.
 
+Before reporting that a collaborator failed to commit or push anything, diff the
+shipped artifact against every branch: fetch, list each branch's newest commit with
+dates, and match the deployed files (or the running site) against the contents at
+each tip. Only then attribute a gap, and say which side it is on: work sitting on an
+unmerged branch is a review gap, work merged but absent from the live build is a
+deploy gap, and only work nowhere on the remote is a push gap. Naming a push gap
+without this check produces an escalation email to someone who did push.
+
 ## Verified 2026-10-02
 
 **ChampLantern** (`Champ-Deep/ChampLantern`, private, Python+React, 4 commits all 2026-09-30, ~17.5k LOC).
@@ -90,6 +98,12 @@ When Deep asserts where something (spend, a bug, a feature) comes from, treat it
 ## Method: rank on moveable progress, not on a score
 
 The tracker score ranks what has already been built, so a repo that is one review away from done and a repo that needs a quarter of new code can sit within a few points of each other. Choose the next repo to push by what a session can actually finish:
+
+0. **Read the open decision cards first.** A `needs_input` or `capability` card
+   sitting on a repo is a gate a human can clear in one reply, and clearing it is
+   cheaper than any amount of code. Answer those before ranking anything: a repo
+   with an unanswered input card cannot progress no matter which session picks
+   it up, and its tracker row will still score as if it could.
 
 1. Read every open PR and every blocked task first (`gh pr list`, plus the board), because blocked work is a decision or an access gate, not more coding.
 2. Score the artifacts, not the tracker: open PRs already green, an existing readiness or gap report, an identifiable blocker, and how much of the remaining work is mergeable versus greenfield.
