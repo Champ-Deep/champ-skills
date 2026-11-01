@@ -37,7 +37,10 @@ Not for: pure art-asset work (`sprite-art-pipeline`), post-deploy service debugg
    `curl -s https://deepfall-production.up.railway.app/<asset> | grep -c <marker>` where the
    marker is a string only the new code contains. "Deploy complete" prints before the
    container serves the new build, so the exit code and a `200` on the root both lie.
-   Re-run gate 2 against production when the change is visual.
+   Never pipe this deploy through `tail`: the pipeline's exit status is `tail`'s, so a
+   failed deploy reports clean. Capture `${PIPESTATUS[0]}` or run it uncaptured, and treat
+   the marker probe, not the exit code, as the ship proof. Re-run gate 2 against production
+   when the change is visual.
 
 ## Surfaces
 

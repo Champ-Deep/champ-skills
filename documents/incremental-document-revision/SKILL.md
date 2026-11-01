@@ -125,6 +125,7 @@ from the document it is being pasted into, and the mismatched defined term is
 itself a defect.
 
 ## Pitfalls
+- Edit in place: replace the stale sentence, do not stack an "UPDATE" block under it.
 
 - **Renumbering before the last insertion.** The numbering tail goes stale and no
   check catches it.

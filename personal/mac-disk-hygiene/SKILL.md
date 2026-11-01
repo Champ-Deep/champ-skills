@@ -49,7 +49,8 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - `du` on this 400GB home exceeds the 420s terminal cap even per top-level dir. Run the survey as a background job writing to a scratch file, and use `du -sk <dir>` per directory rather than `du -d1` (which printed nothing).
 - A long-running `uv run` service can hold `~/.cache/uv/.lock` indefinitely. Bound the native cleaner to 35 seconds, inspect the lock owner with `lsof`, report partial cleanup honestly and leave the service running. Never force the lock or stop an app to free caches.
 - Chrome's cache cannot be fully removed while Chrome runs (directory not empty, long hang). Skip it.
-- The weekly scheduler is `~/.hermes/scripts/disk_sweep.py` via cron `disk-sweep-weekly` (Sun 16:00 IST). Extend its job list; never add a second disk cron.
+- The weekly scheduler is `~/.hermes/scripts/disk_sweep.py` via cron `disk-sweep-weekly` (Sun 16:00 IST). Extend its job list in the script.
+- Auto-clean guard: cron `disk-sweep-guard` (every 30m, `disk_sweep_guard.sh` = `disk_sweep.py --if-low 30`) is silent above 30 GiB free, below it runs caches + Docker `container prune --filter until=72h` + `image prune -a --filter until=720h` (never volumes) and reports to Telegram. Docker unused images were the biggest reclaim (about 34 GB in one pass); `docker system df` underestimates it.
 
 - Counting HF space from directory listings overcounts: broken symlinks and shared blobs inflate it. `du -skL` on snapshots per model is the truth.
 - `brew cleanup --prune=all` frees old formula versions and its cache; installed formulae stay. Safe in Tier A.

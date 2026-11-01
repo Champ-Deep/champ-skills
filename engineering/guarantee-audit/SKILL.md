@@ -196,6 +196,7 @@ Pair the written report with a single-file HTML version when the reader is not
 the author. Run the visual verification gate and open the screenshots.
 
 ## Pitfalls
+- Every "it works" claim needs the command output behind it: record PASS-line counts, spec-pass counts, hash matches and `/health 200` in the report so the claim can be re-derived.
 
 - **A green suite is not a verified guarantee.** It asserts the happy path ran.
   Probe the boundary the guarantee rests on.

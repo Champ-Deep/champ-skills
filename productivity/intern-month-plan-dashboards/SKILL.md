@@ -330,6 +330,7 @@ Shape that worked: **Deep's lanes first** (the four things only he can move), th
 4. **Read `WHAT YOU OWE` out of the packs, never re-derive it.** `sed -n '18,40p' packs/<id>/conversation.md` per person returns all eight in one batch. A regex like `(?is)(what i owe.*)` grabs the heading and nothing else, because the section starts with a one-line instruction and the items are a markdown checkbox list, not prose.
 
 ## Pitfalls
+- Report with status per item (live / staged / blocked) so nothing reads as done when it is only drafted.
 
 - **Any shareable plan or pivot HTML is a designed page, so load `visual-report-builder` and the vault's `Atlas/Context Docs/Design/Warm Editorial Design Language.md` before writing CSS, then close with `visual-verify`.** Reuse the Accelerator run sheet palette (warm paper, orange accent, Manrope/Plex or Spectral/Hanken) so it reads as a sibling of the published page. A freehand page with system fonts and a default purple accent was rejected as generic: loading only this process skill is not enough.
 

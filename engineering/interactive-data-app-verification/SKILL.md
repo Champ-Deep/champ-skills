@@ -130,6 +130,7 @@ a fixed threshold. Never pick ink by a rank bucket: "top half gets white" fails 
 the distribution skews.
 
 ## Pitfalls
+- When the browser daemon is unreachable, fall back to a Playwright script (`chromium.launch()` + screenshot) rather than reporting the page unverified.
 
 - **Do not report a render as verified on a clean audit alone.** Contrast clean means the
   maths passed, not that the picture reads.

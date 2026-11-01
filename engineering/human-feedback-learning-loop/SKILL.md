@@ -178,6 +178,7 @@ connection leaves the next one looking at an empty schema. Call the project's
 model-import registry before `create_all` or it silently skips those tables.
 
 ## Pitfalls
+- Collect feedback in fixed categories (confusion, funny moment, energy drop, breakage) so raw playtest notes convert into build cards without re-reading the transcript.
 
 - **Counting untouched approvals as voice samples.** They teach nothing about
   the person and are the fastest route to a confident empty profile.

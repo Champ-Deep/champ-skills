@@ -75,6 +75,7 @@ Pass `skills` on the card so the visual gate loads (`frontend-design`, the brand
 Report what is built and how it was verified, where the files are, and what is still his. Every judgment you made for him (numbers you proposed, scope you assumed) gets named in the reply. If a numbered decision depends on an unanswered question, block a card with the options and your recommendation first.
 
 ## Pitfalls
+- A staged pack is not sent: end with a decision card naming the exact draft and what remains for Deep to do.
 
 - **Ask format questions once, in one batch.** Two rounds of clarification on output format and then on how it will be shared stall a one-file deliverable that could have been built. Batch what you cannot infer (format, who receives it, channel) in a single ask; assume everything else and state the assumption.
 - **Do not ship the report and the pack as two truths.** The report is the reasoning, the pack is the sign-off surface. Both cite the same numbered decisions, or the stakeholder signs one thing and the team builds another.

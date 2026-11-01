@@ -67,6 +67,7 @@ decision set rather than a thread. Include the sequencing consequences the grill
 since a ruling often creates a dependency nobody had written down.
 
 ## Pitfalls
+- Number the open decisions and carry that numbering into the brief and the chat summary (1-9), so Deep answers by number and the answers drop straight onto build cards.
 
 - Never run a contact-enrichment or lead-pull pipeline for a product brief. A brief is not a
   target list, and running one spends money and produces the wrong artifact.

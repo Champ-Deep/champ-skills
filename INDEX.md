@@ -99,7 +99,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `approval-pack` | Engineering & Dev | Sign-off pack a stakeholder approves without a meeting. |
 | `champ-portfolio-triage` | Engineering & Dev | Use when reviving or assessing a Champ-Deep repo. |
 | `clerk-auth` | Engineering & Dev | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
-| `cloudflare-workers-r2-apps` | Engineering & Dev | Use when building a Cloudflare Worker with R2 or KV. |
+| `cloudflare-workers-r2-apps` | Engineering & Dev | Use when building a Cloudflare Worker with R2, KV, Durable Objects, WebSockets or assets. |
 | `competitive-product-teardown` | Engineering & Dev | Compare our product to a competitor or upstream repo. |
 | `cross-model-review` | Engineering & Dev | Use when a medium or large change needs a second-model review. |
 | `data-brokerage` | Engineering & Dev | Use when brokering data between prospects and AI buyers. |
@@ -348,7 +348,7 @@ MCP, testing, frontend build, auth, scraping, codebase tools.
 | `approval-pack` | Sign-off pack a stakeholder approves without a meeting. |
 | `champ-portfolio-triage` | Use when reviving or assessing a Champ-Deep repo. |
 | `clerk-auth` | Add Clerk authentication (sign-in, sign-up, user accounts, protected routes) to any web project. Use this skill whenever the user wants to add auth, add login, add sign-i |
-| `cloudflare-workers-r2-apps` | Use when building a Cloudflare Worker with R2 or KV. |
+| `cloudflare-workers-r2-apps` | Use when building a Cloudflare Worker with R2, KV, Durable Objects, WebSockets or assets. |
 | `competitive-product-teardown` | Compare our product to a competitor or upstream repo. |
 | `cross-model-review` | Use when a medium or large change needs a second-model review. |
 | `data-brokerage` | Use when brokering data between prospects and AI buyers. |

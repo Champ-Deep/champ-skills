@@ -127,6 +127,7 @@ files and a red run means red. Check the last run before calling anything the
 healthiest in a set, and correct any ranking you already published.
 
 ## Pitfalls
+- Record which port and which host the gate actually used; if a port was held and you moved to another, say so in the report instead of presenting a default-path run.
 
 - **Do not fix a red install by deleting a dependency.** The obvious remedy for
   a legacy package that will not build is to drop it from the manifest. Check

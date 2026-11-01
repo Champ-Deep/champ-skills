@@ -81,6 +81,7 @@ The blocker is credentials and one domain decision, not code.
 - Booking video: Calendly+Loom is the only shipped precedent (CTA on video end).
 
 ## Pitfalls
+- Correct the status line where it lives (the effort note), not only in chat: "still a draft / runs the old build" becomes false the moment you merge and deploy, and the next session will act on it.
 
 The `Apps&Projects` tracker rows are unreliable in both directions. ChampOps is scored 70/"Operational" with zero code and an NXDOMAIN Supabase project. ChampLantern and deependhq-site are scored far below their real completion. Always re-verify.
 

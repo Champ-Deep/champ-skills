@@ -35,6 +35,14 @@ ruling, or reverses a standing one without saying so, has the same defect as two
 PRDs claiming one subsystem: it decides policy by omission. Turn the conflict
 into an explicit decision with a recommendation instead of choosing in prose.
 
+When the brief itself arrives carrying several specs rather than one, resolve the
+conflicts by DOMAIN and write the precedence down at the top of the artifact:
+the newer document wins on behaviour and rules, the older one keeps whatever it
+defined that the newer one never addressed (presentation, formats). Merging them
+silently produces a plan that satisfies neither document, and a reader holding
+the superseded spec sees a plan that contradicts it without saying why. Name what
+was superseded explicitly, as a line in the deliverable, not as an omission.
+
 ## The falsifiability gate
 
 The most common defect is a plan whose definition of done cannot fail.
@@ -163,6 +171,7 @@ path. Summarise what landed and what is still the user's to rule on. Propose
 numbers as **proposals until ruled**, not as decisions taken.
 
 ## Pitfalls
+- Ground every recommendation in the repo before writing it: cite `file:line` for the mechanism you are changing, and mark each system as already-built / partially-built / not-built so the plan never claims work that does not exist.
 
 - **Do not invent what is missing from a skim.** Read all of it first, then
   name gaps by quoting the section that has the gap.

@@ -151,6 +151,7 @@ Report the per-job conclusions and the run id, never a test count. Hand the
 branch over without merging, per the standing rules in `stalled-repo-rescue`.
 
 ## Pitfalls
+- Capture each gate's exit code (`${PIPESTATUS[0]}`, `$?`) in the log you report; a green-looking piped string is not evidence the gate ran clean.
 
 - **A first workflow with no failing run has never been tested.** Reintroduce
   one failure deliberately, confirm the job goes red and names the step, revert.

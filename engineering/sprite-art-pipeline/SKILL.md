@@ -32,6 +32,16 @@ compositions (`hyperframes-*`), or layout verification of the surrounding UI (`v
 
 ## Procedure
 
+0. **Audit the art you were handed before you commit to compositing it.** Measure
+   every supplied file's pixel dimensions and unique colour count before treating it
+   as sprite material:
+   ```bash
+   python3 -c "from PIL import Image; im=Image.open('ref.png').convert('RGB'); print(im.size, len(im.getcolors(maxcolors=1<<24) or []))"
+   ```
+   A file that is tall, high-resolution and carries tens of thousands of unique colours
+   is an illustration, not pixel art: it cannot be sliced into a layered, palette-swappable
+   sheet without being redrawn, and forcing it into the pipeline produces mush on downscale.
+   Classify it as art direction and keep it out of the asset set.
 1. **Inventory the base library into scratch, not the repo.** Clone or download it to the
    scratch directory (the cache prunes it, the repo does not), and read its sheet
    definitions to learn layer names, z-order, animation rows and coordinate offsets.
@@ -68,6 +78,7 @@ compositions (`hyperframes-*`), or layout verification of the surrounding UI (`v
    look good". Finish through the `visual-verify` gate, including the production URL.
 
 ## Pitfalls
+- "Pixel art" that is anti-aliased anime art is not grid-true: check resolution first (688x1024 is not a sprite sheet size), then unique colour count with PIL (`len(set(img.convert("RGB").getdata()))`, 47k-91k means gradient shading, not a palette). Quantise to 32-64 colours and nearest-neighbour upscale only after the check, or downstream pixel snapping produces mush.
 
 - **A missing strip fails silently.** An `<img>` that 404s or a canvas with no loaded
   image renders blank with no console error, so the failure mode is a character-shaped hole

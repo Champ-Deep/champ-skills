@@ -117,6 +117,7 @@ wrong. Owning a corrected count costs nothing and is worth more than the quiet f
 the reader has to trust every other number too.
 
 ## Pitfalls
+- Cite file:line for every mechanism the plan claims; anything you cannot find in the repo goes in the report as not-built, not as done.
 
 - **Do not execute a supplied plan before the claim table exists.** Sequencing is cheap now
   and expensive after the wrong page is rewritten.

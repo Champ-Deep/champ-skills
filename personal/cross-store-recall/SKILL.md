@@ -39,6 +39,7 @@ Deep recalls an idea, list, or decision from past sessions and asks what it was 
 9. **Answer in three buckets, evidence attached:** (a) exists and verified done, with the commit/branch or tool output; (b) requested but never captured anywhere, naming the store gap (offer to capture it as a kanban card so it stops being a ghost idea); (c) collisions and unverified gaps. Never answer a recall question from memory alone, and never upgrade "not found in store X" to "never existed" without having run steps 2-6.
 
 ## Pitfalls
+- Include live URLs with status (open / ready / merged / deployed) so Deep can act without opening the board; a link list without state makes him do the triage you were asked to do.
 
 - Grep the kanban board file: it is a stub/index, so the grep returns empty and looks like proof of absence while task content lives behind the `kanban_list` tool.
 - Treat a `truncated: true` kanban_list as a full inventory: it caps at the newest rows, and the idea you are hunting is usually older than the window.

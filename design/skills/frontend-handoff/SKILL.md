@@ -166,7 +166,13 @@ Classify every gap:
 
 Ask the backend for a seed fixture set rather than a description of the data, covering: a typical record, the longest and largest realistic record, a record with every nullable field null, an empty account, and one saved response body per error code.
 
+Then demand **computed** fixtures: run the real code with a fixed seed and paste its literal output (the ids, codes, dealt values, exact display strings) into the brief, so the frontend's end-to-end run must reproduce them. Random ids and invented names make a UI unverifiable, because every screenshot looks right. When a fixture comes from a spec document rather than the code, regenerate it through the production generator: a quoted value can sit outside the value domain the code actually emits, and then the test fails while the code is correct. Fix the fixture, never the validator.
+
 This is a small ask that removes an enormous amount of back and forth, and it is the difference between a layout that survives production and one that breaks the first week.
+
+### If the backend carries secrets: filter, assert, simulate
+
+Any backend whose state hides information from some viewers (other players, other tenants, the public display) owes three extra artifacts in the handoff: the who-sees-what table, a leak assertion in the receiving lane's runnable gate, and a headless simulation run that separates implementation bugs from behaviour bugs from a design property of the rules themselves. Full procedure: `references/secret-bearing-backends.md`.
 
 ---
 
@@ -210,5 +216,6 @@ This is a small ask that removes an enormous amount of back and forth, and it is
 | File | Use |
 |---|---|
 | `references/journey-shapes.md` | Recurring multi-endpoint journeys: authenticated download, spend-gated job, offline-then-paid. |
+| `references/secret-bearing-backends.md` | Backends that hide information: one state with filtered views per recipient, a leak assertion as an acceptance gate, computed fixtures, headless simulation before any balance claim, and naming the transport limit. |
 
 The three outputs (`BACKEND-MAP.md`, `SCREEN-MAP.md`, `FRONTEND-BRIEF.md`) are written into the target repo, not stored in this skill.

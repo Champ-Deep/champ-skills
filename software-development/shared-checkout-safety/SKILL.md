@@ -84,6 +84,7 @@ git worktree add /tmp/<name> <branch>
 ```
 
 ## Pitfalls
+- Restore any config you edited for a local run (ports, timeouts) before committing; a scratch port in `playwright.config.js` breaks every later CI run.
 
 - **`git status` is not a description of your work alone** in a shared checkout.
   Check the reflog and running processes before trusting it.
