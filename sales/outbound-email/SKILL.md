@@ -14,6 +14,8 @@ Covers a readiness check plus three sequential phases: **Readiness → Research 
 
 These come from the lead-gen team that switched to them over three months and now books 15+ leads a month consistently. Sending domains with a live website outperform domains without one. Apply every rule to any prospecting or follow-up email this skill writes.
 
+**360 rule.** Before Research, run the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`). A peer vendor gets a partner or barter opener, an existing client of a sister company is not a cold prospect, and barter or co-create angles are proposals held for Deep, never promised in copy.
+
 **Brand rule.** Never use Champions Group (name, domain, logo or signature) for data or lead-gen prospecting. Spam complaints and blocklists attach to whatever brand and domain the email carries, and Champions Group is the parent brand for Champion Lagoons, Royal Champion Yachts and the longevity businesses. Sign as the selling brand (LakeB2B, SPAN, Ampliz, Contact Consumers, MetricFox) and send from a dedicated prospecting domain, never from a primary brand domain.
 
 **Before anything is sent (domain readiness).** Every prospecting domain needs:

@@ -1,7 +1,7 @@
 ---
 name: reach
 description: >-
-  The Champions Group REACH sales system in one skill: Research, Engage, Activate, Cadence, Hold, plus the full Champion's Hour pass and the Champions Growth Profiler. Research profiles any person or company and maps it to the right Champions Group brand (LakeB2B, Champion Lagoons and Infratech, Smart Beach Cities, Champions Club) with the wedge and the Why Now. MANDATORY TRIGGER for: "champion's hour", "power hour", "full REACH pass", "work this account end to end", "research [company]", "profile this company", "prospect brief", "is [X] a fit for us", "which Champions brand fits", "how do we pitch them", a pasted LinkedIn URL or company name with intent to engage, "write a cold email to [name]", "surround sound", "battle card", "follow-up sequence", "nurture cadence", "they went quiet", "prep me for my call with [account]", "account review". Replaces champions-hour, reach-research, reach-engage, reach-activate, reach-cadence, reach-hold and champions-growth-profiler.
+  The Champions Group REACH sales system in one skill: Research, Engage, Activate, Cadence, Hold, plus the full Champion's Hour pass and the Champions Growth Profiler. Research profiles any person or company and maps it to the right Champions Group brand (LakeB2B, Champion Lagoons and Infratech, Smart Beach Cities, Champions Club) with the wedge and the Why Now. MANDATORY TRIGGER for: "champion's hour", "power hour", "full REACH pass", "work this account end to end", "research [company]", "profile this company", "prospect brief", "is [X] a fit for us", "which Champions brand fits", "how do we pitch them", a pasted LinkedIn URL or company name with intent to engage, "write a cold email to [name]", "surround sound", "battle card", "follow-up sequence", "nurture cadence", "they went quiet", "prep me for my call with [account]", "account review", "domain drop", "drop this domain", "360 on [company]", "how else could we work with [X]", "could we partner with", "barter", "co-create with". Every read applies the Champions 360 lens: sell, buy, partner, barter, co-create, invest, host, hire, land, learn, acquire. Replaces champions-hour, reach-research, reach-engage, reach-activate, reach-cadence, reach-hold and champions-growth-profiler.
 ---
 
 # REACH
@@ -17,6 +17,7 @@ One skill, five stages, one orchestrator. Pick the stage from the ask, read only
 | **reach-activate** | Stage A. Multi-channel surround-sound play, one-page asset, optional deck | `modes/reach-activate/MODE.md` |
 | **reach-cadence** | Stage C. Six-touch follow-up cadence: Day 1, 3, 7, 14, 21, 30 | `modes/reach-cadence/MODE.md` |
 | **reach-hold** | Stage H. Existing account depth, call prep, what to ask | `modes/reach-hold/MODE.md` |
+| **domain-drop** | A team member drops a company domain and needs the 360 read plus a sequence shaped for Harbinger, Salesforce, Outlook or plain email. Also the managed agent's system brief | `modes/domain-drop/MODE.md` |
 
 ## Routing rules
 
@@ -25,4 +26,5 @@ One skill, five stages, one orchestrator. Pick the stage from the ask, read only
 3. The Champion's Hour runs stages in order and hands each stage's output to the next. Where the orchestrator file says "logic from reach-X", read `modes/reach-X/MODE.md`.
 4. Every stage ends with the no-ai-slop pass on anything the prospect will read. Where the vinh-copywriting style is required for persuasive copy, use that instead of no-ai-slop.
 5. Never invent customer names, data counts or statistics. Unverified numbers are labeled as estimates.
-6. Requests to position Champions as a data broker, qualify a company as an operational-data supplier, or evaluate data-licensing buyers route to the `data-brokerage` skill, not REACH.
+6. Every Research output (R, profiler, domain-drop) applies the Champions 360 lens, `modes/champions-growth-profiler/references/champions-360.md`: score sell, buy, partner, barter, co-create, invest, host, hire, land, learn, acquire; pick one primary mode; hold the rest for Deep. LakeB2B is a candidate, not the default.
+7. Requests to position Champions as a data broker, qualify a company as an operational-data supplier, or evaluate data-licensing buyers route to the `data-brokerage` skill, not REACH.

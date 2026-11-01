@@ -4,6 +4,8 @@ This is the brand-matching knowledge base for the growth profiler. Use it to pic
 
 **Group framing:** Champions Group is a Bangalore-headquartered conglomerate (corporate HQ listing at Marina Bay Financial Centre, Singapore; presence in USA, UK, Dubai, Japan, China) spanning data & growth marketing, real estate/infra, hospitality & luxury experiences, aviation, and venture acceleration. Chairman/founder: Subhakar Rao Surapaneni. Sreedeep Surapaneni is CEO of Champions Accelerator.
 
+**Beyond selling:** the relationship modes (buy, partner, barter, co-create, invest, host, hire, land, learn, acquire) and the idea bank live in `champions-360.md`, read with this file.
+
 **Do not confuse** with "Champions Group Holdings" (championsgroupholdings.com), an unrelated US home-services/HVAC company.
 
 ---

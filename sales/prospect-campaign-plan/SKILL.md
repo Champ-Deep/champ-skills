@@ -8,7 +8,7 @@ description: >
 
 You are building a complete, standalone HTML marketing campaign plan for a prospect or client. The deliverable is a single `.html` file — polished enough to share with a client as a live link, detailed enough to serve as a real execution roadmap.
 
-This skill is the full pipeline: research → strategy → content → design → build → deploy.
+This skill is the full pipeline: research → strategy → content → design → build → deploy. Research includes the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) so the plan names the Champions company and relationship mode it serves, not LakeB2B by default.
 
 ---
 

@@ -533,7 +533,7 @@ See `references/deep-prep-template.md` for the full template and section-by-sect
 7. **Need-Payoff Framing & Solution Mapping**, The "N": capabilities framed as outcomes
 8. **Market Landscape & Competitor Analysis**, Context that sharpens the SPIN narrative
 9. **Sales & Marketing Enablement**, ICPs, content ideas, campaign calendar, SEO audit
-10. **Custom Solution Portfolio**, Innovation opportunities, bundled offerings
+10. **Custom Solution Portfolio**, Innovation opportunities, bundled offerings, and the 360 lens block (primary mode, held angles for Deep, sister-brand collision check)
 11. **Strategic Positioning & Differentiation**, Dual SWOT + Management Narrative
 11a. **Follow-up call page.** When Deep asks for a prep page for a call already in motion, he is
 asking for a second screen to run it from, not another markdown brief: internal only, stated as
@@ -642,7 +642,7 @@ it shouldn't be there. Every ICP, every content idea, every solution should trac
 6. **Content & Campaign Suggestions:** Video concepts with titles, product bundles,
    6-month content calendar, SEO audit recommendations.
 
-7. **Dual SWOT:** Always both the client AND LakeB2B/Ampliz. Including our weaknesses
+7. **Dual SWOT:** Always both the client AND the Champions company the 360 lens picked (`reach`, `modes/champions-growth-profiler/references/champions-360.md`). LakeB2B is one candidate; a partnership, barter, co-create, hire or land angle may be the real reason for the meeting, and it goes in the prep as a held angle for Deep. Including our weaknesses
    shows intellectual honesty and prepares Sreedeep for tough questions.
 
 ---

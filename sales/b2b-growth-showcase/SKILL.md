@@ -26,7 +26,7 @@ If the user's ask clearly names the mode, don't ask. If ambiguous between images
 
 ## Step 0, Preflight (report result in one line)
 
-1. **Brand:** LakeB2B, Ampliz, or Champions Group? Ask once if unclear; it changes palette and value-prop copy. Read the matching brand-guidelines skill if present.
+1. **Brand:** LakeB2B, Ampliz, or Champions Group? Ask once if unclear, or run the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) when the user cannot say; it changes palette and value-prop copy. Read the matching brand-guidelines skill if present.
 2. **Mode:** A, B, or C (above).
 3. **Connectors:** web research available; for Modes A/C, Higgsfield MCP connected (never substitute text descriptions for actual images; if disconnected, stop and offer research + ICP brief only).
 4. **Compliance sanity check:** if the target domain is a government entity, state-owned company in a sanctioned/restricted sector, or otherwise high-risk for a Western data vendor to prospect, pause and flag before building a campaign against it. Skip for ordinary commercial sites.

@@ -9,6 +9,8 @@ Converts contacts collected at real estate, family office and investment events 
 
 The chairman (Subhakar Rao, Champions Group) collects cards at events. Someone else, usually Champ, has to work out who these people are and get a meeting booked before the memory of the handshake fades. Speed and accuracy both matter: a wrong-category pitch to a family office wastes the only warm introduction that contact will ever give.
 
+If a card fits another Champions company or a non-sale mode (partner, invest, buy from) better than an Infratech pitch, say so in the categorisation and route it through the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) instead of forcing the land angle.
+
 ## The company you are pitching
 
 Champions Infratech builds man-made beach communities across India, designing and delivering Crystal Lagoons water technology as the anchor amenity for residential, township and hospitality projects. It positions itself as a licence holder of that technology. Investors can enter at project level alongside builders or at infrastructure level, and partners can participate through referrals into their own landlord, builder and investment-firm relationships.

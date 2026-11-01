@@ -76,7 +76,7 @@ pulled from mail or the vault, open it and confirm it is the current version: fi
 reused across rounds, so an attachment that matches by name can be an earlier iteration. Verify by content
 (dates, figures, named initiatives), not by filename, and name the version you verified when recommending
 it for send. Apply standing rules: no em dashes ever, no section-number
-tags, correct entity names, Lake B2B vs SPAN client separation where relevant.
+tags, correct entity names, Lake B2B vs SPAN client separation where relevant, and the 360 mode the meeting revealed (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) when it differs from the one it was booked under.
 
 ### Step 4: Add the prepared-plus extra
 

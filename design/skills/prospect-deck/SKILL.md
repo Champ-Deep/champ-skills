@@ -19,7 +19,7 @@ description: >
 
 ## Philosophy
 
-This skill exists because Sreedeep's sales process is consultative, not transactional.
+This skill exists because Sreedeep's sales process is consultative, not transactional. Research applies the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`): the deck pitches the Champions company and relationship mode the lens picked, and holds barter, co-create or invest angles for Deep rather than putting them on a slide.
 Every deck should feel like you already know the prospect's world: their company's pain
 points, their professional trajectory, their industry pressures, and the specific angles
 where Champions Group's portfolio can help. The deck is a conversation starter, not a

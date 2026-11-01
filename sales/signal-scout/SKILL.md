@@ -54,7 +54,7 @@ and proceed.
 3. **List size** — default: top 25. Deeper verification per company at 25; lighter at 50-100.
 4. **Target roles** — which titles to map per company (default: CEO + CFO; add whatever the
    signal implies — a hiring-surge signal points at CHRO, a product launch at CMO/CPO).
-5. **Pitch context** — what is being sold and by which brand (e.g., Lake B2B data services,
+5. **Pitch context**: what is being sold and by which brand, or which relationship mode if not a sale: run the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) when the user does not know (e.g., Lake B2B data services,
    Ampliz healthcare intelligence, SGS, Champions Accelerator, or a custom offer). If a brand
    voice skill exists for that brand, load it before writing pitches. If the user declines a
    product angle, write signal-only conversation openers instead.

@@ -7,6 +7,8 @@ description: "Build the shareable client call agenda page (agenda, outcomes, att
 
 Every external call (client, prospect, partner) gets a one page agenda the client sees before the call. This skill turns five answers into that page, publishes it as a link, and writes the three snippets that carry the link: calendar invite, email, Zoom chat.
 
+Before the agenda, note the relationship mode from the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`): a partner, vendor or barter call gets a different agenda than a sale, and an angle held for Deep never appears on the page the client sees.
+
 This is the light, team-wide version. Deep's own SPIN dossier and cheat sheet live in the meeting-prep skill. Use this skill for the page the counterparty sees.
 
 ## Step 1: Intake (ask only what is missing)

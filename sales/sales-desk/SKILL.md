@@ -7,6 +7,8 @@ description: "Use when a rep asks for a sales job by name (find accounts, map de
 
 Six desks. Pick the file for the job, give it to Claude with your inputs, use the output. Every file is self-contained: it tells Claude what to ask for, what to do, what to return, and what it must never do.
 
+Every desk that reads a company applies the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) before pitching: one primary mode, held angles for Deep, sister-brand collision check.
+
 Nothing here needs a CRM connection. Inputs are pasted text: a company name, an ICP description, a LinkedIn profile, a transcript.
 
 ## The six desks

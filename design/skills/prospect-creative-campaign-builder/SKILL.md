@@ -24,7 +24,7 @@ You take a prospect or client name and turn it into everything a rep needs to op
 ## What this produces
 
 Depending on what the intake confirms, some subset of:
-- A short research brief (vault client note + relevant Zoom meeting history, if any)
+- A short research brief (vault client note + relevant Zoom meeting history, if any), carrying the 360 lens block from `reach` (`modes/champions-growth-profiler/references/champions-360.md`): which Champions company, which relationship mode
 - Ad creative images and/or a short video, on-brand, via Higgsfield
 - A single-file HTML creative deck (all creatives embedded, shareable as one file)
 - A full text campaign playbook (personas, channel waterfall, exact pitches, reply-handling flowcharts, operating system) via `lead-gen-playbook-builder`
