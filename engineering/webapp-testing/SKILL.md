@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.
+description: Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots (including authenticated screens for demo kits and video briefs), and viewing browser logs.
 license: Complete terms in LICENSE.txt
 ---
 
@@ -92,6 +92,36 @@ animation, globe, ticker, or polling loop keeps issuing requests, so `networkidl
 times out even though the app is healthy. On those pages wait for `load` plus
 `page.wait_for_selector('<known element>')` and a short `wait_for_timeout` instead,
 and treat the timeout as a property of the page, not a failure of the app.
+
+## Capturing a set of real screens (demo, walkthrough, video brief)
+
+When the deliverable is a shot list other people read (a demo kit, a handout, a
+prompt for an external video studio), capture before you write:
+
+1. **Put the capture script inside the repo tree** (e.g. `<repo>/capture.mjs`,
+   untracked, deleted after the run). Node resolves `node_modules` by walking up
+   from the script's own path, not from the working directory, so a script written
+   to scratch or `/tmp` cannot import the repo's Playwright or app modules no
+   matter where you invoke it from. The symptom is a bare `ERR_MODULE_NOT_FOUND`
+   for a package that is plainly installed.
+2. **Seed the minimum data the screens need** (one campaign, one uploaded list,
+   one populated state) before shooting. An empty app produces a shot list that
+   describes nothing.
+3. **Reach authenticated screens by minting a session, not by driving the login
+   form**: call the app's own auth API (register / invite / login endpoint) with
+   `curl`, then inject the cookie into the browser context
+   (`context.add_cookies([{name, value, domain, path}])`). One call beats selector
+   churn, and it works on routes that only render for a live session.
+4. **Revoke that session and delete the seeded account when the captures are
+   done.** A throwaway session left alive is an open door on a production host.
+5. **Open every capture before writing copy that describes it.** Narration,
+   walkthrough steps and video-prompt copy must state only what the pixels show:
+   exact control labels, wording of empty states, send caps and spend limits read
+   from the source at capture time. What the code suggests a screen says and what
+   it renders differ at precisely the moment the copy matters, and a brief that
+   promises a nonexistent screen ships a broken demo.
+6. **Report the capture list as file names** alongside the brief, so the reader
+   opens the same frames you verified.
 
 ## Waiting without `eval`: respect the page's CSP
 

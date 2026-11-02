@@ -54,11 +54,28 @@ PID or its background-job handle, never a broad `pkill -f <script name>`. The pa
 matches every process with that name on the machine, so it takes down whatever else is
 running under it, and your own run reports success either way.
 
+The inverse direction bites too: a script can report success as a failure, because
+`sys.exit("message")` prints to stderr and returns 1. Never gate a step on the exit
+code of a script you or a teammate wrote; gate on the effect, by calling what the step
+provisioned (the user, the route, the file) and asserting it answers. Wrapping such a
+step in `|| true` to make it green is the same error in reverse: it swallows the real
+failure too.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
 confirm green. Run this on converted and inherited gates, not only the ones just
 written. A gate never seen failing is a gate nobody knows is armed.
+
+## The gate you wrote for a deployment has never run anywhere
+
+A smoke script, deploy check or post-rollout probe is unverified code until something
+has executed it. Run it against a local instance in the same configuration first, so
+its first run diagnoses the deployment instead of debugging itself: a missing env
+var, a wrong path or a malformed assertion otherwise surfaces as "the deploy failed"
+and gets reported upward as a platform problem. Then break the guard locally and
+confirm it goes red, so the live run means something. Only after both does the same
+script pointed at the real host earn the word "passed".
 
 ## Prove "pre-existing" on the baseline, not from memory
 

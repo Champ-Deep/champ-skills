@@ -316,7 +316,7 @@ the target of the gate becomes the production URL: `curl -o /dev/null -w "%{http
 route and every static asset the app ships (nested asset paths, generated media, credit or
 license files), then re-shoot the same screenshot set against the live host. A static server
 that serves a path locally can 404 it in the container, and a client bundle can be stale
-there while current on disk; only the production read proves it. Cursory `200` on the health
+there while current on disk; only the production read proves it. When the app ships a version or commit endpoint, the SHA it reports compared against the commit you deployed is that proof in one call, so check it before falling back to grepping served bytes. Cursory `200` on the health
 route is not verification of the surfaces people will open. Grep the served bytes too: fetch one asset the change touched and grep it for a string only the new code contains (a new identifier, a new rule), because a `200` proves the route answers, not that the container is serving the new build.
 
 **In an overflow-constrained panel, order content by whether the table must act on it.**

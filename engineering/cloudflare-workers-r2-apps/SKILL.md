@@ -50,7 +50,7 @@ as finished while it serves the holding page.
 ## Pitfalls (each one was a real failed run)
 - **R2 `get(key, { range: request.headers })` sets `obj.range` even when no Range header was sent.** Only answer 206 when `request.headers.has('range')`, or every full request comes back partial. Default `offset` to 0 and `length` to `size - offset` (suffix ranges).
 - **`wrangler deploy` intermittently fails with `Received a malformed response from the API`.** Transient: sleep 5 and rerun. Always grep the deploy output for `Deployed` before running tests, or the gate runs against the previous build.
-- **workers.dev returns 403 to Python `urllib` default User-Agent.** Set a custom `user-agent` header. Node `fetch` and curl are fine.
+- **workers.dev returns 403 to Python's default User-Agent** — `urllib`, and every client layered on it (`requests`, httpx defaults). Set a custom `user-agent` header on the probe. Node `fetch` and curl are fine, so one Python 403 beside a curl 200 is a client signal, not an outage.
 - **Never keep a collection in one KV JSON document.** Two concurrent writers (admin edit + create) read-modify-write and one loses its change silently. One key per record (`screen:<id>`) and `list({prefix})` to enumerate.
 - **KV `get` can return a 1 to 2s stale read right after `put`.** A UI that refetches after save shows the old state. Apply the PUT response locally, stamp records with `updated`, and keep the local copy when it is newer than what a refetch returns.
 - **KV `list()` is eventually consistent (up to 60s)** even in the same request path. Any test that writes then lists needs a bounded retry; any online indicator built on list metadata needs a window of at least 90s.
@@ -80,6 +80,29 @@ as finished while it serves the holding page.
 - **A secret change does not recreate the Durable Object, and `envVars` only apply at container start.** A container pinged by cron never idles out, so new keys never arrive. Have the Worker (which always sees current secrets) RPC its env to the container once per isolate per fingerprint; the container stores the fingerprint `onStart` and calls `destroy()` on mismatch. Verify by `secret put` then `secret delete` and watching the running app's config both ways. `wrangler secret delete` has no `--force`: pipe `yes`.
 - Apply D1 migrations in the deploy script before `wrangler deploy`, never at container boot. `--secrets-file` is additive, so a redeploy never wipes keys added later.
 - Never `set -a; . env.env` in a persistent terminal: later test runs inherit the secrets and fail on leaked env. Source it inside `bash -c` only.
+
+## Containers: one codebase shipped as N brand editions
+Shape for publishing a single authenticated app as several branded sites on one
+account. The topology below is the design the deploy kit was written to; the
+per-brand run was still gated on credentials, so treat the commands as intent and
+the smoke script as the proof step.
+
+- **One router Worker per edition, and the container is reached only through it.**
+  The brand URL is `qc-<brand>.<account>.workers.dev`; the Worker forwards `fetch()`
+  to that edition's container. One Worker per brand keeps host-based routing in
+  config rather than in if-branches shared by every brand.
+- **One container and one database name per edition, one cluster.** Two public
+  brands sharing a database leak each other's rows across domains the moment either
+  uploads, and a "wipe on deploy" then wipes both. Fresh-deploy-empty is the
+  default: seed data after the smoke test passes, never before, so an empty catalog
+  is distinguishable from a broken one.
+- **Admin credentials generated at deploy, held in the OS keychain, echoed as the
+  keychain entry name only.** The report names the entry, never the value.
+- **A frontend container is not a public route on its own.** Serve it through the
+  router or leave it unlisted, so there is exactly one origin per brand to put in
+  front of a client.
+- See `public-visitor-mode` for the no-login contract the router must enforce (spend
+  cap, per-IP count, model lock, admin closed).
 
 ## Pushing the built site
 - **A repo whose working branch is not `main` will not fast-forward `main` when you push it.** Build lanes create `build/<name>` branches, and a later hand-built round usually runs on that branch with no local `main` at all, so `git push origin main` either rejects as non-fast-forward or silently pushes a stale branch. Push the checked-out commit explicitly (`git push origin HEAD:main`), then confirm with `git fetch` plus `git rev-parse --short HEAD origin/main` that both hashes match. Before forcing anything, prove the divergence is harmless: `git merge-base --is-ancestor origin/main HEAD` says the remote's extra commits are already contained in what you hold, and only then is a plain push safe.

@@ -20,7 +20,8 @@ Provider commands for Deep's Outlook mailbox through the configured `ms365` MCP 
 - New outbound mail must exist as an unsent Outlook draft, optionally with a document attached.
 - Verify a draft's recipients, subject, attachments, or draft state before Deep sends it.
 - Attach a file to an existing draft when only the message id is known.
-- Deep has explicitly approved sending a staged draft, and the send must be executed and proven by read-back.
+- Deep has explicitly approved sending this exact mail, and the send must be executed and proven by read-back.
+- Reading an attachment someone else sent for analysis (an export Deep was forwarded, a report the sender owns): same pair as step 6, `list_mail_attachments` with `select` trimmed to `id,name,size` so inline images never come back, then `download_bytes_to_file` with `target /me/messages/{messageId}/attachments/{attachmentId}/$value` to a scratch path that does not exist yet. The downloaded file is an input to analysis, so note its size and the sender's stated cutoff alongside the figures drawn from it.
 
 Don't use for: inbox triage or reply policy (`email-inbox-triage`), terminal IMAP/SMTP (`himalaya`), Gmail or Drive (`google-workspace`).
 

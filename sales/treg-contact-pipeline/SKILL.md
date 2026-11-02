@@ -11,7 +11,7 @@ First use on the Virtusa build (17 to 18 Sep 2026) cost $17.93 for 489 usable co
 
 ## Non-negotiables
 
-1. The API key lives in one place: TREG_API_KEY in ~/.hermes/.env (mode 600, git-excluded), filled by Deep with read -s. Never in a vault note, a script, a log or a chat reply; a key pasted in chat is exposed, so ask for rotation and never use it. Grep the working folder for the key before finishing.
+1. The API key lives in one place: TREG_API_KEY in /Users/deep/Celsus/.env (dotfile so Obsidian and Obsidian Sync skip it; mode 600; git-excluded), filled by Deep with read -s. ~/.hermes/.env holds only a pointer comment, never the key. Load it per run with `set -a; . /Users/deep/Celsus/.env; set +a`. Never in a vault .md note, a script, a log or a chat reply; a key pasted in chat is exposed, so ask for rotation and never use it. Grep the working folder for the key before finishing.
 2. Every Treg call is made with that API key so spend is tracked per key. The treg CLI must be logged in with `treg login --token "$TREG_API_KEY"`, never a browser or email session: a session token in ~/.treg/config.json bills the org without an API key attached, which is the untracked spend Deep wants gone. Code reads TREG_API_KEY only; do not add a TREG_TOKEN fallback.
 3. Snapshot the balance before and after every stage: GET /orgs then GET /orgs/{id}/balance. Read X-Treg-Cost-Micro on every response and keep a ledger file (stage, endpoint, calls, cost). Report the ledger with the deliverable.
 4. Set a dollar cap per stage before the first call and stop at the cap. Ask the user before any stage expected to cost more than $5, and before any endpoint priced above $0.05 per call.

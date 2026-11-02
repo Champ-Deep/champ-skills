@@ -78,6 +78,31 @@ data team starts reporting per region after having reported one market only:
 - **seed on migrate, not only at build.** An already-deployed database never runs
   the build script again; the migration path is what upgrades it.
 
+## One label column holding two dimensions double-counts every total
+
+Supplied summaries routinely stack cuts of different kinds in a single table: rows
+for each industry, then rows for each employee-size band, under one label column and
+one value column. `SUM` over that table adds straight across the stack, so every
+grand total counts each subject once per dimension present. Nothing errors, because
+the arithmetic is internally consistent, and the inflated number reaches a reader
+who has no reason to doubt it.
+
+- **Read the label column for distinct dimension families before any aggregate
+  runs.** Industry names, size bands, regions, and total or catch-all rows are
+  different families sharing one column. A label matching no family already seen
+  means a second dimension has started.
+- **Split at ingest into one table per dimension** (totals, by-industry, by-size),
+  each with its own header, all seeded from the same source file. Merging later is a
+  query; un-merging after a number has been published is a correction with a
+  "first reported" trail.
+- **Assert the invariant across the split, not a hard-coded value:** each
+  dimension's rows must sum to the stated total independently, and no total may
+  equal the sum of both dimensions at once. That catches the class when the data is
+  replaced; a pinned magnitude only catches it once.
+- Keep total rows out of the breakdown they summarize (same mechanism as the
+  catch-all row in `SKILL.md`): a total sitting beside its own components is
+  counted twice by every unfiltered query.
+
 ## The real-file test
 
 A field-mapping heuristic is only ever proven by the supplier's actual file. Keep

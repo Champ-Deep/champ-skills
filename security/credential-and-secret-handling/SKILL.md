@@ -113,6 +113,19 @@ status code, never a printout.
 When auditing a file that may hold live values, report key NAMES, value LENGTH,
 and a token-shaped yes or no. Never print the value, not even truncated.
 
+When the question is only "is every required key configured?", do not read the
+values at all, not even for a length: list the names of non-empty assignments and
+the names of empty ones, and report the two lists plus how many are empty.
+
+```bash
+grep -oE '^[A-Z_][A-Z0-9_]*=.+' env.env | cut -d= -f1   # configured, name only
+grep -oE '^[A-Z_][A-Z0-9_]*=$'   env.env | cut -d= -f1   # declared but empty
+```
+
+That answers a readiness audit ("all 20 keys set, two missing") without any
+value ever entering the transcript, and it is the correct check before a deploy
+that would fail on an unset variable.
+
 The same applies to scanner output: gitleaks, trivy and similar tools print the
 matched value in their own human-readable results even when redaction flags are
 set, and tool output reaches the transcript exactly like a paste. Run them with
