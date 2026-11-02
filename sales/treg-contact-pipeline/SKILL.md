@@ -11,11 +11,12 @@ First use on the Virtusa build (17 to 18 Sep 2026) cost $17.93 for 489 usable co
 
 ## Non-negotiables
 
-1. The API key lives in an environment variable only (export TREG_API_KEY=...). Never in a file, a script, a log, a vault note or a chat reply. Grep the working folder for the key before finishing.
-2. Snapshot the balance before and after every stage: GET /orgs then GET /orgs/{id}/balance. Read X-Treg-Cost-Micro on every response and keep a ledger file (stage, endpoint, calls, cost). Report the ledger with the deliverable.
-3. Set a dollar cap per stage before the first call and stop at the cap. Ask the user before any stage expected to cost more than $5, and before any endpoint priced above $0.05 per call.
-4. Save every raw response under raw/ so nothing is bought twice.
-5. No em dashes or en dashes in any file or output.
+1. The API key lives in one place: TREG_API_KEY in ~/.hermes/.env (mode 600, git-excluded), filled by Deep with read -s. Never in a vault note, a script, a log or a chat reply; a key pasted in chat is exposed, so ask for rotation and never use it. Grep the working folder for the key before finishing.
+2. Every Treg call is made with that API key so spend is tracked per key. The treg CLI must be logged in with `treg login --token "$TREG_API_KEY"`, never a browser or email session: a session token in ~/.treg/config.json bills the org without an API key attached, which is the untracked spend Deep wants gone. Code reads TREG_API_KEY only; do not add a TREG_TOKEN fallback.
+3. Snapshot the balance before and after every stage: GET /orgs then GET /orgs/{id}/balance. Read X-Treg-Cost-Micro on every response and keep a ledger file (stage, endpoint, calls, cost). Report the ledger with the deliverable.
+4. Set a dollar cap per stage before the first call and stop at the cap. Ask the user before any stage expected to cost more than $5, and before any endpoint priced above $0.05 per call.
+5. Save every raw response under raw/ so nothing is bought twice.
+6. No em dashes or en dashes in any file or output.
 
 ## Stage 0: scope (free)
 
