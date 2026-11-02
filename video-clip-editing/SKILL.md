@@ -132,6 +132,19 @@ A 4-second 1080x1920 title card proves the whole toolchain end to end in about
 20 seconds. Finding a broken render path after building three full compositions
 costs far more than the smoke test ever does.
 
+## Craft rules (from the @socialcontentking study, heuristics until tested on our footage)
+
+- Music cuts land about 2 frames before the beat, not on it. Do not cut every beat (cut one, skip two). Loudest movement goes on the drop.
+- Smooth means eased speed ramps and zooms, motion blur on fast moves, a Rec 709 grade on log footage, and shake only on the hit.
+- B-roll is evidence: the shot after a claim must show the claim. If muting the voice leaves a shot that proves nothing, replace it.
+- Sound kit: whoosh per camera move, low sub hit per reveal, paper slide per text card, click per number, room tone under everything so the voice never sits in silence.
+- Retakes: find repeated lines in the transcript and keep the best take, never the first.
+- Before render, scan frames for client data on screens, wrong clocks and anything else that should not ship, then blur or cut.
+- A correction Deep gives once ("captions never over the face") becomes a line in this skill, not a chat memory.
+- Review the full output. Error rate grows with length, so long-form needs a full watch-through.
+
+Curriculum and drills: `/Users/deep/Celsus/Atlas/Research/Editing Curriculum - Social Content King.md`.
+
 ## Standing rules
 
 - Never claim a clip is rendered or postable without real tool output behind it.
