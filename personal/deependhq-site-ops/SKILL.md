@@ -324,6 +324,10 @@ that are never optional:
   in gitignored `.dev.vars` and upload with `wrangler secret bulk`, never chat,
   and no cap ever defaults to a value that can spend money.
 
+## Embedding the Ask Deep widget (assistant.deependhq.com)
+
+The tag lives hand-authored in the 40 root, `company/` and `post/` shells (prerender copies, nothing templates it), so a change is a `sed -i ''` over `git grep -l static/widget.js -- '*.html'`. The site CSP is the trap: the preview worker has no site CSP, so images the host loads from `assistant.deependhq.com` (launcher icon, sprites) only break live. `img-src` in `worker/index.js` must list that origin (done for the pixel skin, 3 Nov). The widget's news card also pulls blog images from lakeb2b.com, which `img-src` blocks: a pre-existing console error with or without `data-skin`, owned by the AI news card, not the skin. Production agent deploy order: merge PR, `cloudflare/deploy.sh` from the merged branch, curl `static/deep-host.js` (404 for about a minute while the container rolls), compare its sha256 to the repo file, then touch the site.
+
 ## Analytics and entry-schema depth
 
 How first-party analytics is wired and proved (CSP, dataset-before-binding
