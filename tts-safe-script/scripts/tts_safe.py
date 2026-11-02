@@ -18,7 +18,7 @@ LEXICON = {
     "SQL": "S Q L", "SDR": "S D R", "BDR": "B D R", "SMB": "S M B", "NPS": "N P S", "USP": "U S P",
     "B2B": "B to B", "B2C": "B to C", "D2C": "D to C", "LakeB2B": "Lake B to B", "Lake B2B": "Lake B to B",
     "CMO": "C M O", "CEO": "C E O", "CFO": "C F O", "CTO": "C T O", "COO": "C O O", "CIO": "C I O",
-    "CISO": "see-so", "CRO": "C R O", "VP": "V P", "HR": "H R", "HQ": "H Q",
+    "CISO": "see-so", "CRO": "C R O", "VP": "V P", "HR": "H R", "HQ": "H Q", "DC": "D C",
     "CRM": "C R M", "ERP": "E R P", "EHR": "E H R", "API": "A P I", "SaaS": "sass", "SKU": "skew",
     "KPI": "K P I", "OKR": "O K R", "KRA": "K R A", "ROI": "R O I", "ARR": "A R R", "MRR": "M R R",
     "LTV": "L T V", "CAC": "C A C", "CAGR": "C A G R", "EBITDA": "ee-bit-dah", "YoY": "year on year",
