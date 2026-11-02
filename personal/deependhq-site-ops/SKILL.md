@@ -301,6 +301,12 @@ wrong app.
    hosts (`curl -sI https://deependhq.com/ | head -1` plus body size) before
    reporting anything as deployed.
 
+## Stacked toolkit PRs and the vault publisher copy
+
+- Merging the parents of a stacked PR one by one makes GitHub report a conflict on the top PR even when `git merge origin/main` in its worktree is clean. Merge origin/main into the top branch locally, rerun the selftests, push, then `gh pr merge`.
+- A `dh-*` worktree's `node_modules` is a symlink; `Cannot find package '@clerk/backend'` means it points at a tree without the toolkit deps. Repoint it to `/Users/deep/repos/dh-toolkit-v4/node_modules`, do not reinstall.
+- After any merge to main, sync the publisher's vault folder or the nightly `rsync --delete` reverts the release: `git archive origin/main | tar -x -C $T` then `rsync -a --exclude content.json --exclude data.js --exclude audio/ $T/ <vault>/Efforts/Active/TheDeepEndHQ/deependhq-site/`. The vault copy owns content.json and audio (its journey is usually newer than main), the repo owns everything else.
+
 ## Releasing a big change through main
 
 Deep's standing instruction for a site-wide upgrade: test it end to end, merge
