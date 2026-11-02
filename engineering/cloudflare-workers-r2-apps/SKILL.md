@@ -110,6 +110,7 @@ each passing a 9-point smoke test, with a live A/B of two data structures on one
 - **A frontend container is not a public route on its own.** Serve it through the
   router or leave it unlisted, so there is exactly one origin per brand to put in
   front of a client.
+- **A deploy worktree goes stale the moment another lane commits a dependency.** A build failing with `Module not found` after pulling new commits is usually a lockfile change, not a broken environment: diff `package.json` against the last successful build, then re-run `npm ci` (not `npm install`) before rebuilding.
 - **Poll a live host defensively and re-login on 401.** During a rollout the
   response shape changes under the poller: a 401 while the new container comes up,
   an error body instead of the payload, an empty seed list. `.json()["key"]` raises

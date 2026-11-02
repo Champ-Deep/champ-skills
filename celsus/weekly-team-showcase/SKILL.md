@@ -24,12 +24,13 @@ One vault note: `Efforts/Active/<effort>/<YYYY-MM-DD> Weekly Update - <topic>.md
 
 1. **One line** (what it does, in plain words) and **the ask of the team**.
 2. **Pre-flight** table (20 to 30 min before): warm every link, sanity question with its expected answer, credentials to clipboard, files staged on the Desktop, backup screenshots open.
-3. **Running order** with minutes: Why (2), What we built (3), Live demo (8), How effective (2), What is next (2), Feedback (3). About 20 minutes total.
-4. **Demo click path**: numbered clicks with exact menu labels, and the one sentence to say at each reveal.
-5. **Scorecard**: before/after numbers from a run you executed, plus cost per use if known.
-6. **What is next**: table of item, owner, status (card ids).
-7. **Feedback to collect**: 4 to 5 specific questions that force a choice, never "any thoughts?".
-8. **If something goes wrong** table, then **Likely questions** with short answers.
+3. **Which link runs what data**: one row per link Deep will present: URL, what is loaded at start, the source file it was built from, and where its variables live (Worker var vs secret, with the names). Plus the admin system and login details for each link: the admin URL path, the user, and where the password is stored. Deep asks for exactly this table when he is about to present; build it from a live check, never from memory.
+4. **Running order** with minutes: Why (2), What we built (3), Live demo (8), How effective (2), What is next (2), Feedback (3). About 20 minutes total.
+5. **Demo click path**: numbered clicks with exact menu labels, and the one sentence to say at each reveal.
+6. **Scorecard**: before/after numbers from a run you executed, plus cost per use if known.
+7. **What is next**: table of item, owner, status (card ids).
+8. **Feedback to collect**: 4 to 5 specific questions that force a choice, never "any thoughts?".
+9. **If something goes wrong** table, then **Likely questions** with short answers.
 
 ## Procedure
 
@@ -42,6 +43,10 @@ One vault note: `Efforts/Active/<effort>/<YYYY-MM-DD> Weekly Update - <topic>.md
 
 ## Rules (learned)
 
+- **Confirm the scope of links with Deep before writing the sheet.** He often presents a subset of what was built. The run sheet covers only the links he names; the rest are not mentioned at all.
+- **Verify what each link actually runs by querying it live** (catalog/summary API or the admin console), not from deploy notes or seed config. When Deep names one canonical source file, make every showcased edition load it, so the comparison is branding only.
+- **Check a data file's provenance before naming its author in the sheet.** Open the file or its git history; a label copied from an earlier note can be wrong, and a wrong name in a doc he presents from costs him credibility in the room.
+- **Answer "which link has what data, where are the logins" before he asks.** Ship the data and admin table in the run sheet by default.
 - **Never put a password on the shared screen.** Pre-flight copies it with `security find-generic-password -s <service> -a <user> -w | pbcopy`. Scripts read from the keychain and never print it.
 - **Serverless or container links sleep.** Cloudflare Containers sleep after the configured idle time and take 2 to 3 minutes to wake. Pre-flight opens every link and asks one known question.
 - **Swap demos (bad file vs good file) need a clean slate.** Delete the datasets, show the empty state, and start a **New Chat** after each swap, because thread history leaks the earlier answers. Confirm the app has no query cache that survives a dataset change.
