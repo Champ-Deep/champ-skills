@@ -83,26 +83,42 @@ as finished while it serves the holding page.
 
 ## Containers: one codebase shipped as N brand editions
 Shape for publishing a single authenticated app as several branded sites on one
-account. The topology below is the design the deploy kit was written to; the
-per-brand run was still gated on credentials, so treat the commands as intent and
-the smoke script as the proof step.
+account. Verified end to end: four editions (two brands, two data variants) deployed,
+each passing a 9-point smoke test, with a live A/B of two data structures on one link.
 
 - **One router Worker per edition, and the container is reached only through it.**
   The brand URL is `qc-<brand>.<account>.workers.dev`; the Worker forwards `fetch()`
   to that edition's container. One Worker per brand keeps host-based routing in
   config rather than in if-branches shared by every brand.
+- **The router must strip the scheme before forwarding to the container.** The
+  library downgrades `https://` for the fetch it makes, but the `request.url` it
+  passes along still carries `https://`, and the container only speaks plain http
+  inside Cloudflare. The container answers 500 for every request, the rollout
+  reports healthy, and the first health poll times out: the failure surfaces as
+  "the deploy never came up", not as a URL bug. Forward `url.pathname + url.search`
+  (or `new Request` on a downgraded URL), never the raw `request.url`.
 - **One container and one database name per edition, one cluster.** Two public
   brands sharing a database leak each other's rows across domains the moment either
   uploads, and a "wipe on deploy" then wipes both. Fresh-deploy-empty is the
   default: seed data after the smoke test passes, never before, so an empty catalog
-  is distinguishable from a broken one.
+  is distinguishable from a broken one. MongoDB embedded in the container (one
+  `mongod --dbpath` per container) is enough when the seed files ship in the image.
 - **Admin credentials generated at deploy, held in the OS keychain, echoed as the
-  keychain entry name only.** The report names the entry, never the value.
+  keychain entry name only.** The report names the entry, never the value. Passwords
+  with secure cookies mean the smoke script must log in through the router, not
+  through the container port.
 - **A frontend container is not a public route on its own.** Serve it through the
   router or leave it unlisted, so there is exactly one origin per brand to put in
   front of a client.
+- **Poll a live host defensively and re-login on 401.** During a rollout the
+  response shape changes under the poller: a 401 while the new container comes up,
+  an error body instead of the payload, an empty seed list. `.json()["key"]` raises
+  and the deploy reports a probe crash rather than a transient. Use `.get(key,
+  default)`, treat 401 as "log in again" (a container restart invalidates the
+  session cookie), and bound the retries. Copy seed files into the image with
+  readable permissions, or seeding exits 0 having loaded nothing.
 - See `public-visitor-mode` for the no-login contract the router must enforce (spend
-  cap, per-IP count, model lock, admin closed).
+cap, per-IP count, model lock, admin closed).
 
 ## Pushing the built site
 - **A repo whose working branch is not `main` will not fast-forward `main` when you push it.** Build lanes create `build/<name>` branches, and a later hand-built round usually runs on that branch with no local `main` at all, so `git push origin main` either rejects as non-fast-forward or silently pushes a stale branch. Push the checked-out commit explicitly (`git push origin HEAD:main`), then confirm with `git fetch` plus `git rev-parse --short HEAD origin/main` that both hashes match. Before forcing anything, prove the divergence is harmless: `git merge-base --is-ancestor origin/main HEAD` says the remote's extra commits are already contained in what you hold, and only then is a plain push safe.

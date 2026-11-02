@@ -235,3 +235,15 @@ Read the whole deploy log after the rollout line, not just the line itself: some
 deploy scripts emit their own failure summary, a failed post-deploy smoke for
 instance, *after* the platform reports the container live. Quoting the first line
 alone reports success for a build that just failed its own gate.
+
+## Score a comparison with the same probe on both variants
+When two designs are being compared (two data structures, two schemas, two layouts),
+running each variant's own test proves only that each one works, not that one is
+better, and the scores are not comparable across different question sets. Define one
+probe (the identical question battery, the identical gesture, the identical metric),
+run it against both variants, and report the two scores side by side. A verdict like
+"the recommended structure answers better" is only a number once the same probe
+produced both numbers, and the losing variant's failures should be listed, not just
+counted, so the reader sees which questions it got wrong. If a variant cannot run the
+probe at all, that is the result, and it belongs in the table rather than in a
+footnote.
