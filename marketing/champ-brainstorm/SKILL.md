@@ -34,8 +34,15 @@ what you're brainstorming. This is intentional — the framework meets you where
 
 ### Mode Detection
 
-At the start of every brainstorming session, determine which CHAMP mode fits best. Ask the
-user if it's not obvious from context. The three modes are:
+First decide whether this is a **live brainstorm** (you and the user are generating ideas now)
+or a **scheduled session prep** (a session with named invitees is already on the calendar or in
+`TASKS.md`, and the user needs to run it). If a prep note for it already exists under
+`Efforts/Active/Ideation/`, that note is the starting point, not a blank page: read it, then
+close its gaps. The full procedure is `references/scheduled-session-prep.md`. Never open a
+scheduled session with the CHAMP questionnaire below: those questions generate ideas, and a
+session that already has a filed one-question brief needs grounding and a run sheet instead.
+
+Then determine which CHAMP mode fits best. Ask the user if it's not obvious from context. The three modes are:
 
 | Mode | C | H | A | M | P |
 |------|---|---|---|---|---|
@@ -49,6 +56,31 @@ persuasion and deal-closing contexts.
 
 If the user's need spans multiple modes (e.g., "I need a product idea AND a go-to-market
 campaign"), run the relevant modes sequentially and cross-reference insights between them.
+
+---
+
+## Scheduled session prep (the session is already booked)
+
+When the ask names a session with people and a date ("the brainstorm I am having today with X
+and Y"), treat it as prep, not ideation. The procedure and the run-sheet and decisions-to-land
+tables live in `references/scheduled-session-prep.md`. These rules hold regardless:
+
+- **Find the existing note first.** `Efforts/Active/Ideation/`, plus the `TASKS.md` row that
+  carries `[e:Ideation]` and the Wispr link. Two competing notes on one session is the failure.
+- **Ground every figure in the source record, not the note's summary.** The prep note cites the
+  Wispr meeting id; pull the transcript with `mcp__wispr__get_meeting`. A
+  `notes.wisprflow.ai/shared/...` link is not readable over HTTP: it returns a sign-in page
+  carrying placeholder text about an unrelated document, which reads as real content and is the
+  trap. The id in the note is the only working route.
+- **The one number the session hangs on is usually smaller than the headline number.** A file of
+  5,300 records may carry 3,000 reachable contacts, and a platform's own match rate may put the
+  usable audience under its delivery floor. State the arithmetic; do not restate the file size.
+- **A session that exists to decide gets a decisions-to-land table**, one row per decision, with
+  a recommendation in every row. Anything that needs Deep's ruling is a row, not a paragraph.
+- **Any spend is a hard hold** and is named as such in the note. The session outputs a
+  recommendation; Deep approves the number.
+- **Check the calendar for the slot.** A "proposed slot" in a note is usually not booked yet,
+  and reporting that is part of the deliverable.
 
 ---
 
