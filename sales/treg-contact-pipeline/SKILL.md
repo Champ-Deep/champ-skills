@@ -58,8 +58,16 @@ The client's first complaint on any list is people who have moved. Verify surviv
 ## Stage 4: contact data, only on verified persona rows
 
 - Email: treg.people.email.find (served by trykitt), $0.005 per hit, returns verified true or false. Only run for rows without an email. Re-verify any email older than 60 days before a send.
+- Gap fill on an existing list: separate each gap from the work you did yourself. Three statuses, one per source: already in the source file (never re-billed), found by this run (billed, with cost), not found (say so, do not guess an address from a naming pattern). A reviewer's first question is which of the three a given cell is.
+- Finding a person when only the role is known: for a company that gives up no named HR or function head, stage two candidates, not one. First the company's own people directory for that title, then a firm-wide people search filtered to senior titles (CHRO, CHRO, CHRO, HR head, HR director, HR manager). Rank by seniority and only promote a row whose name and title both came back with an email; a manager who can route the invitation still counts as a hit, so label it by seniority instead of calling it not found.
+- Never let a role search run on an over-long title list: QuickEnrich caps the title string at 255 characters and raises an assertion after the call is built. Join the list, assert the length, and add that assert to the self-test so the guard fires before any spend.
+- Reconcile the returned address against an allowlist before it reaches the deliverable: the email domain must be the company domain, a subsidiary domain, or a listed parent or alternate. Expect a few legitimate mismatches (a group on a corporate parent domain); report them as a named group with their domains rather than filtering them out silently.
+- Keep raw responses keyed on the request, not just the row, and distinguish an empty result from an error. An error cached as a result is the failure that silently deletes work on resume: the run looks complete and the gap is invisible.
+- Make the run idempotent and resume rather than restart. Snapshot the balance before the first call, persist every raw response as it lands, and on a crash re-run the same command: cached rows cost nothing, only the failed row is re-billed.
+- Self-test on the real fixtures before spending: a dry-run self-test that reads the actual raw response files proves data-level assumptions (field names, length caps, null handling) that a syntax check never touches. Run it after every edit to a parsing function, not just once at the start.
 - Phone: quickenrich.people.phone.find is free on a miss and cheap on a hit; the routed phone finder is $0.245 per hit and refuses under a low cost cap. Buy phones only for the calling file and only on request.
 - Never run backfills in a parallel burst; Hunter returns 403 on bursts, so run sequentially with a short gap.
+- Durability: run long paid jobs as a background process with notify-on-complete rather than a foreground poll. A foreground timeout kills the run at the row it was on and loses everything after the last write, which is exactly the spend a resume is built to protect.
 
 ## Stage 5: deliverables
 
@@ -82,6 +90,26 @@ per company plus title-chunk, so re-asking the same question costs nothing. Surf
 cap and spend-to-date in the UI (a "budget today" tile): the user sees the ceiling without
 opening the console, and the visible number doubles as the check on which config the
 deployed build is actually running.
+
+## Own keys first (BYOK), and where a vendor key must live
+
+Treg's routed endpoints (treg.people.enrich, treg.people.email.find, treg.people.search) run
+"own keys first": a vendor key connected with `treg connections connect --provider <vendor>`
+is tried before any Treg-billed provider and is charged 0 markup (X-Treg-Cost-Micro: 0,
+X-Treg-Served-By names the vendor). Deep's standing rule: a user's own key outranks the house
+key, and Treg is the first paid source in any product waterfall (ChampHarbinger
+`src/lib/enrichment/config.ts`, treg rank 12, moltsets on the house key behind it).
+
+Pitfall: connections belong to the Treg identity that holds them, not to every key you own.
+A product whose TREG_API_KEY was minted under a different Treg login or org will route past
+your connected vendor and pay a Treg-billed provider instead, while the call never appears
+in your `treg audit`. Before claiming a vendor is live in a product, call the product with a
+known contact and check (a) the vendor shows as the field source or X-Treg-Served-By and
+(b) the call appears in `treg audit` under the account that holds the connection. If it does
+not, either mint the product's key in that org (`treg org agent-new <product>`, so spend
+has its own audit trail) or connect the vendor in the account the product key belongs to.
+The MoltSets connection (2026-11-03) lives in the Champions Accelerator org under
+deep@championsmail.com; direct call proof: moltsets.people.enrich.linkedin hit, 0 micro.
 
 ## Cost model to quote before starting
 
