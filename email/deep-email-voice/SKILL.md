@@ -40,6 +40,7 @@ Every draft is: greeting, one context line, the body, one clear ask with a date,
 |---|---|
 | Nudge, 1 item | Prose. Context line, what is open and since when, the ask with a date, a concrete help offer. Never a numbered list of one |
 | Nudge, 2 or more items | One context line, then a numbered list, each item `what: agreed date`, then the ask |
+| Day plan or task sheet for a report | One context line, then a bold day mini-head per day over its own numbered list, each day closing with an `End of <day>: <deliverable>` line, then an explicit `Not expected` list and the evidence rule (one timesheet row per block). Their register: warm on the person, exact on the work | A flat undated list of everything outstanding |
 | Meeting recap | `Thanks for <day>.` then bold mini-heads as plain lines (`Where we landed`, `What I need from you`, `Next steps`), bullets under each, owners and dates on every action |
 | Intro | Who each person is in one line each, why they should talk, the specific first step |
 | Update plus research brief | Two bold mini-heads as plain lines (what changed, what I need from you), each over its own numbered list, then one ask naming the deliverable and a date | One long numbered list mixing changes and asks |

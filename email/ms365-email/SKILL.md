@@ -31,6 +31,7 @@ Don't use for: inbox triage or reply policy (`email-inbox-triage`), terminal IMA
 - Deliver attachments inside the draft. If Deep asks for "the doc", the file is attached to the Outlook draft, not merely linked in chat.
 - Every write is verified by read-back before it is reported done. A successful tool call is not a successful draft.
 - Never put a link in the body that was not actually produced. Omit the sentence and say the link is unavailable rather than inserting a placeholder.
+- Never write a body claim in the past tense about a side effect you have not executed and read back ("I have added you to the repo", "the key is on your machine"): the draft is sent later without you, so an unperformed action ships to the recipient as a fact. Do the action first (invite, share, upload), verify it, then stage; if it cannot happen yet, write it as a commitment ("I will add you once you accept") or drop the sentence and put the action on the decision card.
 
 ## Procedure
 
@@ -64,6 +65,7 @@ Don't use for: inbox triage or reply policy (`email-inbox-triage`), terminal IMA
 - Returning the OData `id` instead of `webLink`: Deep cannot open the draft from the id.
 - Parsing the `mcp_servers` block out of `config.yaml` inside `execute_code`: the sandbox has no `yaml` module. Read the block with `search_files`/`read_file` or parse it in `terminal`, which has the project interpreter.
 - Sending a config-reading command through `terminal` that shells out to a language one-liner (`python3 - <<'EOF'`) instead of using the native tools: the gateway's command guard blocks shell text that looks like it would restart or stop the gateway, and the guard matches words, not intent, so the whole command dies before a byte of your parser runs. Read the block with `search_files`/`read_file` and build the child argv in `execute_code`, which never goes through that guard.
+- A `create_draft_email` that fails with a transport error (fetch failed, timeout) has an unknown outcome: search `list_mail_folder_messages` on `drafts` for the subject and recipient before re-issuing, because a blind retry leaves two identical drafts and there is no edit-draft tool to merge them.
 - Draft body naming a shareable page or document link that was never actually published.
 - Stating an assumption as a fact. If the draft needs a detail nobody confirmed (who approves an access request, which domain TLD to buy), write the conditional sentence with the tag `[CONFIRM: field]` so the gap is greppable, then list every such assumption in the reply so he can strike it before sending. A draft still carrying tags is not sendable as-is, so name it and its tags on the decision card rather than reporting the draft as ready.
 - Guessing a recipient's address because the person is obviously real: a wrong address turns a review step into a sent misfire. Search the vault; if no address exists in the vault or the mailbox, leave `toRecipients` empty, put the draft under WAIT in the pack, and flag the missing address in your reply. Empty To is recoverable, a wrong To is not.
