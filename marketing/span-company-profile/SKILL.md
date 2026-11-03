@@ -7,7 +7,12 @@ description: "Build a SPAN company profile page (for example Zoho, HubSpot, NetS
 
 One page per company that answers "who is this company, what do they run, who uses their products" and links to every SPAN list that mentions them. Reference prototype: the Zoho Company Profile artifact (Oct 2026). Pages live at `/companies/<slug>/` on spanglobalservices.com; the platform sits on its own subdomain.
 
-Load first: `span-brand-guidelines` and `frontend-design-pro` for the visual build.
+Load first: `span-brand-guidelines` (use its Content dialect, `references/design-system.md`) and `frontend-design-pro` for the visual build.
+
+## Who does what (Nov 2026)
+Researchers and writers (Aishwarya, with the data team) supply researched, customer-focused content as structured fields. The builder (Harsha) structures, designs and deploys it. Preeti or Manu approves the first two or three pages before deployment, then review is weekly. Counts come from Santhosh in writing; if two internal sources give different counts for the same product, do not pick one. Ask the data team which one the page is allowed to show, and cut the number until they answer.
+
+Page URL and tree: company profiles at `/companies/<slug>/`, technology lists keep their existing `/technology-list/<category-name>` URLs (do not rename them, it causes cannibalization), new category pages nest under the Technographic Data folder. Prefer a few consolidated category pages over hundreds of thin ones.
 
 ## Why it can rank
 Crunchbase, ZoomInfo, Apollo, Owler and Craft rank company pages for "[company] revenue / employees / competitors". BuiltWith, HG Insights, 6sense and Landbase rank "companies using [technology]". A SPAN profile wins only with data they lack, so every profile carries the extra field.
@@ -35,13 +40,13 @@ Companies that added or dropped the company's main product in the last 90 days, 
 2. Research public facts with WebSearch and WebFetch. Open every page you cite. Where sources disagree (for example Zoho FY25 revenue Rs 12,313 crore vs Rs 13,543 crore), show the range and name both.
 3. Request platform fields from the data team: install base by product, country and size split, internal stack, switching signals. Until they arrive, mark blocks "Sample figures".
 4. Write the answer box, FAQ and section leads with `span-answer-page` writing rules and `vinh-copywriting`.
-5. Build the page with `frontend-design-pro`: full width, Mulish, SPAN greens, sticky "On this page" rail with related lists, bars to one scale, micro-interactions, a build notes toggle on prototypes.
+5. Build the page with `frontend-design-pro` and the tokens in `span-brand-guidelines/references/design-system.md`: full width, Mulish, SPAN greens, sticky "On this page" rail with related lists, bars to one scale, micro-interactions, a build notes toggle on prototypes.
 6. Generate the Markdown twin with the same facts, the source URL and the "not affiliated" line.
 7. Interlink: the profile links to every product users list, rival profiles and comparison pages; each of those links back with anchor text "<Company> company profile".
 8. Run the gates.
 
 ## Build from data, not by hand
-Reuse `Efforts/Active/SPAN Content/Oracle Users Page/build_oracle_page.py` (Celsus vault): data at the top, asserts that the region, industry and size cuts reconcile, one build for the HTML and the `.md` twin. It inherits the Zoho CSS but fixes two of its contrast bugs: in dark mode `.btn.primary` needs dark ink (#06331c) because `--green-d` turns light, and amber pill text needs #7a4d00 on light. Check vision-pass claims about bar lengths or clipped cells with a DOM probe first. On these pages they were false.
+Reuse the Oracle build script, `Efforts/Active/SPAN Content/Oracle Users Page/build_oracle_page.py` in Deep's Celsus vault (ask Deep for a copy; it is not in this repo): data at the top, asserts that the region, industry and size cuts reconcile, one build for the HTML and the `.md` twin. It inherits the Zoho CSS but fixes two of its contrast bugs: in dark mode `.btn.primary` needs dark ink (#06331c) because `--green-d` turns light, and amber pill text needs #7a4d00 on light. Check vision-pass claims about bar lengths or clipped cells with a DOM probe first. On these pages they were false.
 
 ## Gates
 1. `no-ai-slop` Gate mode and zero em or en dashes
@@ -56,4 +61,4 @@ Reuse `Efforts/Active/SPAN Content/Oracle Users Page/build_oracle_page.py` (Cels
 - Every block shows its own last updated date; refresh monthly.
 
 ## Output
-Published artifact or HTML for Manu's team, the `.md` twin, the brief updated in the Celsus vault under `Efforts/Active/SPAN Content/Profiles/`, and a one line request for critique.
+HTML for Preeti or Manu to approve, the `.md` twin, the filled brief (Deep's team files it in the Celsus vault under `Efforts/Active/SPAN Content/Profiles/`), a list of open items (unconfirmed counts, sample-figure blocks, undeployed links), and a one line request for critique. Do not deploy before approval.

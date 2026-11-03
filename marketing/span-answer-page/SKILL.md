@@ -7,7 +7,24 @@ description: "Write short, answer-first SPAN pages (users lists, customers lists
 
 Turns one compact-keywords brief into a short page that answers the search in the first fold and sends the reader to the next page. Model page: "Companies That Use Zoho CRM" in the SPAN Content Playbook doc (Oct 2026). Writer: Aishwarya; reviewer: Preeti.
 
-Load first: `span-brand-guidelines` (or the SGS design notes: Mulish, heading #2e4a3a, 18px body, title case headings, no eyebrows), `vinh-copywriting`.
+Load first: `span-brand-guidelines` (Content dialect in its `references/design-system.md`: Mulish, heading #2e4a3a, 18px answer text, title case headings, no eyebrows), `vinh-copywriting`.
+
+## Page types (all on spanglobalservices.com)
+| Type | What it answers | Length | Skill |
+|---|---|---|---|
+| Technology data page | "[Technology] users list": count, fields, how verified, sample | per template | this skill plus `span-brand-guidelines` |
+| Answer page | One bottom-of-funnel question, separate from the FAQ | 400 to 900 words | this skill |
+| Company profile | "Who is [company], what do they run" | blocks | `span-company-profile` |
+| Comparison | "X vs Y", following the G2 and WMDips formats | 400 to 900 words | this skill, comparison mode |
+| Blog | Long form | long | `span-blog-builder` |
+| PPC landing page | One paid offer, non-indexed | one screen plus form | `span-landing-page` |
+
+Keep existing technology-list URLs. New category pages nest under the Technographic Data folder at `/technology-list/<category-name>`. Two pages never target the same keyword.
+
+## Who does what (Nov 2026)
+Writers (Aishwarya) deliver researched, customer-focused content as structured fields: H1, answer box, facts, H2 answers, FAQ, sources. The builder (Harsha) structures, designs and deploys it with the existing templates, agents and 21st.dev for any interactive piece. Preeti or Manu approves the first two or three pages before deployment, then review is weekly. Page authors are SPAN team members. Counts come from the data team (Santhosh) in writing before the draft starts, not after. If a number is not confirmed, cut it. The page ships with fewer numbers, not later.
+
+Proposed turnaround (draft, not yet in force): 2 working days from approved brief to publish-ready file. Brief and data request first, research in parallel, one sign-off by Preeti before drafting, one review round with one consolidated list of changes.
 
 ## Inputs
 A brief from `compact-keywords`. If there is none, run that skill first. Do not start from a bare topic.
@@ -54,10 +71,16 @@ Tick every line before handoff:
 4. `agent-ready` (markdown twin, llms.txt entry, JSON-LD, raw HTML content)
 5. `visual-verify` at 390 and 1440, light and dark, when a designed page is built
 
+## Cut list and before and after
+Cut: sentences that restate the structure, throat clearing ("In today's fast-paced digital landscape"), empty modifiers (robust, comprehensive, seamless), claims with no number, vertical and date (give those three or delete), anything the answer box already said, hedges, passive clauses.
+
+Before: "With the increasing importance of digital transformation, companies today are constantly seeking reliable and accurate B2B data to help them connect with potential customers."
+After: "412 companies use Zoho CRM in India. Verified 14 Oct 2026. Get the full users list, or take a free sample of 250 contacts." (illustrative numbers)
+
 ## Reference build
-The Oracle users list (`Efforts/Active/SPAN Content/Oracle Users Page/`) is the worked tech-page example. It has a region by size segment counter fed from the data team's breakdown sheet, real sample rows at company level only, and build notes for anything still unconfirmed. Unsourced "top customers" tables and estimated industry shares get removed, not published.
+The Oracle users list is the worked tech-page example. It lives in Deep's Celsus vault under `Efforts/Active/SPAN Content/Oracle Users Page/`; ask Deep for a copy. It has a region by size segment counter fed from the data team's breakdown sheet, real sample rows at company level only, and build notes for anything still unconfirmed. Unsourced "top customers" tables and estimated industry shares get removed, not published. Headline counts must reconcile across region, industry and size cuts before the page ships.
 
 ## Output
 - The page copy as Markdown (for the editor) and, when asked, the WordPress-safe HTML with inline styles (SGS editor does not accept style or script blocks; extras scripts go in the site template).
-- The brief updated with status, URL and publish date, saved in `Efforts/Active/SPAN Content/` in the Celsus vault.
-- One line asking for critique, then turn durable notes into rule edits for this skill.
+- The filled brief with status, URL and publish date, handed to Preeti. Deep's team files it in the Celsus vault under `Efforts/Active/SPAN Content/`.
+- Never send or deploy before Preeti or Manu approves. One line asking for critique, then turn durable notes into rule edits for this skill.

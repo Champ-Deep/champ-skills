@@ -1,7 +1,7 @@
 ---
 name: span-landing-page
 description: Use when building or refreshing a SPAN landing page.
-version: 1.1.0
+version: 1.2.0
 author: Champions Accelerator
 metadata:
   hermes:
@@ -26,6 +26,19 @@ Every section explains with a playable component, never a static diagram or wire
 Optional band, clients, compare and citations disappear when unsupported. Never inherit PEO figures, dates, clients, SLAs, verification or compliance claims into a different offer. Sample layouts are clearly illustrative. Preserve the source's optional phone and custom-requirement semantics.
 
 Local validation is not lead capture. Unwired preview feedback says nothing was sent, with no personal-payload logging or conversion event. Endpoint, tracking and final production URL are launch blockers, not invented defaults.
+
+## Building as a new SPAN page builder (Nov 2026)
+
+Start here if you are Harsha or any builder new to SPAN. The Kanban and "route to a frontend card" wording above is Deep's agent setup; if you build directly, you are the frontend lane.
+
+1. Load `span-brand-guidelines` first and use its Brand dialect (Montserrat, Inter, navy and SPAN Green). Content pages (answer pages, users lists, profiles) use the other dialect, see `span-answer-page`.
+2. Practice page: copy `assets/campaign-landing/examples/span-msp-us` to your work folder, change only `site.json` and the logo, build, open it, and review with Deep before touching a real brief.
+3. Content comes from the SPAN team as structured fields. You structure, design and deploy. Do not write claims, counts or client names yourself.
+4. Approval: Preeti or Manu approves the first two or three pages before any deployment, then review is weekly. Pallab reviews paid pages, budget and banners. Preeti deploys until a deployment path is agreed.
+5. Ad landing pages are ad-only and non-indexed: keep `robots noindex, follow` (already in `template.html`) on every variant. The main SPAN site stays technology focused. One page can yield about ten industry variants (for example recruiting MSP, healthcare MSP). The builder swaps the headline from `?hl=<key>` using `headlines.variants` in `site.json` (the MSP example ships `mssp`, `cloud`, `partner`); anything beyond the headline, such as offer or FAQ copy, is a separate `site.json`.
+6. Interactive pieces come from 21st.dev, ported to vanilla for a static file (see `references/workflow.md`).
+
+Launch blockers you may not fill in yourself: form endpoint, tracking ID, final production URL and domain (confirm the approved domain with Manu or Preeti), and the phone number and privacy URL, which come from the brand book and the PEO/EOR example, not the page you were given. State them in VERIFICATION.md. The SPAN site itself runs PHP with the blog on WordPress, and the deployment path and DNS move are still being worked out with Manu. A GitHub plus Cloudflare Workers pipeline is being piloted on other sites.
 
 ## Run
 

@@ -1,31 +1,42 @@
 ---
 name: span-brand-guidelines
-description: Brand guidelines for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including presentations, documents, SEO content, emails, sales assets, landing pages, internal tools, or any design work requiring SPAN branding. Also trigger for anything involving the Phoenix team, Murugan, Preeti, Gary, or SPAN-facing campaigns. MANDATORY TRIGGER for all SPAN-related content creation and design tasks.
+description: Brand guidelines and design system for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including SPAN web pages, landing pages, presentations, documents, SEO content, emails, sales assets, internal tools, or any design work requiring SPAN branding. Also trigger for anything involving the Phoenix team, Murugan, Preeti, Gary, or SPAN-facing campaigns. MANDATORY TRIGGER for all SPAN-related content creation and design tasks.
 ---
 
-# [[SPAN Global Services]] [[Brand Guidelines]]
+# SPAN Global Services Brand Guidelines
 
-Brand guidelines for [[SPAN Global Services]], enabling creation of on-brand content and internal tools.
+Brand guidelines for SPAN Global Services, enabling creation of on-brand content, pages and internal tools. Read "Which dialect" first: SPAN has two page looks, and picking the wrong one is the most common mistake.
 
-## Brand [[Overview]]
+## Brand Overview
 
-**Company:** [[SPAN Global Services]] (trading names: [[span-kb|SPAN]], SGS, [[span-kb|Span Global]])
+**Company:** SPAN Global Services (trading names: SPAN, SGS, Span Global)
 **Tagline:** Vertical Specialist Data Intelligence
 **Industry:** B2B Data Services, Demand Generation, SEO, Content Syndication
-**Parent:** [[Champions Group]]
-**Positioning:** "Vertical specialist beats horizontal spray-and-pray" — differentiated against ZoomInfo, [[Apollo]], Cognism, Lusha
+**Parent:** Champions Group
+**Positioning:** "Vertical specialist beats horizontal spray-and-pray", differentiated against ZoomInfo, Apollo, Cognism, Lusha
 
-[[span-kb|SPAN]] is an enterprise data services company selling verified B2B contact data, lead generation, email campaign execution, intent data, content syndication, and SEO services across seven vertical markets.
+SPAN is an enterprise data services company selling verified B2B contact data, lead generation, email campaign execution, intent data, content syndication, and SEO services. The current web focus is technographic data: who uses which technology, with counts verified by the SPAN data team.
 
 ---
 
-## Color Palette
+## Which dialect (read first)
+
+| Surface | Dialect | Fonts | Palette | Start from |
+|---|---|---|---|---|
+| Landing pages, ad pages, decks, sales assets | **Brand** | Montserrat headings, Inter body | SPAN Green #1B6B3A, Teal #00D4AA, Navy #0F2B3C (below) | `span-landing-page` and its bundled examples |
+| Content pages on spanglobalservices.com: answer pages, users lists, company profiles, comparisons | **Content** | Mulish only | Mint and forest greens, light and dark modes | `references/design-system.md` |
+
+Both share the voice, the vertical names, the zero-dash rule and the CTA wording. Do not mix fonts or palettes inside one page. The full SPAN design system (tokens, type scale, layout, components, review process) lives in `references/design-system.md`. It is the standard: propose changes to it, do not fork it per page.
+
+---
+
+## Color Palette (Brand dialect)
 
 ### Primary Colors
 
 | Name | Hex | RGB | Usage |
 |------|-----|-----|-------|
-| [[span-kb|SPAN]] Green | #1B6B3A | 27, 107, 58 | THE brand color. Buttons, headers, accents on light. |
+| SPAN Green | #1B6B3A | 27, 107, 58 | THE brand color. Buttons, headers, accents on light. |
 | Light Green | #3DBE6E | 61, 190, 110 | Accent on dark backgrounds, stat highlights |
 | Teal | #00D4AA | 0, 212, 170 | Secondary accent, data highlights, dividers |
 | Dark Navy | #0F2B3C | 15, 43, 60 | Dark backgrounds, hero sections |
@@ -49,14 +60,14 @@ Brand guidelines for [[SPAN Global Services]], enabling creation of on-brand con
 
 | Name | Values | Usage |
 |------|--------|-------|
-| [[span-kb|SPAN]] Green Gradient | #1B6B3A to #2D9B55 | Buttons, CTAs, section headers |
+| SPAN Green Gradient | #1B6B3A to #2D9B55 | Buttons, CTAs, section headers |
 | Teal Accent | #00D4AA to #1B6B3A | Highlight sections, progress bars |
 | Dark Hero | #0F2B3C to #1A3A4A | Dark backgrounds, hero sections |
 | Dark Green Hero | #0C1F18 to #0F2B3C | Richest dark theme variant |
 
 ---
 
-## Typography
+## Typography (Brand dialect)
 
 ### Font Stack
 
@@ -76,13 +87,15 @@ Brand guidelines for [[SPAN Global Services]], enabling creation of on-brand con
 | Labels/Tags | Space Mono | 400 | 0.68-0.75rem |
 | Stats | Montserrat | 800 | 2rem+ |
 
+Content dialect type is in `references/design-system.md`.
+
 ---
 
 ## Brand Voice
 
 | Attribute | Description |
 |-----------|-------------|
-| **Authoritative** | [[span-kb|SPAN]] owns vertical data. Cite stats. Use industry terms correctly. |
+| **Authoritative** | SPAN owns vertical data. Cite stats. Use industry terms correctly. |
 | **Precise** | Specific numbers, specific verticals, specific proof points. |
 | **Direct** | No corporate waffle. CIO/CISO/CMO readers want clarity, not fluff. |
 | **Compliance-Aware** | Healthcare = HIPAA. Legal = GDPR. Always acknowledge compliance. |
@@ -93,6 +106,8 @@ Brand guidelines for [[SPAN Global Services]], enabling creation of on-brand con
 - Never: "We have everyone in our database" (horizontal spray-and-pray language)
 - Never: "data vendor" or "email list provider" (positions as commodity)
 - Never: Generic enthusiasm without proof points
+- Never: an unsourced or unconfirmed number. Counts come from the data team in writing, with a verified date.
+- Never: em or en dashes. Use periods, commas, colons.
 - Always: Lead with the buyer's urgency trigger (HIPAA deadline, CSRD enforcement, etc.)
 - Always: Name the vertical explicitly
 
@@ -100,7 +115,7 @@ Brand guidelines for [[SPAN Global Services]], enabling creation of on-brand con
 
 ## Vertical Identity
 
-[[span-kb|SPAN]] covers seven declared verticals. Always use these exact names:
+SPAN covers seven declared verticals. Always use these exact names:
 
 1. Healthcare and Life Sciences
 2. Renewable Energy and Clean Tech
@@ -112,7 +127,7 @@ Brand guidelines for [[SPAN Global Services]], enabling creation of on-brand con
 
 ---
 
-## Light Theme Design System (Client-Facing and Internal Tools)
+## Light Theme Design System (Brand dialect; client-facing and internal tools)
 
 Use for internal onboarding docs, dashboards, reports, and materials that should feel clean and professional.
 
@@ -140,7 +155,7 @@ Use for internal onboarding docs, dashboards, reports, and materials that should
 
 ---
 
-## Dark Theme Design System (Rich Content and Immersive Tools)
+## Dark Theme Design System (Brand dialect; rich content and immersive tools)
 
 Use for hero sections, presentations, dark-mode tools, and SEO landing pages.
 
@@ -165,59 +180,57 @@ Use for hero sections, presentations, dark-mode tools, and SEO landing pages.
 
 ## Section Rhythm (standing rule, Deep 2026-10-25)
 
-A stat band (contact counts, refresh date, provider counts) that follows a dark or brand-filled hero is always the inverse scheme: Surface White ground, SPAN Green #1B6B3A figures in Montserrat 800, Dim Text labels, Surface Border hairlines between figures. Never fill it with green. It exists to break the page between the dark hero and the body; a green band reads as the hero continuing. Keep this in every skin and iteration of a SPAN landing page.
+A stat band (contact counts, refresh date, provider counts) that follows a dark or brand-filled hero is always the inverse scheme: Surface White ground, SPAN Green #1B6B3A figures in Montserrat 800, Dim Text labels, Surface Border hairlines between figures. Never fill it with green. It exists to break the page between the dark hero and the body; a green band reads as the hero continuing. Keep this in every skin and iteration of a SPAN landing page. If there are no verified counts, omit the band.
 
 ## Logo Rules
 
-- Source: `Atlas/Context Docs/SPAN Global Services/` (PPTX and HTML brand book)
-- Primary logo: horizontal lockup, [[span-kb|SPAN]] Green on white or white on dark
+- Source: the SPAN brand book (HTML and PPTX), held by Deep's team. Ask Deep for the current files. A transparent PNG logo ships inside `span-landing-page/assets/campaign-landing/examples/`.
+- Primary logo: horizontal lockup, SPAN Green on white or white on dark
 - Minimum clear space: match height of capital "S"
 - Never: recolor outside palette, stretch, place on busy backgrounds
 - On dark backgrounds: white logotype or light green version only
 
 ---
 
-## Key People ([[SPAN Global Services|Phoenix]] Team)
+## Key People
 
 | Person | Role | Content Link |
 |--------|------|-------------|
-| [[Gary]] | Head of Sales | Pricing, deals, case studies |
-| [[Murugan]] | Nurturing Specialist | Lead sequences, content distribution |
-| [[Preeti]] | SEO Specialist | Content optimization, landing pages |
+| Gary | Head of Sales, Phoenix team lead | Pricing, deals, case studies |
+| Murugan | Nurturing Specialist | Lead sequences, content distribution |
+| Preeti | SEO Specialist, owns SPAN SEO and page approval | Content optimization, landing pages, final say on page content |
+| Manu | Developer on SPAN web | Technical approval of new pages and deployment |
+| Aishwarya | Content Writer, reports to Preeti | Answer pages, profiles, comparisons |
+| Santhosh | Data team | Confirms every count before it is published |
+| Pallab | Reviews SPAN ad landing pages and budget | Paid campaign sign-off |
+| Harsha | Page builder: structures, designs and deploys SPAN pages from team content | Landing pages and content pages |
 | Lam | Account Manager | Prospect volume, account intel |
-| Tim / [[Travis]] | BD Coordinators | Outbound execution |
+| Tim / Travis | BD Coordinators | Outbound execution |
+
+New pages: Harsha builds, Preeti or Manu approves the first two or three before deployment, then review is weekly.
 
 ---
 
 ## SEO Content Standards
 
-[[span-kb|SPAN]]'s SEO strategy is the "Q2 2026 Authority Blitz" — vertical-specialist content to out-flank horizontal platforms.
+SPAN's SEO strategy is vertical-specialist and technology-led content to out-flank horizontal platforms.
 
-- Format: "Companies Using X" lists, "Vertical Email List" hubs, HIPAA/GDPR/SEC compliance angles
+- Format: "[Technology] Users List" pages, answer pages, company profiles, comparisons, category hubs under Technographic Data; HIPAA/GDPR/SEC compliance angles where a vertical needs them
 - Tone: Evidence-first, compliance-aware, vertical-specialist
-- CTAs: Free sample (250-500 contacts from relevant vertical)
-- Internal linking: All vertical pages cross-link within sector clusters
-- Counter-publishing: when a horizontal (ZoomInfo, [[Apollo]]) publishes generic content, [[span-kb|SPAN]] counters with a specialist angle within the week
-
----
-
-## Source Files
-
-- Brand book: `Atlas/Context Docs/SPAN Global Services/Span Brand Book.html`
-- Brand book (slides): `Atlas/Context Docs/SPAN Global Services/Span Brand Book.pptx`
-- KB: `Atlas/Ops/RAG/KB/span-kb.md`
-- Company note: `Atlas/Companies/SPAN Global Services.md`
-- Thought Leader Pulse (weekly): `Atlas/Context Docs/SPAN Global Services/`
+- CTAs: Free sample (250 to 500 contacts, or 25 free records on a technology page, as the page brief says)
+- Internal linking: pages cross-link within sector and technology clusters, minimum 3 internal links
+- Counter-publishing: when a horizontal (ZoomInfo, Apollo) publishes generic content, SPAN counters with a specialist angle within the week
+- Page rules: `span-answer-page`. Company pages: `span-company-profile`. Ad landing pages: `span-landing-page`.
 
 ---
 
 ## Usage Notes
 
-This skill should be loaded whenever creating:
-- [[span-kb|SPAN]]-branded onboarding materials, internal tools, or templates
-- SEO content, blog posts, or landing pages for [[span-kb|SPAN]]
-- Sales assets, email sequences, or outreach for the [[SPAN Global Services|Phoenix]] team
-- Any HTML/CSS artifact in the [[span-kb|SPAN]] color system
-- Reports or dashboards surfaced to the [[span-kb|SPAN]] team
+Load this skill whenever creating:
+- SPAN-branded onboarding materials, internal tools, or templates
+- SEO content, blog posts, or landing pages for SPAN
+- Sales assets, email sequences, or outreach for the Phoenix team
+- Any HTML/CSS artifact in the SPAN color system
+- Reports or dashboards surfaced to the SPAN team
 
-**Do not** use [[span-kb|SPAN]] brand [[colors]] for [[Ampliz]], [[Lake B2B]], or [[Champions Group]] materials. Each entity has its own brand skill.
+**Do not** use SPAN brand colors for Ampliz, Lake B2B, or Champions Group materials. Each entity has its own brand skill.

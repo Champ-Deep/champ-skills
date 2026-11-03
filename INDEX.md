@@ -44,7 +44,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `champions-group-brand` | Brand Guidelines | Brand guidelines for Champions Group, the parent holding company across 12 ventures. Use when creating ANY Champions Group branded content including presentations, docume |
 | `lakeb2b-brand-guidelines` | Brand Guidelines | Brand guidelines for Lake B2B, a B2B data services company. Use when creating any Lake B2B branded content including presentations, documents, web pages, case studies, so |
 | `metricfox-brand-guidelines` | Brand Guidelines | MetricFox brand guidelines and branded Word builder. Use for any MetricFox-branded proposal, document, deck, email, social post or web page, or anything sent from MetricF |
-| `span-brand-guidelines` | Brand Guidelines | Brand guidelines for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including presentations, documents, SEO co |
+| `span-brand-guidelines` | Brand Guidelines | Brand guidelines and design system for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including SPAN web pages |
 | `champions-ranch-docs` | Branded Documents | Create polished, on-brand Champions Ranch documents as print-ready PDFs in the Ranch green-and-gold editorial style, with the Champions Ranch visual identity and voice ba |
 | `lakeb2b-docs` | Branded Documents | Create polished, on-brand LakeB2B documents as print-ready PDFs in the LakeB2B purple-and-gradient enterprise style, with the LakeB2B visual identity and "B2B growth stac |
 | `anusha-hissaria-style` | Marketing & Content | Custom writing style: Anusha Hissaria. Apply only when the user explicitly requests this skill by its exact name 'anusha-hissaria-style'. |
@@ -262,7 +262,7 @@ Official brand systems for Champions Group companies, one skill per brand.
 | `champions-group-brand` | Brand guidelines for Champions Group, the parent holding company across 12 ventures. Use when creating ANY Champions Group branded content including presentations, docume |
 | `lakeb2b-brand-guidelines` | Brand guidelines for Lake B2B, a B2B data services company. Use when creating any Lake B2B branded content including presentations, documents, web pages, case studies, so |
 | `metricfox-brand-guidelines` | MetricFox brand guidelines and branded Word builder. Use for any MetricFox-branded proposal, document, deck, email, social post or web page, or anything sent from MetricF |
-| `span-brand-guidelines` | Brand guidelines for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including presentations, documents, SEO co |
+| `span-brand-guidelines` | Brand guidelines and design system for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including SPAN web pages |
 
 ## Branded Documents (`branded-docs/`)
 
