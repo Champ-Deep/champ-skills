@@ -51,6 +51,29 @@ questions, with no change in answers.
 `page_type_1`, ...) and make one call. Gate 1 does this now. Any new per-item
 judgement should batch the same way.
 
+**Auditing existing code is part of the same rule.** Batching is a property of
+the caller, not the client, so an older pipeline that loops over items and issues
+one request per item violates it exactly as new code would, and it is invisible
+until you count the calls: a panel run costing roughly 1,000 requests is what a
+per-pair loop produces. Before reporting that a codebase batches, list every call
+site of the client and check each one:
+
+```bash
+git grep -n 'systemOne\|TypeSafeClient' -- '*.py' '*.ts'
+```
+
+When judgements cover more than one input type, put them in ONE batched call keyed
+by item across types (`cta_0` for an image, `cta_1` for a text variant), not one
+call per type: the whole value of the tiers is comparing an image creative against
+a text one on the same criteria, and that comparison needs shared criteria wording
+so the buckets mean the same thing.
+
+**Judging an input fetched from a URL is a server-side request forgery surface.**
+The fetcher must reject private, loopback and link-local ranges, cap the body size,
+and require a known content type, or the judge becomes a probe into the internal
+network. Fixtures must contain both passes and fails, or the harness only proves
+the happy path.
+
 ## SDK basics
 
 `new TypeSafeClient({apiKey, timeout, retry})` then

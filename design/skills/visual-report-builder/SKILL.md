@@ -496,6 +496,31 @@ When Deep will present the page rather than send it, also write the **spoken** s
   in the script as reminders. They are spoken guidance for the presenter, not
   text that may ever reach the screen.
 
+## A brief written while the meeting is running
+
+Some pages are built from a conversation in progress rather than from a document. The
+decisions differ from a report on settled facts:
+
+- **Insight from the room becomes an attributed card, not prose.** A named contributor's
+  point gets its own card: first name and role, the takeaway in large type, the
+  implication beneath it. Attribution inside a paragraph is the one place a reader never
+  looks, so the idea and its owner both disappear.
+- **Unattributable insight still surfaces.** An observation with no safe owner ships as a
+  card attributed to the forum ("from this week's leaders' conversation"), never dropped
+  because it cannot be named.
+- **Turn the rule set into something the reader applies.** A two-axis matrix where each
+  cell states the verdict and the budget rule for that case beats four paragraphs of
+  rules: reading four rules is harder than clicking your own, and the click proves the
+  reader found their quadrant.
+- **Every figure carries its source and its softness.** One source line per block and a
+  footer note naming which numbers are directional. The page will be challenged live; a
+  conceded decimal with a held trend survives that, a confident unlabeled decimal does not.
+- **Close on what the room owes, not on a summary.** Numbered questions with a named owner
+  where one exists, then the single decision the page exists to force. A summary as the
+  close ends a meeting on content instead of commitments.
+- **Internal pages say so.** A visible "Not for clients" badge in the topbar: the file
+  travels by attachment and reappears in contexts nobody planned for.
+
 ## What Makes This Different From frontend-design
 
 | This skill | frontend-design |
