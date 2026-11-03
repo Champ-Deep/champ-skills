@@ -35,6 +35,16 @@ the value is exposed and should be rotated, then proceed.
 Rotation advice belongs to Deep. Say it once: if that password is reused
 anywhere, change it. Do not repeat it.
 
+## When he asks what a credential is
+
+Read "what is the X key?" as "what does it do" first, and answer the function:
+which routes it gates, what it authorises, what stops working without it. Most
+credential questions are scope questions. Opening with a refusal about not
+printing the value answers a question he may not have asked and costs a round
+trip to correct. Only when he asks for the value itself do you decline the print
+and offer the copy command instead (`grep '^KEY=' <file>` piped to the
+clipboard, never into chat).
+
 ## Procedure
 
 1. **Do not use the pasted value.** Not with `browser_type`, not with curl, not

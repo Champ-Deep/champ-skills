@@ -64,8 +64,19 @@ failure too.
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
-confirm green. Run this on converted and inherited gates, not only the ones just
-written. A gate never seen failing is a gate nobody knows is armed.
+confirm green. Run this on converted and inherited gates, not only the ones just written. A
+gate never seen failing is a gate nobody knows is armed.
+
+## A removal is proved by absence
+
+Checking that the new shape exists proves nothing about what was taken out: an old field can
+still be emitted beside the new one and every presence check stays green. After removing a
+provider, a column, a flag or a route, grep the consumer's own artifact for the removed
+symbol (response fields, the generated header row, the exported column list, the served
+bundle) and require zero hits, then read that artifact back end to end. Report the symbol you
+grepped and the artifact you grepped, never "the field is gone". The same applies to config:
+a health endpoint that still advertises the removed capability is a leak of the same kind and
+counts as a failed removal.
 
 ## The gate you wrote for a deployment has never run anywhere
 
@@ -83,8 +94,28 @@ Before reporting a red test as unrelated to your change, run that exact command 
 the unchanged baseline (a stash, a worktree of the base commit, or a clean checkout)
 and capture the same failure there. A failure reproduced on the baseline is a
 pre-existing defect you can name with evidence; a failure you merely recognize as old
-is a guess wearing the costume of a finding, and it shields your own regression when
-the two happen to share a symptom.
+is a guess wearing the costume of a finding, and it shields your own regression when the
+two happen to share a symptom.
+
+Compare the *set* of failures, not the count, and compare it across two runs of the
+same tree as well as against the baseline. A run reporting one more failure than the
+next identical run means the suite contains a flaky test: name it as flaky instead of
+folding it into the pass, because a gate that grades differently per run is a gate
+whose green you cannot rely on. Report the final set, and disclose any run whose set
+did not reproduce.
+
+## A test that reads credentials from your shell is not hermetic
+
+A suite asserting on an exported key passes on a machine where the variable is
+unset and fails, or behaves differently, where it is exported, so the failure
+tracks the shell rather than your change. Re-run with the variable explicitly
+unset before calling such a failure pre-existing: the unset run restores the
+state the test assumes, which makes it the discriminating probe.
+
+Read that output before you paste it anywhere. An assertion comparing a real
+credential prints the credential, so capture the run, scrub it, and name the
+exposed token for rotation instead of letting it ride into a report or a
+transcript.
 
 ## Promotion is a sequence of claims, not one
 

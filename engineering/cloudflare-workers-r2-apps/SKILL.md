@@ -48,6 +48,7 @@ the window between the lane's deploy and your review, and never report the link
 as finished while it serves the holding page.
 
 ## Pitfalls (each one was a real failed run)
+- **A local `wrangler dev` missing a secret the deployment has reports the feature as unconfigured, which reads as a code bug.** After adding any secret, mirror it into `.dev.vars`, then compare the config or health endpoint of the local run against the deployed URL field by field: both must report the same `*_configured` flags before you debug code. Start `wrangler dev` as a tracked background process on a fixed port and stop it by name afterwards (`pkill -f "wrangler dev"` plus a port check), or a stale server keeps answering probes and later tests run against the previous build.
 - **R2 `get(key, { range: request.headers })` sets `obj.range` even when no Range header was sent.** Only answer 206 when `request.headers.has('range')`, or every full request comes back partial. Default `offset` to 0 and `length` to `size - offset` (suffix ranges).
 - **`wrangler deploy` intermittently fails with `Received a malformed response from the API`.** Transient: sleep 5 and rerun. Always grep the deploy output for `Deployed` before running tests, or the gate runs against the previous build.
 - **workers.dev returns 403 to Python's default User-Agent** — `urllib`, and every client layered on it (`requests`, httpx defaults). Set a custom `user-agent` header on the probe. Node `fetch` and curl are fine, so one Python 403 beside a curl 200 is a client signal, not an outage.
@@ -71,6 +72,7 @@ as finished while it serves the holding page.
   spawn, so changing the transport or endpoints mid-build needs the
   reclaim -> resume-comment -> dispatch sequence in model-routing; a comment alone
   waits for the next run.
+- **Confirm config and secrets on the live endpoint, never from the command's exit status.** Editing `vars` in `wrangler.jsonc` changes nothing until the next `wrangler deploy`, and a secret uploaded with an empty value reports success and still shows its name in `env_keys`, so read the health or debug flags (`*_configured`) after the deploy and treat a false flag as an unfinished deploy rather than a code bug. A value piped into `secret put` from an unset shell variable is exactly that empty upload.
 - **A fetch-proxy route must ship its paste fallback before it ships.** Retailers and big consumer sites return 403/404/429 to a Worker's server-side fetch regardless of the user-agent, so a URL-classify feature that only works on bot-tolerant sites looks broken on exactly the prospects Deep will paste first. Build the "paste their copy instead" path in the same commit, and let the API error (with the real status code) auto-open it with a one-line hint naming the block. Add an SSRF allowlist before any customer self-serve; a demo-level proxy that fetches any caller-supplied URL is fine only while the URL is unlisted, and say so in a code comment and the report.
 
 ## Containers + D1 (reference: `~/repos/ChampHarbinger-cf`, `deploy/cloudflare/`)
