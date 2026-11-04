@@ -61,6 +61,12 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - Deleting browser caches (Chrome, playwright, camoufox) always succeeds but pushes a re-download onto the next automation run. Say so before removing, and keep Playwright when QA pipelines are active.
 - `npm cache clean --force` and `pnpm store prune` print scary warnings and are still safe; capture their tail output in the log rather than treating warnings as failures.
 
+## RAM, not only disk
+
+- "Memory" on this Mac usually means swap thrash, not disk: check `sysctl vm.swapusage` and `top -l 1 -o mem -stats pid,mem,cmprs,command` before `df`. The holder was `celsus_jev.py score` (19 GB RSS, clef-flash on MPS) fired by the celsus-compose cron whenever a new blocked card needed a score; `kanban_clef.py` loads no model unless `--shadow-top` is passed. The model crons now run on a 2h cron expr; keep any model-loading step off a 30-minute interval on a 32 GB machine.
+- Finished kanban workspaces leave `next dev`, `vite` and `.verify/server.mjs` servers running for days (3 to 4 GB RSS mostly in swap). Find them with `lsof -a -d cwd -p <pid>` under `~/.hermes/kanban/workspaces/`, check the task status in `kanban.db`, then `kill -- -<pgid>`.
+- `docker builder prune -af` plus `docker image prune -af` reclaimed 32 GB in one approved pass; `timeout` does not exist on macOS, run long docker commands as a background job.
+
 ## Maintenance cadence
 
 - Weekly: run the existing approved native uv/npm/pip cleanup, then re-check `df`; keep additional caches outside that policy until separately approved.
