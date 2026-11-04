@@ -1,0 +1,20 @@
+# Reviewing a guideline someone else sent us
+
+Use this when an outside designer or developer hands SPAN a brand or style guideline (an emailed PDF, a hosted page, a Figma export) and Deep wants to judge it. The goal is a one-page review Deep can act on, plus a staged reply to the sender. Nothing goes out until Deep approves it.
+
+## The order
+
+1. **Get the full text before judging.** Email gives a link and maybe an attachment. Fetch the source, then extract the text: a hosted SPA renders to nothing on a plain fetch, so load it in headless Chrome (`playwright` with Chrome at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`), set a tall viewport, take a `full_page` screenshot for vision, and read the DOM text with `pg.evaluate("document.body.innerText")` for the exact wording. Keep the raw extract on disk; the review quotes it.
+2. **Measure the claims, do not read them.** Run `scripts/wcag_contrast.py` on every colour pair the document advertises, count em and en dashes directly in the extracted text, and parse the live site's own CSS for the colours it actually uses (see step 3). The published table is an input to check, not evidence.
+3. **Compare against the live site.** Pull the theme stylesheets from the live HTML (`curl` the `style.css` links), then hex-count them with `re.findall(r'#[0-9a-fA-F]{6}\b', css)` and bucket by hue with `colorsys.rgb_to_hls` to show how many greens (or blues, or greys) exist today. This is the strongest evidence in the review: it proves the fragmentation the guideline is fixing, and it exposes every colour the document forgot to document.
+4. **Split what is a design fix from what is a decision.** Palette, layout and component rules can be approved on the evidence. Font family, tagline, positioning and headline figures are Deep's call, because they fight the standing brand (the two dialects, the vertical-specialist line, counts only from the data team in writing). Put those on the page as numbered decisions with a recommendation first, never as a paragraph in chat.
+5. **Deliver as one HTML page** built in our content dialect (Mulish, our tokens), attached as a `MEDIA:` link. Structure that has worked: the problem the document solves, shown as before/after swatches; the measured contrast table; every finding filterable by severity; numbered decisions; the numbered list of what goes back to the sender. Verify it at 1440px and 390px with Playwright and read the screenshots before sending.
+
+## Pitfalls
+
+- **Never quote a stated contrast ratio.** Vendor accessibility tables routinely claim AA on pairs that fail, and an understated pass is as wrong as a false one. Recompute from hex; publish claimed beside measured so the gap is visible.
+- **Never read hex values out of a screenshot.** Vision models reliably misread digits inside colour chips, which silently corrupts the comparison table. Get colours from the DOM, the CSS file, or the document source, and compute from those.
+- **Clamp every bar chart to its scale.** A ratio of 16 on an 8-wide scale is 201% wide and bleeds into the next column; measure the rendered element's `getBoundingClientRect()` against its cell to confirm nothing overflows. Vision checks alone gave a false alarm here, so measure in the DOM.
+- **Check the document against our own rules, not just itself.** A guideline can be internally consistent and still conflict with ours: zero dashes, counts with a source and a date, light and dark both shipped, stat band after a dark hero stays on white with green figures, comparison pages are allowed. List each conflict as a change, with the rule named.
+- **An external palette proposal changes the live hue, not only the count.** Say so: collapsing to a cooler green moves every button and icon, so the sender should ship a migration table mapping each legacy colour to a token, or the site lands half-migrated.
+- **Stage the reply, do not send it.** The sender sits in a different company's workflow; Deep approves wording before anything is drafted into a real thread.

@@ -19,6 +19,10 @@ SPAN is an enterprise data services company selling verified B2B contact data, l
 
 ---
 
+## When someone else sends us a guideline
+
+If a designer or developer hands SPAN a brand or style guideline to review, follow `references/guideline-submission-review.md`: extract the full text first, recompute every claimed contrast ratio with `scripts/wcag_contrast.py`, count the live site's actual colours from its CSS, then split the answer into design fixes you can approve and decisions (font family, tagline, figures) that go to Deep as numbered options with a recommendation first. Nothing is sent back until Deep approves the wording. Two rules are always on: a stated contrast ratio or stat is never evidence, and conflicts with our own standing rules (zero dashes, sourced counts, both dialects, stat band on white) are listed as changes, not observations.
+
 ## Which dialect (read first)
 
 | Surface | Dialect | Fonts | Palette | Start from |
