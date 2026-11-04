@@ -549,7 +549,6 @@ not instead of it.
  dated folder under `Calendar/Meetings/`, each file named by its role under the naming rule in
  11c (the one to share first, the one to hold back until the counterparty opens the topic),
  plus the design system they were built from.
-The team-facing agenda page (agenda, outcomes, attendees, asks, invite and Zoom text) is built from `references/client-agenda-page.md`; it is the only page the counterparty sees before the call, and nothing internal goes on it.
 counterparties have no brand system in the vault, so derive one from their real logo file rather
 than inventing a palette: measure the dominant colours, take one corner treatment and one
 recurring motif from the mark, and record the asset's source URL in the design-system page so
@@ -557,6 +556,7 @@ the derivation is auditable. Both variants get screenshot at 1440 and 390 and re
 delivery (see the `visual-verify` skill). When the brand DOES exist in the vault (a LakeB2B or
 SPAN page), load that brand skill and follow it instead of deriving anything: the derivation
 recipe is for counterparties only, and improvising a palette on a brand we own is the failure.
+The team-facing agenda page (agenda, outcomes, attendees, asks, invite and Zoom text) is built from `references/client-agenda-page.md`; it is the only page the counterparty sees before the call, and nothing internal goes on it.
 11c. **Script and showcase are always two separate files.** When Deep wants something to run a
 call from, ship a client-facing SHOWCASE (shared on screen, nothing internal, no toggle that could
 reveal notes) and a private SCRIPT AND NOTES page (countdown, word-for-word lines, cheat sheet,
