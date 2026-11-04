@@ -219,3 +219,7 @@ exit code).
 - To read another session's exchange: join `messages` on `session_id`, order by
   `timestamp`, filter `role IN ('user','assistant')`, and bind parameters in
   order `(session_id, *roles, limit)`.
+- `references/session-task-audit.md`: auditing one platform's whole
+  conversation (Telegram, any gateway chat) to answer "which of my earlier
+  tasks are unfinished", covering the platform-session lookup and the
+  last-reply-per-ask query.

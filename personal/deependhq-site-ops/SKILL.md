@@ -18,6 +18,8 @@ Operate and repair the nightly loop that publishes deependhq.com from Deep's Obs
 
 ## Toolkit facts that cost a lane a round
 
+- Adding a whole new tool action (contract, pure core shared with the browser, selftests, fixture, browser proof, the card that builds the window) follows `references/toolkit-tool-actions.md`. The one rule from it that applies to any AI feature here: the model proposes, the browser computes, and no digit from a model reply is ever rendered.
+
 - The toolkit's LLM key is one OpenRouter key. The worker reads `OPENROUTER_API_KEY` or the older `JEV_API_KEY` (same key, `llmKey()` in `worker/toolkit.js`); `TREG_API_KEY` is the enrichment provider. "The AI provider is not configured" means `npx wrangler secret list` lacks them, not a code bug.
 - One model switch: `admin_settings_set {model}` sets intake + research together; the `guide` action reuses the intake model. Every chat call carries `provider: cols.routing(llm)` (require_parameters + `max_price` at the reserved rates), because one OpenRouter model id spans endpoints priced up to about 25x apart (deepseek-v4.1-flash: $0.022 to $0.60 per M prompt on 31 Oct). A new chat call without `routing()` can bill above its reserve.
 - `makeTreg` takes `feature`; pass the calling tool's id, or Treg's audit books the spend to lead-scorer.

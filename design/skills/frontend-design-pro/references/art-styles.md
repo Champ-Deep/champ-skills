@@ -127,8 +127,19 @@ Prompt: `{subject} in kawaii style, soft pastel pink blue lilac white, rounded s
 Recipe: pill buttons, 24px+ radii, pastel tokens, bouncy easing on hover.
 Use: consumer apps, community, mascots. Avoid: B2B and finance.
 
+## Extending this list (rebuild a style from any video)
+
+When Deep hands over a Short or a video showing looks worth keeping:
+
+1. Download the media once: `yt-dlp -f bestvideo+bestaudio/best -o in.%(ext) "<url>"`.
+2. Cut one frame per look: `ffmpeg -i in.mp4 -vf fps=2 frames/f%03d.jpg` (a 25s Short at 2fps gives 50 frames; use `fps=1` for long videos). Read them in batches of three or four with `vision_analyze`, asking which styles are visible and what cues define each, so the naming comes from the image rather than from the video's title or caption.
+3. Write each prompt in the shape used above: `{subject}, <style cues>, <palette>, <light>, <composition>`. One line of cues; extra adjectives dilute the look.
+4. Test before shipping the set: generate 2 or 3 of them with `image_generate` against the same neutral subject, stitch them side by side, and vision-check them against the source frames. Do not test all 20: the sample is what tells you whether the cues hold.
+5. Record the result under "Coverage and limits": which prompts were tested and which were not. A reference that implies every prompt was proven is worse than one that says three were.
+
 ## Coverage and limits
 
-- Style names and the look of each sample are verified from the Short's frames. The prompts are my reconstruction, not the creator's, so treat them as a starting point and tune per image model.
+- Prompts are reconstruction, not the creator's: his list is gated behind a comment, so the cues come from the frames. Style names and the look of each sample are verified; prompts are rebuilt and tuned per image model.
+- Prompts were tested as a sample: Stained Glass, Op Art and Claymation were generated against a lighthouse subject and checked against the Short's frames. The other 17 prompts and every recipe are unproven, so treat them as a starting point and tune per image model.
 - Dials are first estimates from each look and the `design-taste-frontend` presets; adjust after seeing a build.
 - No page has yet been built from these recipes. Run `visual-verify` and `ten-out-of-ten` on the first use and amend the Avoid column with what you find.

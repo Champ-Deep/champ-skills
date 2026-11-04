@@ -230,6 +230,8 @@ SPAN's SEO strategy is vertical-specialist and technology-led content to out-fla
 
 ## Usage Notes
 
+Anything proposed to the design team (Manu, Harsha, Preeti) ships as a visual page, not a text document: live HTML mockups of the proposed state next to screenshots of the live page, measured facts under each, concept renders at their real aspect ratios, ad copy rendered as the ad will appear. A docx of proposals gets read once; a before and after gets decided on. Build on the palette currently approved in principle and say so on the page.
+
 Load this skill whenever creating:
 - SPAN-branded onboarding materials, internal tools, or templates
 - SEO content, blog posts, or landing pages for SPAN

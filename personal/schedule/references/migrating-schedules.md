@@ -74,3 +74,12 @@ Per-job spec differences follow the header. Do not fork the header per job.
   know before you pause the source" list.
 - Do not pause or delete source jobs yourself. Parity confirmation is the user's
   call; irreversible deletions always go to them.
+- Turn the handoff into a kanban card in `blocked` status rather than leaving it
+  in the report: one card holding every open ruling, recommendation first and
+  options numbered so a one-line reply settles it. Split the source inventory
+  into migrated rows and a "stays on the source harness" list with a reason per
+  item, so an audit of the source account sums to its full task count.
+- Name the risk window explicitly on the card: until a source copy is paused, two
+  schedulers run the same work. Recommend pausing each source copy the day after
+  its Hermes copy's first successful fire, never before (nothing has fired yet)
+  and never as a blanket batch (a Hermes copy that fails leaves a silent gap).

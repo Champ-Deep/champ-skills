@@ -17,7 +17,15 @@ Deep is not the bottleneck by choice: agents do everything reversible themselves
 
 Actions: `decide` = open_pr, push_feature_branch, create_branch, create_card, unblock_card, run_tests, retry_ci, comment_issue, file_issue, label_issue, write_report, read_logs, write_digest. `ask_deep` = merge_pr, push_main, force_push, delete_branch, deploy, release, db_migration, change_secrets, rotate_keys, spend, send_external, change_dns, delete_data, and anything unknown. The sets live in `decider/ground.py` (FACTORY_AUTO, FACTORY_ASK); edit them there and run `python -m unittest test_decider` from `decider/`.
 
+- **Probing the gate with a spend-carrying action proves nothing.** `spend` sits in FACTORY_ASK, so any test card that mentions a cap, a price or a purchase returns `ask_deep` however healthy the gate is, and it reads as a broken gate. Probe with a spend-free action (`open_pr`, `run_tests`), and treat `ask_deep` on anything priced as the designed answer to work around by staging, never by loosening the set.
+
 For a business or people decision (not a code action) use `decider.py ask "<situation>"`; it matches Deep's precedents in the Celsus Decision Desk and abstains when none covers it.
+
+## A new proactive automation ships record-only first
+
+Any recurring job that acts on Deep's work without him starts in shadow: it writes one dated proposal note (what it would queue, why, per candidate) into the vault and creates, merges and sends nothing. Promote it to live only after he has read about a week of those proposals and said go. The first live form then takes one bounded action per run (one PR-only worktree card, named spend cap, no deploy, no sends), not a batch.
+
+Why this shape: coverage earns the gate the same way a precedent does, by being adjudicated. An unadjudicated automation writing to real cards has nothing behind it, and the shadow note is the thing he can rule on in one pass. Keep the shadow job's stdout out of chat (`--deliver local`, see the `schedule` skill) so a silent run stays silent.
 
 ## Meeting follow-through gate (Deep's ruling, 28 Oct 2026, precedent P41)
 
@@ -25,6 +33,12 @@ The meeting watcher (cron `d741846ee693`) and intake sweep (`9a042ac04419`) act 
 
 - `clef_ask` criteria must be a dict `{label: description}`; a list raises inside `systemone` and the tool returns a bare "Error executing tool".
 - Clef is conservative, not calibrated: a routine internal deadline-confirmation email scored auto_proceed 0.34, a contract signing 0.05. At a 0.95 bar Clef alone frees almost nothing; the pre-approved action classes and precedents do the work. Grow coverage by adding precedents (Decision Desk `Task Decision Precedents.md`, verify with `decider.py ask`), not by lowering the bar.
+
+## Blocked is not the same as needs Deep
+
+Measure before tuning the gate: on 5 Nov 2026, 306 of 487 blocked cards had no block_kind and were created already blocked (`initial_status`, no reason) by the sweeps. They are parked to-dos, not decisions. Fix at the creator: a sweep creates a `todo` linked as child of one decision card (parent to child gating promotes it when the parent is done), and only that decision card is blocked. Group decisions by type so one ruling covers many cards (`scripts/decision_clusters.py`, dry run). Two cluster shapes inflate the board: cards whose job is to raise another decision card, and daily recurring packs (Send Pack, social posts): rule them once as a policy.
+
+`scripts/kanban_escalate.py` (cron f84b5393e7df, silent when idle) pins a todo/ready card with 3+ block_recurrences to claude-opus-5-5 high, 5+ to xhigh, via kb.set_model_override and kb.set_reasoning_effort. It skips blocked cards and capability walls: a stronger model cannot sign in to M365 for Deep.
 
 ## The decision model's place
 

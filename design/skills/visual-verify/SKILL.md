@@ -265,6 +265,31 @@ You can read the bands without cutting files to disk: call `vision_analyze` on t
 
 Nine bands for a landing page is normal and still cheaper than a subagent. Keep the 390px band count separate from the 1440px one: the defect list differs, because the layouts differ, so the two crops cover different sections and the section name in the prompt has to come from the crop's own y-range, not from the other width's list.
 
+**Numbered callouts on a mockup are placed by the page, never by hand.** When an artifact
+annotates itself (numbered tags pointing at the changes a review is deciding, a legend keyed
+to features on a screen), hardcoding `left/top` coordinates works only until the layout moves
+one line: every tag then lands on the element it was meant to point at. Emit the tags as
+spans carrying `data-for` (a selector) and `data-dx`/`data-dy`, and place them in the page's
+own script against each target's `getBoundingClientRect()`, subtracting the container's rect:
+
+```js
+const sr = stage.getBoundingClientRect();
+for (const t of stage.querySelectorAll('.tag[data-for]')) {
+  const r = document.querySelector(t.dataset.for).getBoundingClientRect();
+  t.style.left = (r.left - sr.left + (+t.dataset.dx)) + 'px';
+  t.style.top  = (r.top  - sr.top  + (+t.dataset.dy)) + 'px';
+}
+```
+
+Because the script runs at load, the tags follow the layout through every edit and through a
+font swap that reflows the titles. Then prove the placements in the same capture run with a
+deterministic check rather than trusting the eye: assert that no callout's rect intersects any
+text-bearing element's rect, and assert that the callout's own target rect is fully on-stage.
+A vision pass will report "no overlaps" across a batch of tags as a reflex (a negative is the
+cheap answer to a yes/no), so the geometry probe is what makes the claim checkable; the vision
+pass is what catches what the probe cannot, such as a tag parked over an illustration it
+should not be sitting on.
+
 → Full procedure in [critique-protocol.md](reference/critique-protocol.md).
 
 The short form, in the order that finds the most problems fastest:
@@ -414,6 +439,13 @@ are the same pixels, so record which of the two you measured rather than acting 
 adjective.
 
 **Probe interactivity as behavior, not as a screenshot, in one batched run.** A page with a live input, tickable items or a tab strip can pass every geometry gate while its logic is dead: nothing in `audit.py` computes what a control does. After the audit, drive the loaded page once at each shipping width and print in a single loop: the computed output after a representative input (including the empty input and one that exceeds the cap, where clamping must show), the overflow rect-walk, the disabled sweep, the dash count off `document.body.innerText`, and the console error list. Then prove persistence for any state the page claims to keep (reload, read it back), because a storage write that silently fails on `file://` or in a locked-down profile turns a stated feature into a lie the screenshot cannot show. An asserted text output beats pixels here: a recalculated number proves the handler ran, while a shot of the number only proves it rendered once. For toggle rows that build a package total (service checklists, add-on pricing), assert the arithmetic, not the active style: click one row off, print the recomputed total AND the on-state count AND the line "every counterparty figure is still present", because the failure mode is a filter that drops the other party's own number from the page they are about to be shown.
+
+**Compose each fix-and-re-run call as one self-contained script.** The kernel behind
+`execute_code` does not survive an exception in a previous call: a follow-up that references a
+variable built two calls ago dies with a `NameError` and the repair is then re-done from
+scratch. Read files and run the render inside the same call (`pathlib` + `subprocess`), and
+prefer plain stdlib IO over tool wrappers when the logic branches, so one retry rewrites the
+whole fix rather than half of it.
 
 **Report honestly.** State what was verified and at what sizes, and when a shot only reached part of a tall page, name the sections it did not cover as unchecked rather than letting the check read as complete:
 

@@ -61,14 +61,36 @@ Finally, create the job with the platform's scheduling tool: `create_scheduled_t
 
 When the ask is to move a batch of tasks from another scheduler (Claude Desktop, crontab, CI cron) into Hermes one-for-one:
 
-1. **Take cadence from the source's own dump, never from memory or chat prose.** Convert UTC source fields to local time once, keep every other cron field byte-identical, and build a parity table (source task, source cron, Hermes job name, id, first fire) before creating anything. Check `hermes cron list` first so two jobs never watch the same target.
-2. **Classify each source task three ways.** Deterministic checks, builds and syncs become no-agent `--script` jobs. Judgment work becomes an agent job whose prompt is a shared substitution header plus a pointer to the spec file already on disk; never paste a whole spec into the prompt. A source prompt you cannot read gets reconstructed from that task's output artifacts, and the reconstruction is flagged in the report and the registry.
+1. **Take cadence from the source's own dump, never from memory or chat prose.** Convert UTC source fields to local time once, keep every other cron field byte-identical, and build a parity table (source task, source cron, Hermes job name, id, first fire) before creating anything. Check `hermes cron list` first so two jobs never watch the same target. Parity of cadence does not extend to the minute: if an existing Hermes job writes the same shared file (a task list, an index, a log), move the migrated job's minute off that job's slot, because two agent runs appending one file in the same minute interleave and corrupt each other's writes.
+2. **Classify each source task three ways.** Deterministic checks, builds and syncs become no-agent `--script` jobs. Judgment work becomes an agent job whose prompt is a shared substitution header plus a pointer to the spec file already on disk; never paste a whole spec into the prompt. A source prompt you cannot read gets reconstructed from that task's output artifacts, and the reconstruction is flagged in the report and the registry. Before classifying, diff the task against jobs Hermes already runs: a source task that overlaps an existing job is migrated in part only, and the dropped half goes into the new job's prompt with the reason it was dropped, otherwise a later session reads the spec on disk and restores the duplicate.
 3. **Prove every script before scheduling it:** first run, an immediate second run that must emit zero bytes, and a simulated failure that must alert. A monitor that has never fired is untested.
 4. **Never fire an agent job as a test run.** Migrated jobs write into real systems (vault, mail, tickets). The first scheduled fire is the test; confirm its delivery after it runs.
 5. **Register each new job** in the vault's automation registry with id, cadence, outputs and per-job gaps. Schedule parity is not data parity: a capability the source had and Hermes lacks is a named gap on that row, not a silent omission.
 6. **Create jobs with the cron tool in batched calls**, not a shell loop: long prompts pushed through shell quoting and an approval gate can fail wholesale, while batched tool calls return job ids you can verify immediately.
+7. **End on a decision card, not a report.** A migration leaves both schedulers live until the source copies are paused, and only the user can pause them, so the risk window stays open no matter how good the parity table looks. Put every open ruling in one kanban card in `blocked` status: which source copies to pause and when (recommended: the day after the copy's first successful fire, so no window is covered twice or zero times), any source task that overlaps a job Hermes already runs, and anything deliberately left on the source harness with the reason. Recommendation first, options numbered for a one-line reply. Report the card id in the final message alongside the parity table.
 
 Substitution-header contents, the no-agent script contract and the registry row format live in `references/migrating-schedules.md`.
+
+## Deterministic work runs as a no-agent script job
+
+A recurring check that needs no judgment (a ranker, a sweep, a digest, a verifier) must not
+burn a model run. Give the script `--selftest` and run it before scheduling; a scheduled
+script has no session to notice it is wrong.
+
+```bash
+hermes cron create "<cron or 30m>" --name <kebab-name> --script <file.py> \
+  --no-agent --deliver local --failure-deliver local
+```
+
+- `--script` takes the file name under `~/.hermes/scripts/`, not a path.
+- `--deliver local` keeps stdout out of chat and `--failure-deliver local` keeps a broken
+  job from nagging; report the job by the `hermes cron create` row itself (name, schedule,
+  next run), which is the only proof the schedule took.
+- A shadow job writes its proposals to a dated file in the vault instead of delivering
+  anything. Promotion from shadow to acting is a decision for Deep, recorded in
+  `factory-decision-gate`, not a flag you flip while editing the job.
+- Read the script's flags from its own `--help` before wiring it; a `--no-agent` job runs
+  the script exactly as declared, so a flag that does not exist fails on the first fire.
 
 ## Reconcile dedupe state before producing anything
 

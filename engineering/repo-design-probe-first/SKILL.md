@@ -20,6 +20,13 @@ doc that asserts "the gate has no parameter X" is worth nothing unless checked.
    have shipped part of it. Probe that implementation and report findings
    against it rather than silently redesigning from scratch.
 
+   When the ask is a feasibility verdict ("can we do X") rather than a design
+   for one named repo, probe EVERY candidate repo first: name-match grep for the
+   feature keyword across `~/repos/<name>`, then `head` each entry file to see
+   what stage it is in. An idea that is 70% already built in a sibling repo
+   changes the whole answer, and the cheapest comparison table you will ever
+   write comes from those probes.
+
 3. **Write probe scripts in scratch, never in the repo.** Import the real
    modules and call them. Probe scripts must be re-runnable and must print
    their own evidence.

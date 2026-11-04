@@ -13,7 +13,7 @@ metadata:
 
 Turn a source URL, HTML file or approved brief into a single-offer SPAN Global Services landing-page preview. Deliver HTML, editable site.json and VERIFICATION.md. For the complete workflow read references/workflow.md, then reuse assets/campaign-landing/build.py and its examples. Do not write a second renderer.
 
-Load span-brand-guidelines, frontend-design and visual-verify. Main owns content judgments and review; route UI implementation to a frontend Kanban card, never delegate_task. Keep full microsites on microsite-refresh and corporate homepages on venture-story. For the toy microsite genre Deep calls "dopamine sites" (single-screen brand toy, no conversion goal, shared result card), use `references/dopamine-sites.md`.
+Load span-brand-guidelines, frontend-design and visual-verify. Main owns content judgments and review; route UI implementation to a frontend Kanban card, never delegate_task. Keep full microsites on microsite-refresh and corporate homepages on venture-story. For the toy microsite genre Deep calls "dopamine sites" (single-screen brand toy, no conversion goal, shared result card), use `references/dopamine-sites.md`. For taking variant families to a real multi-source system (CMS + data store, indexing gate, rebuild triggers), see `references/programmatic-architecture.md`.
 
 ## Standing rules
 
@@ -38,6 +38,17 @@ Start here if you are Harsha or any builder new to SPAN. The Kanban and "route t
 5. Ad landing pages are ad-only and non-indexed: keep `robots noindex, follow` (already in `template.html`) on every variant. The main SPAN site stays technology focused. One page can yield about ten industry variants (for example recruiting MSP, healthcare MSP). The builder swaps the headline from `?hl=<key>` using `headlines.variants` in `site.json` (the MSP example ships `mssp`, `cloud`, `partner`); anything beyond the headline, such as offer or FAQ copy, is a separate `site.json`.
 6. Interactive pieces come from 21st.dev, ported to vanilla for a static file (see `references/workflow.md`).
 
+## Variant families: generate, switch, prove
+
+Use this when Deep or Preeti needs to see several variants of one page and cannot open query strings by hand.
+
+1. Generate every variant from one base `site.json` plus one overlay file per variant, writing all files into a single folder. Change only `site.json` fields, never generated HTML.
+2. Inject a demo-only switcher bar into each generated file: a link per industry variant and per headline key, labeled "demo switcher, not part of the page". The bar never ships in a delivered page. It turns "type six URLs" into "click through six pages", which is what a review meeting needs.
+3. Prove the family with `scripts/check_variants.py`: fill its FAMILIES table (file -> query key -> expected H1), run it, and it serves the folder over loopback, asserts each expected headline and `noindex` on every page, screenshots each variant, and clicks a switcher link to confirm navigation. Rerun it after any rebuild. Keep the check headless and standalone so the proof is repeatable, not a one-off browser session.
+4. Deliver the folder plus the screenshots to Deep as files he can open, not a description of what differs.
+
+Pitfall: variant overlays are relational. A sample record's job title must exist in `jobTitles` and every Orbit item's `formValue` must exist in `form.segments`. Change the related fields together or the builder refuses the variant; that refusal is correct, never relax validation to make a variant pass.
+
 Launch blockers you may not fill in yourself: form endpoint, tracking ID, final production URL and domain (confirm the approved domain with Manu or Preeti), and the phone number and privacy URL, which come from the brand book and the PEO/EOR example, not the page you were given. State them in VERIFICATION.md. The SPAN site itself runs PHP with the blog on WordPress, and the deployment path and DNS move are still being worked out with Manu. A GitHub plus Cloudflare Workers pipeline is being piloted on other sites.
 
 ## Run
@@ -49,4 +60,4 @@ python3 build.py examples/span-msp-us --out /absolute/path/SPAN_MSP_US_LandingPa
 python3 -m unittest discover -s tests -v
 ```
 
-Use examples/span-peo-eor for the count-backed case. Change copied site.json, never generated HTML. Check both examples after renderer changes. Run real browser checks at 390, 834 and 1440, open section screenshots and write the verification report before delivery. A single file uses external Google Fonts and citation favicons, not a fully offline dependency set.
+Use examples/span-peo-eor for the count-backed case. Change copied site.json, never generated HTML. Check both examples after renderer changes. Variant families: run `python3 scripts/check_variants.py` after filling its FAMILIES table (see Variant families above). Run real browser checks at 390, 834 and 1440, open section screenshots and write the verification report before delivery. A single file uses external Google Fonts and citation favicons, not a fully offline dependency set.

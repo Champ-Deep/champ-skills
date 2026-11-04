@@ -329,6 +329,22 @@ def sample_hero(records):
     return ('<div class="hero__object hero__object--sample"><div class="sample-record" role="group" aria-label="Fictional masked sample record"><div class="sample-record__heading"><b>Sample record, masked</b><button type="button" class="sample-record__pause" aria-label="Pause sample rotation" aria-pressed="false">Pause</button></div><div class="sample-record__panels">%s</div><div class="sample-record__footer"><span>Illustrative, not real data</span><span>Available fields and coverage vary by segment</span></div></div><div class="sample-record__pills"><span>MSP</span><span>MSSP</span><span>Cloud MSP</span><span>Custom</span></div></div>') % ''.join(panels)
 
 
+CHEVRON = '<svg class="acc__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>'
+
+
+def stream(records):
+    """v2 hero object: masked sampleRecords as a live table; three rows show, JS rotates the rest in."""
+    cols = (('name', 'Name'), ('email', 'Business email'), ('jobTitle', 'Job title'), ('company', 'Company'), ('location', 'Location'))
+    rows = ''.join('<tr>%s</tr>' % ''.join('<td data-l="%s"><span class="%s">%s</span>%s</td>' % (
+        label, 'masked' if key in ('name', 'email', 'company') else '', E(r[key]),
+        '<em class="stream__seg">%s</em>' % E(r['segment']) if key == 'company' and r.get('segment') else '') for key, label in cols) for r in records)
+    head = ''.join('<th scope="col">%s</th>' % label for _, label in cols)
+    return ('<div class="stream" role="group" aria-label="Illustrative masked sample records">'
+            '<div class="stream__bar"><span class="stream__chip">Illustrative, not real data</span><span class="stream__chip">Fields and coverage vary by segment</span>'
+            '<button type="button" class="stream__pause" aria-pressed="false" aria-label="Pause sample rotation">Pause</button></div>'
+            '<table class="stream__table"><caption class="sr">Masked sample records, illustrative only</caption><thead><tr>%s</tr></thead><tbody>%s</tbody></table></div>') % (head, rows)
+
+
 def sheet(d, records=None):
     s = d.get('sheet', {})
     require_data(s, 'sheet', ('label', 'hint'), {'fields': 4, 'chips': 2})
@@ -370,7 +386,7 @@ def market(d):
     return '<div class="market__layout"><div class="market__map" role="group" aria-label="%s">%s</div><dl class="market__legend">%s</dl></div><p class="market__hint">%s</p>' % (E(d['label']), buttons, legend, E(d['hint']))
 
 
-def render(site, source):
+def render(site, source, template_path=None):
     tick = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>'
     logo = 'data:image/png;base64,' + base64.b64encode((source / site['brand']['logo']).read_bytes()).decode()
     headlines = dict(site['headlines'].get('variants', {}))
@@ -381,14 +397,20 @@ def render(site, source):
             E(r['label']), E(r['value']),
             '<span class="ok">%s</span>' % E(d['verifiedLabel']) if r.get('verified') else '') for r in col['rows'])
         cols += '          <div class="dcol">\n            <h3>%s</h3>\n%s          </div>\n' % (E(col['title']), rows)
-    tabs = panes = ''
+    tabs = panes = accordion = ''
     for n, item in enumerate(site['faq']['items'], 1):
+        vis = visual(item, interactive=True)
         tabs += ('          <button type="button" role="tab" id="tab%d" aria-controls="pane%d" aria-selected="false">'
                  '<i>%02d</i><span>%s</span></button>\n') % (n, n, n, E(item['q']))
         panes += ('          <div class="pane2" id="pane%d" role="tabpanel" aria-labelledby="tab%d" hidden>\n'
                   '            <div class="vis">%s</div>\n            <div class="ans"><h3>%s</h3>\n'
                   '            <p class="faq__lead">%s</p>\n            <p>%s</p></div>\n          </div>\n') % (
-            n, n, visual(item, interactive=True), E(item['q']), E(item['lead']), E(item['detail']))
+            n, n, vis, E(item['q']), E(item['lead']), E(item['detail']))
+        accordion += ('          <div class="acc__item">\n            <h3 class="acc__h"><button type="button" class="acc__btn" id="accb%d" aria-expanded="false" aria-controls="accp%d">'
+                      '<i>%02d</i><span>%s</span>%s</button></h3>\n'
+                      '            <div class="acc__panel" id="accp%d" role="region" aria-labelledby="accb%d"><div class="acc__clip"><div class="acc__body">'
+                      '<div class="ans"><p class="faq__lead">%s</p><p>%s</p></div><div class="vis">%s</div></div></div></div>\n          </div>\n') % (
+            n, n, n, E(item['q']), CHEVRON, n, n, E(item['lead']), E(item['detail']), vis)
     fcols = ''
     for col in site['footer']['columns']:
         lis = ''.join('<li>%s</li>' % (
@@ -428,6 +450,9 @@ def render(site, source):
         'account.sources': sources('sources2', site['account'].get('sources', []), site['account'].get('sourcesLabel', '')),
         'dossier.title': E(d['title']), 'dossier.tag': E(d['tag']), 'dossier.providerLabel': E(d['providerLabel']),
         'dossier.provider': E(d['provider']), 'dossier.columns': cols, 'dossier.footer': E(d['footer']),
+        'faq.accordion': accordion,
+        'hero.stream': stream(site['sampleRecords']) if 'sampleRecords' in site else None,
+        'trust.fields': E(', '.join(d['sheet']['fields'] if 'sheet' in d else [r['label'] for r in d['columns'][0]['rows']][:4])),
         'faq.title': E(site['faq']['title']), 'faq.sub': E(site['faq']['sub']), 'faq.tabs': tabs, 'faq.panes': panes,
         'faq.ask.title': E(site['faq']['ask']['title']), 'faq.ask.text': E(site['faq']['ask']['text']),
         'faq.ask.button': E(site['faq']['ask']['button']),
@@ -438,6 +463,8 @@ def render(site, source):
         'tracking.offerJson': script_json(site['tracking']['offer']), 'tracking.campaignJson': script_json(site['tracking']['campaign']),
         'tracking.formJson': script_json(site['tracking']['form']), 'tracking.conversionJson': script_json(site['tracking']['conversionLabel']),
     }
+    if v['hero.stream'] is None:
+        v['hero.stream'] = v['hero.object']
     if 'band' in site:
         v['band'] = ''.join('    <div class="band__n"><b>%s</b><span>%s</span></div>\n' % (E(b['value']), E(b['label'])) for b in site['band'])
     if 'clients' in site:
@@ -470,7 +497,7 @@ def render(site, source):
     if diagram:
         v['dossier.sheet'] = sheet(d)
         v['account.diagram'] = market(site['account']['diagram'])
-    template = (ROOT / 'template.html').read_text(encoding='utf-8')
+    template = Path(template_path or ROOT / 'template.html').read_text(encoding='utf-8')
     sections = {key: key in site for key in ('band', 'clients', 'compare')}
     sections.update(market=diagram and not picker and not orbit, orbit=bool(orbit), sheet='sheet' in d, picker=bool(picker), bento='compare' in site or bool(picker), legacy='sheet' not in d)
     for key, enabled in sections.items():
@@ -481,11 +508,11 @@ def render(site, source):
     return out
 
 
-def build(source, out):
+def build(source, out, template=None):
     source = Path(source)
     site = json.loads((source / 'site.json').read_text(encoding='utf-8'))
     validate(site, source)
-    text = render(site, source)
+    text = render(site, source, template)
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(text, encoding='utf-8')
@@ -496,6 +523,7 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('source', type=Path, help='Directory holding site.json and the PNG logo')
     p.add_argument('--out', type=Path, required=True, help='Path of the HTML file to write')
+    p.add_argument('--template', type=Path, default=ROOT / 'template.html', help='Template to render (default template.html; template-v2.html for the v2 look)')
     a = p.parse_args()
-    build(a.source, a.out)
+    build(a.source, a.out, a.template)
     print('built', a.out)
