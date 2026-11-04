@@ -34,6 +34,38 @@ These do not raise. The agent reports success and the result is wrong, which is 
 5. **Do not name a scratch script after a stdlib module.** A probe called `inspect.py` shadows the stdlib `inspect` that dataclasses imports, and the resulting circular-import error points at your own module instead of the real cause.
 6. **Check free disk before installing a browser stack.** A patched browser plus its extras is hundreds of megabytes, and an install that dies partway leaves a venv that looks present but cannot launch. Clearing regenerable caches is usually enough, but ask before deleting anything on the user's machine and report the space reclaimed.
 
+## An authenticated walkthrough belongs to the user's session
+
+Driving a hosted app with the user's own account, for a demo, a staging walkthrough or feedback on their real data, is a different job from scripting an app you control:
+
+1. **Never enter a credential.** Check the password manager for a saved login on that exact origin first and fill it from there; if there is none, open the browser **headed** on the login page and let the user sign in themselves. A locked or empty password manager is a reason to hand over the window, never a reason to type a password yourself or ask for one in chat.
+2. **Build one session and reuse it.** Launch a persistent context with `--remote-debugging-port=<port>` and reconnect from later scripts with `p.chromium.connect_over_cdp("http://localhost:<port>")`. A fresh context per call throws away the login the user just completed, so every subsequent screen reads unauthenticated and the walkthrough silently degrades into screenshots of login walls.
+3. **Hold the window open.** The script that opens the browser must not exit when it finishes its checks, because process exit closes the browser and the session with it. Keep it as a long-lived background process, and put navigations and assertions in separate short-lived scripts that attach over CDP.
+4. **Keep the profile off the user's live browser directory.** Point the persistent profile at a scratch path: a running browser holds a lock on its own profile, so a second browser on that path either fails to start or risks the user's real session.
+5. **Report the boundary you actually crossed.** Name the screens you drove authenticated and the ones you only saw behind a gate you never crossed.
+
+## When no browser server is running: drive headless Chrome over CDP directly
+
+The Hermes browser tools need a browser server on port 9377. `~/.hermes/tools/camofox` is only
+the client library: it has no `start` script, so `npm start` there fails with `Missing script:
+"start"` and no amount of retrying installs the server. Do not spend a turn on it. Node 24 has a
+global `WebSocket`, so a single `.mjs` drives headless Chrome with no dependency and no venv:
+launch `--headless=new --remote-debugging-port=<port>`, read `/json` for the page target, then use
+`Runtime.evaluate`, `Input.dispatchMouseEvent`, `DOM.setFileInputFiles` and `Page.captureScreenshot`.
+Two traps, both silent:
+
+1. **Seeding `localStorage` needs the target origin first.** A fresh target sits on `about:blank`,
+   where `setItem` throws `SecurityError: Access is denied`. Navigate to the app, *then* seed, then
+   reload.
+2. **A hash-only navigation does not remount a SPA.** Calling `Page.navigate` to the same URL with
+   a different `#fragment` is a same-document navigation, so React never re-mounts and the app keeps
+   whatever state it mounted with (a seeded key reads as empty and every request 401s). Use
+   `Page.reload` after seeding, and drive tabs by clicking them.
+
+Read values back rather than trusting the click: a React-controlled input needs the native setter
+plus a dispatched `input` event, and a real `Input.dispatchMouseEvent` at the element's centre
+beats `.click()` when a button is disabled, since clicking a disabled button silently does nothing.
+
 ## Verification gate
 
 An agent run is not done until all three hold:

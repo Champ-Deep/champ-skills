@@ -61,6 +61,8 @@ provisioned (the user, the route, the file) and asserting it answers. Wrapping s
 step in `|| true` to make it green is the same error in reverse: it swallows the real
 failure too.
 
+Backgrounding multiplies the same error, because the harness reports the pipeline's status as the job's: a command run as `deploy.sh 2>&1 | tee log` finishes with tee's zero, so a run that died mid-build surfaces as "completed normally (exit code 0)". When you background anything that can fail, redirect instead of piping (`deploy.sh > log 2>&1`), and before repeating any wrapper status, grep the log for the script's own failure markers and probe the target's live identity. A completion notification is a statement about the wrapper, never about the work.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
@@ -117,6 +119,18 @@ credential prints the credential, so capture the run, scrub it, and name the
 exposed token for rotation instead of letting it ride into a report or a
 transcript.
 
+## The printout is not the artifact
+
+Output reaches you through a display layer that can mask PII-shaped tokens
+(phone numbers, card digits) before you read them, so a response printing
+`+141****6273` may be a redacted view of a value holding every digit on disk.
+Decide whether a value is masked, truncated or corrupted by inspecting the file
+itself (`len(value)`, digit count, `'*' in value`, a hash) rather than by reading
+the printed copy: a healthy value judged corrupt from its redacted printout sends
+a fix round at a defect that is not there, and a genuinely corrupted value judged
+redacted ships. Never quote a printed identifier as proof of what the file holds.
+Measure the artifact, report the measurement.
+
 ## Promotion is a sequence of claims, not one
 
 Deploying is a chain (find the version, deploy it, promote it), and the tool's success
@@ -132,6 +146,22 @@ even though the deploy command printed success. If a wrong version does go
 live, say so in the report with the corrected version id rather than letting the original
 success message stand.
 
+## A stored secret is not a used secret
+
+Rotating or swapping a credential in a deployment proves only that the new value is
+stored. A running process keeps the old secret in memory until it restarts, and a
+gateway that holds a connection under a different identity bills elsewhere while the
+call still succeeds, so the swap looks live from every config view and is not.
+
+Split the claim in three, and prove each: read the config back (stored), restart or
+redeploy the process that must pick it up (loaded), then prove use from the
+*provider's* side with an identity only the new credential can produce: the call
+appearing in the owning account's own audit, a response header naming the serving
+vendor or route, a per-key usage counter that increments. Config read-backs and CLI
+success messages prove storage; only the upstream's own record proves use. When they
+disagree, report the storage change as made and use as unverified instead of calling
+the swap live.
+
 ## Some endpoints cannot be probed with the HTTP client you reach for
 
 A WebSocket upgrade route answers only a real handshake: Node's `fetch` refuses to
@@ -145,6 +175,16 @@ responded".
 ## A rejection from one HTTP client is not a deployment verdict
 
 Edge networks and WAFs block default library user-agents, so one client can get 403 while another gets 200 from the identical URL. Before reporting a deployment as down, an asset as missing, or access as broken, retry with a second client (curl, then the browser) and report which client saw what. A single-client failure is a client signal until reproduced.
+
+## Behind an auth gate, a real route and a fake one answer alike
+
+When every request is refused by an auth layer before routing, a path that does not exist returns exactly what a real path returns: the same 401, the same redirect. No outside probe can tell the two apart, and comparing two builds only proves the bundle changed, not that any route or feature works. Establish a control probe first (an obviously fake path), compare it against the real one, and when the two are identical report the surface as **not verified from outside**, wording it as "served by this build" rather than "works". Getting to a working claim needs an authenticated session, a fixture account, or a route that answers differently from the control.
+
+Compare like with like: a status that moves between two probes usually means the probe's auth context changed, not that the code did. Signed in, an absent route returns a real `404` because routing ran; unsigned, the same path answers a `307` or `401` from the gate that fires before routing. So a `404` becoming a `307` across a deploy is no evidence the route arrived, and reading it that way reports a feature that does not exist. Hold the same session, cookies and client for both sides of any before/after, read an authenticated `404` as "the gate passed and the route is absent", and reserve "now it works" for a signed-in probe that renders the screen.
+
+## "Testable" means deployed
+
+An endpoint, screen or flow is testable by a person only in the build actually serving traffic. Code merged to the release branch but not yet deployed is not testable, and a report that lists it beside live capabilities reads as an invitation to test something that will 404. Split every capability list by deployment state: live now, live after the deploy, and dormant until a named key or config arrives. A code path present but missing its credential is dormant rather than broken, so name the missing variable instead of calling the feature broken or omitting it.
 
 ## A guard that protects one site protects one site
 

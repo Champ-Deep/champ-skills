@@ -31,7 +31,14 @@ grep -nE '^  [a-z-]+:$|node-version|python-version|\s+run:' .github/workflows/<c
 Ignore release/publish workflows that fire only on tags; the test workflow is the gate. If the repo pins Node 22 while this machine defaults on Node 24, switch with the version manager before installing, or the lockfile resolves differently than it will on the runner. If the base has no `.github/workflows` directory at all, say so explicitly and derive the gates from the package scripts and repository docs; never write that CI passed when no workflow ran.
 
 5. Compare the observed heads with the plan. If the base moved, repeat the planned dry-run merge checks before touching the release branch.
-6. Confirm deployment access and required secret names without printing values. Authentication alone is not proof that the account can create the required environment, so verify project and environment access too. Also establish which checkout and commit the deployment actually runs from: when that checkout holds uncommitted changes, commit the exact running state as its own checkpoint before merging anything into it. Work that exists only in a working tree cannot be reverted to, bisected, or reproduced after the next push, and the first conflict resolution destroys the only copy of what production is running.
+
+   **Measure each input's real contribution by patch-equivalence, never by its ahead-count.** When the base was rebuilt by squashing an entire lineage, every branch forked inside that lineage carries that lineage as shared history and reports itself hundreds of commits ahead while holding only a handful of new commits. `git rev-list main..branch` counts content already in the base as work, so it is useless for deciding what a branch still contributes:
+
+```bash
+git cherry -v origin/main origin/<branch>                        # + = not in base, - = already equivalent
+git log --cherry-pick --right-only --oneline origin/main...origin/<branch>
+```
+6. Confirm deployment access and required secret names without printing values. Authentication alone is not proof that the account can create the required environment, so verify project and environment access too, and read the CLI's own scope report (`wrangler whoami`, `gcloud auth list --filter=status:ACTIVE --format='value(SCOPES)'`) rather than treating a successful login as full rights: a valid token can be missing the scopes a particular resource type needs, and that surfaces only at upload time, mid-deploy. Also establish which checkout and commit the deployment actually runs from: when that checkout holds uncommitted changes, commit the exact running state as its own checkpoint before merging anything into it. Work that exists only in a working tree cannot be reverted to, bisected, or reproduced after the next push, and the first conflict resolution destroys the only copy of what production is running.
 7. **Bootstrap control-plane credentials one at a time, in the order they are needed.** Several CLIs are involved across repos (git host, deploy platform, DNS, preview host) and each needs its own login. When a CLI refuses to log in because stdin is not a TTY, do not conclude it cannot be driven: switch to its browserless/pairing mode, which prints a URL plus a short pairing code, open that URL directly with `open "<url>"`, and have the user approve the code shown on the page. Pairing sessions expire within minutes, so deliver the link immediately instead of batching logins. For a scheduled sweep that must keep access without a browser, the durable form is an API token the user places in the environment; ask for that specifically rather than re-pairing every cycle.
 
 ## 2. Merge in the specified order
@@ -44,6 +51,12 @@ git merge --no-ff -m 'Step N: merge <branch> into release/<name>' origin/<branch
 ```
 
 After each clean merge, capture the merge commit, parents, file summary, and clean status before proceeding.
+
+**When patch-equivalence says an input is already inside the base, do not merge it.** A squash-rebuilt base makes `git merge` read the shared content as modified on both sides, so a branch whose entire history is already contained conflicts across dozens of files and contributes nothing new. Merging is the wrong verb for that case; skip inputs with zero unique commits and cherry-pick the rest, one commit at a time in plan order:
+
+```bash
+git cherry-pick -x <sha>    # -x records the origin sha in the message for later containment proofs
+```
 
 Once the last input branch is merged, prove none was skipped; a clean history is not evidence that the set is complete:
 
@@ -66,7 +79,16 @@ git grep -n '^<<<<<<< ' -- <expected-files>
 
 Compare the observed set exactly with the plan. Stop and report before resolving if any file is missing from or added to the expected set. An unexpected conflict can indicate a moved base or changed branch and invalidates the recorded resolution instructions.
 
-Resolve each region according to the plan, usually by composing both sides rather than selecting ours or theirs wholesale. Then verify before staging:
+Resolve each region according to the plan, usually by composing both sides rather than selecting ours or theirs wholesale.
+
+**Renumber incoming numbered artifacts; never renumber what the base already ships.** Migrations, schema snapshots, changelog entries and seed files all carry a sequence number that independent feature branches compute the same way, so each one invents the same next value and the merge quietly produces a duplicate sequence that no test catches. It surfaces only where numbering is enforced, which for a database is the deploy-time migration apply against the live store. List what the base already ships, assign each incoming artifact the next free number, and rename every companion in the same change: the artifact file, its metadata or snapshot file, the id or tag inside the manifest or journal, and the previous-id link that chains it to its new predecessor. Keep the manifest ascending, then assert the sequence before staging:
+
+```bash
+ls db/migrations/*.sql | sed 's|.*/||' | cut -d_ -f1 | sort | uniq -d          # must print nothing
+python3 -c "import json;d=json.load(open('db/migrations/meta/_journal.json'));t=[e['tag'] for e in d['entries']];print(len(t),len(set(t)),t[-3:])"
+```
+
+Then verify before staging:
 
 ```bash
 git grep -n -E '^(<<<<<<<|=======|>>>>>>>)' -- ':!<lockfile>' || true
@@ -188,7 +210,9 @@ Report first: the branch and PR, a per-input merits call (land vs close-with-rea
 
 **A release is not published until the scheduled publisher cannot undo it.** Before marking a site release complete, locate the cron/nightly publishing path that will next overwrite production (often a different checkout from the release branch) and reconcile it onto the release tree. Preserve any newer content or uncommitted work in that source before syncing; overwriting it trades a rollback bug for lost work. If the source can't be reconciled cleanly, report the unresolved conflict instead of choosing a side.
 
-On the go, in order: merge the release PR; close each superseded PR with a reason that names the new PR and the containment proof (`Superseded by #<new>, commits contained, verified with git merge-base --is-ancestor`); close conflicting bot PRs such as dependency bumps with a note that the bot re-opens them against the new base. Delete a superseded branch only after the containment command succeeds for it. Containment, not a clean merge, is the deletion gate. If the base branch has no required-check protection, adding it is its own explicit step so the next push cannot land ungated.
+On the go, in order: merge the release PR; close each superseded PR with a reason that names the new PR and the containment proof (`Superseded by #<new>, commits contained, verified with git merge-base --is-ancestor`); close conflicting bot PRs such as dependency bumps with a note that the bot re-opens them against the new base. When the base was squashed, `--is-ancestor` cannot succeed for commits that entered as part of the squash, so prove containment by patch-equivalence instead (`git cherry -v` showing every commit marked `-`, or `--cherry-pick --right-only` returning empty) and state which proof you used. Delete a superseded branch only after the containment command succeeds for it, and record its SHA before deleting so the branch can be restored. Containment, not a clean merge, is the deletion gate.
+
+**Compute the open-PR base set and exclude it from any batch deletion.** A branch that is the base of an open PR would strand that PR, and a loop walking a name pattern will take it without complaint. Run batch remote operations with credential prompts disabled (`GIT_TERMINAL_PROMPT=0`) so an interactive prompt cannot stall the loop halfway through a destructive list; a host that refuses to delete the default branch still ends the loop at that element and drops everything after it. If the base branch has no required-check protection, adding it is its own explicit step so the next push cannot land ungated.
 
 ## Stop conditions
 

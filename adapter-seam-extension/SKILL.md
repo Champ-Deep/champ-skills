@@ -125,8 +125,13 @@ value we believed we had sent. Take the field names from the provider's own
 reference or a captured real response, and pin them in the seam's test as literal
 strings so a rename on either side breaks a test instead of a transaction.
 
-Two rules that travel with it:
+Three rules that travel with it:
 
+- **Pin the miss shape alongside the field names.** What "no result" looks like
+  (empty array, null, a status field) is part of the contract, and it is what the
+  caller's fall-through to the next provider keys off. A test that exercises only
+  the hit shape never proves the adapter no-ops on a miss instead of inventing a
+  row.
 - **Omit an optional block rather than filling it with a placeholder.** A
   placeholder that would become a real-world fact (a contact record, an address,
   an identity field on a registration) is worse than an absent block: the provider
@@ -167,10 +172,62 @@ Keep the invariant stated in prose for whoever reads the tool's output:
 dimensions are separate cuts of one population, and adding across them is
 always wrong. Say it where the consumer sees it, not only in the schema.
 
+## A registry entry is never one file
+
+The adapter is the easy half. Before writing it, grep the previous provider's
+identifier across the repo to find every site that enumerates providers: the
+priority table, the reliability or confidence table, the engine's registration
+call, the integrations registry, the per-provider key tester, the example env
+file. One of those is usually *derived* from another, and a coverage test that
+asserts every allowed name has an entry over there turns a single-file addition
+into a change that stays red until the whole set lands in the same commit. Find
+that binding first and land the set together.
+
+Two economics rules belong in the same change:
+
+- **A flat-priced provider in a per-call cost table** gets the nominal figure the
+  table expects, with a comment saying billing is flat. The escalation order then
+  stays a useful ordering rather than a false precision nobody can defend.
+- **A metered sub-field stays unclaimed.** When a field (a mobile number, a
+  sub-lookup) bills per hit at a rate far above the tier's nominal cost per call,
+  leave it out of the first version. Unclaimed is a decision you can point at and
+  switch on later; silently claimed is a budget bug the first batch discovers.
+
+## The deploy lineage is its own reading pass
+
+A repo that ships from a second lineage (an integration branch, a
+platform-specific stack) does not inherit a change landed on the default branch,
+and the second lineage is what the live app runs from. Treat the port as its own
+pass rather than a copy:
+
+- **Diff the target lineage's enumeration sites against the source's before
+  copying anything.** Priority table, provider list, cost table: a slot present on
+  one side can be absent on the other, so rank numbers and neighbour order are not
+  portable, and a comment explaining the source's ordering may describe a slot the
+  target never had.
+- **Re-derive what that branch's own tests enforce.** Beyond the allowlist and the
+  coverage test binding names to testers, a branch may carry an explicit
+  "implemented providers" enum that a console reads to decide whether to report
+  code behind a slot. Missing it is a silent UI lie, not a test failure. Grep that
+  branch's tests for list-shaped assertions and expect every one to need updating
+  in the same commit.
+- **Run the target lineage's suite, not the source's.** The file count differs, so
+  a green run on the branch you started from says nothing about the port.
+- **Carry deploy wiring with the code.** An instance cannot see a new provider key
+  until the example env file, the deploy script's name array and the worker's
+  forwarded-env list all name it. Where a test keeps those three in step, missing
+  the third is caught only by running that branch's suite.
+
 ## Pitfalls
 
+- **Calling a deployment covered because the change is merged.** Merged into which
+  branch? The platform builds what it is pinned to, and an unmerged local commit
+  says nothing about whether a deployment exists at all.
 - **A `*_provider` setting in config that the factory ignores.** Check the
   factory, not the config.
+- **Assuming a new provider is one file.** Derived allowlists and the coverage
+  test binding them to their testers keep a single-entry addition red until every
+  enumeration site changes with it.
 - **Empty-returning new methods on a base class.** Silent success, wrong
   behaviour, no exception to trace.
 - **Fetching inside a loop.** One page view becomes hundreds of quota burns.

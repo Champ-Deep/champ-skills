@@ -45,6 +45,7 @@ Every draft is: greeting, one context line, the body, one clear ask with a date,
 | Intro | Who each person is in one line each, why they should talk, the specific first step |
 | Update plus research brief | Two bold mini-heads as plain lines (what changed, what I need from you), each over its own numbered list, then one ask naming the deliverable and a date | One long numbered list mixing changes and asks |
 | Reply in a thread | Answer first, reason second, two to five sentences |
+| Leave or work-from-home request | Greeting, one line approving with the reason stated back to them, one line of support or of what you need instead. Approve the request that carries a stated reason (illness, safety, no transport); when a request gives no reason at all, ask for the reason and a one-line plan per day before approving, and say the request is not approved yet until that comes back. cc stays as the sender set it (attendance and the HR owner), because the approval is a record, not a private note |
 | Decision ask to a leader | The decision in the first line, options numbered, Deep's recommendation, the date he needs it by |
 | Confirmation of a slot he proposed | One line: does the time work, yes or no, with the exact day, date and zone repeated. No restating the thread, no new asks: he answers "yes" or "move it" and stops |
 
@@ -97,6 +98,7 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 - [ ] Every deadline is either sourced or named as mine in the handback. A deadline I chose is a proposal Deep may strike, so it never goes out silently as a fact.
 - [ ] Before proposing a due date, check the recipient's calendar or leave: a proposal that lands on a colleague's leave, a holiday or a milestone of theirs is called out as its own option (move the date to the next working day) in the handback, never embedded silently in the draft.
 - [ ] `toRecipients` holds a real address for the right person, or is empty and flagged. Never Deep.
+- [ ] A leave or work-from-home reply says plainly whether it is approved. "I will confirm once I have the reason" is not an approval, and a draft that reads as one either way leaves the person waiting on a second mail.
 - [ ] Subject is what the recipient should see: specific, no bracket tags.
 
 ## Worked example (bot draft, then the fix)

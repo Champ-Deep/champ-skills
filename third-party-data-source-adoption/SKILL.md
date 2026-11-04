@@ -1,6 +1,6 @@
 ---
 name: third-party-data-source-adoption
-description: "Use when building on an external data feed or API."
+description: "Use when evaluating or building on an external data source."
 version: 1.0.0
 license: MIT
 metadata:
@@ -46,6 +46,20 @@ a broker 401 is a human login step, so stage the exact login and token-mint comm
 a blocked decision rather than retrying or stubbing the pull. If the broker bills per
 call, pass its cost-cap and attribution headers so one retry loop cannot run the bill.
 
+**Check the catalog one level down, before writing a direct client.** The same
+broker often carries the individual vendor we were about to integrate (an HLR
+network, a lookup API, a search provider) as its own routes:
+`treg catalog search <vendor>` returns endpoints named
+`<vendor>.<domain>.<action>`, each with the upstream route, a price and an
+answer shape. When the vendor is there, call it through the broker: the
+credential already exists, prices are visible at adoption time, and no
+procurement step lands in the path. Building the direct client instead buys a
+second credential that has to be bought and provisioned by a human, which turns
+a feature that could ship today into a capability block. If the search returns
+nothing, the direct client is correct and the credential becomes a blocked
+decision card. See `references/broker-routes-and-billing.md` for the full
+recipe, including how to tell reported price from actual spend.
+
 ## Procedure
 
 0. **Check the account's own dashboard for an account-level default before
@@ -59,11 +73,35 @@ call, pass its cost-cap and attribution headers so one retry loop cannot run the
 1. **Read the terms page, not the pricing page.** Fetch the terms and search for
    the clause naming your use: commercial use, redistribution, re-serving as an
    API, white label, monetisation of derived insights. The pricing page advertises
-tiers; the terms grant rights, and the two are written separately.
-   vendor can advertise a free tier and forbid commercial use of it — free
-   *access* and the right to *resell* are different grants. See
+tiers; the terms grant rights, and the two are written separately. A
+vendor can advertise a free tier and forbid commercial use of it: free
+*access* and the right to *resell* are different grants. See
    `references/licence-and-terms-checks.md` for the clause checklist and the
    flags that mean "do not build on this yet".
+
+   **Then map each clause onto a specific line of your own system, and bucket it
+   before you report.** A clause you cannot point at a file, table or flow for is
+   a clause you will argue about twice. Two buckets, decided by what the clause
+   tests, and never by which section number it carries:
+
+   - **Entity-scoped**: tests *who the customer is*. Eligibility, competitor
+     exclusions, who counts as an Authorized User. A different contracting entity,
+     or keeping an affiliate's staff off the key, can settle these outright.
+     Verify the corporate relationship from records rather than assuming it, and
+     state the condition that keeps it satisfied.
+   - **Artefact and clock-scoped**: tests *what you built and how long you hold
+     it*. No dataset or derivative derived from the service, retention limited to
+     the term, deletion with proof on exit, no making results available to third
+     parties. A different entity and a different database move these not at all.
+
+   Reporting the agreement as one verdict is wrong in both directions: all-blocked
+   hides a restriction behind a clause you already solved, all-cleared lets a solved
+   clause carry one it never addressed. Report the split, name for each clause the
+   code path it touches (the write-back's upsert target, the sync, the client
+   deliverable), and give the remedies as options rather than a refusal: a written
+   permission the terms themselves invite, a non-persisting design that stays
+   inside the grant, or an exposure ruled on knowingly. Refusing to build is one
+   option, not the default.
 
 2. **Probe what the paid tier actually gates, before budgeting for it.** Plans
    routinely price a subscription that the feature does not need, because the
@@ -144,6 +182,31 @@ data shape rather than only the verdict. "This feed lists breached websites, so
 large B2B vendors never appear in it" is actionable; "vendor watch had no data" is
 a symptom.
 
+## Price ceilings that actually bind
+
+When one request fans out across paid layers (phone check, reverse lookup, email
+verify, person and company enrich), "cheapest provider first" is a preference, not
+a cap: when the cheap answer does not come back the router spends whatever the
+policy reaches next, and one row lands on a provider priced far above the tier it
+was sold as. Encode the tier as a per-call ceiling checked **before** the network
+call, so an over-price attempt costs nothing instead of being logged after the
+money moved, and encode a run-level spend cap that marks later work
+`skipped (spend cap reached)` rather than dropping it silently or spending past
+the limit.
+
+- **Assume a layer can bill on a miss.** A paid lookup that charges for no answer
+  has to show that cost beside the miss, or the row's cheapest route reads as
+  expensive and nobody can see which layer spent the money.
+- **Carry the per-layer cost on the result itself**, next to the serving provider
+  and the endpoint used. A pipeline reporting only a total cannot be audited for a
+  leak after the fact; the evidence row is what makes the next tier decision a
+  measurement instead of a guess.
+- **Price a tier from the rows you expect, not from one lucky row.** Each row picks
+  one path through the chain, so a single sample measures one provider path. Run
+  the same realistic set through each tier, put both totals next to each other,
+  and let the default tier be a decision with both numbers on it: it is a price
+  paid per row, not a config default.
+
 ## Pitfalls
 
 - **Writing per-platform OAuth when a broker already holds the connections.** App
@@ -151,6 +214,27 @@ a symptom.
   buys you credentials that rot and a compliance review you did not need.
 - **Reading the pricing page for rights.** Rights live in the terms, and the two
   are written by different teams.
+- **Reporting an agreement as one verdict when its clauses test two different
+  things.** Entity-scoped clauses and artefact-and-clock clauses answer to
+  different fixes, so a single "cleared" or "blocked" always hides the half that
+  decides the build.
+- **Asserting where your own write path lands from a spec diagram.** An
+  architecture drawing names the destination the design intends, while the code
+  names the one it uses, and the two differ whenever a sync step is deferred or
+  optional. Read the write path in the repository before describing where data
+  goes, then cite the file.
+- **Treating a Deep pushback on a findings verdict as something to concede or
+  defend.** He names an entity, a target or a scope; check it against the records
+  and the code first, concede what verifies in the correction-first order, and hold
+  only what his correction did not move.
+- **Re-opening a clause Deep has already ruled on.** A ruling ends the analysis,
+  not the need to record it: move the overridden clauses into a dated ruling
+  section saying what he decided and what he delegated, rewrite the verdict as
+  what was actually built, and keep only the constraint the ruling did not cover.
+  The licence scope of the output survives an exposure accepted as boilerplate
+  (internal use only, written permission before any client deliverable), so name
+  that one line and drop the rest. A findings list that still marks a ruled clause
+  as an open risk asks him for the same decision twice.
 - **Treating a free key as a commercial right.** It is access, not resale.
 - **Budgeting the paid tier before probing the free one.** The gated operation is
   often not the one the feature performs, so the purchase can be deferred past the
@@ -168,6 +252,8 @@ a symptom.
   contract, not our types, so an invented name surfaces as a missing required
   field on the first live call while every unit test stays green; pin the
   provider's literal names in a test.
+- **Letting the router climb when the cheap provider misses.** A miss is a reason
+  to report unknown, not a licence to spend; the ceiling is what stops it.
 - **Filling a required human-only block with placeholder data.** Omit the block or
   wait for the real value: invented identity or contact data is accepted, then
   cannot be recalled.

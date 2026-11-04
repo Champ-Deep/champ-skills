@@ -38,6 +38,31 @@ Metadata and catalogue endpoints are frequently public and keyless while only
 search by subject is gated. If the free tier already covers the operation the
 feature performs, the purchase belongs to a later gate.
 
+## 2b. Map each clause to a line of your system, then bucket it
+
+Point every clause you found at a specific file, table or flow before reporting.
+A clause with no code path attached gets argued twice: once as abstract legal
+worry, once as an implementation dispute.
+
+Bucket by what the clause tests, not by its section number:
+
+| Bucket | Tests | Settled by | Worked examples |
+|---|---|---|---|
+| Entity-scoped | Who the customer is, and who may act for it | Contracting entity, ownership records, who holds the key | Competitor exclusion, eligibility, the definition of Authorized Users (usually employees plus wholly or majority owned subsidiaries) |
+| Artefact and clock-scoped | What you built, and how long you hold it | The design: where results are written, whether they persist, what leaves the building | No dataset or derivative from the service (aggregated or de-identified included), retention limited to the term, deletion with proof on exit, no supplying results on behalf of a third party |
+
+An entity change fully settles the first bucket and does not touch the second. A
+design change fully settles the second and does not touch the first. Report both
+rows: naming one and implying the other follows is how a real restriction gets
+carried into the build unnoticed.
+
+Each clause also needs its remedy named as an option. In order of cost: a written
+permission the terms themselves may invite (a "contact us and we may enter into a
+separate agreement" clause is an invitation, not a dead end), a design that stays
+inside the grant (a live lookup that is never persisted, a source tag so exit
+deletion is one query), or an exposure accepted knowingly and recorded as a ruled
+decision. "Do not adopt" is the last option, not the first.
+
 ## 3. Flags that mean "do not build on this yet"
 
 | Flag | Why it stops the build |

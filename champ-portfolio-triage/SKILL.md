@@ -68,6 +68,24 @@ unmerged branch is a review gap, work merged but absent from the live build is a
 deploy gap, and only work nowhere on the remote is a push gap. Naming a push gap
 without this check produces an escalation email to someone who did push.
 
+## Before calling a branch stale, measure ahead and behind separately
+
+A single `git diff <main>..<branch> --stat` is inflated by merges from both sides: a
+branch three commits behind and a hundred ahead reads as a 650-file diff that is almost
+entirely main's own work, and judging on it calls live work dead. Run
+`git log <main>..<branch> --oneline | wc -l` (what the branch adds) and
+`git log <branch>..<main> --oneline | wc -l` (what it lacks), then a path-scoped diff
+over only the directories the branch claims to touch
+(`git diff <main>..<branch> --stat -- src/`). The scoped diff is the verdict: it shows
+whether the branch holds anything main does not. Quote all three numbers when you say
+a branch is stale, and when a branch does hold work, look for the card and worktree
+that own it before proposing a replacement.
+
+When you do replace stalled work with a new card, mark the old one in the same turn:
+a blocked card left unmarked is resumed by the dispatcher onto the dead branch, and a
+TASKS.md line still naming the old id sends the next session to work that was declared
+superseded.
+
 ## Verified 2026-10-02
 
 **ChampLantern** (`Champ-Deep/ChampLantern`, private, Python+React, 4 commits all 2026-09-30, ~17.5k LOC).

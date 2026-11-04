@@ -49,6 +49,42 @@ versus the help centre for the same field: feature lists, limits, counts, prices
 Contradictions, unrendered stat counters, and placeholder testimonials on case-study pages
 are stronger and cheaper findings than any review.
 
+**Tier limits come from the entitlement response, not the pricing page.** For a
+hosted product with a free or trial tier, the layer that decides what we actually
+get is the runtime entitlement call the app itself makes with the real key: it
+returns per-feature booleans (memory, analytics, channels), the plan code,
+retention and count limits, and whether self-hosting is licensed. Read it with a
+one-file probe that imports the app's own SDK and loads its `.env`, prints the
+payload, and never echoes the key; place the probe inside the package that owns
+that SDK, since module resolution walks up from the script's path, not the working
+directory. One call settles claims the docs get wrong in both directions, and it
+separates "the tier refuses this feature" from "we failed to reach the service",
+which read identically in a setup checklist.
+
+**Absence from the README is not absence from the product.** A capability the
+docs never mention is usually licence- or deployment-gated (a Helm chart plus a
+licence token env var, an entitlement flag) rather than unimplemented. Check those
+surfaces before writing that a product cannot self-host or lacks a feature, and
+report the gate instead of the absence.
+
+**Normalize price before you rank anything.** Vendors in one category rarely bill the same
+unit: rate limits, credits, seats, record caps and per-call charges are different
+denominators, so a "cheapest" ranking built on headline prices is fiction. Convert every
+option to the one unit the requirement actually consumes (per 1,000 records delivered, per
+seat per month, per 10k tokens), state the conversion assumption beside the table, and mark
+any row you could not source as UNVERIFIED rather than filling it from memory. Then keep the
+two numbers that always differ apart: the normalized price at the plan's cap is a floor
+reached only at saturation, while the price at the measured hit rate is what the work will
+cost. Report both, each labeled, because the first one sells and the second one decides.
+
+**Recommend the cheapest run that produces the deciding number.** When the metric the
+decision turns on is not published anywhere (usable-hit rate, deliverability after
+verification, refresh latency, p95 latency), the deliverable is not a verdict, it is a
+test: name the sample size, the live input to run it against, the figure to compare it to in
+our own stack, and the fact that it costs nothing but time. The vendor's silence on that one
+number is itself a finding, and the action item becomes obtaining it rather than debating
+around it. Mark such a next step reversible so it never needs a meeting to approve.
+
 ## Before you plan a build: check whether we already own it
 
 When the ask implies building a replacement, **search our own repos and the vault before

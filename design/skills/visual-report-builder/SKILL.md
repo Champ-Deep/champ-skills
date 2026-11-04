@@ -189,7 +189,7 @@ TOPBAR
 HERO
   Kicker (mono, uppercase, brand accent, with decorative line)
   H1 headline (serif, one word italicized with gradient)
-  Deck paragraph (sans, secondary color, max-width 56ch)
+  Deck paragraph (sans, secondary color, max-width 50ch, see the measure rule)
   Stat strip (3-7 key metrics in a grid)
 
 SECTIONS (01 through N)
@@ -378,6 +378,7 @@ Every report follows this structure:
   pushes the track past the viewport while every child still measures inside it.
 - Wide data tables sit in an `overflow-x: auto` wrapper so they scroll in place
   instead of scrolling the page or being clipped by the root.
+- Body and deck paragraphs cap at `max-width: 50ch`, not the 56ch to 70ch that reads as generous in the source. `ch` is the width of a `0` glyph, roughly 1.3x an average text character, so `70ch` renders about 93 characters and `visual-verify`'s measure check fails it against its 65-character cap. Set 50ch, then trust the character count the audit reports back over the unit you typed.
 - `max-width: 1600px` on the shell container, so the report uses the full width on wide screens (Deep dislikes a narrow centered column with dead space either side). Generous horizontal padding
   via `clamp(16px, 4vw, 40px)`.
 

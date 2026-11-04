@@ -95,6 +95,32 @@ credential belonging to a different system arrives configured and fails at reque
 Unset provider keys in the launcher script so the `.env` file is the only source, and say
 plainly at startup when no key is present rather than failing later inside a request.
 
+## Keep the four non-answers apart
+
+A layer's answer can be: not requested, requested but not run, run with no match,
+run and failed, run with a hit. Collapsing any two makes the consumer assert
+something nobody established:
+
+| State | Renders as |
+|---|---|
+| switch off | `not requested` |
+| cap, disable or skip stopped it | `skipped (reason)` |
+| ran, provider said nothing, or provider does not cover this input | `no match`, reported as unknown |
+| ran and errored | `error: <status>` |
+| provider declined to say (reachable, identity) | `null` / "not stated" |
+
+Carry the state as an explicit value through the API, the UI and the export, and
+never translate one into another: a miss is unknown, not a `false`, and a provider
+that does not cover the input is a gap in the provider, not evidence the record
+does not exist. A re-run with fewer layers must report the ones it did not run as
+not requested rather than as a miss.
+
+**Apply defaults before answers, never after.** A field-defaulting pass that runs
+after enrichment stamps `not requested` or `""` over a value a layer already
+filled, and the export then shows an empty answer where a hit exists while every
+check on the happy path stays green. Stamp first, fill after, and assert a known
+answer survives the whole pipeline.
+
 ## Pitfalls
 
 - **Guarding on presence instead of wrapping the call.** Passes on an invalid inherited key.

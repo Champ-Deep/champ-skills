@@ -170,6 +170,21 @@ absence, and a feature that is off makes "no change" look like proof of
 stability. Report the configuration state alongside the number, and send the
 question to whoever owns the measurement rather than resolving it yourself.
 
+## Addresses and identifiers must be reconciled, not just delivered
+
+When enrichment returns a value keyed to an entity (an email domain, a phone
+country code, an account id), reconcile it against what you know about that
+entity before it reaches the consumer: a known-domain allowlist covering the
+entity plus its subsidiaries and listed parents. A hit on an unexpected domain
+is usually a parent or brand domain and is legitimate; occasionally it is the
+wrong company. Both outcomes must be visible, because a silent pass-through
+puts a mis-keyed value in front of a buyer and a silent filter deletes real
+coverage. Report the mismatches as a named group with their domains.
+
+The same shape governs who a value is attributed to: a title or role returned
+alongside a name is part of the claim, so label it by what the source actually
+said rather than promoting it to the senior position that was being sought.
+
 ## Build the deliverable, then verify its cells against source
 
 Writing the consumer of a number is a verification pass, not just an output

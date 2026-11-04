@@ -96,6 +96,32 @@ browser prompt; the vault is for the reference, not the secret.
 If a login page is not currently open, say what is needed and stop there rather
 than inventing a storage location.
 
+## Editing an env file without reading it
+
+`read_file` refuses `.env` and its siblings by design (defense in depth). Do not
+route around it; get the structure from `.env.example` or the template the tool
+ships, copy it to `.env`, then edit by key name:
+
+```bash
+cp .env.example .env
+sed -i '' -e 's|^KEY_TO_SET=.*|KEY_TO_SET=value|' .env   # anchored on the key, whole line
+sed -i '' -e 's|^# COMMENTED_OUT=.*|COMMENTED_OUT=value|' .env
+
+grep -n -E '^(KEY_TO_SET|OTHER_NONSECRET)=' .env         # lines you authored: safe to show
+grep -oE '^[A-Z_][A-Z_0-9]*=.+' .env | cut -d= -f1     # secret keys: names only
+```
+
+Choose a sed delimiter that appears in NEITHER the pattern nor the replacement:
+a `#` inside a `#`-delimited expression ends the pattern at the first inner `#`
+and sed aborts with a "bad flag" error partway through the edit list, so earlier
+expressions may already have applied and later ones silently did not. When the
+punctuation makes anchoring awkward, edit with the `patch` tool on `.env.example`
+and mirror the same single-line change into `.env`.
+
+Verify secret-bearing lines by NAME (present, empty, duplicate), never by
+content; verify non-secret lines (ports, URLs, feature flags) by content freely,
+since you wrote them.
+
 ## CLIs that dump variables
 
 A command whose normal output is a variable dump (`railway variables`,
