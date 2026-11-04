@@ -47,6 +47,14 @@ Only install into a fresh environment if no interpreter probes clean. Re-running
 install against the PATH python while a working one already exists elsewhere just
 repeats the same failure with a different interpreter.
 
+**A second interpreter spawned from `execute_code` inherits the kernel's environment.**
+Strip `PYTHONPATH`, `PYTHONHOME` and `VIRTUAL_ENV` from the child env
+(`env={k: v for k, v in os.environ.items() if k not in ("PYTHONPATH", "PYTHONHOME", "VIRTUAL_ENV")}`)
+or the foreign Python resolves modules against the Hermes kernel's own site-packages and
+fails on imports it demonstrably has installed. When a package probes clean under
+`terminal` and still fails to import from `execute_code`, this leak is the first suspect,
+not a missing install.
+
 In sandboxes where Chromium is preinstalled, it is already on the path and no download is needed. When neither script's browser works, the one-shot fallback that still lets you LOOK is a headless Chrome screenshot fed to a vision call: `"<chrome>" --headless=new --disable-gpu --hide-scrollbars --window-size=1200,<full height> --virtual-time-budget=10000 --screenshot=out.png <file>` then `vision_analyze` on the PNG. Keep `--virtual-time-budget` in that line: without it the shutter can fire before webfonts and images finish loading, and the look pass then judges fallback typefaces and empty boxes instead of the build. Size the window tall enough to cover the whole page, or say plainly which sections the shot did not reach: a partial screenshot reported as a full check is the same false pass the gate exists to prevent. If a page must be served rather than opened as a file, start the static server as a background process in one call and run the audit or shoot script in a separate call: chaining `python3 -m http.server` and the Playwright script in one foreground command gets rejected as a long-lived process and runs neither. If a browser genuinely cannot be obtained, say so plainly, fall back to the manual checklist in `reference/critique-protocol.md`, and label the output **unverified**. Never silently skip the gate and imply it passed.
 
 ---
@@ -144,6 +152,17 @@ every type tile plus a sample of the photo tiles rather than judging the set fro
 grid shot. A literal question is answerable from pixels; an evaluative one invites
 the model to supply the answer.
 
+**The inverse failure is the all-clear.** Asked a yes/no ("any text overlapping here?") across a
+batch of pages, a vision pass returns a uniform "No" for every page whatever the pixels show,
+because a negative is the cheap answer to a yes/no and nothing forces the model to look. Ask for
+the literal inventory instead: what sits directly behind this line of text, what this caption's
+box touches, read the words on this line and name what they run into. Cross-check the answer
+against a deterministic count wherever the source allows one: a bullet list that must match its
+approved source counts 4 against 6 in a single `grep -c`, as does a dash count or an element
+count. Treat an all-clear on the first pass as the trigger to re-ask with a literal question,
+never as a green gate: the defects a second pass then finds were found by the question, since
+the page did not change between the two.
+
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body), and when that ground is a gradient, against every stop in it, taking the worst. White body copy can clear 4.5:1 over a band's dark end and genuinely fail over its light end, and that split decides the fix: a genuine worst-stop failure moves the band to a dark ground (the same dark warmth, no desaturation), while an artifact that passes on every stop gets an opaque ground a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or is recorded as a known checker limitation. Real luminance maths in about ten lines of Python settles which case each FAIL is. Report FAILs you leave standing as measured passes with their worst-stop ratios, never as ignored.
 
 **A brand accent is graded at the size it is set at, not the size of the thing it sits
@@ -212,6 +231,13 @@ For a non-web deliverable (PDF, PPTX, DOCX, poster, chart image), you still shoo
 pdftoppm -png -r 110 deck.pdf .verify/page      # PDFs
 soffice --headless --convert-to pdf deck.pptx   # decks, then pdftoppm
 ```
+
+When poppler is absent, render the PDF in-process instead of installing anything:
+`pymupdf.open(path)[i].get_pixmap(dpi=90).save(f"page-{i+1}.png")`. For a multi-page
+document, tile the pages into one contact sheet with PIL (three columns, grey gutters) so a
+single vision call sweeps the whole file, then take the per-page verdicts from the
+individual page PNGs: at 90 dpi a sheet is a navigation aid, not evidence, and a page that
+reads clean in the grid can still carry text touching its trim.
 
 ---
 
