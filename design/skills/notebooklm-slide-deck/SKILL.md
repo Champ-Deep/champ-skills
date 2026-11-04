@@ -42,6 +42,9 @@ Do this instead, every time:
 
 With content sources alone, NotebookLM returns a generic dark-charcoal, single-accent, wireframe-box deck with no logo. Before generating, add as sources: (1) a visual-direction PDF built from the brand skill (palette with hex and ratios, type, illustration language, do and don't, and 3 to 4 sample slide layouts rendered at 1376x768 via Playwright `page.pdf`), (2) the logo PNGs (full colour and white), (3) a slide-by-slide storyboard with a visual note per slide. In the prompt, name the grounds, hex codes, illustration style, logo placement and the bans (stock photos, 3D, dark charcoal, wireframe boxes), and tell it to follow the storyboard in order. Keep the prompt under about 2,000 characters and carry a short version too. Worked example: `Atlas/Clients/GBG/context-docs/notebooklm/` (00b prompt, 05 storyboard, design/).
 
+- Build the reference pages on a header, content and footer grid with decorations in their own cells, then gate them with `scripts/layout_check.py <file.html> <out_dir>` (text over svg/img/.deco, text outside its card, text off the page, under 13px; it renders the PDF and PNGs only at zero problems). A vision pass called a reference with 20 measured collisions clean, and Deep rejected it on sight; never ship a reference on a vision verdict.
+- Size the deck to the slot. A deck shown for about ten minutes at the end of a discovery call is 8 slides at most: one slide for the whole pilot plan, no chapter dividers, and no slide for anything discovery is meant to find out (segments, personas). An 18-slide storyboard was rejected as far too long.
+
 ## Writing the generation prompt: slide content only, never a verbatim script
 
 Never write a prompt that asks NotebookLM to put a "near-verbatim speaker script" or word-for-word
