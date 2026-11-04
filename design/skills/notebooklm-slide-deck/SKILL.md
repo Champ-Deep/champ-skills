@@ -149,6 +149,8 @@ To do this:
 
 ## Notes
 
+- Hermes lane (no Chrome MCP): the `notebooklm` CLI from the pipx venv `notebooklm-py` (`notebooklm login`, `create`, `source add`, `generate slide-deck`, `download`). Prove auth with `notebooklm status`; "Not logged in" means no `~/.notebooklm/storage_state.json`. `login` needs Playwright Chromium in that venv (`~/.local/pipx/venvs/notebooklm-py/bin/python -m playwright install chromium`) and a human Google sign-in in the window it opens; if it asks "Save authentication anyway?" with a `/trynow` URL, the user is not signed in, answer N.
+
 - If NotebookLM's UI has changed since this was written (button labels, modal layout), fall back
   to `read_page` with `filter: "interactive"` to re-discover the current controls rather than
   guessing at coordinates from memory.
