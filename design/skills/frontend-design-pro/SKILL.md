@@ -55,6 +55,10 @@ Every interactive element gets a hover, focus and touch response from `reference
 
 Charts and tables follow `references/charts-tables.md` (pick by data shape, values on marks, separate scales when units differ, hairline tables with computed columns). Motion follows `references/motion.md` (one load sequence, reveals on scroll, count-ups ending on stated values, `prefers-reduced-motion`, `?static=1` for PDF and PNG export).
 
+### 5b. Art style (only when the brief names a mood or look)
+
+When the request asks for a style (pop art, neon, stained glass, claymation, glitch and so on) or a campaign, event or social look without a brand lock on the visuals, pick one of the 20 in `references/art-styles.md`. Each has a short image prompt with a `{subject}` slot, a web recipe, taste dials and an Avoid line. One style per page. The brand skill still wins on colour, type and logo; the style supplies texture, light and composition. Skip this step for product UI and data pages.
+
 ### 6. Quality gate (before delivery, every mode)
 
 1. Render at 390 and 1440 (and dark if the page supports it). Open the screenshots with the Read tool and critique them.
@@ -67,4 +71,4 @@ Charts and tables follow `references/charts-tables.md` (pick by data shape, valu
 
 ## References
 
-`references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`. When they are not in the account copy, read them from the vault at `Other/Skills/frontend-design-pro/references/`.
+`references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`, `references/art-styles.md`. When they are not in the account copy, read them from the vault at `Other/Skills/frontend-design-pro/references/`.
