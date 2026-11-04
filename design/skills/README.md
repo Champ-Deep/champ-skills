@@ -23,7 +23,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `pdf-to-html` | Convert a PDF into a single, self-contained, faithful HTML file that the presales team can host, share as a web link, drop into a page, or edit. Use this skill whenever s |
 | `power-design` | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
-| `prospect-deck` | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
+| `prospect-deck` | Retired 2026-11-05. Use the `meeting-prep` skill, CLF mode (research is Step 0 of Phase 1; the NotebookLM build is the `notebooklm-slide-deck` skill). Redirect stub, remo |
 | `research-to-visual` | Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) int |
 | `responsive-viewport-qa` | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |

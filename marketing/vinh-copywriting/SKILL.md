@@ -1,6 +1,6 @@
 ---
 name: vinh-copywriting
-description: "Writing layer that sharpens persuasive text — emails, talking points, slide copy, pitch decks, proposals, LinkedIn posts. Based on Vinh Giang's communication and storytelling frameworks. COMPANION SKILL: pptx, power-design, clf-meeting-prep, reach-engage, outbound-email, prospect-deck, reach-cadence load this when producing copy meant to persuade. MANDATORY TRIGGER for writing, copywriting, content creation, or any text improvement request. Also trigger on: \"make this clearer,\" \"simplify,\" \"too corporate,\" \"jargon,\" \"punch this up,\" \"tighten this,\" \"write like a human,\" \"make this land,\" \"strip the fluff,\" \"tell a story,\" \"add a story,\" \"rewrite for clarity.\" NOT for landing pages. If persuasive words are being written, this skill applies."
+description: "Writing layer that sharpens persuasive text — emails, talking points, slide copy, pitch decks, proposals, LinkedIn posts. Based on Vinh Giang's communication and storytelling frameworks. COMPANION SKILL: pptx, power-design, meeting-prep, reach-engage, outbound-email, reach-cadence load this when producing copy meant to persuade. MANDATORY TRIGGER for writing, copywriting, content creation, or any text improvement request. Also trigger on: \"make this clearer,\" \"simplify,\" \"too corporate,\" \"jargon,\" \"punch this up,\" \"tighten this,\" \"write like a human,\" \"make this land,\" \"strip the fluff,\" \"tell a story,\" \"add a story,\" \"rewrite for clarity.\" NOT for landing pages. If persuasive words are being written, this skill applies."
 ---
 
 # The Vinh Giang Writing Method
@@ -28,7 +28,7 @@ This skill is designed to be **loaded by other skills** at the moment they produ
 | **reach-engage** | When drafting the personalized cold outreach message (the "first touch") |
 | **reach-cadence** | When writing follow-up sequence emails (Day 3, 7, 14, 21, 30) |
 | **outbound-email** | When generating cold emails, nurture sequences, or breakup emails |
-| **prospect-deck** | When writing slide narrative or research summary prose |
+| **meeting-prep (CLF mode)** | When writing slide narrative or research summary prose |
 | **reach-activate** | When creating battle cards, one-pagers, or multi-channel messaging |
 | **prospect-campaign-plan** | When writing email templates, LinkedIn post copy, or messaging hierarchy |
 

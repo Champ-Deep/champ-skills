@@ -36,7 +36,7 @@ A coordinated multi-channel kit for one account, every piece consistent with the
 
 ## Power-ups (optional)
 
-- Skills: `prospect-deck`, `prospect-campaign-plan`, `power-design` and `pptx` for decks, `visual-report-builder` for one-pagers, `canvas-design` for visuals, `b2b-blog-writer` for content.
+- Skills: `meeting-prep` (CLF pitch mode), `prospect-campaign-plan`, `power-design` and `pptx` for decks, `visual-report-builder` for one-pagers, `canvas-design` for visuals, `b2b-blog-writer` for content.
 - Tools: NotebookLM for grounded deck building, Canva for polish.
 - Champ stack: ChampVoice for the voice touch, SlideSmith for decks.
 

@@ -27,7 +27,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `pdf-to-html` | Design & Creative | Convert a PDF into a single, self-contained, faithful HTML file that the presales team can host, share as a web link, drop into a page, or edit. Use this skill whenever s |
 | `power-design` | Design & Creative | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Design & Creative | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
-| `prospect-deck` | Design & Creative | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
+| `prospect-deck` | Design & Creative | Retired 2026-11-05. Use the `meeting-prep` skill, CLF mode (research is Step 0 of Phase 1; the NotebookLM build is the `notebooklm-slide-deck` skill). Redirect stub, remo |
 | `research-to-visual` | Design & Creative | Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) int |
 | `responsive-viewport-qa` | Design & Creative | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Design & Creative | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |
@@ -74,7 +74,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `span-company-profile` | Marketing & Content | Build a SPAN company profile page (for example Zoho, HubSpot, NetSuite) with firmographics, technographics, install base, switching signals, reviews, sentiment, hiring, c |
 | `vinh-copywriting` | Marketing & Content | Writing layer that sharpens persuasive text, emails, talking points, slide copy, pitch decks, proposals, LinkedIn posts. Based on Vinh Giang's communication and storytell |
 | `b2b-growth-showcase` | Sales & Outreach | Unified B2B growth showcase generator (v3). From a prospect's website or domain, produces personalized sales assets: (A) 12 standalone premium images, (B) a '10 Ways [Cli |
-| `client-call-prep` | Sales & Outreach | Build the shareable client call agenda page (agenda, outcomes, attendees, asks, after-call steps) for any external call, plus the invite, email and Zoom chat text to send |
+| `client-call-prep` | Sales & Outreach | Retired 2026-11-05. Use the `meeting-prep` skill, `references/client-agenda-page.md` (the agenda page the client sees). Redirect stub, remove after 2026-12-05. |
 | `infratech-card-to-pitch` | Sales & Outreach | Turns a business card or bare contact details into a researched Champions Infratech meeting request. Researches the company, assigns it to one of 14 audience categories,  |
 | `negotiation-coach` | Sales & Outreach | Real-time negotiation coaching (Getting to Yes framework). Two modes: PREP before a meeting (BATNA, interest mapping, opening strategy, concession plan) and CATCH-ME-UP d |
 | `outbound-email` | Sales & Outreach | Full-stack B2B cold outbound email skill. Use whenever a user wants to write a cold email, outreach sequence, sales or prospecting email for B2B audiences, or gives a pro |
@@ -240,7 +240,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `pdf-to-html` | Convert a PDF into a single, self-contained, faithful HTML file that the presales team can host, share as a web link, drop into a page, or edit. Use this skill whenever s |
 | `power-design` | Generate beautiful HTML presentation slides in any brand's design language, combining brand DNA extracted via Firecrawl with 20 codified design principles and a library o |
 | `prospect-creative-campaign-builder` | Turns a prospect name into a full outbound package in one pass: vault + Zoom research, on-brand ad creatives (Higgsfield images/video), a multi-channel lead-gen playbook, |
-| `prospect-deck` | End-to-end prospect research and slide deck pipeline. Takes a name, company, LinkedIn URL, or brief as input. Researches via Proxycurl, Ahrefs, web search, and vault. Com |
+| `prospect-deck` | Retired 2026-11-05. Use the `meeting-prep` skill, CLF mode (research is Step 0 of Phase 1; the NotebookLM build is the `notebooklm-slide-deck` skill). Redirect stub, remo |
 | `research-to-visual` | Entry point for any visual page built from text; routes to one-pager, report or showcase. Turns text research (notes, reports, transcripts, briefs, memos, data dumps) int |
 | `responsive-viewport-qa` | Use when a built page must be checked at phone, tablet and laptop sizes. |
 | `scroll-journey-kit` | Builds landing pages that feel alive: glow-horizon opening scrolling into an interactive hero, scroll scenes, interactive sections and a broad MicroKit micro-interaction  |
@@ -315,7 +315,7 @@ REACH, growth showcase, prospecting, negotiation, lead gen, outreach.
 | Skill | What it does |
 |---|---|
 | `b2b-growth-showcase` | Unified B2B growth showcase generator (v3). From a prospect's website or domain, produces personalized sales assets: (A) 12 standalone premium images, (B) a '10 Ways [Cli |
-| `client-call-prep` | Build the shareable client call agenda page (agenda, outcomes, attendees, asks, after-call steps) for any external call, plus the invite, email and Zoom chat text to send |
+| `client-call-prep` | Retired 2026-11-05. Use the `meeting-prep` skill, `references/client-agenda-page.md` (the agenda page the client sees). Redirect stub, remove after 2026-12-05. |
 | `infratech-card-to-pitch` | Turns a business card or bare contact details into a researched Champions Infratech meeting request. Researches the company, assigns it to one of 14 audience categories,  |
 | `negotiation-coach` | Real-time negotiation coaching (Getting to Yes framework). Two modes: PREP before a meeting (BATNA, interest mapping, opening strategy, concession plan) and CATCH-ME-UP d |
 | `outbound-email` | Full-stack B2B cold outbound email skill. Use whenever a user wants to write a cold email, outreach sequence, sales or prospecting email for B2B audiences, or gives a pro |
