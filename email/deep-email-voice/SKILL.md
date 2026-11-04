@@ -30,7 +30,7 @@ When an email is anchored to a conversation (Deep says "based on my last call wi
 | Sign-off | `Cheers,` or `Best,` or `Thanks,` then `Deep` on its own line | Sign-off glued onto the last sentence |
 | Register | Warmer and softer for interns and juniors; crisp and decision-led for leaders, vendors and the Chief; external clients get the brand voice of the sending company | One register for everyone |
 
-Never: em or en dashes, "I hope this email finds you well" to someone mid-thread, restating their message back, invented dates, prices or commitments. A missing fact becomes the literal tag `[CONFIRM: what]` inline in the sentence, so the gap is greppable rather than plausible, and it is listed in the run report. A draft still carrying tags is not sendable as-is: name it and its tags on the decision card instead of reporting the draft as ready.
+Never: em or en dashes, "I hope this email finds you well" to someone mid-thread, restating their message back, invented dates, prices or commitments. Never attach a Markdown file (`.md`) or any other source-format file: recipients cannot open them. Attachments are PDF, HTML, Word, Excel or PowerPoint only; convert vault notes first (pandoc to HTML, then Chromium or Playwright to PDF). A missing fact becomes the literal tag `[CONFIRM: what]` inline in the sentence, so the gap is greppable rather than plausible, and it is listed in the run report. A draft still carrying tags is not sendable as-is: name it and its tags on the decision card instead of reporting the draft as ready.
 
 ## 2. Structure
 
@@ -76,6 +76,8 @@ No `<p>` inside `<li>` (it renders as `1.` on its own line). No `\n` inside html
 
 Resolve every recipient before creating the draft, in this order, and stop at the first hit:
 
+0. **When Deep names a source file for a reply, read that file and verify the recipient list against it before drafting.** He is pointing at the version that carries the right addressing, so a draft built from an earlier copy repeats the defect he is asking you to fix; the recipient check comes before any wording work, because a draft cannot be edited in place.
+0b. **Name the origin of a forwarded request exactly.** When several people passed the same material, state both the original sender and the forwarder in the opening line (`Ganavi shared X with Hemang, and Hemang passed it on`), not whichever name sits at the top of the newest forward. Misattributing who owns a request reads as inattention to the person who will answer it, and the correction lands in the reply instead of the draft.
 1. `Atlas/People/<Name>.md` and `_config/people.md`.
 2. Vault-wide pattern grep: `(?i)<name>[\w.'_-]*@[\w.'-]+\.[a-z]{2,}` with `search_files` across the vault. Triage and meeting notes carry addresses the People notes never got, and one search beats two Outlook round-trips.
 3. Wispr: when Deep and the person were both on a recorded call, `get_meeting_participants_enriched` on that meeting returns each participant's emails directly; find the meeting with `search_meetings` on their name.
@@ -93,9 +95,11 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 ## 5. Before you save, check every draft
 
 - [ ] Would Deep send it without rewording? Greeting, warm line where it fits, polite ask, sign-off on its own line.
+- [ ] When he named a source file (`this is the source`), does the draft add substance, not just fixes? A reply that only repairs recipients or wording wastes the instruction: tighten the ask, state what was learned, or hand over something concrete (an attachment carrying the list or data he referenced), so the new draft is unambiguously better than the one it replaces.
 - [ ] No one-item list, no `<p>` inside `<li>`, no em or en dash.
 - [ ] Every date, number and name traces to the source (thread, meeting, TASKS.md row).
 - [ ] Every deadline is either sourced or named as mine in the handback. A deadline I chose is a proposal Deep may strike, so it never goes out silently as a fact.
+- [ ] For a date invented for this draft, offer two candidates in the handback (the one written in, and a nearer or later alternative) instead of one silent proposal, so Deep picks rather than having to invent an option himself.
 - [ ] Before proposing a due date, check the recipient's calendar or leave: a proposal that lands on a colleague's leave, a holiday or a milestone of theirs is called out as its own option (move the date to the next working day) in the handback, never embedded silently in the draft.
 - [ ] `toRecipients` holds a real address for the right person, or is empty and flagged. Never Deep.
 - [ ] A leave or work-from-home reply says plainly whether it is approved. "I will confirm once I have the reason" is not an approval, and a draft that reads as one either way leaves the person waiting on a second mail.
