@@ -1,12 +1,12 @@
 ---
 name: meeting-prep
 description: >-
-  SPIN-driven meeting preparation, plus CLF (Champions Leadership Framework) pitch prep for sales and BD reps. Scans the calendar, pulls meeting history from Google Calendar, Notion, the Celsus vault and Google Drive, maintains client context folders (Atlas/Clients/{name}/), and builds tiered prep: DEEP for external, sales and partnership meetings (SPIN sequences, SWOT, ICPs, competitors), MEDIUM for internal reviews, LIGHT for recurring syncs. CLF mode runs a zero-assumption questionnaire and builds a full enterprise pitch doc plus a NotebookLM prompt and slide outline, for LakeB2B, SGS, Ampliz or Champions Accelerator. MANDATORY TRIGGER for: "prep me for my meeting", "meeting prep", "prep for today's meetings", "SPIN prep", "CLF pitch", "prep a pitch", "pitch doc for", "sales pitch for [company]", "pitch [brand] to [company]", "build a proposal for", or a rep pasting a thread or profile asking "help me pitch this". Replaces clf-meeting-prep.
+  SPIN-driven meeting preparation, plus CLF (Champions Leadership Framework) pitch prep for sales and BD reps. Scans the calendar, pulls meeting history from Google Calendar, Notion, the Celsus vault and Google Drive, maintains client context folders (Atlas/Clients/{name}/), and builds tiered prep: DEEP for external, sales and partnership meetings (SPIN sequences, SWOT, ICPs, competitors), MEDIUM for internal reviews, LIGHT for recurring syncs. CLF mode runs a zero-assumption questionnaire and builds a full enterprise pitch doc plus a NotebookLM prompt and slide outline, for LakeB2B, SGS, Ampliz or Champions Accelerator. MANDATORY TRIGGER for: "prep me for my meeting", "meeting prep", "prep for today's meetings", "SPIN prep", "CLF pitch", "prep a pitch", "pitch doc for", "sales pitch for [company]", "pitch [brand] to [company]", "build a proposal for", or a rep pasting a thread or profile asking "help me pitch this". Also the single entry for: "prospect deck", "research deck", "client deck", "prospect slides", "agenda for the call", "client call agenda". Replaces clf-meeting-prep, client-call-prep and prospect-deck.
 ---
 
 ## CLF pitch mode (absorbed from clf-meeting-prep)
 
-When a sales or BD rep needs a pitch document rather than a meeting brief (the ask says pitch, CLF, proposal, or "what do I say" with a pasted thread or profile), read `modes/clf-meeting-prep/MODE.md` and run it. It blocks on missing inputs instead of assuming. Use the client context folder and SPIN material below as inputs to it.
+When a sales or BD rep needs a pitch document rather than a meeting brief (the ask says pitch, CLF, proposal, or "what do I say" with a pasted thread or profile), read `modes/clf-meeting-prep/MODE.md` and run it. It blocks on missing inputs instead of assuming. Use the client context folder and SPIN material below as inputs to it. This is the one rep entry point for prep-to-pitch: the mode ends in a fixed exit (pitch doc, 8-slide brief with script, deck-doctor pass, showcase page, leak test), so do not start from a retired sibling skill.
 
 # Meeting Prep, SPIN-Driven, Client-First Preparation
 
@@ -549,6 +549,7 @@ not instead of it.
  dated folder under `Calendar/Meetings/`, each file named by its role under the naming rule in
  11c (the one to share first, the one to hold back until the counterparty opens the topic),
  plus the design system they were built from.
+The team-facing agenda page (agenda, outcomes, attendees, asks, invite and Zoom text) is built from `references/client-agenda-page.md`; it is the only page the counterparty sees before the call, and nothing internal goes on it.
 counterparties have no brand system in the vault, so derive one from their real logo file rather
 than inventing a palette: measure the dominant colours, take one corner treatment and one
 recurring motif from the mark, and record the asset's source URL in the design-system page so
@@ -576,7 +577,7 @@ showcase top bar links to those sections so he can drive it in one click. Leak-t
 text for internal words before delivery (the do-not-say block's own headings, employee names,
 verdict and candidate labels, vault paths): a zero dash count is not a leak test, and a page can
 pass every visual gate with the internal notes still on screen. Depth on the file pair, the
-localStorage tickables and the routing of the build itself lives in `celsus-client-call-prep`,
+localStorage tickables and the routing of the build itself lives in
 `references/call-artifacts-html.md`. Name files by role, never p1, p2 or ds.
 12. **Source Reference Index**, Every claim footnoted
 

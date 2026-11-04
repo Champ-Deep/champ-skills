@@ -38,7 +38,7 @@ The pack is generic by design so it can be shared. Inside the company, the same 
 | Desk | House skill |
 |---|---|
 | Find Buyers | `reach` (Research stage), `champions-growth-profiler` mode, `treg-contact-pipeline` |
-| Run the Pipeline | `reach` (Engage, Activate, Cadence, Hold), `client-call-prep`, `meeting-prep`, `meeting-followup` |
+| Run the Pipeline | `reach` (Engage, Activate, Cadence, Hold), `meeting-prep` (SPIN prep, CLF pitch, client agenda page), `meeting-followup` |
 | Guides and Playbooks | `lead-gen-playbook-builder`, `prospect-campaign-plan`, `b2b-growth-showcase` |
 | Libraries and Prompts | `negotiation-coach`, `outbound-email` (owns the CLF email rules), `vinh-copywriting` |
 | Signal Agents | `signal-scout`, `b2b-thought-leader-pulse` |

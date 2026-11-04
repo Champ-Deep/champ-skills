@@ -49,6 +49,16 @@ can use immediately after the call to spin up a slide deck.
 
 ## PHASE 1, Context Intake
 
+### Step 0: Research first, so the rep confirms instead of typing
+
+Before the questionnaire, pre-fill fields 4 to 13 from real sources (lifted from the retired `prospect-deck`). Run in parallel and mark each filled field with its source; anything not found stays UNKNOWN:
+
+- LinkedIn URL or name plus company: Proxycurl `enrich-prospects` (URL) or `match-prospects` (name + company); company via `enrich-business`. Fall back to web search if Proxycurl is down.
+- Company news, funding, leadership changes, size: web search. Digital maturity: Ahrefs `site-explorer-metrics` and `site-explorer-organic-keywords` (limit 20) on the domain.
+- Vault: `Atlas/Clients/{company}/`, `Atlas/People/`, `Atlas/Companies/`, and prior meeting notes. Do not repeat what is already known.
+
+Numbers found here are "their site reports" or "their LinkedIn shows", never our proof (see gate 2 in Phase 4).
+
 ### Step 1: Present the Questionnaire
 
 When the skill triggers, immediately present the full questionnaire below in a clean, labeled
@@ -455,6 +465,18 @@ READY TO PROCEED?
 - Full compliance documentation list available on request
 - Relevant whitepapers or product sheets (by brand)
 - Additional case studies in adjacent industries
+
+---
+
+## Fixed exit (every CLF run ends here, in this order)
+
+1. Pitch document (Phase 3), answer-first.
+2. Deck brief of 8 slides or fewer plus the speaker script as its own file (Phase 4, gates 1 to 5).
+3. `deck-doctor` pass on the outline before it goes to NotebookLM: facts verified, slide count held, ask named.
+4. Showcase page built with `showcase-page` under the sending brand skill, as CLIENT PAGE (send) plus CALL SCRIPT (private) (`meeting-prep` 11c). An agenda page for the call comes from `references/client-agenda-page.md`.
+5. Leak test on the client page: zero hits for the internal-word set, zero dash characters. Report the counts.
+
+No step is skipped because the rep "only needs a deck".
 
 ---
 

@@ -28,7 +28,7 @@ This skill is designed to be **loaded by other skills** at the moment they produ
 | **reach-engage** | When drafting the personalized cold outreach message (the "first touch") |
 | **reach-cadence** | When writing follow-up sequence emails (Day 3, 7, 14, 21, 30) |
 | **outbound-email** | When generating cold emails, nurture sequences, or breakup emails |
-| **prospect-deck** | When writing slide narrative or research summary prose |
+| **meeting-prep (CLF mode)** | When writing slide narrative or research summary prose |
 | **reach-activate** | When creating battle cards, one-pagers, or multi-channel messaging |
 | **prospect-campaign-plan** | When writing email templates, LinkedIn post copy, or messaging hierarchy |
 
