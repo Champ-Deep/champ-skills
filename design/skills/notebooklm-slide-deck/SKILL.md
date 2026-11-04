@@ -38,6 +38,10 @@ Do this instead, every time:
    before it involved *packaging* it for NotebookLM, the prepared thing itself is a source, not
    just the research that fed it.
 
+## Design sources: without them the deck comes out plain
+
+With content sources alone, NotebookLM returns a generic dark-charcoal, single-accent, wireframe-box deck with no logo. Before generating, add as sources: (1) a visual-direction PDF built from the brand skill (palette with hex and ratios, type, illustration language, do and don't, and 3 to 4 sample slide layouts rendered at 1376x768 via Playwright `page.pdf`), (2) the logo PNGs (full colour and white), (3) a slide-by-slide storyboard with a visual note per slide. In the prompt, name the grounds, hex codes, illustration style, logo placement and the bans (stock photos, 3D, dark charcoal, wireframe boxes), and tell it to follow the storyboard in order. Keep the prompt under about 2,000 characters and carry a short version too. Worked example: `Atlas/Clients/GBG/context-docs/notebooklm/` (00b prompt, 05 storyboard, design/).
+
 ## Writing the generation prompt: slide content only, never a verbatim script
 
 Never write a prompt that asks NotebookLM to put a "near-verbatim speaker script" or word-for-word
