@@ -305,6 +305,7 @@ These rules govern **product UI without exception**. The narrow set of cases whe
 - Validate on blur, not every keystroke
 - Error formula: What happened? Why? How to fix?
 - Undo > confirmation dialogs for destructive actions
+- A write-only secret field (token, password) shown blank on a form pre-filled from a saved record must not let the primary submit silently clear the saved secret or reset state that hangs off it (approved tools, modes, webhooks). Keep the saved secret when the field is blank, or say plainly before the post what saving will remove and require an explicit second press. The test drives the re-save from the reloaded state and reads the saved record back, because the first-save path never exercises it.
 
 ### HIGH: Navigation
 → *Consult [platform reference](reference/platform-guidelines.md)*
