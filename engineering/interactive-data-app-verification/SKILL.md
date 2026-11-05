@@ -70,6 +70,12 @@ and assert each value and `document.activeElement` survived. A timer tick must u
 `replaceState` (or no URL write) and must pause, or leave untouched, any region the user is
 working in, not only the pills that drive it.
 
+**That one user action writes exactly one history entry.** Radix-style tabs can fire
+`onValueChange` on both pointer-down and focus, so a single click calls `pushState` twice with
+the same URL and the first Back press does nothing visible. Assert `history.length` grew by
+exactly 1 per click (never `>`, which hides the duplicate) and that one `go_back()` restores the
+previous state. Fix it once in the shared URL writer: skip the push when the URL is unchanged.
+
 ## Layout defects that survive a screenshot
 
 - **Every coordinate `NaN`.** One unassigned anchor (`n.fx` read but never written) collapses
