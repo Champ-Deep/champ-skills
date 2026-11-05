@@ -34,4 +34,6 @@ Buying domains/mailboxes on an inbox provider, wiring them into the sending prod
 ## Pitfalls
 
 - Purchased mailboxes are inactive until the provider's own onboarding finishes; importing before activation fails login verification and must be redone.
+- Auto-publishing a provider's DNS records into someone's zone: act on the record's `purpose` field, never on its shape. An inbound `mx` record at a name that already has MX records takes over the owner's inbound mail, so report it as a conflict and add nothing; SPF merges by hand; an existing DMARC stays. Build the test fixture from the provider's documented record list (OpenMail: apex MX, long DKIM TXT, `bounce` MX + SPF, `_dmarc`), not from a guess, or the dangerous case never runs.
+- Comparing a long TXT (DKIM) for idempotency: Cloudflare stores content over 255 bytes as quoted strings (`"part1" "part2"`). Join the strings before comparing, or every re-run posts a duplicate record.
 - Verify availability through the provider's own check (live API call in the same session), never from a registration-page screenshot or an availability aggregator.
