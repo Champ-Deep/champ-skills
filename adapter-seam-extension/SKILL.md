@@ -137,6 +137,14 @@ Three rules that travel with it:
   an identity field on a registration) is worse than an absent block: the provider
   accepts it and the false data lands somewhere it cannot be recalled. Send the
   configured real value or send nothing.
+- **When the provider's source is on disk, read each route handler before
+  writing the call**: required query params, which auth dependency guards it
+  (a per-org guard refuses a valid personal key), and side effects it triggers
+  (an import that auto-queues paid enrichment). A route you can read is a fact
+  to check, not an "assumption to verify later". Make the fixture refuse what
+  the real handler refuses, because a fixture that answers any path under the
+  route hides a missing required param. Any side effect belongs in the preview
+  a human approves.
 - **Configure the human-only inputs as one named env set**, and request the
   missing fields as a single decision listing them exactly. The seam then goes
   live on one redeploy instead of a redesign, and the same input serves the UI
