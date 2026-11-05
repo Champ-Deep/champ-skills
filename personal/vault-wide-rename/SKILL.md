@@ -83,5 +83,10 @@ rerun the generators and confirm a clean rerun reproduces the output.
   ordering array or per-person config keyed on the old id silently stops matching.
 - **A script written to do the sweep contains the old string.** Delete it, or grep will
   keep reporting a hit that is the tool rather than the data.
+- **Mentions of the rename are not uses of the name.** The rename card's own title, task rows
+  and digest lines that quote it, and alias or normalisation records all name the old
+  spelling on purpose. A blind sweep turns "rename X / Y to Z" into "rename Z / Z to Z".
+  Grep for the canonical name repeated next to itself (`Z( /|,| and| or) Z`) after the sweep
+  and restore those lines from the backup; flagging it as a risk is not enough.
 - **Report what the sweep could not prove.** Name the layers you did not sweep and say
   why, rather than implying full coverage.
