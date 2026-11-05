@@ -75,6 +75,17 @@ key. A test named for a negative guarantee ("the refused write changed nothing")
 create the before-state, attempt the write with a value that differs from it, and read
 it back in the same test.
 
+## A fix fitted to the reported input is proven on that input only
+
+A precision fix for a heuristic (a scraper, a classifier, a parser rule) that is
+validated on the one site or sample named in the bug report shows it beat that
+sample, not that the class of defect is gone: the next site carries the same junk
+in a shape the new rule never saw. Before reporting a precision fix done, run
+the extractor on a held-out set of at least 8 real inputs the fix was not built
+from, and report the junk rate per input (rows or links that are not the target
+entity) alongside the reported case. A fix that only clears the reported input
+goes back as a fix to the rule, not a ticket for the next site.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
