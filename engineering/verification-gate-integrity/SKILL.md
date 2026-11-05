@@ -86,6 +86,14 @@ from, and report the junk rate per input (rows or links that are not the target
 entity) alongside the reported case. A fix that only clears the reported input
 goes back as a fix to the rule, not a ticket for the next site.
 
+An input that yields zero rows tests nothing about precision, so the 8 count
+only inputs that produced output. Spread the set across organisers and
+platforms (one trade-fair operator's sites share one template and fail
+together), and include page shapes known to fool the rule class, such as news,
+blog and session grids with tag or category labels. Run the old and new rules
+on the same set: a row dropped by the new rule is a precision win or a recall
+loss, and only reading it tells which.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
