@@ -205,6 +205,15 @@ tree for that symbol first and rewrite the assertions in the same change: tests 
 old contract, so they go red by design and read as a regression, inviting a rollback of the
 polish. Report the rewritten assertions alongside the new pass count.
 
+## A library can switch its own guard off under test
+
+Some auth libraries relax a security check when they detect a test runtime (Better Auth
+skips its Origin/CSRF check when `NODE_ENV=test`). A suite that runs under that default
+proves the request shape works, not that the guard rejects anything. Pin the production
+value explicitly in the config (`advanced.disableOriginCheck: false`), then break it once
+to confirm the cross-site test goes red. Grep the library's context setup for `isTest` or
+`NODE_ENV` before trusting any green security test built on it.
+
 ## Name the fixture boundary of every pass
 
 A run driven by fixture identities, seeded databases or canned provider responses
