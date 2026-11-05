@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -241,6 +242,23 @@ class BuildTests(unittest.TestCase):
             mutate(site)
             with self.assertRaises(ValueError):
                 self.build(site)
+
+    def test_v2_template_keeps_the_contract(self):
+        hooks = lambda text: set(re.findall(r'\bdata-[a-z][a-z0-9-]*', text))
+        with tempfile.TemporaryDirectory() as td:
+            for name in ('span-peo-eor', 'span-msp-us'):
+                src = ROOT / 'examples' / name
+                site = json.loads((src / 'site.json').read_text())
+                v1 = module.build(src, Path(td) / 'v1.html')
+                v2 = module.build(src, Path(td) / 'v2.html', ROOT / 'template-v2.html')
+                self.assertIn('<h1 id="hl">%s</h1>' % module.E(site['headlines']['default']), v2)
+                self.assertIn('<meta name="robots" content="noindex', v2)
+                self.assertNotIn('{{', v2)
+                for banned in ('dither', 'halftone', 'canvas'):
+                    self.assertNotIn(banned, v2.lower(), name)
+                self.assertEqual(hooks(v1) - hooks(v2), set(), name)
+                self.assertEqual('class="band"' in v2, 'band' in site, name)
+                self.assertEqual(v2.count('class="acc__btn"'), len(site['faq']['items']), name)
 
 
 if __name__ == '__main__':

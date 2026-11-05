@@ -27,12 +27,18 @@ Any recurring job that acts on Deep's work without him starts in shadow: it writ
 
 Why this shape: coverage earns the gate the same way a precedent does, by being adjudicated. An unadjudicated automation writing to real cards has nothing behind it, and the shadow note is the thing he can rule on in one pass. Keep the shadow job's stdout out of chat (`--deliver local`, see the `schedule` skill) so a silent run stays silent.
 
+A job that only *reports* ships paused instead of shadow. Shadow is for jobs that write to cards, repos or mail, which have something to stage. A brief has nothing to stage: create its cron with `--paused --paused-reason "<the review he owes>"`, paste the top N of its ranking with the reason for each row into the decision card body, flag the entries you doubt yourself, and let his ruling unpause it (`hermes cron resume <id>`). An unreviewed ranking that starts firing daily pings him with output nobody has judged.
+
+One derivation, one home: when a new surface (endpoint, brief, export) needs something an existing sweep already computes (due dates, scores, clusters), extract the shared function and import it. A second copy of the same regex drifts from the first, and the board then contradicts itself about what counts as overdue.
+
 ## Meeting follow-through gate (Deep's ruling, 28 Oct 2026, precedent P41)
 
 The meeting watcher (cron `d741846ee693`) and intake sweep (`9a042ac04419`) act on Deep's items without him: emails he committed to, docs, NDAs (champions-nda), and 30-minute ideation slots with a prep note in `Efforts/Active/Ideation/`. Only DECISION items gate: hard-hold list first (spend, pricing, payments, signing other than the standard NDA, HR and reporting lines, credentials, legal disputes, Chief-owned), then `decide` (precedent), then one `clef_ask`; proceed only if `auto_proceed >= 0.95`. Everything else is a blocked decision card on the board, never only a Telegram line.
 
 - `clef_ask` criteria must be a dict `{label: description}`; a list raises inside `systemone` and the tool returns a bare "Error executing tool".
 - Clef is conservative, not calibrated: a routine internal deadline-confirmation email scored auto_proceed 0.34, a contract signing 0.05. At a 0.95 bar Clef alone frees almost nothing; the pre-approved action classes and precedents do the work. Grow coverage by adding precedents (Decision Desk `Task Decision Precedents.md`, verify with `decider.py ask`), not by lowering the bar.
+
+When a decision card asks whether to loosen a hold, answer with a backtest, not an assertion: leave-one-out over the labels already adjudicated, reporting per-category n and precision at the proposed bar (default n>=30 at 0.99). No category clearing the bar is itself the recommendation, and those numbers go in the card. A hold argued with a confusion table survives review; a hold argued with taste gets loosened.
 
 ## Blocked is not the same as needs Deep
 

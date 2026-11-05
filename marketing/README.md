@@ -28,6 +28,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `site-growth-audit` | Audit a live site and turn findings into a ranked plan. |
 | `site-interlink-audit` | Use to audit a site's internal linking and link gaps. |
 | `slack-gif-creator` | Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GI |
+| `span-ad-creative` | Use when SPAN needs campaign ad concepts or ad creative. |
 | `span-answer-page` | Write short, answer-first SPAN pages (users lists, customers lists, comparisons) to the SPAN page standard with audio overview, Ask AI, copy as Markdown, preferred source |
 | `span-blog-builder` | Build a Span Global Services (SGS) blog end to end: research, Word draft, readability rewrite, Span theme design and a WordPress-safe paste-ready code block. |
 | `span-company-profile` | Build a SPAN company profile page (for example Zoho, HubSpot, NetSuite) with firmographics, technographics, install base, switching signals, reviews, sentiment, hiring, c |

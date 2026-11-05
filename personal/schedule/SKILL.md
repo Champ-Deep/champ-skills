@@ -89,6 +89,11 @@ hermes cron create "<cron or 30m>" --name <kebab-name> --script <file.py> \
 - A shadow job writes its proposals to a dated file in the vault instead of delivering
   anything. Promotion from shadow to acting is a decision for Deep, recorded in
   `factory-decision-gate`, not a flag you flip while editing the job.
+- A job whose first fire should wait on a human review ships paused:
+  `hermes cron create ... --paused --paused-reason "<the review owed>"`. It then sits
+  visibly in `hermes cron list` and promotes with one `hermes cron resume <id>` named
+  in the decision card, instead of pinging the user with output nobody has judged.
+  Use it for message-producing jobs (briefs, digests); shadow (above) is for jobs that write.
 - Read the script's flags from its own `--help` before wiring it; a `--no-agent` job runs
   the script exactly as declared, so a flag that does not exist fails on the first fire.
 

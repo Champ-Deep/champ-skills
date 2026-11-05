@@ -138,7 +138,8 @@ screened shortlist plus one tested recommendation, not a star-count table.
    the rendered overviews, check small-size legibility on your own, and hold the list to the
    same rubric for every cell before recommending.
 7. **Gate adoption behind licence and intake.** Installing or vendoring a vetted skill still
-   runs `skill-repo-sync` `references/skill-vendoring.md` plus `skill-creator`'s untrusted
+   runs `skill-repo-sync`'s `references/skill-vendoring.md` (that file lives in the
+   `skill-repo-sync` skill's directory) plus `skill-creator`'s untrusted
    intake gate, and the adopt-versus-ignore call goes to Deep as a decision card first.
 
 **Community sentiment, when asked:** gather it *before* the runs, because anonymous Reddit
@@ -214,7 +215,10 @@ Before repeating a directory's headline number, count what is behind it.
   a 0-rating listing, a 404 on Trustpilot, and `nbHits: 0` from a search API are three
   verified findings.
 
-See `references/source-credibility.md` for the full credibility checklist.
+See `references/adoption-diligence.md` for two decision-critical checks: which layer of an
+"open-source" candidate actually lives in the repo (SDK-only, licence-without-source,
+gated self-host tier), and how competitor shutdowns, acquisitions and free regulatory
+tools change the build case.
 
 ## Phase 4: ecosystems and replacements
 
@@ -286,3 +290,10 @@ with `MEDIA:` plus an absolute path, never a bare path.
 - **Do not fan out Reddit thread reads in the foreground.** The anonymous feed throttles per
   IP per minute, so serial foreground calls burn minutes a background batch would hide.
 - **Do not add another undated plan to a pile of undated plans.** That is not progress.
+- **Do not recommend a brand that sells into the market we are entering for it.** Data
+  sellers launching a removal service, or similar adjacencies, get named by the trade
+  press as a pattern; check registry membership and one journalist lookup before putting
+  a client's existing brand on the new product (`references/adoption-diligence.md`).
+- **Do not treat a competitor's shutdown as trivia.** A dead incumbent plus a free
+  regulatory substitute is the pricing story; report it as a market signal, not a
+  footnote in the candidate table.

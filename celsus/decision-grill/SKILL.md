@@ -66,6 +66,20 @@ At the end, consolidate every ruling into **one dated decision table** so the an
 decision set rather than a thread. Include the sequencing consequences the grill revealed,
 since a ruling often creates a dependency nobody had written down.
 
+Open rulings then go on the board as blocked decision cards in the `kanban-task-intake`
+section 3 shape (stacked blocks with `A:`/`B:` when one plan carries several). A ruling
+that only exists at the end of a plan note sits unread: he answers cards, not documents.
+
+## Gate the fork before asking, when he is not in the room
+
+During a live grill he answers each question, so there is nothing to gate. When the
+rulings come out of a plan you wrote yourself, run the decider once per scoping fork
+first (`mcp__clef_decide` with the situation, `decider.py ask` from the terminal): a
+`decide` verdict means the precedent already settles it and it never becomes a question;
+`ask_deep` means card it. Category hard rules (spend, pricing) return `ask_deep` on any
+situation that mentions a price, so treat that as the designed answer to stage, not as a
+gate failure to route around.
+
 ## Pitfalls
 - Number the open decisions and carry that numbering into the brief and the chat summary (1-9), so Deep answers by number and the answers drop straight onto build cards.
 
