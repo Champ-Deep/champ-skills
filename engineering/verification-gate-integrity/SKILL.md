@@ -63,6 +63,18 @@ failure too.
 
 Backgrounding multiplies the same error, because the harness reports the pipeline's status as the job's: a command run as `deploy.sh 2>&1 | tee log` finishes with tee's zero, so a run that died mid-build surfaces as "completed normally (exit code 0)". When you background anything that can fail, redirect instead of piping (`deploy.sh > log 2>&1`), and before repeating any wrapper status, grep the log for the script's own failure markers and probe the target's live identity. A completion notification is a statement about the wrapper, never about the work.
 
+## A test that passes only in file order is not a gate
+
+A test that relies on state an earlier test left behind (a config row an admin test
+wrote, a seeded provider) passes in the full run and fails, or worse, takes a live
+path, when run alone, filtered with `-t`, or shuffled. Before reporting new tests
+green, run each one alone (`npx vitest run <file> -t "<name>"`) and require the same
+verdict. Set offline defaults in the test bindings themselves (a `mock` provider, no
+real upstream URL), so a stray test can never reach a paid third-party API with a fake
+key. A test named for a negative guarantee ("the refused write changed nothing") must
+create the before-state, attempt the write with a value that differs from it, and read
+it back in the same test.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
