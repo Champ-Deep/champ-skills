@@ -29,6 +29,7 @@ that would become a real-world fact is a finding, not a fixture.
 |---|---|
 | "every call is rate limited, capped and logged" | Find where the limit is counted: per HTTP request or per operation. On any JSON-RPC endpoint (MCP, LSP-style), POST an array of N `tools/call` messages in one request with the daily cap at 2 and count the results that ran and the log rows written. SDK transports often still accept batches, so a per-request guard lets one request run N calls |
 | "one log row per call" | Same batch probe: the log must show N rows or the array must be refused before the transport sees it |
+| "output is capped at N with a `truncated` flag" | Find every later clip on the path to the consumer (a tool-result `clip(JSON.stringify(result), M)`, a log column limit) and serialize the worst case: N chars of newline- or quote-heavy text. If M is under the escaped length, the consumer gets broken JSON and never sees `truncated`. Assert at the consumer's message, not the handler's return |
 
 ## The double that hides the failure
 
