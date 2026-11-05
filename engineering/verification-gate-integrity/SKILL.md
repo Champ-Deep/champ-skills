@@ -106,6 +106,10 @@ folding it into the pass, because a gate that grades differently per run is a ga
 whose green you cannot rely on. Report the final set, and disclose any run whose set
 did not reproduce.
 
+## Time a delay inside the page, not around the driver
+
+A hover-intent or debounce assertion written as `hover(); wait_for_timeout(60); expect closed` measures Playwright's own actionability, scroll and IPC time as part of the window, so a correct 120 ms open delay fails whenever the first browser context is cold. Record timestamps in the page (`performance.now()` on `pointerenter` and when the open class lands, via a `MutationObserver`) and assert the difference, or drive the event with `dispatchEvent` and read state on the next frame. Run any timing gate three times before reporting it green: one red in three is a flaky gate, not a pass.
+
 ## A test that reads credentials from your shell is not hermetic
 
 A suite asserting on an exported key passes on a machine where the variable is
