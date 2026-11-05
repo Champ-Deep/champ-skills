@@ -60,6 +60,16 @@ with `.click()`, never `.check()`: Playwright's `.check()` treats a deliberate J
 an element failure and throws ("Clicking the checkbox did not change its state"), so the
 error reports a working gate as a broken element.
 
+**That anything on a timer leaves the user's state alone.** An auto-advancing carousel, ticker
+or cycling showcase that writes through the app's shared selection path inherits every side
+effect of a user click: a `history.pushState` per tick, remounting keyed children, collapsing
+opened rows, stealing focus. Idle the page for two intervals with the pointer outside the
+paused zone and assert `history.length` did not move. Then open a row, pick a non-default
+option and focus a field in every section below the cycling element, idle two intervals again,
+and assert each value and `document.activeElement` survived. A timer tick must use
+`replaceState` (or no URL write) and must pause, or leave untouched, any region the user is
+working in, not only the pills that drive it.
+
 ## Layout defects that survive a screenshot
 
 - **Every coordinate `NaN`.** One unassigned anchor (`n.fx` read but never written) collapses
