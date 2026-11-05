@@ -42,7 +42,8 @@ Driving a hosted app with the user's own account, for a demo, a staging walkthro
 2. **Build one session and reuse it.** Launch a persistent context with `--remote-debugging-port=<port>` and reconnect from later scripts with `p.chromium.connect_over_cdp("http://localhost:<port>")`. A fresh context per call throws away the login the user just completed, so every subsequent screen reads unauthenticated and the walkthrough silently degrades into screenshots of login walls.
 3. **Hold the window open.** The script that opens the browser must not exit when it finishes its checks, because process exit closes the browser and the session with it. Keep it as a long-lived background process, and put navigations and assertions in separate short-lived scripts that attach over CDP.
 4. **Keep the profile off the user's live browser directory.** Point the persistent profile at a scratch path: a running browser holds a lock on its own profile, so a second browser on that path either fails to start or risks the user's real session.
-5. **Report the boundary you actually crossed.** Name the screens you drove authenticated and the ones you only saw behind a gate you never crossed.
+5. **Google does not survive a copied profile.** With Hermes `use_real_profile`, GitHub opened signed in but Google opened signed out, though the snapshot held the same Google cookies as the live profile (likely device-bound session credentials). Route Gmail, Calendar and Drive through the `gog` CLI or the connectors. For Google web UI with no API, use a dedicated Chrome user-data-dir the user signs into once and attach with `/browser connect`, because the real-profile snapshot re-syncs its auth files on every fresh session and drops any login made inside it.
+6. **Report the boundary you actually crossed.** Name the screens you drove authenticated and the ones you only saw behind a gate you never crossed.
 
 ## When no browser server is running: drive headless Chrome over CDP directly
 
