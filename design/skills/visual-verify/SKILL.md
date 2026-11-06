@@ -296,6 +296,15 @@ cheap answer to a yes/no), so the geometry probe is what makes the claim checkab
 pass is what catches what the probe cannot, such as a tag parked over an illustration it
 should not be sitting on.
 
+**ASCII and monospace drawings are gated by measurement, not by eye.** A vision pass reads a
+rule that stops 7 characters short of the text, or a table cell one column right of its header,
+as "aligned", because a one-character offset is a few pixels in the screenshot. For every fenced
+diagram, assert in code that no line is longer than its frame or rule lines (`+---` / `---+`),
+that every boxed row ends its closing `|` in the frame's column, and that each table header and
+its data rows start every column at the same index. Run the check on every drawing, not only the
+ones you edited, prove it red on a known overrun before trusting its green, and never write "no
+malformed frame" in a verification report on vision evidence alone.
+
 → Full procedure in [critique-protocol.md](reference/critique-protocol.md).
 
 The short form, in the order that finds the most problems fastest:
