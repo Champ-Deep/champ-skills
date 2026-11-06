@@ -229,6 +229,16 @@ sites the run covered, and put shared checks in the shared script or the CI conf
 repos rather than in a per-repo build step. A green run on the project you happen to have
 open reads as coverage you do not have.
 
+## A count of your own output cannot prove coverage
+
+"7 items, 7 host lines" checks a list against itself, so it passes whether the list is
+complete or not. When acceptance says "every X covered", derive the denominator from the
+canonical record independently of the list (in Celsus, grep TASKS.md and the dated notes for
+the same action phrase, open rows and later dates included), then diff the two sets and
+report each item on the record but absent from the output with a one-line reason it was
+excluded. A brief that names N items is a starting list, not the denominator, when the
+record has kept growing since the brief was written.
+
 ## A test asserting the removed contract fails by design
 
 When a deliberate redesign removes a pattern (a hover label swap, a chip UI), grep the test
