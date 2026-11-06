@@ -35,6 +35,7 @@ If there is no draft, ask for it. If the audience is unclear, ask one question: 
 - **Lead with the point when the setup adds nothing.** Keep a personal aside or story when it adds context, tension, or character.
 - **Keep the meaning.** Never invent claims, examples, stats, quotes, sources, or opinions. If something is unclear, ask.
 - **Numbers keep their scope.** An aggregate stays an aggregate (38% across three pilots is not "a third of each list"), "often" does not become "a steady stream", and your own inference is written as inference, not as fact.
+- **Scope a claim by how you state it; keep the audit trail in the ledger.** When a piece carries a fact-check list, limitations addressed to a reviewer ("treat this as a recommendation, not proven", "the evidence also needs a boundary", "its value would need to be checked") go in that list, not the body. They read as the writer arguing with his own reviewer, and they are metadiscourse plus binary contrast that the lint does not catch. In the body, state the claim at its supported size, or give the reader one plain action ("measure your own second attempts").
 - **Open it up, don't dumb it down.** Keep nuance and precision. Strip jargon, tangled structure, abstract nouns.
 - **Active voice, human subjects.** "The team shipped it Tuesday", not "the decision emerged". Inanimate things do not do human verbs.
 - **Every sentence earns its place.** Cut empty qualifiers. Keep "I think" or "maybe" when they express real uncertainty.
