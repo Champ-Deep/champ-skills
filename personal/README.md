@@ -18,6 +18,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `kanban-task-intake` | Use when Deep hands over tasks or asks about blocked cards. |
 | `mac-disk-hygiene` | Use when cleaning Deep's Mac disk or inventorying AI models. |
 | `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
+| `model-routing` | Use when routing work across subscription and API lanes. |
 | `release-integration-engineering` | Use when consolidating branches into a gated release. |
 | `schedule` | Create or migrate scheduled tasks in Hermes cron. |
 | `skill-repo-sync` | Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo. |
