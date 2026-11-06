@@ -34,7 +34,7 @@ Also keep the TASKS.md row (vault conventions still apply). The card is the exec
 **Bulk intake (10+ cards): create from code, not tool calls.** The full fan-out procedure (one spec file, directories pre-created, one body template, idempotency keys, gated review card, TASKS.md block in the same pass, status read-back) is `references/parallel-fan-out.md`. Minimum shape: Write each body to a temp file and drive the CLI in one `execute_code` pass:
 
 ```bash
-hermes kanban create "<title>" --body-file <tmp.md> --assignee default --priority 85 --initial-status blocked --created-by default --json
+hermes kanban create "<title>" --body-file <tmp.md> --assignee default --priority 85 --initial-status blocked --initial-block-kind needs_input --initial-block-reason "<DECISION line for this card>" --created-by default --json
 # parse the id from the JSON (fall back to grepping t_[0-9a-f]{8} from stdout), then:
 hermes kanban notify-subscribe <id> --platform telegram --chat-id 8225744637 --user-id 8225744637 --chat-type dm
 ```
