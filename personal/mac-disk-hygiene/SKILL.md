@@ -63,6 +63,11 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 
 ## RAM, not only disk
 
+- Swap IS disk here: `/System/Volumes/VM` shares the APFS container, so 20 GiB of swapfiles took free space from 50 to 5.6 GiB (2026-11-06). When free space drops with no new files, run `sysctl vm.swapusage` and `ls /System/Volumes/VM` first; killing the RAM holders gave back 10 GiB in 30 seconds.
+- Two standing guards now prevent the repeat: `celsus_compose_cron.sh` skips the clef-flash jev step unless 20 GiB RAM is available and 30 GiB disk is free (skips logged to `~/.hermes/logs/jev_skips.log`), and cron `dev-server-reaper` (every 30m, `dev_server_reaper.py --apply`) SIGTERMs then SIGKILLs agent-started dev servers (leader has `__hermes_exit_file`) whose kanban task is not running, or older than 6h elsewhere. wrangler/workerd ignore SIGTERM. Check both before writing new prevention.
+- `node_modules`, `.next`, `.turbo`, `.wrangler` inside done-task workspaces are regenerable and were 8 GiB; blocked-task workspaces keep `node_modules` (they may resume) but lose build caches. Source, evidence and zips stay.
+- Starting OrbStack to prune Docker auto-starts `restart=always/unless-stopped` containers (open-webui, sledgehammer, openbot, softphone). Prune, then `orb stop` to restore the prior state. Unused named volumes (buildx state, miroshark ollama data) are Deep's call.
+
 - "Memory" on this Mac usually means swap thrash, not disk: check `sysctl vm.swapusage` and `top -l 1 -o mem -stats pid,mem,cmprs,command` before `df`. The holder was `celsus_jev.py score` (19 GB RSS, clef-flash on MPS) fired by the celsus-compose cron whenever a new blocked card needed a score; `kanban_clef.py` loads no model unless `--shadow-top` is passed. The model crons now run on a 2h cron expr; keep any model-loading step off a 30-minute interval on a 32 GB machine.
 - Finished kanban workspaces leave `next dev`, `vite` and `.verify/server.mjs` servers running for days (3 to 4 GB RSS mostly in swap). Find them with `lsof -a -d cwd -p <pid>` under `~/.hermes/kanban/workspaces/`, check the task status in `kanban.db`, then `kill -- -<pgid>`.
 - `docker builder prune -af` plus `docker image prune -af` reclaimed 32 GB in one approved pass; `timeout` does not exist on macOS, run long docker commands as a background job.
