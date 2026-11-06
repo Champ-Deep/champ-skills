@@ -60,6 +60,8 @@ Substack has no posting API and Postiz does not support it: the weekly issue is 
 - Every number traces to a source Deep can point to (a repo count, a skill file, a team result already written down). No "booked 47 meetings" unless it is in the vault.
 - Every claim traces to a file: the number *and* the anecdote. If the story is not in a source file ("reps hated it until they didn't", "it shipped three wrong changes"), cut it or replace it with what the file actually shows. Unsourceable anecdotes are the one thing that turns a proof post into a guru post, and they are caught only by a read-back pass over the finished draft before it is written out.
 - Repeat offenders to cut on that pass: adoption stories ("everyone switched"), before/after sentiment ("they hated it, then loved it"), and failure counts with no log behind them.
+- No proof to cite is not a reason to soften the hook. Write it as an imperative or a contrarian rule ("Check the contact before you write the email."), never a conditional "I would...", which reads as a hedge in the first five seconds. Alternate hooks must be a different hook type (rule vs value promise vs question-free contrast), not a paraphrase of hook A.
+- Teaching scripts show the move, not just name it: if a line says "draft the question", the next line speaks an example question, labelled hypothetical in the notes.
 - Banned words: excited, thrilled, game-changer, unlock, supercharge, leverage (as a verb), revolutionary, 10x.
 - Never name a client or a prospect. Teams and brands are fine.
 - One giveaway per post, one comment word per post, words never reused within 30 days.
