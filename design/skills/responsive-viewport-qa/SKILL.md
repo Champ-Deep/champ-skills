@@ -44,3 +44,4 @@ Run on the nvm node (`/Users/deep/.nvm/versions/node/v24.13.1/bin` first on PATH
 - Full-page screenshots hide sticky and fixed elements that overlap content; check the first viewport separately.
 - Responsively screenshots are downscaled; zoom with a crop before judging small type.
 - A fix that works at 375 can break 768. Always re-shoot all widths after the last edit.
+- A deliberate scroll box is not exempt from fit checks. Inside a scrolling table, still measure (a) that identifiers (phone numbers, emails, ids, codes) render on one line, by counting distinct line tops from `Range.getClientRects()` on the cell, and (b) that the columns the screen exists to show are inside the scroller at 1440 wide. `overflow-wrap:anywhere` on table cells shrinks auto-layout columns to their tiniest min-content, which splits `+14158586273` mid-digit and pushes trailing columns (hit rate, samples) off a desktop viewport with no scroll cue.
