@@ -45,7 +45,7 @@ kanban_create(
 )
 ```
 
-**Subscription-first routing supersedes the old automatic Opus build escalation.** Frontend and worker profiles use `gpt-6.1-sol` on `openai-codex`. Do not automatically move a failed build to Anthropic. Keep Anthropic for main judgment, planning and review. Explicit specialist pins remain deliberate per-card decisions. The bounded fallback is `openrouter-budget` with `openrouter/auto`, never unrestricted Auto or an uncapped provider. Follow `references/subscription-first-routing.md` for quota admission, limits, proof and known gaps. Never reclaim a running worker just to apply this policy: it keeps its current model until it finishes.
+**Subscription-first routing with priority tiers.** Frontend and worker cards run `gpt-6.1-sol` on `openai-codex` below priority 75; priority 75 to 89 pins Sonnet and 90+ pins Opus, both on Anthropic, waiting for headroom instead of downgrading. Failed builds are never auto-escalated to Anthropic. Keep Anthropic for main judgment, planning and review. Explicit specialist pins remain deliberate per-card decisions. The bounded fallback is `openrouter-budget` with `openrouter/auto`, never unrestricted Auto or an uncapped provider. Follow `references/subscription-first-routing.md` for quota admission, limits, proof and known gaps. Never reclaim a running worker just to apply this policy: it keeps its current model until it finishes.
 
 Escalate only a hard, reasoning-heavy frontend card to Astra by pinning the model on that one card: `model="gpt-6-astra", provider="openai-codex"`. Astra burns the ChatGPT window fast, so this is the exception.
 
