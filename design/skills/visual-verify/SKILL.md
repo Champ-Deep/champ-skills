@@ -105,7 +105,7 @@ The audit runs the live page in Chromium and checks the **computed** styles, not
 
 Severities: **FAIL** blocks delivery. **WARN** needs a reason to ignore. **INFO** is a nudge. The script exits 1 on any FAIL so it can gate a build.
 
-**A cluster of ~1:1 contrast FAILs is the checker, not your design.** Chrome returns `color(srgb r g b / a)` for every `color-mix(...)` result, with 0-to-1 channels, and a `[\d.]+` regex reads those channels as 0-to-255, so every translucent colour in the page audits as near black at once: nav bars, text on dark bands and translucent backgrounds all FAIL at 1.0 to 2.8:1 together. `scripts/audit.py` scales `color(` channels by 255; if you run a vendored or plugin copy of the script, carry that fix. Prove the gate before you distort the palette.
+**A cluster of ~1:1 contrast FAILs is the checker, not your design.** Chrome returns `color(srgb r g b / a)` for every `color-mix(...)` result, with 0-to-1 channels, and a `[\d.]+` regex reads those channels as 0-to-255, so every translucent colour in the page audits as near black at once: nav bars, text on dark bands and translucent backgrounds all FAIL at 1.0 to 2.8:1 together. `scripts/audit.py` scales `color(` channels by 255; if you run a vendored or plugin copy of the script, carry that fix. The same uniform ~1.4:1 cluster (sidebar, h1 and untouched shell included) appears on Tailwind v4 / shadcn apps whose tokens are `oklch(...)`: the regex cannot read oklch either. Re-measure by resolving each computed colour through a 1x1 canvas `fillStyle` plus `getImageData` and compositing backgrounds up the ancestor chain, then report those ratios. Prove the gate before you distort the palette.
 
 **Chart text in the failure zone gets its ink from one computed value, not from a
 step index.** A sequential palette assigns text by ramp position ("step 3 and above
@@ -461,6 +461,8 @@ Never write "verified" if you did not open the images.
 
 When the deliverable is a set of files others open later (a showcase, a handoff, a deck), persist the report beside them as `VERIFICATION.md`: checks executed with counts, visual defects found and fixed, and explicit limits (devices not tested, no deployment, what was left unverified). A chat message ages out; the file travels with the artifact and answers the reviewer's first question without a rebuild.
 
+A pull request into a product repo is the exception: the report goes in the PR body and the task's evidence attachments, never committed. A root-level `VERIFICATION.md` or per-fix `DESIGN.md` lands on main permanently, clutters a repo that may be public, carries internal process notes (lane names, task rulings, local interpreter paths) out of the company, and squats the `DESIGN.md` name the repo's design-system spec owns. Keep the committed diff to product code, tests and any verification script, and give that script its own run instructions in a header comment.
+
 ---
 
 ## The gate
@@ -481,6 +483,7 @@ Delivery is blocked until all of these are true:
 - [ ] Overflow checked by element rect against the viewport, not by `document.scrollWidth` (a clipped root lies), and any "text is clipped / element is missing" claim from a vision pass first confirmed against the full-page height, since a crop's own edge is the usual culprit
 - [ ] Every interactive control the page ships, driven in one batched behavior probe at each shipping width: no control is disabled in its default state without an explicit source attribute, each one advances page state when driven, computed outputs recompute (empty and over-cap inputs included), and any state the page claims to keep survives a reload
 - [ ] Local-only or self-contained claims proved with `scripts/offline-check.py`, browser offline: zero external requests, zero storage writes
+- [ ] Data-classification check: a deliverable carrying personal data (employee names with home locations, shift or travel times) was previewed on a local static server only, and no public URL appears in the file, the handoff, or the screenshot paths
 - [ ] The swap test passes: this could not be any other brand's page
 
 If a browser is unavailable, every unchecked line above appears in the handoff as an explicit **unverified** list. An honest gap beats a fabricated pass.
