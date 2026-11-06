@@ -99,6 +99,20 @@ unless he says otherwise in the moment:
   `api/services/configuration/registry.py`; TTS construction in
   `api/services/pipecat/service_factory.py::create_tts_service`.
 
+## RULE: a client wait for a call outcome must outlast the switch's own timer
+
+A REFER 202 or a 180 means "in progress", not success or failure. When a client
+waits for the real outcome (NOTIFY sipfrag 200, an answer, a hangup), its
+timeout must be longer than the ring timer the switch applies to that leg
+(Asterisk `Dial(...,30)` in the dialplan): a shorter client timeout reports
+failure for a target that answers late, while the switch connects the call
+anyway. Read the dialplan timer before picking the number, and prove it with a
+slow-answer probe (delay the target's answer past the client timeout, inside
+the switch timer) alongside the fast-answer and unknown-target cases. After any
+non-success outcome, compare the client's call state with the switch's channel
+list: a call the UI still shows active after the switch dropped that channel is
+a ghost call and a defect.
+
 ## Diagnose by failure signature
 
 | Signature | Cause | Where to look |
