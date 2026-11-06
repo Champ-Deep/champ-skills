@@ -50,6 +50,8 @@ Length: 400 to 900 words. If the draft passes 900, cut sections, not sentences.
 - Every fact about a vendor has a public source and a date. SPAN numbers stay in [brackets] until the data team fills them.
 - One pain point from forums, G2 reviews, Reddit or a sales call, noted in the brief and used in the copy.
 - Never invent a customer story, a stat or a quote.
+- Never cite, link or name a competing data or technographic vendor (PredictLeads, Derrick, ZoomInfo, HG Insights, BuiltWith and the like) in public copy, because it sends the buyer to a rival. Their pages may back a claim in the internal fact-check notes only; public copy states the point plainly with no marker, or cites a neutral non-vendor source.
+- Never imply a SPAN product capability (what the sample shows, how detection works, how often data refreshes) that no SPAN source confirms. A buyer checklist on a SPAN page reads as a promise that SPAN passes it, so source it from the data team or drop it.
 
 ## Page Extras Gate (span-company-profile uses this too)
 Tick every line before handoff:
