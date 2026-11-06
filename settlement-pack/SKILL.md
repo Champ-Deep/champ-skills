@@ -44,7 +44,7 @@ Everything an agent can do without an answer is already running or staged before
 
 | Situation | Move |
 |---|---|
-| New ruling, no card exists | `kanban_create(initial_status="blocked")`, section 3 body, recommended option first, one question |
+| New ruling, no card exists | `kanban_create(initial_status="blocked", initial_block_kind="needs_input", initial_block_reason="<DECISION line>")`, section 3 body, recommended option first, one question |
 | Thread already carded | `kanban_comment` on the existing card with the pack's position; never a duplicate card |
 | Prior note's recommendation overridden | The new card body names the old recommendation and why it loses; comment the same on the old note's card if one exists |
 | A sub-ruling is too small to card | Fold it into an existing card as a comment (an extra criterion on a scoring card, a scope addition on a build card) |
