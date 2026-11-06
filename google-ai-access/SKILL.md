@@ -26,7 +26,7 @@ first; mixing lanes is how advice becomes wrong.
 
 | Lane | What pays | What it covers | Wired into |
 |---|---|---|---|
-| Google AI plan (Plus/Pro/Ultra) | monthly subscription | Quota inside Google's own surfaces: AI Studio web UI, Gemini app, NotebookLM, Antigravity, Jules | human use, Antigravity (`agy`) |
+| Google AI plan (Plus/Pro/Ultra) | monthly subscription | Quota inside Google's own surfaces: AI Studio web UI, Gemini app, NotebookLM, Antigravity, Jules | human use, Antigravity (`agy`), and Hermes through the `antigravity-subscription-directsdk` plugin (Gemini 4 Argon, Gemini 3.8 Flash, Claude Opus/Sonnet 5.5, GPT-OSS; quota via `agy -p /usage --output-format json`). Verified with real tool calls 2026-11-07; see `model-routing` reference `subscription-first-routing.md` |
 | Gemini API key | Google Cloud billing, pay per token with a spend cap; free tier exists but is rate-limited | Programmatic Gemini API | Hermes `gemini` provider: `GOOGLE_API_KEY` or `GEMINI_API_KEY` in `~/.hermes/.env`, then `hermes model` |
 | Vertex AI | Google Cloud billing | Same models under enterprise controls | Hermes `vertex` provider via Application Default Credentials |
 | Workspace agent (Ask Gemini in Chat) | eligible Google Workspace subscription | Gemini inside Chat/Gmail/Drive/Docs, reading that account's Workspace data | Google Chat, admin-enabled |
@@ -44,9 +44,7 @@ first; mixing lanes is how advice becomes wrong.
 - **An agent lane needs paid billing or acceptance of throttling.** The Gemini
   API free tier cannot carry long agent runs because Hermes makes several model
   calls per turn. Any API-key setup gets billing enabled with a spend cap.
-- **Antigravity is the subscription-covered Google CLI surface.** Google
-  redirects personal Gemini CLI logins to the Antigravity suite, so do not
-  build automation on the personal Gemini CLI login path.
+- **Antigravity is the subscription-covered CLI surface, and it is the only subscription path into Hermes.** The `antigravity-subscription-directsdk` plugin drives `agy` headlessly; the plugin must be installed and enabled per profile (`hermes -p worker plugins list`), or Hermes reports Unknown provider and falls through to the next fallback, which may be paid. Google redirects personal Gemini CLI logins to the Antigravity suite, so do not build automation on the personal Gemini CLI login path.
 - **Account topology decides visibility.** The consumer Google account holds
   the AI plan, personal Drive, AI Studio, and Antigravity. The Workspace
   account (Deep admins `championsmail.com`) is what Ask Gemini in Chat and

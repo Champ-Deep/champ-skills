@@ -4,19 +4,23 @@ Use the existing Hermes profiles and native fallback chain. Do not build a secon
 
 ## Routes
 
-Three tiers, decided by card priority when no human pin exists (Deep, 2026-11-07):
+Four pools, all read live every 5 minutes: Anthropic direct (`hermes usage`), ChatGPT (`hermes usage --provider openai-codex`), Antigravity (`agy -p /usage --output-format json`, three buckets: Gemini, Claude and GPT, Argon), shared OpenRouter key (paid). Reserves: Anthropic 25%, ChatGPT 15%, Antigravity buckets 20%, OpenRouter 20%. Unknown quota is treated as empty.
 
-| Tier | Priority | Model | Lane |
+Tiers, decided by card priority when no human pin exists (Deep, 2026-11-07):
+
+| Tier | Priority | Model | Pool |
 |---|---|---|---|
-| Hardest | 90+ | `claude-opus-5-5` on `anthropic` | waits for Anthropic headroom, never downgrades |
-| Important | 75 to 89 | `claude-sonnet-5-5` on `anthropic` | same |
-| Routine | below 75 | `gpt-6.1-sol` on `openai-codex` | ChatGPT subscription first, bounded Auto fallback |
+| Hardest | 90+ | Claude Opus 5.5 | whichever of Anthropic direct or Antigravity Claude has more headroom; both at reserve: pin Anthropic and wait, never downgrade |
+| Important | 75 to 89 | Claude Sonnet 5.5 | same |
+| Routine | below 75 | GPT-6.1 Sol on ChatGPT | at the ChatGPT reserve: Antigravity Gemini (Argon for frontend when its bucket allows, Flash otherwise); only when that is also at reserve: bounded paid OpenRouter Auto |
 
-The governor applies these to unpinned ready frontend and worker cards. A human pin at any priority is left alone. Set the priority honestly at `kanban_create`: priority is the tier switch.
+Antigravity model ids carry an effort suffix: `claude-opus-5-5-medium`, `claude-sonnet-5-5-medium`, `gemini-4-argon-medium`, `gemini-3.8-flash-medium`. Provider id `antigravity-subscription-directsdk` (plugin in each executing profile's `plugins/`; a profile without the plugin reports Unknown provider and silently falls through to the paid chain, so check `hermes -p <profile> plugins list` first). Proven with real tool calls on frontend and worker for Argon, Flash and Opus (2026-11-07).
 
-Google: Deep's Google AI plan covers Google's own surfaces only (`google-ai-access` skill). No Gemini credential exists in Hermes and the subscription cannot pay for API calls, so there is no Google lane for cards. Adding one means a Gemini API key with Google Cloud billing and a spend cap, which is a Deep decision.
+The governor applies these to unpinned ready frontend and worker cards and rebalances only the pins it made (`managed_routes` in the state file). A human pin at any priority is left alone. Set the priority honestly at `kanban_create`: priority is the tier switch.
 
-Frontend and worker primary: provider `openai-codex`, model `gpt-6.1-sol`, ChatGPT subscription. Native `fallback_providers` has one entry: `openrouter-budget`, model `openrouter/auto`. Main judgment, planner and reviewer keep their separate Anthropic lanes. Do not auto-escalate repeat failures to Opus.
+Native `fallback_providers` per profile, for runtime errors mid-card: frontend Sol, then Antigravity `gemini-4-argon-medium`, then `openrouter-budget/openrouter/auto`; worker Sol, then Antigravity `gemini-3.8-flash-medium`, then Auto.
+
+Frontend and worker primary: provider `openai-codex`, model `gpt-6.1-sol`, ChatGPT subscription. Native `fallback_providers` has Antigravity Gemini before the paid entry (see Routes). Main judgment, planner and reviewer keep their separate Anthropic lanes. Do not auto-escalate repeat failures to Opus.
 
 The `providers.openrouter-budget` definition in each executing profile must have:
 
