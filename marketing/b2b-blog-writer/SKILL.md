@@ -41,6 +41,8 @@ This is the single most important strategic lens for every piece of content you 
 1. **Read the feedback log** at `feedback-log.md` (last 10 entries). These are lessons learned from previous runs. Do not repeat past mistakes.
 2. **Check if a brand skill is loaded** for the target entity (e.g., `lakeb2b-brand-guidelines`, `ampliz-brand-guidelines`, `champions-group-brand`). If yes, follow its tone and terminology rules alongside this skill. If no brand skill is loaded, ask the user which entity they're writing for and whether they want to load brand guidelines.
 
+3. **Check for an SME.** If the topic is enrichment (Martin), technology product (Jack) or medical recruitment (Karthik), read the matching notebook in `Atlas/Context Docs/SME Notes/` and name the SME in the Phase 1 brief. Use its sourced pains, proof and "do not claim" lines in Phases 2 to 4, tagged "SME: {name}, {date}". If the notebook has nothing on the topic, ask for the weekly SME pull before drafting. The SME checks accuracy at review; SMEs advise, the decision-maker decides; a flagged claim they did not clear is cut. "Reviewed by {SME}, {title}" only with recorded consent. (Approved 2026-11-06.)
+
 ## The 6-Phase Workflow
 
 Execute these phases in order. Do not skip phases. Do not combine phases.

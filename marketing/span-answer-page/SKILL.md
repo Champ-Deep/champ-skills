@@ -29,6 +29,8 @@ Proposed turnaround (draft, not yet in force): 2 working days from approved brie
 ## Inputs
 A brief from `compact-keywords`. If there is none, run that skill first. Do not start from a bare topic.
 
+**SME step (approved 2026-11-06).** Before the brief, read the SME notebook for the topic in `Atlas/Context Docs/SME Notes/` (Enrichment = Martin, Technology Product = Jack, Medical Recruitment = Karthik) and name the SME in the brief (field 10 of the pain-point brief). Notebook lines fill the pain, proof and "do not claim" fields, tagged "SME: {name}, {date}". No pull for a covered topic means the brief fails the gate: ask for the weekly SME pull, do not draft from competitor copy. In review the SME checks accuracy alongside Preeti, inside the same window. SMEs advise, Preeti decides; silence from the SME drops any claim they flagged. Add "Reviewed by {SME}, {title}" only with that SME's recorded consent.
+
 ## The page (in this order)
 1. **H1:** the keyword in plain words, title case, under 60 characters.
 2. **Answer box (first fold):** 40 to 60 words. The count, the verified date, who they are, and the next step with a link. A reader who stops here got the answer.
