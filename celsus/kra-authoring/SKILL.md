@@ -35,6 +35,8 @@ If Deep asks whether prior conversations exist on the topic, search conversation
 | The current short-form sheet for interns/trainees (weights must sum to 100) | `Efforts/Active/Accelerator KRAs Q3 FY27/`, and read `Accelerator-KRAs-Q3-FY27.xlsx` with the `xlsx` skill: that workbook is the format authority for the Excel deliverable, not its prose sibling |
 | A plain bullet KRA for a junior under a senior's team | the Aishwarya section of the SPAN content send pack in `Efforts/Active/SPAN Content/` |
 
+Since the 29 Jul reviews the scale is out of 10 (HR-measured), not 1 to 5. For the Excel, load `Efforts/Active/Appraisal & Org Restructure Aug 2026/KRA - A Sameulla.xlsx`, copy cell styles, and rebuild rows from one shared Python data list that also writes the note, so the two cannot drift. LibreOffice may be absent: read formulas back by row and say they were not recalculated.
+
 Reuse the skeleton verbatim: identification (both hats plus scoped dotted lines), role summary, reporting and cadence, allocation, KRAs with KPI tables, rating scale, mutual commitments, escalation path, acknowledgment. Never invent a new section shape.
 
 ### 3. Scope the buckets to the person's tier
