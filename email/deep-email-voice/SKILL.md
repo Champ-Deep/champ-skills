@@ -108,6 +108,7 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 - [ ] For a date invented for this draft, offer two candidates in the handback (the one written in, and a nearer or later alternative) instead of one silent proposal, so Deep picks rather than having to invent an option himself.
 - [ ] Before proposing a due date, check the recipient's calendar or leave: a proposal that lands on a colleague's leave, a holiday or a milestone of theirs is called out as its own option (move the date to the next working day) in the handback, never embedded silently in the draft.
 - [ ] `toRecipients` holds a real address for the right person, or is empty and flagged. Never Deep.
+- [ ] Before tagging an address `[CONFIRM]`, search spelling variants of the name (Akansha, Akanksha, Akankshya) and the local-part pattern (`firstname.initial@`), then corroborate a candidate by team and co-occurrence (same distribution list, same teammates, same project thread). Put the candidate and that evidence on the tag so Deep confirms in one word instead of looking it up.
 - [ ] A leave or work-from-home reply says plainly whether it is approved. "I will confirm once I have the reason" is not an approval, and a draft that reads as one either way leaves the person waiting on a second mail.
 - [ ] Subject is what the recipient should see: specific, no bracket tags.
 
