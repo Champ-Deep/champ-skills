@@ -41,6 +41,10 @@ Verdict shape: judge on the tier table, never on an overall mean, because one fa
 
 When someone other than Deep runs the models (an intern, Alfiya), hand over a task pack plus rubrics, never prior scores. Keep answer keys and earlier results in a separate Deep-only file and release keys only after coded outputs come back, because a scorer who has seen 1.00 for a model reads its output toward 1.00. Reuse a few fixtures from the existing bank so the old checkers still score them. Pack v1 (24 tasks, 5 categories, tiers 1 to 4) lives in `Efforts/LLM Bake-off/Blind Task Pack v1/`. Deterministic tasks need their key computed in code before it is written down (a hand count of the QA task was checked this way). No GPT-6.1 or Kimi K3 rows exist in the v2 results, so any claim about them starts from the pack run.
 
+## SQL and database tasks
+
+`suite/db_tasks.py` (run with `--bank db_tasks`) holds six SQLite tasks. Pattern to reuse: build the fixture in code, compute the key in plain Python from the raw rows (never from the reference SQL), have the checker execute the model's SQL on an in-memory database, and for schema or index tasks probe behaviour (try to break constraints, read `EXPLAIN QUERY PLAN`) instead of reading the DDL. Plant traps the checker can see: case and padding on emails, NULL in a NOT IN list, a WHERE that turns a LEFT JOIN into an inner join, join fan-out. Reasoning models can return empty text with HTTP 200 when hidden reasoning eats the output cap, so a human-run pack must record max output, thinking setting, stop reason and the raw body for any empty or endless run.
+
 ## Build the candidate list from your own research
 
 Deep's standing correction (2026-10-31): a tool's recommendation is one input, never the shortlist. Hermes's local catalog recommended Qwen3.6 35B-A3B while NVIDIA's Nemotron 3.5 Bolt sat in the same catalog unrecommended; Deep expected both found and tested. Shortlist from at least three independent sources (vendor card, independent leaderboard or review, hands-on report), and write down why each excluded model was excluded.
