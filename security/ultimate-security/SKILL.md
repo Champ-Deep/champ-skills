@@ -95,6 +95,8 @@ Agent rules for every deploy:
   workflow running the same gate as a required check, not with more local hooks.
 
 Gate pitfalls learned on rollout:
+- **Fixes after the audited ref change the stamped surface.** `stamp` fingerprints the sensitive files at the run's `source_ref`; any later commit that touches auth, Dockerfile, CI or deploy files makes `check` say AUDIT-REQUIRED. Verify the final fixes against the commit you will stamp (set `source_ref` to it), and keep the commits after it to non-sensitive files. In a fix-verification run, expect the hunters and verifiers to find defects in your own fixes: budget a final small verifier pass on the last commit.
+- A verifier fake that books cost itself hides a missing span. Make test fakes return the provider-shaped response and let the production code book it.
 - `git rev-parse` inside a plain folder under `~` resolves to the home repo. The gate treats a
   folder as git only when it is the toplevel, or installs land in `~/.git/hooks`.
 - Baselines must cover both HEAD (what pre-push checks) and the working tree (what predeploy and
