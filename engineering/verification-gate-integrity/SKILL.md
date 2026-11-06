@@ -94,6 +94,10 @@ blog and session grids with tag or category labels. Run the old and new rules
 on the same set: a row dropped by the new rule is a precision win or a recall
 loss, and only reading it tells which.
 
+## A rebuild from the package proves reproducibility only if it equals the shipped build
+
+"The extracted ZIP builds" proves the package compiles, not that it reproduces the artifact you shipped beside it. Build tools that scan a directory (Tailwind `@source`, glob imports) pick up files the packager left out, so the shipped build and the rebuild can differ silently. After rebuilding from the extracted package, diff its output against the shipped artifact (bytes, or the generated class or module list) and either package the missing inputs, rebuild the shipped artifact from the package, or report the delta and why it is inert.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
