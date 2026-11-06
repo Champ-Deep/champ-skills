@@ -144,6 +144,10 @@ When Deep says "clear my decision cards for me", the local Jev scorer has alread
 
 Recurring: cron `kanban-ruling-pass` (weekly) runs this section on whatever is blocked; it only rules what the policy above allows and leaves the rest on the sheet.
 
+**Never `complete` a decision card that has children; archive it.** `complete` releases every dependency-gated child, and a stale October decision card can have a whole pipeline parked under it. On 2026-11-06 completing "approve the TASKS.md migration plan" as moot released three children, one of which wrote a card-creator script and put 313 blocked cards plus 32 triage cards on the board inside seven minutes. Before `complete`, check `select count(*) from task_links where parent_id=?`; if non-zero, `archive` with the same comment (archive releases nothing). Also pin every card-creating script to a one-shot: rename it `.disabled-<date>` after the run, because a worker that finds it will run it again.
+
+**The compose and Jev lanes die with the shared OpenRouter cap.** A run of `celsus_compose.py` that prints `HTTP Error 403` on every card is the weekly limit, not the key: confirm with `curl -H "Authorization: Bearer $KEY" https://openrouter.ai/api/v1/auth/key` (`limit_remaining: 0`) and card the cap raise for Deep. Clef sweep is local and keeps running.
+
 ## 2. What "blocked" means
 
 `kanban_block(kind=...)` routes by cause. Only two kinds need Deep.
