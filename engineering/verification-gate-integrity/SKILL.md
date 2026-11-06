@@ -137,6 +137,10 @@ folding it into the pass, because a gate that grades differently per run is a ga
 whose green you cannot rely on. Report the final set, and disclose any run whose set
 did not reproduce.
 
+## A deflake is proven only under the load that caused the flake
+
+Green runs of a timeout flake on an idle machine cannot discriminate: the unfixed code passes there too. Before claiming a deflake, reproduce the failure on the base commit (run base and fix suites concurrently, or under the same machine load the report came from), then run the fix under that same load. Report the flaky test's own duration against its timeout in every run (`--reporter=verbose` prints it), not just the pass count: a fix that moves 5.2s to 4.3s under load still has under 1s of margin and will fail again. If the base failure never reproduced, say the green runs are unproven rather than calling them proof.
+
 ## Time a delay inside the page, not around the driver
 
 A hover-intent or debounce assertion written as `hover(); wait_for_timeout(60); expect closed` measures Playwright's own actionability, scroll and IPC time as part of the window, so a correct 120 ms open delay fails whenever the first browser context is cold. Record timestamps in the page (`performance.now()` on `pointerenter` and when the open class lands, via a `MutationObserver`) and assert the difference, or drive the event with `dispatchEvent` and read state on the next frame. Run any timing gate three times before reporting it green: one red in three is a flaky gate, not a pass.
