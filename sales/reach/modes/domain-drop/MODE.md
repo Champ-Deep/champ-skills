@@ -17,7 +17,7 @@ Ask these in one message. Skip any the input already answers. Do not start resea
 ## Step 1: resolve and collision-check
 
 1. Domain to company: site, LinkedIn, registry. If the domain resolves to a parent or a different trading name, say so first.
-2. Collision check before anything else: `Atlas/Clients/`, the CRM the rep named, and Harbinger `contact_claims` (10-day window, see `~/repos/ChampHarbinger-cf/docs/handoff/BACKEND-MAP.md`). An existing relationship with any of the 12 companies stops the cold sequence and returns the owner's name instead.
+2. Collision check before anything else: `Atlas/Clients/`, the CRM the rep named, and Harbinger `contact_claims` (10-day window, see `~/repos/ChampHarbinger-cf/docs/handoff/BACKEND-MAP.md`). Inside Harbinger, call `checkDomainCollision` first: `stop: true` ends the run with the owning team and days ago, before any research. `stop: false` is only "no claim among the addresses Harbinger holds". An existing relationship with any of the 12 companies stops the cold sequence and returns the owner's name instead.
 
 ## Step 2: research and the 360 read
 
@@ -29,7 +29,7 @@ Build the touches with `modes/reach-engage/MODE.md` (first touch) and `modes/rea
 
 | System | Shape | Notes |
 |---|---|---|
-| **Harbinger** | JSON for `POST /api/outreach`: `{campaignId, name, steps: [{subject, bodyTemplate, delayDays, position}]}` | The rep pastes it into the Harbinger agent, which owns sequence creation (no UI form exists). shortcut: the insert currently ignores `subject` and `bodyTemplate` per BACKEND-MAP, so also hand over the touches as text until that route stores them. |
+| **Harbinger** | Inside the Harbinger chat the agent builds it itself: `listSequences`, then `createSequence` with `{name, campaignId, brief: {goal (160 chars), tone, angle, talkingPoints}, steps: [{delayDays, condition}]}`. Cadence: Day 1, 3, 7, 14, 21, 30. The per-touch plan goes in `brief.talkingPoints` (2000 chars); Harbinger writes each email per contact from the brief, so also hand over the touches as text. | Needs a campaign: reuse the rep's or create "Domain Drop: <domain>", add the company and find contacts with the campaign tools. The sequence is created as a draft and nothing sends until the rep approves drafts in Harbinger. Never call `sendEmail`, `sendSequenceEmails` or `approveSequenceDrafts`. The Harbinger route `POST /api/outreach` is a legacy duplicate and ignores copy; do not use it. |
 | **Salesforce** | CSV of Tasks: `Subject, ActivityDate, Description, WhoId or Contact Email, Status=Not Started`, one row per touch, plus one Account row and Contact rows | Importable with Data Loader or the Import Wizard. Dates computed from the rep's chosen Day 1. |
 | **Outlook** | One draft per touch, subject and body, with its send day in the first line as `[Send: YYYY-MM-DD]` | Staged as Drafts through the `ms365-email` skill when the session has it, never sent. Rep deletes the marker line before sending. |
 | **Plain email** | Numbered text blocks with send dates | Copy-paste ready. |
