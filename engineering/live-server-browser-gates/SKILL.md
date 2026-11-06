@@ -172,6 +172,8 @@ mapping, no CORS/CSP change, no deploy) plus what stayed untested (real provider
 physical devices, other browsers), so a mapped-origin pass is never read as a test of a
 production deploy.
 
+For browser syntax errors or hydration stalls after a clean compile, read [browser asset integrity](references/browser-asset-integrity.md) before changing application logic or blaming the gate.
+
 ## Pitfalls
 
 - **Reading `os.environ` after a conftest override.** Reports the fixture, not the server.
