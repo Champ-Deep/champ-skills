@@ -113,6 +113,16 @@ non-success outcome, compare the client's call state with the switch's channel
 list: a call the UI still shows active after the switch dropped that channel is
 a ghost call and a defect.
 
+A blind transfer has two failure classes, and each needs its own probe. A
+pre-move rejection (unknown target, NOTIFY 404 right after 100 Trying) leaves
+the original bridge up, so keeping the local leg is correct. A post-move
+failure (target never answers, busy, congestion: NOTIFY 486/503 after the Dial
+timer) arrives after the switch already took the transferee into the dialplan
+and dropped the transferor's channel, so the local leg is dead and the
+transferee may be hung up too. Always run a ring-no-answer probe (target never
+answers, wait past the Dial timer) and check the channel list after it; the
+fast 404 case does not cover it.
+
 ## Diagnose by failure signature
 
 | Signature | Cause | Where to look |
