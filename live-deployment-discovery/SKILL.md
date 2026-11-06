@@ -209,6 +209,23 @@ switch the pin.
   deployed. Pair the HTTP probe with the deployment age and the secret list
   before saying anything is "working": a warm shell with zero secrets cannot
   log in, and reporting the 200 alone reads as "the new code is live".
+- Cross-check the deployed head against the **served bundle**, not the repo:
+  fetch `/`, extract `src="(/assets/*.js)"`, grep that file for a literal that
+  exists only on one branch (an auth-provider key prefix, a feature string).
+  Bundle hashes never match a local build, so a branch-specific literal is the
+  only cheap "is my code the running code" probe. If the string you are chasing
+  appears in neither the repo nor the served bundle, say so and label the cause
+  an inference rather than presenting it as verified.
+- An auth provider's **publishable/frontend key is origin-bound** while its
+  secret key is not: a live key refuses to initialize on a host outside the
+  provider's allowed origins (an `*.workers.dev` URL), and a test key usually
+  accepts any origin. So "staging works, production does not" can be an origin
+  rule, not a code or secret difference. Check the key prefix in the served
+  bundle plus the provider's allowed-origin setting before debugging code.
+- Cloudflare **preview versions of a Worker share production's bindings** (same
+  D1, same R2, same secrets) by default. Once production holds real data, a
+  preview is not a staging environment; it writes into the real stores. Use a
+  separate Worker with its own bindings for anything that exercises writes.
 - Treat Worker code, custom-domain triggers and DNS as separate outcomes. Wrangler can upload and activate a version, then exit nonzero because custom-domain attachment failed. Read deployment versions and fetch the workers.dev host before retrying; never call the custom domain live from an upload message.
 - Inspect apex and www DNS before replacing parking records. An active Cloudflare zone with correct nameservers can still retain registrar parking A/CNAME records. Domain changesets can report no conflicts while attachment rejects externally managed DNS records. Preserve mail records and limit any approved change to the exact web hostnames.
 - Check permissions rather than assuming Wrangler OAuth includes DNS editing. Worker/D1 access and zone metadata can work while DNS record reads return 403. If no authenticated DNS-capable channel is available, request the specific parking-record removal in the dashboard; do not request a token in chat or keep retrying the same denied API.

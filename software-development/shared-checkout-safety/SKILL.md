@@ -80,8 +80,36 @@ not `git clean -fd`, and do not "tidy" the tree. If it blocks you, move to a
 separate checkout or worktree:
 
 ```bash
-git worktree add /tmp/<name> <branch>
+git worktree add -b <my-branch> /path/sibling <base>
 ```
+
+Cut it from the intended base explicitly (`main`, `origin/main`), not from
+whatever HEAD the shared checkout happens to be on.
+
+### Make the worktree runnable
+
+A fresh worktree has no gitignored state, so it cannot run the suite out of the
+box. Get it green before writing code:
+
+1. **Symlink the primary checkout's install instead of reinstalling:**
+   `ln -s ../<repo>/node_modules node_modules` (and any other gitignored
+   dependency dir). Same lockfile plus same base means the tree is identical;
+   you avoid a second full install and never disturb the shared checkout. If
+   the worktree branch is on a different lockfile, install for real.
+2. **Quote every path that contains `[]`.** Next.js dynamic route folders are
+   `[keyName]`, which the shell reads as a character-class glob and silently
+   expands to nothing, so `vitest run src/app/api/.../[keyName]` or an unquoted
+   eslint argument can pass while running zero files. Always single-quote such
+   paths, and confirm the run by test/file count, not by exit code 0.
+3. **Pre-commit hooks may be missing their dependencies.** A hook that shells
+   out to `node_modules/.bin/*` fails in a bare worktree. Fix it by restoring
+   the install (step 1). If you bypass instead, do it for that one commit only
+   (`git -c core.hooksPath=/dev/null commit ...`), then re-run the hook's checks
+   by hand (lint, typecheck, the touched test directory) and say in the PR body
+   that hooks were bypassed. A bypassed hook you did not re-run by hand is an
+   unverified commit.
+4. **Ship from the worktree, not the shared checkout:** push the branch and
+   open the PR from there; the shared tree keeps its other lane's files intact.
 
 ## Pitfalls
 - **Never deploy from a checkout a card worker may be on.** A deploy script reads whatever HEAD is at run time; a dispatcher-spawned worker can switch the branch between your `git status` and the build, so you ship their half-done branch. Deploy from a detached worktree pinned to the exact commit (`git worktree add <dir> origin/<branch> --detach`), copy the gitignored env file in and symlink the deploy tool's `node_modules`. If wrangler suddenly tries to CREATE a container application that already exists (POST `/containers/applications` 401 instead of PATCH), check which branch built it, and then check the Cloudflare token separately: a clean-worktree rebuild that still fails at the registry push with `unauthorized` is an auth problem, not a branch problem. A deploy wrapper that exits 0 while its wrangler step failed is still a failed deploy: confirm the live version/health endpoint matches the commit you meant to ship before reporting success, and never report success from the shell exit code alone.

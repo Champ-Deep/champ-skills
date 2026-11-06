@@ -31,7 +31,11 @@ building against. Steps 1 to 5 above still apply; these are the ones a removal a
    columns, cache keys with their TTLs, and the request parameter that turns it on. Anything
    left behind reads as a live feature that silently does nothing, and a cache key left behind
    serves the removed provider's answers as if they were fresh. The absence proof lives in
-   `verification-gate-integrity`.
+   `verification-gate-integrity`. The same rule covers a credential deleted through the
+   product UI, not just code: taking a provider key out of a settings key store must take the
+   rows that key imported with it (mailboxes, records, jobs stamped with that provider), or
+   they linger as live-looking rows that do nothing. Anything deliberately left behind, health
+   rows and caches above all, is named in the report with what refreshes it and when.
 3. **Reset per-run derived state whenever a re-run can change the layer set.** A job re-run
    with fewer layers answers out of the previous run's leftovers unless you clear them, so an
    old network name or company reads as this run's result. Clear at the start of every run,
