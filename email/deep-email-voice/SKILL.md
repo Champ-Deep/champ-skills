@@ -32,6 +32,8 @@ When an email is anchored to a conversation (Deep says "based on my last call wi
 
 Never: em or en dashes, "I hope this email finds you well" to someone mid-thread, restating their message back, invented dates, prices or commitments. Never attach a Markdown file (`.md`) or any other source-format file: recipients cannot open them. Attachments are PDF, HTML, Word, Excel or PowerPoint only, and always built with the sending brand's design skill (`lakeb2b-docs`, `champions-ranch-docs`, `docx`, `power-design`): a vault note run through bare pandoc or default CSS is not sendable, convert it through the brand template first. A missing fact becomes the literal tag `[CONFIRM: what]` inline in the sentence, so the gap is greppable rather than plausible, and it is listed in the run report. A draft still carrying tags is not sendable as-is: name it and its tags on the decision card instead of reporting the draft as ready.
 
+When the ask is for data he does not have, the ask goes out as an attached input sheet rather than a list of questions in prose: prefilled with every row and column already known from the thread (names, teams, times), dropdowns on the choice fields, and a flag on any row where the recipient's own source contradicts itself. A recipient answers gaps in a table in two minutes; the same fields in an email body take a reply chain, and asking in prose for facts you hold reads as not having read the mail. The body still names the attachment and the date, and "attached" never appears until the read-back shows the file.
+
 ## 2. Structure
 
 Every draft is: greeting, one context line, the body, one clear ask with a date, sign-off.
@@ -100,6 +102,8 @@ Never address a draft to Deep himself and never put `[FILL TO: ...]` in a subjec
 - [ ] When he named a source file (`this is the source`), does the draft add substance, not just fixes? A reply that only repairs recipients or wording wastes the instruction: tighten the ask, state what was learned, or hand over something concrete (an attachment carrying the list or data he referenced), so the new draft is unambiguously better than the one it replaces.
 - [ ] No one-item list, no `<p>` inside `<li>`, no em or en dash.
 - [ ] Every date, number and name traces to the source (thread, meeting, TASKS.md row).
+- [ ] No claim comes from talking points for a conversation Deep has not held yet (a planned 1:1, a "Deep only" section). Those are his proposals, not decisions, and putting one in a mail to third parties announces it before the person it concerns has heard it. Check the board card for that conversation; if it is still open, use only what Deep already wrote as ready to send.
+- [ ] Every count in the body (people, slots, groups) traces to a parse of the source table, not to a figure carried over from an earlier draft of the same mail.
 - [ ] Every deadline is either sourced or named as mine in the handback. A deadline I chose is a proposal Deep may strike, so it never goes out silently as a fact.
 - [ ] For a date invented for this draft, offer two candidates in the handback (the one written in, and a nearer or later alternative) instead of one silent proposal, so Deep picks rather than having to invent an option himself.
 - [ ] Before proposing a due date, check the recipient's calendar or leave: a proposal that lands on a colleague's leave, a holiday or a milestone of theirs is called out as its own option (move the date to the next working day) in the handback, never embedded silently in the draft.
