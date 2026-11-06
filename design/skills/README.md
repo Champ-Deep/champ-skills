@@ -35,3 +35,4 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `visual-verify` | Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic inte |
 | `viz-kit` | Use when building a viz kit, ad kit, or data visual. Create varied campaign creative with static ads, narrative carousels and rendered motion, or token-driven charts and  |
 | `web-artifacts-builder` | Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex a |
+| `wireframe` | Use when exploring page structure before visual design. Grayscale low-fi layout options. |
