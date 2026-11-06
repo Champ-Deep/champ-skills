@@ -312,6 +312,11 @@ snapshot times out later in the same flow.
 
 - Dump the live DOM (ids, classes, text of interactive elements) before writing
   interactions, and re-dump after each state change.
+- **A mount call that returned is not a render.** When a harness mounts several surfaces,
+  assert each one by its own selector (non-empty content, its heading) before claiming it
+  mounted. An imperative handle on a React root (`open()` dispatching an event that a
+  `useEffect` listens for) is dropped when called in the same tick as the mount, because the
+  effect has not attached yet: test "mount then call immediately" as its own case.
 - **Write probe scripts to a file.** Inlining JavaScript into a shell or f-string
   collides on `{}` braces and produces an error in the harness, not in the app.
 - Return structured objects from `page.evaluate` and print them; a `"".join is not a
