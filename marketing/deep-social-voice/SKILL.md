@@ -64,6 +64,7 @@ Substack has no posting API and Postiz does not support it: the weekly issue is 
 - Teaching scripts show the move, not just name it: if a line says "draft the question", the next line speaks an example question, labelled hypothetical in the notes.
 - Banned words: excited, thrilled, game-changer, unlock, supercharge, leverage (as a verb), revolutionary, 10x.
 - Never name a client or a prospect. Teams and brands are fine.
+- Open conflict, pending Deep's ruling: the `content` profile brief (SOUL.md) bans product names and allows only a comment question or "save this for your next ..." as the closer, while this skill's shape uses brand names and a comment-word giveaway. Drafts from the cron follow this skill; the content lane rewrites them to its brief. Until Deep rules, an approval binds to the exact copy he saw: when the content lane changes approved copy, the new decision card offers the approved original as its own option, so his "do it" is never silently voided and he is not asked to approve twice without a choice.
 - One giveaway per post, one comment word per post, words never reused within 30 days.
 - The comment word maps to a real path in `champ-skills` and the post log records it.
 
