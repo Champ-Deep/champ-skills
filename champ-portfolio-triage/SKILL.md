@@ -81,6 +81,44 @@ whether the branch holds anything main does not. Quote all three numbers when yo
 a branch is stale, and when a branch does hold work, look for the card and worktree
 that own it before proposing a replacement.
 
+## Reconcile three registers before calling a build complete
+
+Work by a cluster of agents lives in three places that never agree, and each
+alone undercounts: remote branches and PRs, local worktrees, and kanban cards.
+Read all three before any completeness claim.
+
+1. **Remote:** `gh pr list --state open` (drafts are the majority of real work)
+   plus `git for-each-ref refs/remotes/origin/` counted ahead/behind against
+   `origin/main`, gives merged, unmerged, and draft in one pass.
+2. **Local:** for every worktree or clone of the repo, `git -C <dir> log
+   origin/main..HEAD --oneline`. Commits sitting unpushed in a worktree are
+   invisible to `gh` and to every branch listing, and they are frequently the
+   newest polish pass (a skin, a UI fix) rather than abandoned work. A repo
+   audit that skipped the worktree list is missing the last thing that shipped
+   to nobody.
+   **Find those clones by remote URL, not by folder name:** list `~/repos/*`
+   (and any worktree dir the repo declares) and match `git -C <dir> remote
+   get-url origin` against the target, because parallel lanes clone to short
+   sibling names derived from the feature, so a glob on the product or repo
+   name returns nothing while six clones of the target sit next to it. A clone
+   with no `.git` at its top level is not a clone; recurse one level before
+   concluding the code is absent.
+3. **Cards:** `kanban_show` on the done and blocked cards names the PR, branch,
+   commit, review rounds, and carries `open_items` / `skipped` / `caveats`
+   metadata written by the worker and reviewer. Treat that metadata as a
+   pre-built gap checklist, then verify each entry against the code instead of
+   restating it: card summaries are self-reports and the reviewer's caveats are
+   the most reliable sentence in the thread.
+
+**Verify stack-layer claims at the tip, not in the description.** When a PR or
+ card says it is stacked on an earlier branch, the later branch may have been
+ forked before that layer and silently dropped it. A diff stat cannot show a
+ dropped feature, it only shows what changed: grep the feature's entry point in
+ the tip's own files (the action dispatch table, the mounted window or route
+ list, the migration directory) and confirm it is still registered. A backend
+ action with no caller and no UI mount is work that exists in the repository and
+ not in the product.
+
 When you do replace stalled work with a new card, mark the old one in the same turn:
 a blocked card left unmarked is resumed by the dispatcher onto the dead branch, and a
 TASKS.md line still naming the old id sends the next session to work that was declared
@@ -107,6 +145,7 @@ The blocker is credentials and one domain decision, not code.
 - Booking video: Calendly+Loom is the only shipped precedent (CTA on video end).
 
 ## Pitfalls
+- Compose analyses as real Python inside `execute_code`, calling `terminal` once per command. Do not build a shell `python3 -c '...'` inside an f-string: braces interpolate at the wrong nesting level and literal newlines inside the quoted body break it, so the failure surfaces as a `NameError` or `SyntaxError` in code you never meant to write and reads like the tool itself broke.
 - Correct the status line where it lives (the effort note), not only in chat: "still a draft / runs the old build" becomes false the moment you merge and deploy, and the next session will act on it.
 
 The `Apps&Projects` tracker rows are unreliable in both directions. ChampOps is scored 70/"Operational" with zero code and an NXDOMAIN Supabase project. ChampLantern and deependhq-site are scored far below their real completion. Always re-verify.

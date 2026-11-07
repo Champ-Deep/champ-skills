@@ -30,7 +30,21 @@ grep -nE '^  [a-z-]+:$|node-version|python-version|\s+run:' .github/workflows/<c
 
 Ignore release/publish workflows that fire only on tags; the test workflow is the gate. If the repo pins Node 22 while this machine defaults on Node 24, switch with the version manager before installing, or the lockfile resolves differently than it will on the runner. If the base has no `.github/workflows` directory at all, say so explicitly and derive the gates from the package scripts and repository docs; never write that CI passed when no workflow ran.
 
-5. Compare the observed heads with the plan. If the base moved, repeat the planned dry-run merge checks before touching the release branch.
+5. **When the work sits in an open stack of PRs, find the branch that already holds the whole stack before planning any merge.** Read the stack's shape in one call, with each head's base so the chain order is visible:
+
+```bash
+gh pr list --state open --json number,baseRefName,headRefName,additions,deletions,statusCheckRollup,mergeable
+```
+
+PRs each based on the previous one form a chain, and the chain's leaf head already carries every earlier head: integrating from the leaf replaces N head merges with one and keeps a single CI history instead of N green runs that say nothing about the combination. Prove containment per input rather than inferring it from ahead-counts, since a branch one commit behind main can still be the stack root:
+
+```bash
+for b in <input-heads>; do git merge-base --is-ancestor origin/$b origin/<leaf> || echo "MISSING $b"; done
+```
+
+Harvest each PR body into the plan before merging. A chained PR documents its own deviations, the migrations its layer applies, and the remote state it assumes; those become plan inputs and stop conditions at inventory time instead of discoveries at deploy time. A migration whose rows have not been applied remotely is a named ops prerequisite for the release decision, never a footnote after the go.
+
+6. Compare the observed heads with the plan. If the base moved, repeat the planned dry-run merge checks before touching the release branch.
 
    **Measure each input's real contribution by patch-equivalence, never by its ahead-count.** When the base was rebuilt by squashing an entire lineage, every branch forked inside that lineage carries that lineage as shared history and reports itself hundreds of commits ahead while holding only a handful of new commits. `git rev-list main..branch` counts content already in the base as work, so it is useless for deciding what a branch still contributes:
 
@@ -38,8 +52,8 @@ Ignore release/publish workflows that fire only on tags; the test workflow is th
 git cherry -v origin/main origin/<branch>                        # + = not in base, - = already equivalent
 git log --cherry-pick --right-only --oneline origin/main...origin/<branch>
 ```
-6. Confirm deployment access and required secret names without printing values. Authentication alone is not proof that the account can create the required environment, so verify project and environment access too, and read the CLI's own scope report (`wrangler whoami`, `gcloud auth list --filter=status:ACTIVE --format='value(SCOPES)'`) rather than treating a successful login as full rights: a valid token can be missing the scopes a particular resource type needs, and that surfaces only at upload time, mid-deploy. Also establish which checkout and commit the deployment actually runs from: when that checkout holds uncommitted changes, commit the exact running state as its own checkpoint before merging anything into it. Work that exists only in a working tree cannot be reverted to, bisected, or reproduced after the next push, and the first conflict resolution destroys the only copy of what production is running.
-7. **Bootstrap control-plane credentials one at a time, in the order they are needed.** Several CLIs are involved across repos (git host, deploy platform, DNS, preview host) and each needs its own login. When a CLI refuses to log in because stdin is not a TTY, do not conclude it cannot be driven: switch to its browserless/pairing mode, which prints a URL plus a short pairing code, open that URL directly with `open "<url>"`, and have the user approve the code shown on the page. Pairing sessions expire within minutes, so deliver the link immediately instead of batching logins. For a scheduled sweep that must keep access without a browser, the durable form is an API token the user places in the environment; ask for that specifically rather than re-pairing every cycle.
+7. Confirm deployment access and required secret names without printing values. Authentication alone is not proof that the account can create the required environment, so verify project and environment access too, and read the CLI's own scope report (`wrangler whoami`, `gcloud auth list --filter=status:ACTIVE --format='value(SCOPES)'`) rather than treating a successful login as full rights: a valid token can be missing the scopes a particular resource type needs, and that surfaces only at upload time, mid-deploy. Also establish which checkout and commit the deployment actually runs from: when that checkout holds uncommitted changes, commit the exact running state as its own checkpoint before merging anything into it. Work that exists only in a working tree cannot be reverted to, bisected, or reproduced after the next push, and the first conflict resolution destroys the only copy of what production is running.
+8. **Bootstrap control-plane credentials one at a time, in the order they are needed.** Several CLIs are involved across repos (git host, deploy platform, DNS, preview host) and each needs its own login. When a CLI refuses to log in because stdin is not a TTY, do not conclude it cannot be driven: switch to its browserless/pairing mode, which prints a URL plus a short pairing code, open that URL directly with `open "<url>"`, and have the user approve the code shown on the page. Pairing sessions expire within minutes, so deliver the link immediately instead of batching logins. For a scheduled sweep that must keep access without a browser, the durable form is an API token the user places in the environment; ask for that specifically rather than re-pairing every cycle.
 
 ## 2. Merge in the specified order
 

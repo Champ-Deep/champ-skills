@@ -97,6 +97,16 @@ hermes cron create "<cron or 30m>" --name <kebab-name> --script <file.py> \
 - Read the script's flags from its own `--help` before wiring it; a `--no-agent` job runs
   the script exactly as declared, so a flag that does not exist fails on the first fire.
 
+**Watching live state (sessions, cards, queues): use the change-gated shape.** Copy
+`templates/change-gated-watch.py` instead of starting from scratch. The contract it
+encodes: `snapshot()` reads current state (DBs opened `file:...?mode=ro`, read-only), `evaluate()`
+diffs structured fields (counts, ids, status, error) against the last snapshot persisted in a
+state file, and only changed elements print. Compare structure, never raw text: a timestamp or
+pid inside the payload would fire a false alert every run. Save the new snapshot even when
+printing nothing, or the next run re-reports the same change. Ship `--selftest` (first run
+reports, immediate rerun silent, simulated failure alerts) and `--force` (full report on demand),
+run the selftest before scheduling, then prove first run / silent second run as in step 3 above.
+
 ## Reconcile dedupe state before producing anything
 
 An agent job that picks "today's item" from a state file (a log, a queue, a manifest) must reconcile that state against the artifacts actually on disk before it creates anything new. State and disk drift apart whenever items are written outside the job: a batch pre-written into one file, a run that died between state append and file write, or a human who edited the file. Without the check the job re-produces an item the state says already exists, and the duplicate lands in a real destination (a card, a post, a send) before anyone notices.
