@@ -17,8 +17,9 @@ metadata:
 
 Use when the user wants a repository's GitHub issues to keep moving without a
 human relaying work card by card: scan open issues, dispatch them as agent
-work, and return PRs for review. Also use when building or repairing the
-scanner script, its cron registration, or the card bodies it creates.
+work, and return PRs for review. Also use when two Hermes installs hand work to each other through one repo's
+issues (a two-way bus, below), or for building or repairing the scanner
+script, its cron registration, or the card bodies it creates.
 Not for a one-off triage of a handful of issues (create those cards by hand),
 or for reviving an already-stalled repo (that is `stalled-repo-rescue`).
 
@@ -150,6 +151,30 @@ to stdout and report that the batch is still dispatching. Only scan again once
 the earlier batch has reached `done` or `blocked`, at which point the state map
 already does the dedupe. Dry-run first so you can see which issues would be
 created.
+
+### 7. Variant: a two-way bus between two Hermes installs
+
+When two installs (yours and someone else's) hand work to each other through
+one repo's issues, run the same scanner on both sides with direction labels:
+
+- Each side scans only the label the OTHER side writes (`for-flow` reads the
+  work I was sent; `for-champ` is mine to send). After carding an issue, add a
+  `*-queued` label so the next tick skips it: the label is the state, which
+  survives a lost local state file and is visible to both sides.
+- Card creation stays idempotent, one `--idempotency-key` per issue number, so
+  a double-fire or a hand-made card never duplicates.
+- Comment the card id onto the issue when you card it, and post the result
+  back on the issue when you finish. The other side reads the thread, never
+  your board, so an issue that closes silently looks like dropped work.
+- The card body carries the contract: comment the result on the issue, close
+  it, and no secrets, phone numbers or addresses, because the bus repo is
+  public to keep the other side's read access simple.
+- A tick with nothing new replies exactly `[SILENT]`. Chatty idle ticks train
+  the human to ignore the job and the one real handoff is missed.
+- Pushing a bus change does not deploy it: unless you built a self-updater,
+  the other install needs its human to pull and re-run the cron setup. Open
+  the kickoff issue yourself and name the exact command, so the bus's first
+  live hop is also its end-to-end proof.
 
 ## Pitfalls
 

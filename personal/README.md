@@ -27,3 +27,4 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `vault-keeper` | Unified Celsus vault maintenance: root sweep and file sorting, code-out-of-vault, inbox triage, client and prospect capture, thin-note enrichment, daily notes, note creat |
 | `vault-wide-rename` | Use when renaming a misspelled name vault-wide. |
 | `weekly-review` | Gamified weekly review skill that aggregates Mon-Fri daily notes from Celsus vault, runs an interactive quiz for subjective reflection, then produces THREE outputs: (1) a |
+| `whatsapp-channel-ops` | Use when wiring WhatsApp into Deep's agent workflows. |
