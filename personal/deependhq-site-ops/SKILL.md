@@ -110,6 +110,8 @@ curl -s "https://deependhq.com/data.js?cb=$(date +%s)" | grep -o '"today_date":"
 
 **Always verify against the live site.** A successful push is not a successful publish. Workers Builds can fail after a good push, and pushing to `initial-site` produces a preview build that never reaches production.
 
+Compare the authored journey fields, not the entire entry object: `build-data.mjs` adds `company_links` to the live entry. Assert `date`, `shipping_now`, `yesterday_thread`, `raw_thought`, `mood`, `arcs` and `arc_color` exactly against content.json, then separately check `brand.today_date` and read the rendered journey after hydration. A whole-object mismatch caused only by derived links is not a stale deployment. If a bare HTTP fetch returns 403, retry with curl and a browser user agent before declaring the live site unreachable.
+
 ## Backfill missing days
 
 Order matters and there is a deadline.
