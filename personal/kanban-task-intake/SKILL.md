@@ -193,6 +193,8 @@ Put the same contract in every card body you create, under a heading `If you mus
 
 ## 4. Answering a block
 
+**Refresh an already-blocked decision in place.** The CLI `hermes kanban block` refuses a card already in `blocked`. Use `hermes kanban edit <id> --body <complete DECISION block>` and a source-evidence comment, then read back the exact body, status and block_kind. Do not unblock and re-block just to refresh wording, because that can release dependent work or spend a retry. The historical blocked-event reason is not changed by a body edit, so do not claim it was refreshed too.
+
 Deep replies in chat ("A on t_63fcbc19") or on the card. Then:
 
 ```bash
