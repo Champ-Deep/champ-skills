@@ -512,11 +512,12 @@ Lessons from real vault cleanups (to avoid wasting context window):
    `mv`. Paths with spaces need double-quoting.
 4. **Watch for escaped-space duplicates.** CLI tools sometimes create `folder\ name/`
    alongside `folder name/`. Check for these every run.
-5. **Weekly triage is lighter than full audit.** Scope link audits and MOC checks to
+5. **Anchor task-section checks to heading lines.** Use multiline `^## Done\s*$`, not `text.index('## Done')`, which can match introductory prose above Active. Save the actual Done-section hash before a write and compare afterward. Use targeted Active insertions when scheduled writers share TASKS.md. Never blame concurrency for a failed assertion without evidence.
+6. **Weekly triage is lighter than full audit.** Scope link audits and MOC checks to
    files modified in the last 7 days rather than scanning everything.
-6. **Don't re-read files already in context.** If a continuation summary says "file X has
+7. **Don't re-read files already in context.** If a continuation summary says "file X has
    Y lines covering Z sections", trust it and start working.
-7. **Batch mv commands.** Moving 80+ files one at a time is slow. Group by destination
+8. **Batch mv commands.** Moving 80+ files one at a time is slow. Group by destination
    and use shell loops or xargs.
 
 ---
