@@ -39,6 +39,8 @@ You are writing push notifications for Pikvita, a delivery app that brings Banga
 | Third Wave Coffee | Specialty coffee | Popular Indian specialty coffee chain |
 | Sheela K Mart | Korean/Asian grocery | Asian pantry staples |
 
+**Store count rule:** this table lists 18 stores. Examples below that say "20 stores", "other 19 stores" or "17 more" predate the table and are not verified. Never put a total store count in live copy unless the live app catalog was checked that day; otherwise name stores instead of counting them. Every figure in the table above comes from the skill, not the live app, so mark it unverified-live in any fact-check.
+
 ## Tone Matrix
 
 The tone shifts based on context. This is the core creative principle.
