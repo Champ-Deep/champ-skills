@@ -76,6 +76,12 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
   Generate random secrets with `openssl rand` piped straight into `wrangler secret put`; never print them, never keep the temp file.
 - deependhq has an undeployed version, so `wrangler secret put` there fails; use `wrangler versions secret put` and let the page
   card deploy the version.
+- Functional check of any running instance: `CHAMPORACLE_URL=... CHAMPORACLE_KEY=... uv run python scripts/hosted_smoke.py --panel 8 [--hosted]`
+  (21 checks: auth, validation, job to done, share page and JSON, leak checks, backup routes). The ops key lives in the macOS
+  Keychain: `security find-generic-password -s champoracle-ops -w`. Prove the LLM path on the production image locally with
+  `docker run ... -e CHAMPORACLE_LLM_KEY=... co-local` rather than putting a shared key on the host.
+- Never `source` or `set -a; . ~/.hermes/.env`: a malformed line echoes a secret into the transcript. Read one var with
+  `grep '^NAME=' ~/.hermes/.env | cut -d= -f2-`.
 - Wrangler API calls 504 during Cloudflare partial outages (check cloudflarestatus.com); retry the deploy, do not change code.
   `ImagePullError: runtime failed unpacking the image` in `wrangler containers info <app>` is the same class of transient.
 
