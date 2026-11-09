@@ -96,6 +96,17 @@ hermes cron create "<cron or 30m>" --name <kebab-name> --script <file.py> \
   Use it for message-producing jobs (briefs, digests); shadow (above) is for jobs that write.
 - Read the script's flags from its own `--help` before wiring it; a `--no-agent` job runs
   the script exactly as declared, so a flag that does not exist fails on the first fire.
+- **Pin the interpreter and every CLI by absolute path.** A cron job's PATH is not the shell's:
+  a bare `python3` may resolve to a different install missing the modules your script imports
+  (anything importing `hermes_cli` wants `$HOME/.hermes/hermes-agent/venv/bin/python3`), and
+  helper CLIs such as `agy` may not resolve at all. The tell is a job that fails on every fire
+  while the identical command works by hand.
+- **Read `hermes cron list` before trusting what a job is supposed to be doing.** Consecutive
+  failures and stderr live on the job row and reach no chat. When a failing job's wrapper fails
+  safe by disabling something (emptying an allowlist, stopping a dispatcher), a package error
+  in the script becomes a board-wide freeze, so fix the script's cause and let its own success
+  path restore the setting: hand-editing the setting back while the job still fails only delays
+  the next freeze.
 
 **Watching live state (sessions, cards, queues): use the change-gated shape.** Copy
 `templates/change-gated-watch.py` instead of starting from scratch. The contract it
