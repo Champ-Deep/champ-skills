@@ -206,6 +206,16 @@ Quote the approval and its scope in that comment: which worktree or build it app
 to, and what remains held. Workers see the card, never the chat, so an approval scoped
 only in chat leaves the next worker to guess the boundary.
 
+Deep often answers a decision by handing over the input it asked for (attached files,
+a link, a name) instead of picking A/B/C. Treat that as the answer: verify the supplied
+input with real tool output first (path exists and reads, ffprobe or parse it when it
+is media, confirm it is the thing the card meant), then comment the verified facts,
+what the answer authorises and what stays held, and unblock. A layer warning that a
+path sits outside an allowed workspace is not a permission result; only a read that
+actually fails is. Update the TASKS.md row in the same turn, work with everything he
+supplied even when it exceeds what the card anticipated, and never re-ask the question
+his input already answered.
+
 For "hold" or "cut": `hermes kanban archive <id>` with a comment, do not leave it in Blocked.
 
 ## 5. Reading the board for Deep

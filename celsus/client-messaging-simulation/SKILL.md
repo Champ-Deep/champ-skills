@@ -60,7 +60,24 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
   `deependhq-site/docs/ui-brief-oracle-v1.md` (toolkit page). The 21st.dev MCP may not be loaded in the
   main lane; call `https://21st.dev/api/mcp` directly with `tools/call` `search` (key from `~/.hermes/.env`,
   never printed) and open 3 preview images with vision before writing a component table.
-- Hosting is a Deep decision (Clef: client-facing plus spend). Do not provision a host or a key without the card.
+- Hosting is a Deep decision (Clef: client-facing plus spend). Deep chose Cloudflare on 2026-11-09.
+
+## Cloudflare deployment (`cf/` in champoracle-agent)
+
+- Worker `champoracle` + `OracleContainer` (Container class, `basic`, `sleepAfter 30m`, `max_instances 1`) built from the root
+  Dockerfile; URL https://champoracle.deep-ae0.workers.dev. Deploy: `cd cf && CI=1 npx wrangler deploy` (Docker via OrbStack must
+  be running: `open -a OrbStack`). A config-only or secret-only deploy does not restart the container; only an image change rolls it.
+- Disk is ephemeral. `persist.py` restores `/data/champoracle.db` from the Worker's `/_restore` on boot and PUTs a sqlite-backup
+  snapshot to `/_backup` (R2 bucket `champoracle-data`) every 30s when changed and on shutdown. A failed restore disables backups
+  for that run so an empty DB never overwrites a good snapshot. Cloudflare returns 403 to the default `Python-urllib` agent, so
+  the client sends `User-Agent: ChampOracle/0.2`. Inspect the snapshot with `wrangler r2 object get champoracle-data/champoracle.db --remote`.
+- Secrets on the Worker: `CHAMPORACLE_BOOTSTRAP_KEY` (the ops workspace key; `db.workspace_for_key` mints the workspace on first
+  use, so rotation needs a container restart but no shell), `CHAMPORACLE_BACKUP_SECRET`, `CHAMPORACLE_LLM_KEY` (Deep pastes it).
+  Generate random secrets with `openssl rand` piped straight into `wrangler secret put`; never print them, never keep the temp file.
+- deependhq has an undeployed version, so `wrangler secret put` there fails; use `wrangler versions secret put` and let the page
+  card deploy the version.
+- Wrangler API calls 504 during Cloudflare partial outages (check cloudflarestatus.com); retry the deploy, do not change code.
+  `ImagePullError: runtime failed unpacking the image` in `wrangler containers info <app>` is the same class of transient.
 
 ## Pitfalls
 

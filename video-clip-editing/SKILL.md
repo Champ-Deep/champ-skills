@@ -33,6 +33,26 @@ round.
 Run `ffprobe` and immediately answer: is this a single camera, or a composited
 multi-tile layout?
 
+Before trusting any supplied file, prove three things with real tool output:
+path exists and reads, duration/codec/fps, and `stream_side_data_list.rotation`.
+A stream coded 1920x1080 can carry rotation=90 and display as portrait
+1080x1920: bake the rotation into pixels exactly once (or strip the tag) or the
+derivative double-rotates. A path the chat attachment layer flags as outside the
+workspace can still be readable; verify with a real read instead of treating the
+warning as a denial, and treat it as a blocker only after a read fails.
+
+For a talking-head input, sample frames across the whole timeline (two or more
+tiles, offset past the midpoint) and have vision list what will fight your
+overlays: burned-in captions, background wall or signage text, hands crossing
+the lower third, tight headroom, blown highlights. Decide caption and graphic
+placement against those collisions before designing anything; unbacked text over
+a busy background is the most common legibility failure.
+
+**Pitfall: the empty trailing cell of a tile sheet is filter padding, not video.**
+`tile=3x2` over 5 samples leaves a black cell that can even carry stray text, so
+an apparent black ending is an artifact. Judge the real final frames of the
+source, never the sheet's blank slot.
+
 A screen-recorded call (Google Meet, Zoom, Teams) is NOT a camera shot. Detect
 near-black gutter columns and rows programmatically:
 
@@ -140,6 +160,7 @@ costs far more than the smoke test ever does.
 - Sound kit: whoosh per camera move, low sub hit per reveal, paper slide per text card, click per number, room tone under everything so the voice never sits in silence.
 - Retakes: find repeated lines in the transcript and keep the best take, never the first.
 - Before render, scan frames for client data on screens, wrong clocks and anything else that should not ship, then blur or cut.
+- **Reference footage you could not fully decode is not evidence.** A remux that throws decode warnings and yields a couple of seconds has not been watched: label every timing, motion or sound note drawn from it as an untested design hypothesis, and recover playable media (or inspect stills) before stating it as an observation.
 - A correction Deep gives once ("captions never over the face") becomes a line in this skill, not a chat memory.
 - Review the full output. Error rate grows with length, so long-form needs a full watch-through.
 
