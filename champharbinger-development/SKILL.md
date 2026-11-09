@@ -55,6 +55,20 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Production deploy (the repo's Cloudflare deploy script plus its smoke checks) happens only after Deep picks a decision card: a `needs_input` kanban block with options and your recommendation first, deploy action named as the recommended option. Stage it and say where it is staged.
 - Keep contract PRs (API routes other cards depend on) draft until Deep says ship them; branch later fixes off `main` so each PR stays independently mergeable.
 
+## Sending gates (who can actually receive mail)
+
+- `deploy/cloudflare/worker.ts` pins `PILOT_STRICT_SENDS=1`: only pilot campaigns send. A pilot campaign's `pilot_campaigns.transport` decides: `record` transmits nothing (Inbox says "Recorded only. Not sent."), `live_test` only the 10-address allowlist, `live` any recipient that clears approval, country, pause, reply and bounce gates. worker.ts sets `PILOT_DEFAULT_TRANSPORT=live` (Deep, 9 Nov), so only campaigns created after that are live. Before answering "can the team send", read `transport` for their campaigns.
+- Daily cap, bounce breaker and throttle count by sending address across all users (teammates share an imported inbox). Never re-add a `clerkUserId` predicate there.
+- A new env var must land in three places or the app never sees it: `deploy.sh` `OPTIONAL`, `worker.ts` `APP_ENV`, and `env.env.example`; `src/lib/deploy/cloudflare-env.test.ts` checks the first two agree.
+- lakeb2b.com, engageprob2b.com and spanglobalservices.com are on SURBL abuse (`dig +short <d>.multi.surbl.org` returns 127.0.0.64). No links to them in any draft or signature.
+- Admin: re-inviting an existing member's email is the password reset (new set-password link); disable ends sessions at once.
+
+## Prod reads and smoke
+
+- Read-only D1: `CI=1 npx wrangler d1 execute champ-harbinger --remote --json --command "<select>"` from `deploy/cloudflare` with `CLOUDFLARE_ACCOUNT_ID` set. Column names: `jobs.created_on`/`state`, `mailbox_connections.created_at` (ms epoch).
+- `deploy/cloudflare/smoke.sh https://champ-harbinger.deep-ae0.workers.dev` needs the base URL argument; without it it exits 1 with a usage line.
+- Deploy from a clean detached worktree of `origin/main` with `ENV_FILE=<canonical checkout>/deploy/cloudflare/env.env`; the container rollout wait takes 15 to 25 minutes, so run it in the background.
+
 ## Pitfalls
 
 - Never write a status or guardrail message that asserts a check which did not run. Distinguish "has not been checked yet" / "was last seen X" / "is X": the fail-closed path is where a user reads the loudest claim, and a wrong claim there sends them fixing DNS that was fine.
