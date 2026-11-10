@@ -25,6 +25,8 @@ When a page must explain HOW something works and the idea has a physical mechani
 
 ## What went wrong before (do not repeat)
 
+**A format conversion is still a design task.** When Deep asks for HTML from a run sheet or Markdown note, distill it into visual evidence, ownership and decision structures before styling. A polished contents rail plus verbatim paragraphs is not a visual executive brief, even if it uses a real 21st.dev component and passes accessibility checks. Read and render a relevant prior branded showcase, borrow its hierarchy and section rhythm, and put exhaustive source detail in closed disclosures. Choose 21st.dev components for the information interaction, not just the navigation. Prove the first-screen answer and ask, default-rest height, source-preserving detail, and honest unknown states.
+
 - **Too long.** Early outputs ran 6,000 to 9,500px on desktop and up to 17,000px on a phone: ten to twenty screens of editorial prose under a one-pager's name.
 - **Generic look.** The September 2026 readout for Chief shipped as an orange-gradient hero, a four-up stat grid, and eight white rounded cards with a pill in the corner. That is the default every generator produces. It happened because the skill said "pick a style from another skill", and under time pressure the builder picked nothing and fell back to the template.
 - **Numbers with no comparator.** "9 active workstreams" and "5 open P0s" told the reader nothing.
