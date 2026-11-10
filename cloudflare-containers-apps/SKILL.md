@@ -53,6 +53,13 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
   get` metadata) after the first upload rather than trusting the upload's exit
   code.
 
+## Private app and durable-write boundaries
+
+- Keep container backup/restore callbacks reachable without a human Access session. Use a separate private state Worker, a scoped service path or a properly configured machine policy; protecting every callback behind browser OTP breaks cold-start restore. Require machine authentication, keep the bucket private and expose no account data on health routes.
+- Persist a consistent SQLite backup before acknowledging successful hosted mutations. A periodic best-effort upload can lose changes the UI already called saved. Keep a dirty flag after upload failure, retry before later success and validate downloaded SQLite integrity, schema and relationships before installing it. `with sqlite3.connect(...)` commits but does not close the connection: use explicit close or `contextlib.closing` for snapshot connections.
+- Read back deployed HTML, JavaScript and CSS and compare their hashes with the final source. A successful image rollout does not prove an already-running container has changed. Verify an actual stop/start, stored mutation survival and restoration of the test mutation. Record any first-request transient separately instead of hiding it behind a later successful retry.
+- Use the approved Cloudflare connector for Access policy changes when Wrangler OAuth lacks those scopes. Never extract tokens from Wrangler credential files or silently grant broad access. If a generated MCP `get` schema contains identical string alternatives in `oneOf`, use an exact-filtered list endpoint for readback rather than changing permissions or guessing another identifier.
+
 ## Verification before reporting a deploy as done
 
 1. `curl` an unauthenticated endpoint and an authenticated one on the live
