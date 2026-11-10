@@ -108,6 +108,17 @@ sessions" are different products.
 Prioritise the threshold that decides whether the effort ships at all. The rest
 are instrumentation.
 
+### Ranking and personalization plans need a fair test
+
+Before accepting a precision-at-k gate, compute the per-case ceiling from candidate relevance prevalence. A perfect ranker cannot pass an absolute precision bar when fewer than k useful candidates exist. Label the whole frozen candidate pool blind to all rank orders, report raw precision with its ceiling, and use a justified ceiling-aware metric plus paired gains against the same gated baseline. Test the existing heuristic as well as recency ordering, and require results per offer profile so aggregate success cannot conceal failed personalization.
+
+Require point-in-time evidence before promising historical replay. Today's feed is not an archive: later edits and later discovery cause look-ahead leakage. Name a licensed archive or a forward capture period as a prerequisite, size the holdout account universe separately from the operational pilot, and count annotation work as snapshots x candidates x profiles x reviewers. Reserve genuinely unseen data for any retest and define what happens when a revision improves but still misses the ship bar. Never count repeated account/day observations as independent trials.
+
+Separate rule authorship from holdout judgment. At least one independent labeller, a frozen rubric, reported agreement and a pre-agreed uncertainty method make the comparison defensible. Keep unknown fit visible and routed to review rather than silently scoring it as zero.
+
+Put safety gates before the exposure they protect. A production-readiness phase can repeat isolation, recovery and abuse tests, but cannot be the first place they are required after real pilot users or a second organisation already received access. Shared-collection plans also need tests for subscription metadata leakage and tenant corrections poisoning shared entity records.
+
+
 ## The structural completeness checklist
 
 Architecture documents get mistaken for PRDs. Telltale signs: sections named
