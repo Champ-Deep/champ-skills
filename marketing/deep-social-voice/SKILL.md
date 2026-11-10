@@ -91,10 +91,33 @@ Rules when picking a track:
 
 1. Read the last 14 entries in `/Users/deep/Celsus/Efforts/Active/Social Posts/log.md` to avoid repeating a topic or a comment word. Then reconcile against the dated files: a `log.md` row with no `<date>.md` next to it means the post was pre-drafted in a batch, so pull that day's cuts out of the batch file (`Week 1 Posts.md`, sections `## Day N (<date>)`) instead of drafting a duplicate. Stop if `<date>.md` already exists.
 2. Pick today's source, in this order of preference: something Deep shipped in the last 48 hours (check `git log` in `~/champ-skills` and recent `Calendar/` daily notes), else the next unused Sales Desk file, else a standing rule from `_config/standing-orders.md` told as a story.
-3. Draft the LinkedIn post, the X/Bluesky cut, and the comment word.
+3. Draft the LinkedIn post, the X/Bluesky cut, the comment word, and the daily video script (section below).
 4. Write `/Users/deep/Celsus/Efforts/Active/Social Posts/<YYYY-MM-DD>.md` with the three cuts and the artifact path, and append one line to `log.md`: `date | topic | WORD | artifact path | status: draft`.
 5. Create a kanban card for profile `content`, title `Social post <date>: <hook>`, body = the three cuts plus "Approve by replying POST, or edit the file and reply POST". Block it as `needs_input` so it reaches Deep as a decision card.
 6. On approval the content worker sends through Postiz (`~/postiz/README.md` has the API call) and flips the log line to `status: posted <platforms>`.
+
+Before drafting anything, count `log.md` rows with `status: draft` against rows with `status: posted`. A growing unposted count means the bottleneck is approval reach, not drafting: raising volume then makes it worse, so say so and route the fix to whatever surface he actually opens, not to more drafts. Setting up an external assistant to draft or post in this lane is `external-assistant-setup`.
+
+## Daily video script (added 2026-11-10)
+
+Every daily draft carries a `## Video script` section: the same idea as the post, written for the ear. One script serves both formats, so Deep can record it as a talking head or the pixel host can read it, and a missed recording never costs a day.
+
+| Beat | Length | Rule |
+|---|---|---|
+| HOOK | first 3 seconds | The post's hook, verbatim or tighter. A statement, never a question or a greeting. |
+| WHY | 1 to 2 sentences | Who this is for and what goes wrong without it. |
+| MOVES | 3 to 4 sentences | One move per sentence, spoken as "One. Two. Three." Show the move, do not name it. |
+| CAVEAT | 1 sentence | The proof or the honest limit, from the source file. |
+| CLOSE | 1 sentence | The same closer as the post. |
+
+Rules:
+- 110 to 150 spoken words, which is 45 to 60 seconds. Short sentences. Nothing that only works when read.
+- Same sourcing rules as the post: nothing the post's source file does not carry, no client names, no banned words.
+- Put 2 to 4 emphasis words in CAPS. The edit uses them for caption accents and punch-ins, so pick the words that carry the idea, not the loud ones.
+- Add one `On-screen:` line: the title card, 6 words at most.
+- An avatar read goes through `tts-safe-script` before any voice render. The talking-head read does not.
+
+Plan and format split: `/Users/deep/Celsus/Efforts/Active/Deep Socials Engine/Video System Plan Nov-Dec 2026.md`.
 
 ## Batch-writing a week
 
