@@ -71,6 +71,7 @@ Deep's standing correction (2026-10-31): a tool's recommendation is one input, n
 - Expected values you wrote into the prompt (reference implementations, hidden test expectations) can be wrong. Verify each by independent calculation before blaming a model for missing it.
 - A task whose checker only rewards the good sample and never flags the bad one reports every model as 1.00; the pass column then measures nothing. Run `--selftest` and confirm the bad sample scores at or below the threshold before trusting any row.
 - An Anthropic-compatible endpoint returns thinking blocks alongside text. When `content` comes back empty on HTTP 200, read the raw body before concluding anything.
+- An ad-hoc probe (a throwaway harness written outside the suite) needs three guards or it reports the wrong winner. **Empty output with `finish_reason=length` means the cap was too low, not that the model failed**: hidden reasoning spends the output budget, so re-run that row with a much larger `max_tokens` before scoring it. **Identical prompts hit provider cache**, so latencies of 0.2s against 30s are a cache artifact: put a random nonce in each request before timing anything. **A small sample cannot crown a replacement**: only say a candidate beats the incumbent when it passed every run of the task where the incumbent also passed, with the run counts beside both.
 
 ## References
 

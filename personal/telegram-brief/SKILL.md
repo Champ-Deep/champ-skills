@@ -61,6 +61,8 @@ Use only these icons, one per line, at the line start: 🙋 needs you, 🚨 at r
 
 ## Rules
 
+- **Claim a delivery only after reading it back.** A send call returning ok, delivered or a message id is the API accepting the request, not the message existing in the chat. Before reporting done, read the recent history back (session history, a status query) and confirm the id, recipient and attachment name are there. Report the ids you verified, never the ids you merely got.
+- A file only reaches Deep when it goes out as an attachment with a caption. Send the cover message and the file in one batch so a failure on one does not leave a bare link with no context.
 - Nothing new: the whole message is one line, `Quiet: <job> ran, nothing new.`
 - NEEDS YOU holds only decisions or hands-only actions, each a question with a recommended answer.
 - READY TO SEND lists Outlook drafts by recipient and subject. Never claim a draft exists without the create_draft_email result.

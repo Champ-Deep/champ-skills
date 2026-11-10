@@ -48,6 +48,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 3. Lint: `pnpm exec eslint <touched files>`. Baseline carries pre-existing warnings (unused `_`-prefixed parameters): zero new problems, no mass cleanup of old warnings.
 4. Test: `pnpm exec vitest run <touched suites>`, then the full suite before claiming green. Unit tests mock `@/db`, so they cannot touch prod state.
 5. Report only gates whose command output you ran in that same turn.
+6. When the full suite reports timeouts in files you did not touch, check `uptime` first: this suite pays a per-test setup cost, so a loaded machine inflates timeouts across unrelated files. Re-run the named files alone, and let CI on a clean runner arbitrate the final verdict. State in the PR body that the local run was noisy and CI is the gate, rather than re-running the whole suite until the box quiets down.
+7. Poll `gh pr view <n> --json statusCheckRollup` for the conclusions (not `gh pr checks`, which reports `pending` for jobs that already finished) and require `mergeStateStatus=CLEAN` before merging.
 
 ## Shipping
 
@@ -64,7 +66,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Admin: re-inviting an existing member's email is the password reset (new set-password link); disable ends sessions at once.
 - Draft guardrail `hasLowFrictionAsk` judges the last two sentences ending in . ! or ?; the prompt appends the profile signature, so before #136 any multi-line signature sent every draft to the generic fallback. When drafts come back as "Quick note" / GENERIC-SAFE FALLBACK, read the `Rules the AI drafts broke:` suffix in `ai_reasoning`.
 - A Quick Send to a freemail address (gmail) has no company to research, so no citation, so `approveDraft` refuses it (`research_incomplete`, no waiver). Live tests go to a company-domain address.
-- The send window is recipient-local 08:00 to 18:00; an India recipient tested in Deep's evening is approved and deferred to 08:00 IST (`outside_send_window` 409 from send-now is the gate working).
+- The send window is recipient-local 08:00 to 18:00; an India recipient tested in Deep's evening is approved and deferred to 08:00 IST (`outside_send_window` 409 from send-now is the gate working). A `live_test` campaign whose recipient is on the allowlist is exempt: the pilot gate marks those decisions `test: true` and `sendClaimedDraft` skips the window for them, so an owner-approved test need not wait for morning. Cold recipients keep the window; never widen it for them.
+- "Is sending actually working?" is answered by one mail, not by the state you can see: send a real message from a production sender address to a real address Deep owns, then read the row back from `outreach_emails` and quote its `id`, `from`, `to`, `status` and `error`. Sending the test to a mailbox this app itself hosts proves the pipeline moved bytes, not that a third party accepted and delivered it, so send at least one copy to a domain Harbinger does not control. Report the exact address the copy went to: a test received on one address and "missing" on another was never missing.
 - Driving prod as Deep: `browser_exec(local=True)` has his session; fire long calls (`/api/quick-send` streams 30 to 60 s) without awaiting in `js()` (5 s eval cap) and read `quick_sends.stage` from D1. Pilot draft actions are POST `/api/pilot/<campaign>/drafts/<draft>` with `action` approve (needs `versionHash`), edit, reject, redraft.
 
 ## Prod reads and smoke
@@ -72,6 +75,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Read-only D1: `CI=1 npx wrangler d1 execute champ-harbinger --remote --json --command "<select>"` from `deploy/cloudflare` with `CLOUDFLARE_ACCOUNT_ID` set. Column names: `jobs.created_on`/`state`, `mailbox_connections.created_at` (ms epoch).
 - `deploy/cloudflare/smoke.sh https://champ-harbinger.deep-ae0.workers.dev` needs the base URL argument; without it it exits 1 with a usage line.
 - Deploy from a clean detached worktree of `origin/main` with `ENV_FILE=<canonical checkout>/deploy/cloudflare/env.env`; the container rollout wait takes 15 to 25 minutes, so run it in the background.
+- A deploy that aborts before the LIVE line changed nothing: Cloudflare rejects some pre-deploy database calls (D1 error 7403) and the script stops, so prod keeps serving the previous build. Every state you read during that window describes the old code, including the UI and a healthy-looking jobs table. Confirm identity by `/api/version` after the LIVE line, not by absence of damage.
+- Pair each deploy with a re-run of `smoke.sh` and the `/api/version` read in the same background job, so a completion notification carries the evidence instead of a bare exit 0.
 
 ## Proving the review-to-send path end to end
 

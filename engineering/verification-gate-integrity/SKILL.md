@@ -315,6 +315,14 @@ also fails a 44px minimum.
   button. The browser resolves taps, not bounding boxes.
 - **Re-measure against the pre-fix values.** A new gate proven only against the fixed
   state may not discriminate. Point it at the old numbers and confirm it reports them.
+- **When a vision read and a DOM measurement of the same page disagree, the measurement
+  decides.** A screenshot review will report overlaps, clipping and drift that
+  `getBoundingClientRect()` shows do not exist, because it is describing pixels and
+  patterns rather than boxes it measured. Take the vision pass as a prompt to write the
+  geometry probe (chip right edge versus text left edge, `scrollWidth <= clientWidth`,
+  card-to-card overlap, `naturalWidth` on images), print the counts, and act only on what
+  the probe counts. Reverting a correct layout because a screenshot sounded wrong is the
+  same error as trusting a green gate that never ran, in the other direction.
 - **Count what the fixtures already contain before you assert a count.** A new test
   written against a seeded database (seed rows, loaded templates, prior test runs) that
   expects the fresh data alone will report an inflated or deflated number and read as a

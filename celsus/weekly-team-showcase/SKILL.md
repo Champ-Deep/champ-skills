@@ -16,9 +16,11 @@ Deep's weekly update is him presenting work to his team: what we built, proof th
 
 ## When to Use
 
-Deep says weekly update, team showcase, demo for the team, walk the team through, or present our work. Also use it when a meeting note schedules him to showcase something. Not for client meetings (`meeting-prep`) or his own weekly review (`weekly-review`).
+Deep says weekly update, team showcase, demo for the team, walk the team through, or present our work. Also use it for a per-person run sheet he wants to send the team (one page, what each person owns this week), and when a meeting note schedules him to showcase something. Not for client meetings (`meeting-prep`) or his own weekly review (`weekly-review`).
 
-## Output
+Two deliverables exist under this skill. Pick by what Deep asks for.
+
+### A. Demo showcase run sheet (he presents our work)
 
 One vault note: `Efforts/Active/<effort>/<YYYY-MM-DD> Weekly Update - <topic>.md` with frontmatter `type: meeting-prep`, plus a `walkthrough/` folder of live screenshots next to it. Deliver it as a MEDIA card. Sections, in this order:
 
@@ -31,6 +33,23 @@ One vault note: `Efforts/Active/<effort>/<YYYY-MM-DD> Weekly Update - <topic>.md
 7. **What is next**: table of item, owner, status (card ids).
 8. **Feedback to collect**: 4 to 5 specific questions that force a choice, never "any thoughts?".
 9. **If something goes wrong** table, then **Likely questions** with short answers.
+
+### B. Team status run sheet (he sends the team one shared list)
+
+He names a set of people and wants one page they can all work from: what moved last week, what each owns this week. No demo, no rehearsal.
+
+Two files, kept apart:
+
+| File | Audience | Location |
+|---|---|---|
+| `YYYY-MM-DD - <team> Weekly Run Sheet.html` | sent to the team | `Calendar/Meetings/` |
+| `YYYY-MM-DD - <team> Weekly Script (private).md` | Deep only, never shared | same folder, name ends `(private)` |
+
+The HTML carries the shared list, then one card per person: **Last week** with each line tagged, and **This week** as a Focus/By table. Put the unowned cross-team items in one card at the top so the meeting picks an owner for them. Close the page with a reply-by deadline: no reply means the card stands.
+
+Three tags only: `Done` (finished and on record), `Open` (carried over), `Confirm` (no written update, tell us where it stands). A person with nothing filed last week gets a Confirm card listing their oldest open items, not a blank card.
+
+The private script holds the run of show: a one-paragraph opening line, 2 to 3 minutes per person in a fixed order, the shared-item picks, a read-back close, and a **Do not say** block (no credential values, no purchase or volume commitments beyond what is verified, no performance comments). Order the round so Deep speaks first to set the pace.
 
 ## Procedure
 
@@ -56,4 +75,9 @@ One vault note: `Efforts/Active/<effort>/<YYYY-MM-DD> Weekly Update - <topic>.md
 - **Show the method, not just the answer.** Plan one moment that opens the "how this was calculated" view, so the team sees why to trust it.
 - **Headless Playwright on apps that keep a connection open:** use `wait_until="load"` plus a fixed wait. `networkidle` never fires on SSE or polling apps.
 - The browser tool (Camofox) is often down. Playwright via `/opt/anaconda3/bin/python3` has Chromium installed.
-- Reference run: `Celsus/Efforts/Active/Queryable Chatbot Showcase/2026-11-03 Weekly Update - Team Showcase.md`.
+- **Evidence first, and a `Confirm` tag where there is none.** Pull each person's last week from meeting notes, email triage, the decision desk and kanban before writing a card. Where nothing is written down, say so on the card and list their oldest open items instead of inventing a status or leaving the card empty. Report to Deep which people had no record; that gap is his signal, not something to paper over.
+- **A date nobody agreed to is a proposed date.** Mark it with `*` and put the meaning of `*` in the legend on the page, so a sheet full of my estimates cannot be read as commitments the team made.
+- **Name collisions between two people are the highest-risk error on a sheet like this.** When the team holds two similar names (a first name and a same-first-name colleague), state the assumption in one line in the reply to Deep and offer to redo that card. Never silently pick one.
+- **Two files, because one of them must not be sent.** Anything with names and status in it gets a private script beside it, named `(private)`, so Deep can tell at a glance which artifact leaves the building.
+- **Answer "is there a meeting today" from live Outlook before writing a script.** Check the named group against the calendar view for the week, note cancelled events as cancelled, and say plainly when the slot he implies was staged but never booked. The script then says where it can be used instead of assuming one occasion.
+- Reference run: `Celsus/Efforts/Active/Queryable Chatbot Showcase/2026-11-03 Weekly Update - Team Showcase.md`. Status run sheet reference: `Celsus/Calendar/Meetings/2026-11-10 - Tech Team Weekly Run Sheet.html` with its `(private).md` script.

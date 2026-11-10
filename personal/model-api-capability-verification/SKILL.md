@@ -28,13 +28,19 @@ in hand.
    supported parameters, per-token/per-second/per-character pricing, and context
    length are all machine-readable on the model entry. That is where the answer
    is.
-3. **Distinguish three different claims**, because conflating them is the actual
+3. **Distinguish four different claims**, because conflating them is the actual
    bug:
    - *Does the endpoint exist?* An HTTP status on a malformed request proves
      routing, nothing else.
    - *Does a model exist behind it?* A `model does not exist` error on a real
      call refutes capability, and a 400 on a **wrong method** refutes nothing.
    - *Does it work end to end?* Only a successful call with real input proves it.
+   - *Does it work through the auth path in use?* A model reachable on the
+     platform's own subscription SDK is not reachable on the key-based HTTP API,
+     and vice versa: an auth failure says nothing about the model. Decide first
+     which path the calling code takes, then test that path. Vision is the common
+     case, since an image lane that fails over HTTP may have a working route
+     through the subscription SDK with a different base URL and no bearer key.
 4. **Make the real call, and close the loop when the output is media.** Generate
    a file, then feed that file back through the inverse capability. TTS output
    read back by STT proves both halves are real rather than a stub that returns
@@ -66,6 +72,10 @@ human).
 
 ## Pitfalls
 
+- **An auth or transport failure is never evidence about the model.** A 401, a
+  403, or a timeout on the wrong path (HTTP API when the code uses the
+  subscription SDK, or the reverse) says the path is wrong, nothing about
+  capability. Fix the path first, then re-run the claim.
 - **Do not treat a 4xx from a malformed or wrong-method request as evidence of
   absence.** Retest with the correct method and a valid body before concluding
   anything. Every wrong conclusion here started as a valid 4xx read too early.

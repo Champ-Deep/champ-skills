@@ -30,7 +30,8 @@ Goal: prove research -> draft -> review -> send works on the real deployment, wi
 1. Read current state first: review endpoint, run events, and the open draft's gates plus its `versionHash`. Approve with the hash you just read; a stale hash fails.
 2. Fix data only when it is your own test data, through the product's database (`wrangler d1 execute "$DB" --remote --command ...`, env sourced from the cached db env file). Confirm `rows_written` on every write.
 3. Re-run, re-fetch, re-check gates before claiming improvement.
-4. Read back the live version/health endpoint and quote it in the report.
+4. End with one real message from a production sender to a real address the requester owns, and quote the persisted row (`outreach_emails`: id, from, to, status, error). A pipeline read-back proves the record moved; only the receiving address, reached on a domain outside this system, proves delivery.
+5. Read back the live version/health endpoint and quote it in the report.
 
 ## Pitfalls
 
@@ -39,3 +40,5 @@ Goal: prove research -> draft -> review -> send works on the real deployment, wi
 - A draft with zero citations can never become sendable, no matter how approved: block on a missing dated public fact. Confirm the contact has a citable source before a fix loop, or report the honest outcome.
 - Do not hand-edit derived columns (default flag, status) by SQL; the app computes them from ordering columns. Use the product's UI, then read the table back to verify.
 - A shell exit code of 0 does not mean the deploy landed: read the log tail and the live version hash before reporting success.
+- When the requester says they received nothing, ask which address before diagnosing: proof delivered to address A and "nothing at address B" are two different claims, and the second is often an address the first never targeted. Quote the address the test went to in the report so the two never get confused.
+- When a gate defers the test (a send window, an approval rule), say so with the exact code (`outside_send_window`, `research_incomplete`) and the time it will fire, rather than reporting the send as pending. A test that the product's own policy intentionally holds is a working gate, and only a decision card can change it.

@@ -137,6 +137,8 @@ and prefer a slightly wider crop over aggressive zoom.
 
 ## 6. Build in HyperFrames, then verify
 
+For an explicitly authorized editorial house-style test, load `editorial-video-house-style` before composition. It supplies candidate visual tokens and overrides only the test's styling, not source approval, privacy or media QA. It is not the global default.
+
 Read the HyperFrames skill before writing composition code; do not guess its API.
 Write `DESIGN.md` before any HTML, sourced from the company brand guideline.
 

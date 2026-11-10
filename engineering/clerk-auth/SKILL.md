@@ -23,6 +23,25 @@ This skill was built off the pattern already used on **ChampUTM** and
 **ChampLens**. Follow it and every Champions Group tool ends up with the same
 auth shape, the same env var conventions, and the same deploy story.
 
+## Pick the provider before you write any auth code
+
+The provider is a decision, not an assumption. Say which one you are using and
+why in one line before starting, because the rest of this skill only fits
+Clerk.
+
+| Situation | Provider | Why |
+|---|---|---|
+| Internal Champions tool, teammates sign in, sibling tools may share a user pool | **Clerk** | One directory per app, dashboard-managed, the shape every existing tool already has |
+| Public self-serve app where Deep controls who signs up, and the backend must verify tokens without a vendor SDK | **Better Auth** (self-hosted, JWT plugin, JWKS) | No per-seat vendor dependency, key material is self-issued, verification is plain JWKS |
+| Neutral, self-hosted only, Deep wants no vendor at all | Keycloak (see the reference) | Bigger to run than Better Auth; take it only when he asks for it |
+
+Deep asked for Better Auth on a public, agency-facing app, so Better Auth is the
+default answer for anything consumer or client facing unless he names Clerk. On a
+self-serve app, decide the invite model at the same time as the provider: an
+allow-list (ids or emails in env, `*` for anyone verified) is what makes an
+open sign-up safe to ship. Token verification on any backend follows
+`references/backend-jwt-verification.md`, which is provider-agnostic.
+
 ## What "done" looks like
 
 A working project where: unauthenticated visitors can sign up and sign in,
@@ -129,11 +148,9 @@ is to verify the session token the frontend sends.
 The short version: the React/Next frontend gets a session token from Clerk
 (`useAuth().getToken()`), sends it as a `Bearer` token on API calls, and the
 Python backend verifies it. Use Clerk's official Python SDK
-(`clerk-backend-api`) or verify the JWT against Clerk's JWKS endpoint. Full
-backend verification is its own task; for most internal tools, protecting the
-frontend routes is enough to start. Flag to the user whether they need
-backend enforcement too (they do if the API is reachable directly, not just
-through the protected UI).
+(`clerk-backend-api`) or verify the JWT against Clerk's JWKS endpoint.
+
+**Backend enforcement is a separate, always-required step when the API is reachable directly, not just through the protected UI** (it usually is: an API on its own domain or Worker is one URL away from anyone with a key). The frontend token check protects the pages; only a verifier on the server protects the data. Verification itself is provider-agnostic: `references/backend-jwt-verification.md` gives the single-verifier pattern (API keys and user bearer tokens through one check function) with the JWKS fetch, caching, fail-closed rules and the three-call deploy test. Say which of the two you built, so Deep knows whether the API is actually gated.
 
 ## Shared usage credits and billing
 
@@ -169,7 +186,10 @@ Do not claim success without checking. Run through this:
    `sk_` to be certain no key is about to be committed.
 6. If deploying: the deploy dashboard has the keys set.
 
-Report what you verified, not just what you wrote.
+Report what you verified, not just what you wrote. When backend verification
+is in scope, a local test suite is not the check: after deploy, run three
+calls against the live URL (valid bearer token, forged or expired token, API
+key) and report the three status codes. A verifier only exists end to end.
 
 ## Which team tools this applies to
 

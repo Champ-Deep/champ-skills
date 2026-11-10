@@ -40,7 +40,7 @@ A nightly scheduled task named `daily-note-recap` runs at 01:03 IST. Part A writ
 
 Repo worktree: `Efforts/Active/TheDeepEndHQ/deependhq-site/` inside the vault. **It is a worktree only. Never run a writing git command against its `.git` from a sandbox.** `publish.sh` clones fresh and rsyncs onto the clone, which is why it works from anywhere.
 
-The live refresh work happens in `/Users/deep/repos/deependhq-refresh` (branch `refresh/2026-10`), not the vault checkout, which has no commit history on `main`. Brand assets and the icon sprite rebuild through the brand-assets recipe in the
+Discover the current checkout before editing. `/Users/deep/repos/deependhq-site` is a repository, but its checked-out branch may be unrelated to production. `/Users/deep/repos/deependhq-refresh` can be a leftover directory with no `.git`; `git` there silently resolves to the parent `/Users/deep` repository. Require `git rev-parse --show-toplevel` to match the intended repo, inspect worktrees and remote branches, and compare deployed assets to the proposed base. Never infer the production base from the directory name. Brand assets and the icon sprite rebuild through the brand-assets recipe in the
 deependhq-site repo (look for `scripts/brand` or `og/` there); no copy exists in
 this skill yet, so read the repo rather than trusting a link here.
 
@@ -331,6 +331,14 @@ that are never optional:
 ## Embedding the Ask Deep widget (assistant.deependhq.com)
 
 The tag lives hand-authored in the 40 root, `company/` and `post/` shells (prerender copies, nothing templates it), so a change is a `sed -i ''` over `git grep -l static/widget.js -- '*.html'`. The site CSP is the trap: the preview worker has no site CSP, so images the host loads from `assistant.deependhq.com` (launcher icon, sprites) only break live. `img-src` in `worker/index.js` must list that origin (done for the pixel skin, 3 Nov). The widget's news card also pulls blog images from lakeb2b.com, which `img-src` blocks: a pre-existing console error with or without `data-skin`, owned by the AI news card, not the skin. Production agent deploy order: merge PR, `cloudflare/deploy.sh` from the merged branch, curl `static/deep-host.js` (404 for about a minute while the container rolls), compare its sha256 to the repo file, then touch the site.
+
+## Agent integration verification
+
+- Check the host page CSP, not only the agent origin. Shadow DOM inherits the host CSP: external news pictures require allowed image origins and YouTube requires an explicit frame origin. Use narrow approved origins or a validated media route, never a wildcard bypass.
+- Compare `static/deep-host.js` with the public site's computed tokens. The pixel skin owns separate palette literals and can retain navy while the main site has moved to charcoal. Audit light mode explicitly; a hardcoded dark skin is not scheme synchronization.
+- Exercise the pixel loader path independently. `widget.js` returns early for `data-skin=pixel`, bypassing the legacy loader's idle and hover preparation. Fetch timing for the skin, messenger module, config, Help and News must be measured separately before blaming article scraping or cold starts.
+- Keep prefetch separate from view accounting. `GET /news/items/{id}` calls `news.item(..., count_view=True)` and increments views. Background warming needs a read-only representation; it must not inflate readership or share visitor-specific reactions through a public cache.
+- Treat footer clearance as a shared geometry contract. `deep-host.js` can inject body padding and reposition the launcher independently of the site dock. Compare both axes before lifting the launcher, and test scroll positions on both the main site and Toolkit rather than only the final frame.
 
 ## Analytics and entry-schema depth
 
