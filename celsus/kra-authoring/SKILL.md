@@ -71,6 +71,7 @@ Then annotate, never close, the `TASKS.md` row: what was written, where it lives
 - No em or en dashes anywhere in the markdown files (python sweep, per `celsus-vault`); check the Excel's text cells in the same sweep.
 - Aliases piped per `_config/link-policy.md` (`[[SPAN Global Services\|SPAN]]`), never-link list respected.
 - For the Excel: read it back with `xlsx_read.py --sheets` and `--formulas` before claiming it is done. Confirm weights total 100, every weighted formula points at its own row (off-by-one row arithmetic is the common defect when the spec is assembled programmatically), each KRA average covers exactly its KPI rows, and the score column is the only filled input column.
+- Sweep every Excel text cell and the cover email for people's names and keep only the subject, Deep and the people named in the note's scoped lines. A workbook started from another person's KRA keeps that person's name and questions (a Kethan sheet shipped "Open questions for Preeti ..."), and the dash and formula checks cannot catch it. Also confirm the Summary tab's open-questions line points at this note's own question list.
 - Deliver with `MEDIA:` only for files verified to exist.
 
 ### 7. Send only on an explicit go
