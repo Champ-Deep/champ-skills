@@ -435,6 +435,8 @@ other side raise it.
 
 ### Merge & Deduplicate
 
+**Recorder attribution gate.** A recorder can attach an already-written transcript to a future or rescheduled calendar slot. Treat its calendar-linked start as scheduling metadata until the dialogue, participant identity and actual occurrence agree. If the transcript refers to the named counterparty as a separate company, or its modification predates its apparent future occurrence, flag the conflict in the active prep and client history. Do not infer attendance, merge obligations, assign employment terms or mark the upcoming call held from that capture. Keep ambiguous hiring material out of the external client's obligation list until identity is resolved.
+
 After pulling from all sources:
 - If a prep note for this meeting already exists in `Calendar/Meetings/`, read it and build on it
   instead of starting a parallel version. Two competing notes on one meeting is the failure.
