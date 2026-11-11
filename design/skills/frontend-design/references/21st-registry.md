@@ -2,6 +2,10 @@
 
 Deep's standing rule: **21st.dev components are non-negotiable for all front-end work.** Check the registry before hand-writing any standard component (filter bar, command palette, data table, date picker, toast, stepper, chart wrapper). Writing it custom when 21st has it is the failure; say so explicitly if you fall back.
 
+## Where 21st sits in the picker
+
+21st.dev is the marketplace layer: use it for something specific that no single library covers, or for section patterns (hero, pricing, filter bar, stepper). Run `ui-library-picker` first; foundation and specialist rows (shadcn, Base UI, Sonner, Vaul, cmdk, NumberFlow) settle most components without a search. Same install rule as the video: install through the shadcn CLI or registry so the code is in the project, retheme, one accent per page.
+
 ## Setup (once per machine)
 
 The registry needs an API key as `TWENTY_FIRST_API_KEY` in `~/.hermes/.env`. The key value is Deep's to paste (never write a pasted secret yourself, see `credential-and-secret-handling`): add the variable line empty and hand him the file. Verify with a request that only checks status, never echo the key:

@@ -31,6 +31,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `ten-out-of-ten` | Use when scoring or rebuilding a website to 10/10. |
 | `text-art-eggs` | Make ASCII, block-letter and braille art (figlet logos, animated braille pictures, Nike-style robots.txt, humans.txt, agents.txt, console art) plus page eggs. Use for any |
 | `theme-factory` | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that y |
+| `ui-library-picker` | Use when a UI needs a component and a library might do it better than hand-built code. Task in, library out, plus the three-layer rule and 21st.dev install flow. |
 | `visual-report-builder` | Build magazine-quality, single-file HTML reports, briefs, dashboards, and strategy pages with editorial design language. Use whenever the user asks to create a report, br |
 | `visual-verify` | Mandatory closing gate for anything visual. Renders the built output in a real browser, captures screenshots at multiple breakpoints and themes, runs a deterministic inte |
 | `viz-kit` | Use when building a viz kit, ad kit, or data visual. Create varied campaign creative with static ads, narrative carousels and rendered motion, or token-driven charts and  |

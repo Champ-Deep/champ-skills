@@ -89,3 +89,8 @@ Always keep a plain-HTML twin of the data (table or list) for crawlers and scree
 4. Dash count 0. Zero console errors. No horizontal overflow at 400.
 5. A heading never stays hidden when JS is blocked (test with scripts off).
 6. Report real-GPU frame time as unverified unless it was measured on a real GPU.
+
+## UI libraries
+
+<!-- ui-library-picker -->
+For React builds, pick set pieces with `ui-library-picker` (Magic UI, Aceternity for landing effects, motion for scroll and layout animation, Cobe for a globe) and install through the shadcn CLI so the code stays in the project. One animated accent per scene. Single-file HTML keeps the ported MicroKit recipes; only motion, Cobe, shiki and NumberFlow are marked usable without a bundler.

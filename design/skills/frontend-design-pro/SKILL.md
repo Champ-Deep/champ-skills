@@ -36,7 +36,10 @@ Infer the brand from the request or ask "which brand?" once. Load the brand skil
 
 For a new page, propose one template from `references/templates.md` (Case Study, Executive One-Pager, Campaign Report, Partner Pitch, Event Recap, Market or Data Snapshot) in a single AskUserQuestion, recommended first. Skip it when the request names the format.
 
-### 3. Components from 21st.dev
+### 3. Components: library picker, then 21st.dev
+
+<!-- ui-library-picker -->
+First run `ui-library-picker` (`python3 ui-library-picker/scripts/pick.py "<task>"`) for each component the page needs. A foundation or specialist pick (shadcn, Base UI, Sonner, Vaul, cmdk, NumberFlow, Virtuoso) settles that component; do not search further. Design-layer picks (Magic UI, Aceternity, Beautiful UI, RareUI) are the set pieces: one accent per page. Write the chosen libraries and the 21st ids into the brief before building. Then, for anything specific the picker does not cover:
 
 List the 3 to 5 components the page depends on most. When the 21st.dev MCP is connected (tools `search`, `get_inspiration`, `get_component`, `search_logo`):
 
@@ -70,5 +73,7 @@ When the request asks for a style (pop art, neon, stained glass, claymation, gli
 7. The Paddle bar. Would Paddle ship this? Editorial numbers on hairlines, real visuals in every section, responsive details under the pointer. If not, fix before delivery.
 
 ## References
+
+- `ui-library-picker` (skill): task-to-library lookup, three-layer rule, install findings. Run it before step 3 and again inside the UI polish mode.
 
 `references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`, `references/art-styles.md`. When they are not in the account copy, read them from the vault at `Other/Skills/frontend-design-pro/references/`.

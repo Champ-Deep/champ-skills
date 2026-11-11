@@ -72,3 +72,8 @@ To test/visualize the artifact, use available tools (including other Skills or b
 ## Reference
 
 - **shadcn/ui components**: https://ui.shadcn.com/docs/components
+
+## UI libraries
+
+<!-- ui-library-picker -->
+Before hand-writing a component in an artifact, run `ui-library-picker`. Specialists (Sonner, Vaul, cmdk, NumberFlow, Virtuoso, Recharts) bundle fine with Parcel. Retheme shadcn defaults (radius, grey, font) and check the `cn` import quirk in `ui-library-picker/SKILL.md` after every `shadcn add`.

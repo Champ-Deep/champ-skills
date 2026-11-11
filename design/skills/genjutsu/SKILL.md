@@ -25,3 +25,8 @@ Modules (motion, GSAP, framer-motion, CSS-native, three.js, tells, design-audit,
 - Where a scale tells you to run a shell resolver for `_jutsu`, the directory is the `references/_jutsu` folder of this skill.
 
 Source and licence: see `UPSTREAM.md`.
+
+## UI libraries
+
+<!-- ui-library-picker -->
+Default component-library looks are part of the AI tell: stock shadcn radius, grey and font. Run `ui-library-picker` before hand-building any component, and retheme whatever it installs (radius, colour, type) from the brand. One animated accent per page; ten glowing effects is itself the tell.

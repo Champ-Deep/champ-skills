@@ -1,0 +1,835 @@
+{
+ "verified": "2026-11-11",
+ "note": "npm_latest, licence and npm_modified come from registry.npmjs.org on the verified date; refresh with pick.py --refresh. Layers follow the video: foundation, specialist, design; plus motion-data and plumbing from Emil Kowalski's list.",
+ "libraries": [
+  {
+   "id": "shadcn",
+   "name": "shadcn/ui",
+   "layer": "foundation",
+   "tasks": [
+    "buttons",
+    "inputs",
+    "forms",
+    "tabs",
+    "dialog",
+    "select",
+    "table",
+    "cards",
+    "base components",
+    "accordion",
+    "badge",
+    "dropdown",
+    "checkbox",
+    "switch",
+    "basic components",
+    "design system",
+    "components",
+    "ui kit"
+   ],
+   "why": "Copy-in components with Radix or Base UI behaviour under them; code lives in your repo so the agent can restyle it.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026; Champ project use or our own addition",
+   "install": "npx shadcn@latest add <component> --yes --overwrite",
+   "avoid": "Do not ship the default look: radius, gray and font are the AI calling card. Change those three from the brand skill first.",
+   "flags": [
+    "Default radius, gray and font read as AI-made. Retheme from DESIGN.md before the polish pass",
+    "Tested 11 Nov in a fresh Vite 8 + Tailwind 4 app: shadcn add button wrote from \"cn\" and npm-installed a junk package named cn. Fix: src/lib/utils.ts (clsx + tailwind-merge), rewrite the import to @/lib/utils, npm rm cn"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "shadcn",
+   "npm_latest": "4.23.0",
+   "license": "MIT",
+   "npm_modified": "2026-10-27T12:33:52.202Z"
+  },
+  {
+   "id": "base-ui",
+   "name": "Base UI",
+   "layer": "foundation",
+   "tasks": [
+    "dialog",
+    "modal",
+    "popover",
+    "menu",
+    "dropdown",
+    "select",
+    "accessible",
+    "unstyled",
+    "tooltip",
+    "focus trap",
+    "combobox",
+    "accessible primitives",
+    "primitives"
+   ],
+   "why": "Unstyled accessible primitives: dialogs, popovers, menus, selects with focus and dismissal handled.",
+   "source": "Emil Kowalski pick-ui-library (MIT); Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npm i @base-ui/react",
+   "avoid": "Not when shadcn already ships the styled component you need.",
+   "flags": [
+    "Package renamed: older @base-ui-components/react is the pre-1.0 line; use @base-ui/react"
+   ],
+   "replaces": [
+    "react-aria",
+    "headlessui"
+   ],
+   "single_file_html": false,
+   "npm": "@base-ui/react",
+   "npm_latest": "1.9.0",
+   "license": "MIT",
+   "npm_modified": "2026-10-09T08:52:44.362Z"
+  },
+  {
+   "id": "radix",
+   "name": "Radix UI",
+   "layer": "foundation",
+   "tasks": [
+    "dialog",
+    "popover",
+    "dropdown",
+    "accessible primitives",
+    "tabs"
+   ],
+   "why": "The primitives under most shadcn installs today. Fine to keep; new work should start from the shadcn or Base UI route.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npm i radix-ui",
+   "avoid": "Do not add alongside Base UI in the same component set.",
+   "flags": [
+    "Listed as a foundation in the video; Emil's list prefers Base UI for new primitives"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "radix-ui",
+   "npm_latest": "1.8.1",
+   "license": "MIT",
+   "npm_modified": "2026-10-14T13:29:49.409Z"
+  },
+  {
+   "id": "sonner",
+   "name": "Sonner",
+   "layer": "specialist",
+   "tasks": [
+    "toast",
+    "toasts",
+    "notification",
+    "notifications",
+    "snackbar",
+    "alert popup"
+   ],
+   "why": "Toasts that group, expand on hover and animate in and out. Hand-built toasts overlap or vanish unread.",
+   "source": "Emil Kowalski pick-ui-library (MIT); Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npm i sonner",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "sonner",
+   "npm_latest": "2.0.8",
+   "license": "MIT",
+   "npm_modified": "2026-08-09T08:46:10.361Z"
+  },
+  {
+   "id": "vaul",
+   "name": "Vaul",
+   "layer": "specialist",
+   "tasks": [
+    "drawer",
+    "bottom sheet",
+    "sheet",
+    "slide out panel",
+    "mobile panel",
+    "pull down to close"
+   ],
+   "why": "Drag-to-dismiss drawer for mobile bottom sheets.",
+   "source": "Emil Kowalski pick-ui-library (MIT); Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npm i vaul",
+   "avoid": null,
+   "flags": [
+    "npm last published Dec 2024; check it against your React version before relying on it"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "vaul",
+   "npm_latest": "1.1.2",
+   "license": "MIT",
+   "npm_modified": "2024-12-14T00:56:01.059Z"
+  },
+  {
+   "id": "cmdk",
+   "name": "cmdk",
+   "layer": "specialist",
+   "tasks": [
+    "command palette",
+    "command menu",
+    "command k",
+    "cmd k",
+    "search palette",
+    "spotlight"
+   ],
+   "why": "Command menu that survives keyboard use.",
+   "source": "Emil Kowalski pick-ui-library (MIT); Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npm i cmdk",
+   "avoid": null,
+   "flags": [
+    "npm last published Aug 2025"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "cmdk",
+   "npm_latest": "1.1.1",
+   "license": "MIT",
+   "npm_modified": "2025-08-27T19:56:17.142Z"
+  },
+  {
+   "id": "number-flow",
+   "name": "NumberFlow",
+   "layer": "specialist",
+   "tasks": [
+    "animate number",
+    "animated numbers",
+    "counter",
+    "price counter",
+    "ticker",
+    "stat count up",
+    "stats",
+    "price change"
+   ],
+   "why": "Digit-by-digit number transitions instead of jumps.",
+   "source": "Emil Kowalski pick-ui-library (MIT); Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npm i @number-flow/react",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": true,
+   "npm": "@number-flow/react",
+   "npm_latest": "0.6.2",
+   "license": "MIT",
+   "npm_modified": "2026-07-18T20:09:34.821Z"
+  },
+  {
+   "id": "input-otp",
+   "name": "input-otp",
+   "layer": "specialist",
+   "tasks": [
+    "one time password",
+    "otp",
+    "verification code",
+    "pin input",
+    "code input",
+    "2fa"
+   ],
+   "why": "One-time code input with paste and autofill working.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i input-otp",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "input-otp",
+   "npm_latest": "1.5.0",
+   "license": "MIT",
+   "npm_modified": "2026-08-18T10:20:09.598Z"
+  },
+  {
+   "id": "dnd-kit",
+   "name": "dnd kit",
+   "layer": "specialist",
+   "tasks": [
+    "drag and drop",
+    "drag drop",
+    "sortable",
+    "reorder",
+    "kanban cards",
+    "drag"
+   ],
+   "why": "Drag and drop and sortable lists.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i @dnd-kit/react",
+   "avoid": null,
+   "flags": [
+    "@dnd-kit/react is 0.x; the classic @dnd-kit/core 6.3.1 was last published Dec 2024. Pick one line per project, do not mix"
+   ],
+   "replaces": [
+    "react-beautiful-dnd",
+    "react-dnd"
+   ],
+   "single_file_html": false,
+   "npm": "@dnd-kit/react"
+  },
+  {
+   "id": "virtuoso",
+   "name": "Virtuoso",
+   "layer": "specialist",
+   "tasks": [
+    "virtualization",
+    "virtualized",
+    "long list",
+    "very long list",
+    "large table",
+    "thousand rows",
+    "infinite scroll",
+    "5000 rows",
+    "big list",
+    "many rows"
+   ],
+   "why": "Virtualized lists and tables for 1,000+ rows.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i react-virtuoso",
+   "avoid": null,
+   "flags": [],
+   "replaces": [
+    "react-window",
+    "react-virtualized"
+   ],
+   "single_file_html": false,
+   "npm": "react-virtuoso",
+   "npm_latest": "4.18.21",
+   "license": "MIT",
+   "npm_modified": "2026-11-09T05:34:33.805Z"
+  },
+  {
+   "id": "recharts",
+   "name": "Recharts",
+   "layer": "specialist",
+   "tasks": [
+    "chart",
+    "charts",
+    "line chart",
+    "bar chart",
+    "dashboard chart",
+    "graph",
+    "analytics chart",
+    "area chart",
+    "pie chart",
+    "dashboard",
+    "data viz"
+   ],
+   "why": "General static or interactive charts. Streaming data uses Liveline instead.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i recharts",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "recharts",
+   "npm_latest": "3.10.1",
+   "license": "MIT",
+   "npm_modified": "2026-11-03T01:07:06.300Z"
+  },
+  {
+   "id": "liveline",
+   "name": "Liveline",
+   "layer": "specialist",
+   "tasks": [
+    "realtime chart",
+    "real time chart",
+    "streaming chart",
+    "live chart",
+    "live data"
+   ],
+   "why": "Charts whose points arrive live and scroll with time.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i liveline",
+   "avoid": null,
+   "flags": [
+    "0.0.x, pre-release; pilot before committing a product screen to it"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "liveline"
+  },
+  {
+   "id": "leva",
+   "name": "Leva",
+   "layer": "specialist",
+   "tasks": [
+    "control panel",
+    "tweak panel",
+    "debug gui",
+    "parameter controls",
+    "tuning gui"
+   ],
+   "why": "Control panel for tuning values live. dialkit is the alternative.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i leva",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "leva",
+   "npm_latest": "0.10.1",
+   "license": "MIT",
+   "npm_modified": "2025-10-31T18:39:54.476Z"
+  },
+  {
+   "id": "dialkit",
+   "name": "dialkit",
+   "layer": "specialist",
+   "tasks": [
+    "control panel",
+    "tweak panel",
+    "tuning gui",
+    "dial"
+   ],
+   "why": "Alternative to Leva for tuning panels.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i dialkit",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "dialkit"
+  },
+  {
+   "id": "torph",
+   "name": "torph",
+   "layer": "motion-data",
+   "tasks": [
+    "animated text",
+    "text morph",
+    "text transition",
+    "text effect"
+   ],
+   "why": "Animated text components.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i torph",
+   "avoid": null,
+   "flags": [
+    "0.1.x, pre-release"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "torph",
+   "npm_latest": "0.1.3",
+   "license": "MIT",
+   "npm_modified": "2026-09-07T13:18:31.140Z"
+  },
+  {
+   "id": "cobe",
+   "name": "Cobe",
+   "layer": "motion-data",
+   "tasks": [
+    "globe",
+    "3d globe",
+    "world map",
+    "spinning globe",
+    "markers on globe"
+   ],
+   "why": "Small WebGL globe.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i cobe",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": true,
+   "npm": "cobe",
+   "npm_latest": "2.0.1",
+   "license": "MIT",
+   "npm_modified": "2026-03-19T17:01:48.104Z"
+  },
+  {
+   "id": "satori",
+   "name": "Satori",
+   "layer": "motion-data",
+   "tasks": [
+    "og image",
+    "open graph image",
+    "social card",
+    "html to svg",
+    "dynamic image"
+   ],
+   "why": "HTML and CSS to SVG or PNG for dynamic OG images.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i satori",
+   "avoid": null,
+   "flags": [
+    "Licence MPL-2.0 (file-level copyleft). Fine to use as a dependency; do not edit and ship its source without checking"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "satori",
+   "npm_latest": "0.63.2",
+   "license": "MPL-2.0",
+   "npm_modified": "2026-10-20T12:33:55.524Z"
+  },
+  {
+   "id": "shiki",
+   "name": "shiki",
+   "layer": "motion-data",
+   "tasks": [
+    "syntax highlighting",
+    "code block",
+    "highlight code",
+    "code highlight"
+   ],
+   "why": "Syntax highlighting with editor-grade grammars.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i shiki",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": true,
+   "npm": "shiki",
+   "npm_latest": "4.6.0",
+   "license": "MIT",
+   "npm_modified": "2026-11-02T04:36:18.827Z"
+  },
+  {
+   "id": "motion",
+   "name": "motion",
+   "layer": "motion-data",
+   "tasks": [
+    "animation",
+    "animate",
+    "spring",
+    "layout animation",
+    "enter exit animation",
+    "gesture",
+    "framer motion",
+    "page transition",
+    "scroll animation"
+   ],
+   "why": "Springs, layout and exit animations, gesture values. Plain CSS transitions for simple hover and fade.",
+   "source": "Emil Kowalski pick-ui-library (MIT); Champ project use or our own addition",
+   "install": "npm i motion",
+   "avoid": "Simple hover or fade: use CSS.",
+   "flags": [],
+   "replaces": [
+    "framer-motion"
+   ],
+   "single_file_html": true,
+   "npm": "motion",
+   "npm_latest": "14.12.0",
+   "license": "MIT",
+   "npm_modified": "2026-11-10T08:53:48.466Z"
+  },
+  {
+   "id": "zustand",
+   "name": "zustand",
+   "layer": "plumbing",
+   "tasks": [
+    "state",
+    "state management",
+    "global state",
+    "store",
+    "shared state"
+   ],
+   "why": "Small shared-state store.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i zustand",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "zustand",
+   "npm_latest": "5.1.0",
+   "license": "MIT",
+   "npm_modified": "2026-11-06T14:07:48.696Z"
+  },
+  {
+   "id": "clsx",
+   "name": "clsx",
+   "layer": "plumbing",
+   "tasks": [
+    "classname",
+    "conditional classes",
+    "class names",
+    "conditional class"
+   ],
+   "why": "Ad-hoc conditional className strings.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i clsx",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "clsx",
+   "npm_latest": "2.1.1",
+   "license": "MIT",
+   "npm_modified": "2026-09-18T13:52:35.035Z"
+  },
+  {
+   "id": "cva",
+   "name": "cva",
+   "layer": "plumbing",
+   "tasks": [
+    "variants",
+    "variant styling",
+    "component variants",
+    "type-safe variants",
+    "size intent state"
+   ],
+   "why": "Typed variant API for Tailwind components.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i class-variance-authority",
+   "avoid": null,
+   "flags": [
+    "Apache-2.0 licence, not MIT"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "class-variance-authority",
+   "npm_latest": "0.7.1",
+   "license": "Apache-2.0",
+   "npm_modified": "2024-11-26T08:20:34.776Z"
+  },
+  {
+   "id": "tailwind-merge",
+   "name": "tailwind-merge",
+   "layer": "plumbing",
+   "tasks": [
+    "merge classes",
+    "cn helper",
+    "tailwind class conflict"
+   ],
+   "why": "Resolves conflicting Tailwind classes; pairs with clsx as the cn() helper shadcn expects.",
+   "source": "Champ project use or our own addition",
+   "install": "npm i tailwind-merge",
+   "avoid": null,
+   "flags": [],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "tailwind-merge",
+   "npm_latest": "3.7.0",
+   "license": "MIT",
+   "npm_modified": "2026-10-23T21:46:06.960Z"
+  },
+  {
+   "id": "next-themes",
+   "name": "next-themes",
+   "layer": "plumbing",
+   "tasks": [
+    "dark mode",
+    "theme switch",
+    "theme toggle",
+    "light dark",
+    "theme"
+   ],
+   "why": "Theme switching without a flash on load.",
+   "source": "Emil Kowalski pick-ui-library (MIT)",
+   "install": "npm i next-themes",
+   "avoid": null,
+   "flags": [
+    "npm last published Mar 2025"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "next-themes",
+   "npm_latest": "0.4.6",
+   "license": "MIT",
+   "npm_modified": "2025-03-11T21:02:06.078Z"
+  },
+  {
+   "id": "lucide",
+   "name": "Lucide",
+   "layer": "design",
+   "tasks": [
+    "icons",
+    "icon set",
+    "icon library",
+    "icon family"
+   ],
+   "why": "One icon family at one stroke weight, replacing emoji. Phosphor is the alternative the polish skill already names.",
+   "source": "Champ project use or our own addition",
+   "install": "npm i lucide-react",
+   "avoid": null,
+   "flags": [
+    "ISC licence"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "lucide-react",
+   "npm_latest": "1.72.0",
+   "license": "ISC",
+   "npm_modified": "2026-11-11T06:15:41.068Z"
+  },
+  {
+   "id": "tanstack-table",
+   "name": "TanStack Table",
+   "layer": "specialist",
+   "tasks": [
+    "data table",
+    "sortable table",
+    "table sorting",
+    "column filters",
+    "grid table",
+    "datagrid"
+   ],
+   "why": "Headless table logic for sorting, filtering, pagination; style with shadcn table.",
+   "source": "Champ project use or our own addition",
+   "install": "npx shadcn@latest add table, then npm i @tanstack/react-table@8",
+   "avoid": null,
+   "flags": [
+    "npm latest is 9.x; 21st registry components written against v8 break on it (see 21st-registry.md). Pin the major the component imports"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "@tanstack/react-table",
+   "npm_latest": "9.3.1",
+   "license": "MIT",
+   "npm_modified": "2026-10-12T16:50:45.239Z"
+  },
+  {
+   "id": "react-day-picker",
+   "name": "react-day-picker",
+   "layer": "specialist",
+   "tasks": [
+    "date picker",
+    "calendar",
+    "date range"
+   ],
+   "why": "Date picker under the shadcn calendar.",
+   "source": "Champ project use or our own addition",
+   "install": "npx shadcn@latest add calendar",
+   "avoid": null,
+   "flags": [
+    "npm latest is 10.x; shadcn calendar expects the version its CLI installs. Let the CLI pin it"
+   ],
+   "replaces": [],
+   "single_file_html": false,
+   "npm": "react-day-picker",
+   "npm_latest": "10.0.2",
+   "license": "MIT",
+   "npm_modified": "2026-09-30T09:03:30.350Z"
+  },
+  {
+   "id": "beautiful-ui",
+   "name": "Beautiful UI (Turbo)",
+   "layer": "design",
+   "tasks": [
+    "ai interface",
+    "streaming text",
+    "agent approval card",
+    "diff view",
+    "agent screen",
+    "chat composer",
+    "thinking state",
+    "tool call",
+    "prompt bar",
+    "ai product",
+    "approval card",
+    "stream text",
+    "agent ui",
+    "ai native"
+   ],
+   "why": "Primitives built for AI products: streaming text, approval cards, diffs, thinking and tool states. 27 registry items on 11 Nov.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npx shadcn@latest add https://beautifului.dev/r/<name>.json",
+   "avoid": null,
+   "flags": [
+    "Install-tested 11 Nov: stream-text and approval-card install, but the registry's foundation.css has one extra closing brace (a lost @media opener around .records-footer-hint) and the Tailwind build fails until it is repaired by hand. Also needs the shadow-plugin npm package (MIT) and ignores the @/ alias layout (writes src/app/beautifui and src/components/atoms, primitives); one component needs a type-only import under verbatimModuleSyntax",
+    "Licence text not read; a MIT repo TurboKach/ai-native-react-components exists but I did not confirm it is the same project. Check before any client build",
+    "Verdict: pilot only, on an AI-product screen, with the CSS brace repaired and the media query restored"
+   ],
+   "replaces": [],
+   "single_file_html": false
+  },
+  {
+   "id": "rare-ui",
+   "name": "RareUI",
+   "layer": "design",
+   "tasks": [
+    "animated button",
+    "text effect",
+    "interactive background",
+    "spectacular moment",
+    "hero effect",
+    "button effect"
+   ],
+   "why": "Showpiece moments: animated buttons, text effects, interactive backgrounds. CLI: npx rareui add <component>.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npx rareui add <component>",
+   "avoid": null,
+   "flags": [
+    "Site says free for commercial use; a MIT repo Codewithswappy/RareUI exists but I did not confirm it is the same project. Not install-tested"
+   ],
+   "replaces": [],
+   "single_file_html": false
+  },
+  {
+   "id": "magic-ui",
+   "name": "Magic UI",
+   "layer": "design",
+   "tasks": [
+    "marquee",
+    "globe animated component",
+    "bento grid",
+    "animated beam",
+    "number ticker",
+    "border beam",
+    "particles",
+    "meteors",
+    "shimmer button",
+    "animated list",
+    "hero effect",
+    "magic card",
+    "landing page effect",
+    "animated component"
+   ],
+   "why": "260 free animated components on top of shadcn (registry count 11 Nov). Landing-page set pieces.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npx shadcn@latest add https://magicui.design/r/<name>.json",
+   "avoid": "One accent per page, not ten.",
+   "flags": [
+    "MIT on GitHub (magicuidesign/magicui)",
+    "Install-tested 11 Nov: marquee via the shadcn CLI landed clean, wrote its keyframes into index.css, typechecked and built"
+   ],
+   "replaces": [],
+   "single_file_html": false
+  },
+  {
+   "id": "aceternity",
+   "name": "Aceternity UI",
+   "layer": "design",
+   "tasks": [
+    "aurora background",
+    "background beams",
+    "3d card",
+    "landing page effect",
+    "moving lines",
+    "spotlight",
+    "landing page hero",
+    "background rays",
+    "3d map"
+   ],
+   "why": "Landing-page effects: 3D maps, beams, moving lines. Install through the shadcn CLI or the agent.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026",
+   "install": "npx shadcn@latest add https://ui.aceternity.com/registry/<name>.json",
+   "avoid": null,
+   "flags": [
+    "Install-tested 11 Nov: background-beams via the shadcn CLI landed and built; it pulls motion and needs @/lib/utils. Its file left an unused variable that fails strict noUnusedLocals",
+    "Free-tier licence not checked; some components are paid Pro"
+   ],
+   "replaces": [],
+   "single_file_html": false
+  },
+  {
+   "id": "21st-dev",
+   "name": "21st.dev marketplace",
+   "layer": "design",
+   "tasks": [
+    "marketplace",
+    "specific component",
+    "component search",
+    "many authors",
+    "filter bar",
+    "stepper",
+    "pricing section",
+    "testimonial",
+    "hero section",
+    "navbar",
+    "footer",
+    "faq",
+    "feature section",
+    "something specific"
+   ],
+   "why": "Marketplace of 12,000+ components from many authors; the place for something specific that no single library covers. Key TWENTY_FIRST_API_KEY; install via registry.21st.dev.",
+   "source": "Griffin Wooldridge video zsCGS-Yzjnw, 7 Nov 2026; Champ project use or our own addition",
+   "install": "npx shadcn@latest add https://registry.21st.dev/r/<owner>/<name> --yes --overwrite",
+   "avoid": "Entries are demo code: retheme and replace sample data. See frontend-design/references/21st-registry.md quirks.",
+   "flags": [
+    "Authors set their own licences; read the entry before using in a client build"
+   ],
+   "replaces": [],
+   "single_file_html": false
+  }
+ ]
+}

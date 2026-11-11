@@ -13,6 +13,9 @@ Any HTML, page, form, checklist, dashboard or single-file artifact deliverable s
 
 **21st.dev components are non-negotiable for all front-end work** (Deep's standing rule). Before hand-writing a filter bar, command palette, data table, date picker, or any component class 21st offers, check the registry and install through the shadcn CLI. Full procedure, the env-var setup, and the registry quirks (keyframes-only CSS, shadcn overwriting your edits, proving the address under test serves your build) are in [21st-registry reference](references/21st-registry.md). Only write custom components when 21st genuinely has no equivalent, and say so in the report. Hardcoded demo copy (a "from last month" trend line, sample names) is not a rejection reason: you own the source after install, so edit the string out. Reject on structure or dependencies, and name at least two searched candidates per component class you end up hand-writing. When the deliverable is static single-file HTML rather than a React app, the shadcn install path does not apply: port the component into vanilla CSS and JS against the page's own tokens, credit the id in a CSS comment, and say plainly in the report that a vanilla port was used. The full recipe (source capture, theme-variable remap, reduced-motion and static-export branches, and the probes that prove the ported behaviour) is in [21st vanilla port reference](references/21st-vanilla-port.md). **Kokonut UI is the companion library to check and try alongside 21st.dev for all frontend development**, especially buttons, cards and interaction patterns. Verify the existing API key through the live MCP/registry, install the chosen source with shadcn, adapt it to the project, and name the actual mounted or build-rendered components in the handoff. A catalog lookup or unused installation is not adoption. For static sites, build-time React rendering is valid for CSS-only components and avoids a client-framework migration.
 
+<!-- ui-library-picker -->
+**Pick the library before hand-building a component.** Run `python3 ui-library-picker/scripts/pick.py "<task>"` (skill `ui-library-picker`). Order: brand and DESIGN.md, then what `package.json` already has, then the three layers (foundation shadcn or Base UI; specialist Sonner, Vaul, cmdk, NumberFlow, Virtuoso, dnd kit; design Magic UI, Aceternity, Beautiful UI, RareUI), then a 21st.dev search for anything specific, then hand-built with a one-line reason. Name the chosen libraries in the build brief. Retheme radius, grey and font from the brand before shipping, and keep to one animated accent per page.
+
 ## Companion skills (chain, do not pick one)
 
 | Need | Load with this skill |
@@ -412,7 +415,7 @@ The DON'T guidelines above are the fingerprints of AI-generated work. The classi
 | **React / Next.js** | CSS Modules, Tailwind, CSS-in-JS. Server components for perf. |
 | **Vue / Nuxt** | Scoped styles, CSS variables, Nuxt UI. |
 | **Svelte / SvelteKit** | Scoped CSS, transitions API, stores for theme. |
-| **Tailwind / shadcn/ui** | Customize aggressively. Override default tokens. |
+| **Tailwind / shadcn/ui** | Customize aggressively. Override default tokens: radius, grey and font are the AI calling card. Specialists (Sonner, Vaul, cmdk, NumberFlow) come from `ui-library-picker`. |
 | **HTML/CSS** | Vanilla with custom properties. Progressive enhancement. |
 | **React Native** | StyleSheet, Animated API, platform-specific files. |
 | **Flutter** | ThemeData, Material 3, custom painters. |

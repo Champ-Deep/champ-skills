@@ -109,3 +109,8 @@ When Deep says to base the page on a named reference (a brand's showcase, a prev
 ## References
 
 `references/components.md`, `references/react-build.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/spotlight-card.md`, `references/templates.md`, and the kit README at `kit/README.md`. When they are not in the account copy, read them from the vault at `Other/Skills/showcase-page/`.
+
+## UI libraries
+
+<!-- ui-library-picker -->
+Before step 3, run `ui-library-picker` for each React component. Static HTML builds port from the picked library's source and credit it in a comment; React builds install through the shadcn CLI. Landing-style set pieces (marquee, beams, bento, globe) come from the design layer, one accent per page.

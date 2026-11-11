@@ -92,3 +92,8 @@ Screenshot at 375, 768, 1280, 1440 and 1600; zero horizontal scroll; no word col
 - No em dashes or en dashes in copy, code comments or notes.
 - Brand locks win. If the brand is dark-only, the composition moves to dark; it does not bring a light mode with it.
 - Never copy a reference's copy, photos or exact layout: take the device and its intent, make the surface from the person's own material.
+
+## UI libraries
+
+<!-- ui-library-picker -->
+Component libraries serve the editorial brief, not the other way round. Use `ui-library-picker` for behaviour (Base UI, Sonner, Vaul, motion) and retheme to the editorial type and grid. One animated accent per page, and never a stock radius or grey.

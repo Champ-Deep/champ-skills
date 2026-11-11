@@ -611,3 +611,8 @@ When a page must explain HOW something works and the idea has a physical mechani
 ## References
 
 `references/css-starter.md` (scoped starter), `references/components.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/templates.md`, `references/pricing-options.md` (tiered proposal pages in two formats, client-facing gates). When the shared files are not in the account copy, read them from the Celsus vault at `Other/Skills/visual-report-builder/references/`. The working kit (tokens, components, export script) is at `Other/Skills/showcase-page/kit/`.
+
+## UI libraries
+
+<!-- ui-library-picker -->
+Reports and dashboards: charts from Recharts (static or interactive) or Liveline (streaming), numbers from NumberFlow, code from shiki. Run `ui-library-picker` when a report ships as a React app. Single-file HTML reports use the vanilla patterns already here.

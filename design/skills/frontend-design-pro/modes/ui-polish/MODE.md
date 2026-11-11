@@ -43,7 +43,7 @@ Work cheapest-to-most-impactful so the UI improves visibly at every step.
 
    Every FAIL is a polish item with a known fix. Every WARN tagged `side-stripe`, `emoji-as-icon`, `gradient-text`, `static-glass`, `default-font`, `three-card-row`, or `placeholder-content` maps directly onto a row of the cheat sheet below. Start the manual pass with those already resolved so your attention goes to the things only judgement can catch.
 
-1. **Audit.** Walk the interface against `assets/polish-audit.md` and mark every AI tell you find. Be specific: "stat cards use emoji", "sidebar has 11 items", "create-link is a full sparse page".
+1. **Audit.** Run `python3 ui-library-picker/scripts/pick.py --check package.json` and list every hand-built toast, drawer, command menu, number animation, long list and drag handler as a polish item with its library (Sonner, Vaul, cmdk, NumberFlow, Virtuoso, dnd kit). Then walk the interface against `assets/polish-audit.md` and mark every AI tell you find. Be specific: "stat cards use emoji", "sidebar has 11 items", "create-link is a full sparse page".
 2. **Pillar 1: Aesthetic refinements.** Icons, color, data density. Highest perceived-quality gain for the least effort. See `reference/aesthetic-refinements.md`.
 3. **Pillar 2: Layout and hierarchy.** Consolidate navigation, build the account card, optimize cards. See `reference/layout-and-hierarchy.md`.
 4. **Pillar 3: Features and interaction.** Creation modals, humane billing, rich analytics. See `reference/interaction-and-features.md`.
@@ -56,6 +56,7 @@ Work cheapest-to-most-impactful so the UI improves visibly at every step.
 ## The four pillars at a glance
 
 ### Pillar 1: Visual and aesthetic refinements
+- **Replace hand-built specialists with the library for the job.** Toasts, bottom sheets, command menus, animated numbers and 1,000+ row lists each have a specialist (`ui-library-picker`). Swap, retheme from the DESIGN.md, and keep one animated accent per page.
 - **Replace emojis with a real icon library.** Pick one family (Lucide or Phosphor) and use it everywhere at a consistent size and stroke weight. Emojis render differently on every OS and read as amateur. Icons are semantic, not decorative.
 - **Use purposeful color theory.** Abandon the AI-default palette: cyan-on-dark, purple-to-blue gradients, neon accents. Choose one considered, cohesive direction instead (for example a deep forest green rather than a harsh dark blue). Apply 60-30-10 and tint your neutrals toward the brand hue.
 - **Increase data density.** Where a card holds a decorative icon, put a functional micro-chart instead: a sparkline, a trend delta, a mini bar. The graphic should carry information, not fill space.

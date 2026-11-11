@@ -219,3 +219,8 @@ Any backend whose state hides information from some viewers (other players, othe
 | `references/secret-bearing-backends.md` | Backends that hide information: one state with filtered views per recipient, a leak assertion as an acceptance gate, computed fixtures, headless simulation before any balance claim, and naming the transport limit. |
 
 The three outputs (`BACKEND-MAP.md`, `SCREEN-MAP.md`, `FRONTEND-BRIEF.md`) are written into the target repo, not stored in this skill.
+
+## UI libraries
+
+<!-- ui-library-picker -->
+When the handoff names screens and components, run `ui-library-picker` per component and write the picks (library, install line, flags) into the frontend brief so the frontend lane does not hand-build toasts, drawers, command menus, tables or charts. Check `package.json` for an existing library first.
