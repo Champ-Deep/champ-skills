@@ -139,6 +139,15 @@ Output: feat(auth): implement JWT-based authentication
 
 Try to explain to the model why things are important in lieu of heavy-handed musty MUSTs. Use theory of mind and try to make the skill general and not super-narrow to specific examples. Start by writing a draft and then look at it with fresh eyes and improve it.
 
+## Packaging for a Claude account
+
+A skill folder in this repo carries Hermes frontmatter (`version`, `author` at the top level). A Claude account validates frontmatter strictly: only `name`, `description`, `license`, `metadata`, `compatibility` and `allowed-tools` are accepted at the top level, so a folder zipped as-is is rejected on upload. The account also decides when to load a skill from the description alone, so the uploaded copy may carry a longer, more pushy description than the one-line trigger this library's index keeps.
+
+- Ship a `scripts/package.py` with any skill meant for an account: it rewrites the frontmatter (version and author under `metadata`) and writes the zip with the fuller description. Run it after every change to the skill and upload the new zip; an account running an older zip runs stale code while the repo looks current.
+- Where a skill has no packager, rewrite the frontmatter into a temp copy and zip that. Never edit the repo copy to satisfy one account's validator.
+- Prove the zip before handing it over: validate it, extract it read-only, and run the skill's documented build and checks from the extracted copy. A zip that validates but cannot build from a read-only extraction ships a skill that fails on first use. `scripts/package_skill.py` and `quick_validate.py` check the Hermes frontmatter rules only, so they will pass a folder that a Claude account rejects: the account's own key set has to be checked separately, by a packager that rewrites it or by uploading once to see the error.
+- `scripts/package_skill.py` zips a folder as-is into a `.skill` file. Use it only for skills whose frontmatter already matches the target account; a skill with Hermes-only keys needs the rewritten-frontmatter packager above.
+
 ### Test Cases
 
 After writing the skill draft, come up with 2-3 realistic test prompts — the kind of thing a real user would actually say. Share them with the user: [you don't have to use this exact language] "Here are a few test cases I'd like to try. Do these look right, or do you want to add more?" Then run them.
@@ -331,7 +340,7 @@ Keep going until:
 
 A common variant of "improve my skills with this": the user pastes an article, a Short, a study, or a competitor's playbook and wants the skill library to absorb it. The loop above (test, eval, iterate) does not apply here; the job is getting one external rule into every skill that carries it, with the evidence attached and nothing left contradicting.
 
-1. **Trace the claim to its primary source before writing it into a skill.** Viral summaries drop the caveats that make a number safe to act on: who was actually studied, how the metric was measured. Pull the original post or paper, read its methodology, and carry the population and measurement caveats into the skill next to the number. A stat quoted without its population becomes a rule the next session applies to the wrong audience.
+1. **Trace the claim to its primary source before writing it into a skill.** Viral summaries drop the caveats that make a number safe to act on: who was actually studied, how the metric was measured. Pull the original post or paper, read its methodology, and carry the population and measurement caveats into the skill next to the number. A stat quoted without its population becomes a rule the next session applies to the wrong audience. When the primary source is out of reach (a paid video, a course, a call you were not in), do not quietly upgrade the summary into rules: open the new skill with a short Source and trust section naming what was read and what was not, label the originator's figures as claims with their provenance, tag our own reconstructions as proposals, and close with a Not verified list. A figure the next session cannot tell apart from a measured fact will be applied as one.
 2. **Set precedence before editing.** Numbers measured on the user's own campaigns, team, or field tests beat borrowed study numbers. Where they disagree, keep the internal number as the rule and cite the study as supporting direction, saying so in one line. State the precedence in the reference file so a later session does not "fix" the rule back.
 3. **Find every skill carrying the rule, not just the obvious one.** Content-search the library for the rule's current wording (word caps, subject-line formats, banned-word lists, cadence limits) across all skills and their `references/` dirs. Standards are routinely copied verbatim into two or more skills, and the skill that names the topic is not always the copy you found first. Search every skills root, not one: `~/.hermes/skills`, `~/champ-skills`, and the vendored mirrors `~/.claude/skills` and `~/.agents/skills`. The last two hold duplicate copies of the same skill families, so an edit landing in one must be copied to the other and confirmed with `diff -q`; a patch that reaches only one mirror loads half the time, depending on which root the session scans.
 4. **Patch every copy in the same pass.** A rule tightened in one skill and left stale in its twin leaves the library contradicting itself; whichever copy the next session loads wins, so the update silently fails half the time.
@@ -339,6 +348,14 @@ A common variant of "improve my skills with this": the user pastes an article, a
 6. **Edit the sentence in place; never append an update note.** "UPDATE: actually..." under the old rule means both versions are loadable. Replace the old wording so there is exactly one statement of the rule.
 7. **One reference file for the evidence, named by topic.** Full data tables, methodology, source links, and caveats go in a single `references/<topic>.md` under the skill that owns the rule (`cold-email-benchmarks.md`, never `short-AbCdEf123.md`). Each patched skill gets one line pointing at that file and saying when to read it. Headline numbers may be cited inline in the rules themselves; tables and methodology stay in the reference file. If two skills need the same evidence, both point at the
 8. **Verify, then hand off.** Grep every skills root for the old wording to confirm no stale copy survives, grep for the new pointer to confirm it landed in each intended copy (both mirrors, all wired skills), then follow `skill-repo-sync` to commit and push. The library is other agents' live read path, so an unpushed edit is half-done.
+
+### Applying a folded playbook to one of Champ's brands
+
+A borrowed method (a creator's ad playbook, a growth framework) does not become a rule for one of his companies the moment it is written down. Split the output: the reusable procedure stays in the class-level skill's SKILL.md, and each brand's application goes in a topical reference beside it (`references/<topic>-applications.md`), so the rules stay generic and the brand drafts stay editable without touching them.
+
+- Cite every brand fact to the vault file it came from (strategy memo, quarterly plan, client note) and mark whatever the vault does not answer as CONFIRM with a named owner. An unknown written as a fact is the error the next session inherits.
+- Check the vault for prior decisions on the same channel, offer or claim before applying the borrowed method. A previous decision not to do the thing (a parked channel, a rejected offer, a wording the owner disputed) outranks a viral playbook: stage the reopening as a needs_input decision card with the recommendation first, never re-open it silently inside the plan.
+- End the application with those open decisions as a card, not as paragraphs in chat. The playbook approves no spend, no launch and no send on its own.
 
 ### Admitting an untrusted third-party skill
 

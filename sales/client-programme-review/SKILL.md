@@ -121,7 +121,7 @@ python3 pr/make.py pr/<client>            # draft, red ribbon while the ledger h
 python3 pr/make.py pr/<client> --final    # refuses until the ledger is clean
 ```
 
-`client.py` is the only file that changes per client: the lead table, sends, calls, the leads the client named, the config for filters and lead cards, and every sentence of copy. Numbers in the copy are computed from the tables, never typed twice. Do not edit `review.tpl.html`, `review.css` or the kit for one client: a change there is a change for every client, and needs the probe rerun on the sample in all three modes. `PR_MODE=review|monthly|weekly` (or the `SECTIONS` list in `client.py`) picks the sections. The output is `pr/<client>/dist/<slug>.html`, one self-contained file, with the data it was built from beside it.
+`client.py` is the only file that changes per client: the lead table, sends, calls, the leads the client named, the config for filters and lead cards, and every sentence of copy. Numbers in the copy are computed from the tables, never typed twice. Starting from a delivered page rather than the sample? The extraction and its parity proof are in `showcase-page/references/engine-extraction.md`. Do not edit `review.tpl.html`, `review.css` or the kit for one client: a change there is a change for every client, and needs the probe rerun on the sample in all three modes. `PR_MODE=review|monthly|weekly` (or the `SECTIONS` list in `client.py`) picks the sections. The output is `pr/<client>/dist/<slug>.html`, one self-contained file, with the data it was built from beside it.
 
 Sections, what each must prove, and the widget contract for each are in `references/sections.md`.
 

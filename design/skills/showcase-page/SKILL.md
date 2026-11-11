@@ -108,7 +108,7 @@ When Deep says to base the page on a named reference (a brand's showcase, a prev
 
 ## References
 
-`references/components.md`, `references/react-build.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/spotlight-card.md`, `references/templates.md`, and the kit README at `kit/README.md`. When they are not in the account copy, read them from the vault at `Other/Skills/showcase-page/`.
+`references/components.md`, `references/react-build.md`, `references/charts-tables.md`, `references/motion.md`, `references/micro-interactions.md`, `references/spotlight-card.md`, `references/templates.md`, `references/engine-extraction.md` (turning one delivered page into a reusable engine with a fictional sample client), and the kit README at `kit/README.md`. When they are not in the account copy, read them from the vault at `Other/Skills/showcase-page/`.
 
 ## UI libraries
 
