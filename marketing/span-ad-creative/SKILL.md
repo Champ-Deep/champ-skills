@@ -9,6 +9,9 @@ Concept to approval pipeline for SPAN Global Services campaign creative: seasona
 
 ## 1. Offer before art
 
+For the offer, the opt-in page and the angle test around it, use `meta-ads-low-budget` first: its fit gate and readout rules apply to any paid channel. This skill starts once the offer and angles are approved.
+
+
 No creative until the offer survives these checks. SPAN is quote based and sales led, so the usual B2B holiday playbook does not transfer.
 
 - Percent off belongs to self serve, card payment products under about $100 a month. Sales led vendors that discount train accounts to wait for the next holiday. SPAN runs a festive frame (gratitude, a free check, a free count), never a discount. See `references/holiday-offer-research.md`.

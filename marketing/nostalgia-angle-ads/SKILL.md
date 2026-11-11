@@ -182,6 +182,10 @@ Composite the real logo and export in code so the brand marks are exact.
 - **Render** each ad as a small HTML page and screenshot it with Playwright at 1200x1200 (and 1200x628), saving JPG at quality 92.
 - **Landscape:** make 1200x628 only for the winning arm. Use Higgsfield `outpaint_image` at 21:9 or 16:9 on the square job id, then crop to 1.91:1 with `background-size: cover`. Check each result: outpainting sometimes recomposes the scene, shrinks the navy band, invents unreadable background signs, or pushes the headline to the edges. Fixes that worked: shift the crop position, use a navy tab across only the left half for the logo, or place the logo directly on the existing band.
 
+## Next round: test the angle, not only the look
+
+The Q4 2026 test held pain point and offer fixed and varied the look. A second round should hold the look fixed and vary the angle (the belief the ad speaks to), each angle in its own ad set. Mine the angles from the buyer's own words (reviews, forums, sales call notes), not from the team's guesses. Funnel, angle research, readout rules and the phone follow-up are in `meta-ads-low-budget`, written for Meta but the angle and readout rules carry to LinkedIn.
+
 ## Step 9. Plan the test
 
 Two-arm LinkedIn test (the default when two worlds are in play):
