@@ -46,6 +46,18 @@ Never rebuild the body from the reply text alone: the quoted history read in ste
 
 Deep approves drafts by eye against his own Outlook-composed replies. Clean means one `<p>` per paragraph at 11pt Aptos with 1.4 line height, a thin divider above the quoted history, and the quoted history rendered as a bold From/Sent/To/Cc header block over grey 10pt paragraphs. Shabby means the raw quote dumped as one block, run-on paragraphs with no line breaks, or unstyled `<div>` text prepended over the original body. When a formatting change lands, look at the rendered draft (or its screenshot) before reporting done.
 
+## The no-draft policy (`playbook.json` → `no_draft_rules`)
+
+The one place to stop the bot drafting for a sender or a class of mail. Each entry is `{why, action, <match keys>}`: `action` is `label` (label only, stay silent) or `brief` (surface to Deep, still no draft). Match keys are ANDed: `sender_contains` (substring of the from address or the display name), `intent` (the classifier intent), `subject_contains`, `scheduling_only` (classifier intent is scheduling, or the subject or the new body text reads as a calendar or slot mail). First match wins. A rule with no match key is ignored by design, and `selftest` fails a rule that would match every message or carry an action other than label or brief.
+
+Two guards in `decide`: a `label` rule never fires for a P0 or a VIP (that mail keeps its normal handling), and the check sits before the confidence check so muted mail cannot reach Deep as a brief.
+
+Temporary holds (a thread Deep answers himself once the work behind it lands) live in the same list; clear one by deleting its entry. Two kinds of entry exist today: silent mutes (spam, team-owned scheduling, a booked calendar invite) and holds that brief Deep (a parked thread).
+
+## Proving a policy change on real mail
+
+A dry run only re-decides mail the state file has not already recorded, so it cannot show a rule firing on yesterday's thread. Prove it directly instead: import `inbox_bot` in a scratch script with `STATE`, `LEDGER`, `LOCK`, `REPORT_DIR` and `CONTACTS` repointed into the scratch dir, fetch the real message by `list-mail-messages(search='"from:<sender>"')`, run `classify_prompt` + `complete_json` + `decide` on it, and print the action. That is read-only and shows the before (the triage report's action) and after (the printed action) side by side.
+
 ## Running the tests
 
 ```bash
