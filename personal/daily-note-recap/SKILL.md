@@ -24,6 +24,8 @@ description: "Generate a comprehensive daily note in the Celsus Obsidian vault r
 - Recheck an initially empty late capture once before closing. If it finalized, follow its transcript continuation offsets and exclude personal/background playback from business extraction.
 - Keep transcript retrieval inside approved connector tools. If tool output clips, request smaller bounded ranges and follow exact continuation offsets. Never inspect credential/config token files or call a raw MCP endpoint to bypass clipping. Give the same prohibition to extraction children.
 - Apply `knowledge-tier-boundaries` before BearDrive staging. A staging config is not permission to copy named client, decision or transcript bodies into an org-visible Outbox. Preserve metadata-only review rows when privacy cannot be established.
+- Separate source synchronization from authored vault activity. A publisher refresh can reset hundreds of source mtimes; reuse the single inventory but filter known code, support, QA and simulation-frame trees before reporting knowledge-file totals. Keep raw and filtered denominators explicit.
+- Before appending team-sheet obligations, dedupe against the actual workbook, preserve existing row IDs and other-sheet values, and extend the existing named table through the added rows. Verify the saved rows and table range; appending outside the table hides the new work from HR's filtered view.
 
 ## When This Runs
 
