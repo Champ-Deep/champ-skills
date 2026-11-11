@@ -1,0 +1,8 @@
+[
+ {"id": "leads_delivered", "claim": "12 leads delivered", "shown": "12 leads delivered", "source": "Client lead sheet, 12 rows pasted by the account owner", "as_of": "2026-01-15", "status": "matched", "by": "client lead sheet, compared company by company", "client_can_check": true},
+ {"id": "contracted", "claim": "20 contracted, 8 pending", "shown": "of 20 contracted, 8 pending", "source": "Signed order", "as_of": "2025-11-01", "status": "owner", "by": "account owner, 15 Jan", "client_can_check": true},
+ {"id": "sends", "claim": "1,840 emails across three sends", "shown": "1,840 emails", "source": "Send reports 1 to 3", "as_of": "2026-01-10", "status": "sourced", "client_can_check": false},
+ {"id": "universe", "claim": "universe of about 4,000 contacts", "shown": "about 4,000", "source": "Sizing quoted on the kickoff call recap, not a database pull", "as_of": "2025-11-05", "status": "caveated", "caveat": "as sized at kickoff, to be refreshed", "by": "account owner, 15 Jan: soften it", "client_can_check": false},
+ {"id": "copy_order", "claim": "which copy went with which send", "source": "Assumed from the series order", "as_of": "2026-01-15", "status": "open", "client_can_check": true, "note": "Ask the campaign owner for the send log."},
+ {"id": "dial_total", "claim": "2,300 dials", "shown": "2,300 dials", "source": "A chat summary, no report on file", "as_of": "2026-01-12", "status": "cut", "client_can_check": false, "note": "No report to back it, removed from the page."}
+]

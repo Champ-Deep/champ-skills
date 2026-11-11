@@ -87,7 +87,8 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
 
 ## Pitfalls
 
-- **Keep variant labels plain** (`Emailer 1`, not `Emailer 1: Kinetic introduction`). The panel model echoes the label back, and a label with a colon or comma comes back altered; reactions with an unknown label are dropped.
+- **Keep variant labels plain** (`Emailer 1`, not `Emailer 1: product introduction`). The panel model echoes the label back, and a label with a colon or comma comes back altered; reactions with an unknown label are dropped.
+- **On a client page the tool is never named.** It is the "<Brand> simulation" ("LakeB2B simulation") and the rewrite is the "<Brand> rewrite"; the model name stays out too. Rename at the point the page data is built, and search the built page and the PDF text for the tool name before delivery.
 - **`analyze()` can hang for many minutes after both tests show `locked`**, because the analyst summary is one unbounded LLM call. When `tests.status` is `locked` and the process is still alive, kill it and rebuild the data with `service.get_test(ws, tid)` plus `service.breakdown(ws, tid)`; the ranking and every reaction are already in the DB, and client-facing prose is rewritten by hand anyway.
 - **Count scored personas before quoting the panel size.** On DeepSeek Flash with six variants in one prompt only about half of a 24-persona panel returned a usable reaction on two runs in a row. Report "n of N returned a scored reaction", never the audience size alone.
 - **To put real results beside the simulation**, pass the sends as `ads` with `ads_channel: "email_marketing"` (body only when subject lines are not on file for every send, so no variant is advantaged), then show actual click rate against the 80% band per send. The simulation reads copy only, so say that send order and list fatigue are outside it.
