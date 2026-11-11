@@ -30,6 +30,9 @@ collected count does.
 - **Convert the script, do not re-advertise it.** A probe written as a `__main__`
   script is a manual tool. If a claim depends on it running, it needs real test
   functions in the suite.
+- **Report passed and skipped as two numbers.** "199 tests pass" from a suite
+  that silently skips 112 without its database is a total, not a pass count.
+  Quote the pytest summary line verbatim and name the service each skip needs.
 - **Skip loudly when the harness is absent.** A browser gate needs a live server. Make
   it an explicit skip with a stated reason so "no server running" is never read as
   "the layout passed".
