@@ -95,5 +95,6 @@ The last section of the reply is the two or three things only he can settle (whe
 - Do not name the assistant after a word the site already uses for a character. Check the site's voice file first; a name that reads as a mascot there reads as a mascot everywhere.
 - Keep per-Bot job messages subordinate to the pack. When the goal changes, supersede the old job message in place with a dated note, and say which one is current.
 - Never hand a third-party assistant code or deploy access and then ask it to "improve the site". It scouts and reports; builds stay in the Hermes lanes.
+- When he wants the assistant to be how Hermes reaches him, bridge through one private GitHub repo granted issues-only, never a connector into the Mac or the board. Hermes writes the open decisions into one issue and reads back strictly formatted comment lines keyed by card id; the assistant only reads the issue, confirms the exact lines with him and posts them. Prove the Hermes side end to end with throwaway cards, and say plainly that nothing inside the assistant's app was run. Worked example: the Desk bridge in `Efforts/Active/Grok Bot/Grok Bot.md`.
 
 See `references/positioning-and-voice.md` for the wording to reuse.
