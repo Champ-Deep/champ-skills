@@ -58,9 +58,28 @@ git -C <repo> remote -v
 git -C <repo> diff main..<branch> --stat | tail -30
 ```
 
+**When our side is split across diverged lines, measure the split before any specialist
+reads it.** Three commands settle it: commits ahead and behind per line against the
+company default (`git log origin/main..<line> --oneline | wc -l`, and the reverse), and a
+no-touch merge preview (`git merge-tree --write-tree origin/main <line>`, which reports
+the conflict list without touching a worktree). Report which line the user's requested
+features actually live on: work stranded on a personal branch is a finding that changes
+the plan more than any competitor detail.
+
+**Snapshot a repo before dispatching readers.** Copy or fresh-clone it into scratch and
+point the briefs at the copy. Read-only specialists cannot lose the source, but a folder
+that vanishes mid-read (a synced project directory being cleaned by another session, an
+Apps&Projects backup pass) erases any uncommitted work with no way to tell what was lost,
+and the teardown then reports HEAD identity instead of working-tree identity.
+
 Then read the scoring, validation, and refresh paths **yourself** before dispatching. That
 is where the load-bearing findings live, and reading them first is what lets you catch a
 specialist ranking a symptom above its cause.
+
+When the brief hands a specialist a repo with diverged branches, say **read-only and never
+git-check-out**: offer `git show <ref>:<path>` and `git diff` as the blessed commands. A
+specialist that checks out a line rewrites the working tree the user has open, and a
+read-only teardown that moved HEAD has already changed the thing it promised to inspect.
 
 ## Phase 2: fan out one specialist per area
 
@@ -73,6 +92,12 @@ specialist asked only for capabilities reports the competitor's intent; asked fo
 hunts for what is broken. You want both, and one pass gets them consistently.
 
 Tell them to return findings in the response, not to disk.
+
+Brief every specialist working on our own product with the branch inventory from Phase 1
+and ask which line each capability sits on. A feature reported as "exists" on a branch
+nobody merges is a feature the product does not have; the branch split belongs in the
+first table of the deliverable, ahead of the parity map, because every fix below it is
+gated on merging that line first.
 
 ## Phase 3: re-verify before it reaches the user
 
@@ -90,6 +115,13 @@ customer-visible billing bug.
 3. Say plainly when you added findings after verification, and **lead with the
    correction.** The user's first read of your conclusion was wrong in a way that changed
    their plan, so the correction is the headline, not a footnote.
+4. **Label the verification tier of every claim in the deliverable, not just in chat.**
+   A plain legend does it: a marker meaning "I re-read the code after the reader
+   reported it", everything else marked as reader output. Where a specialist's report
+   is too large to re-read in full, re-verify only the findings headed for the top tier
+   and the rows of the parity map, then say which rows are which. A document that reads
+   as uniformly checked when three of its four sources are self-reports is a document
+   the next session will cite as fact.
 
 Two failure modes worth expecting:
 
@@ -127,6 +159,16 @@ deciding what to do this week.
    count and where the gaps concentrate, e.g. "9 exist or partial on the data side, 7
    absent, all on the render side: it has their brain and none of their hands." The count
    turns a feature list into a verdict.
+   - With **three or more products**, add a column per product against one capability
+     list, then give each product its own count row. The counts are what let a reader see
+     which of our two products should be the donor before reading any row.
+   - Follow it with a **"where the gaps concentrate"** sentence naming the two edges the
+     absent rows sit on. "It has the brain and the visitor's side, and almost none of the
+     agent's side" beats a list of eleven features, and it tells the user which tier of
+     the fix plan exists to close.
+   - The map is also where the **donor** gets named: when our own two products are both
+     in the table, say in one line which one should donate which capability to which, so
+     the fix plan cites an internal donor file path instead of an open-source one.
 4. **Open questions only the user can answer.** Name the specific decision and why code
    cannot settle it. When a prompt legend and a validator disagree on a scale, do not infer
    the intent and proceed: write it up as a decision they own, because a scoring change
@@ -259,3 +301,12 @@ timeouts-and-retries issue from an auth or quota wall.
   usually means a bug-fix tier and a feature tier; sequence them separately so the bugs do
   not wait behind the features.
 - **Do not add another undated plan to a pile of undated plans.** That is not progress.
+- **Do not recommend a parity row whose competitor source sits behind a commercial
+  path.** Tag each row `core` or `enterprise` when the repo splits by directory: an
+  enterprise-only feature is an argument for a pattern, never an argument for running or
+  copying their code, and leaving the tag off the row makes the plan look like it wants
+  to rebuild something the competitor deliberately sells.
+- **Do not let a specialist's "absent" verdict ride on grep alone.** Grep absence proves
+  the string is missing, not that the behaviour is. Say which findings came from absence
+  and name the one runtime probe that would settle them, instead of presenting an
+  inferred dead path as a removable one.

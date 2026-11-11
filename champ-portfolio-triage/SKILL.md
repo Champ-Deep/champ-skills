@@ -68,7 +68,30 @@ unmerged branch is a review gap, work merged but absent from the live build is a
 deploy gap, and only work nowhere on the remote is a push gap. Naming a push gap
 without this check produces an escalation email to someone who did push.
 
-## Before calling a branch stale, measure ahead and behind separately
+## ## Before comparing anything, split the feature work from the line work
+
+A product's recent features often live on a collaborator's personal branch while the
+company default branch has its own unrelated commits, so "does X exist" has no single
+answer. Run, for each line: commits ahead and behind the default
+(`git log origin/main..<line> --oneline | wc -l` and the reverse), then a no-touch merge
+preview:
+
+```bash
+git merge-tree --write-tree origin/main <line>   # conflict list, no worktree touched
+```
+
+Report the split in the first table of any deliverable, before feature findings: which
+line carries which capability, how many conflicts the rescue merge has, and which files
+those conflicts are in. Everything downstream (a fix plan, a parity map, an estimate) is
+gated on that rescue, and a plan written as if the features were already in the product
+sends the next session to build on a branch nobody merges. Offer the conflict list as
+Tier 0 of the plan rather than merging it yourself.
+
+When a specialist will read such a repo, order it read-only and hand it `git show
+<ref>:<path>` and `git diff` as the blessed commands. A checkout to "see the branch"
+rewrites the working tree Deep has open.
+
+Before calling a branch stale, measure ahead and behind separately
 
 A single `git diff <main>..<branch> --stat` is inflated by merges from both sides: a
 branch three commits behind and a hundred ahead reads as a 650-file diff that is almost
