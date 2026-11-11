@@ -20,3 +20,8 @@ description: >-
 3. **Run sheet:** Step 3 writes the pending priority tasks for today into the daily note under `Day at a Glance`, ready by 11 a.m. when the routine runs on schedule.
 4. Wherever a mode file says to invoke `day-planner` or `dashboard-refresh`, read that mode file here.
 5. Never move `TASKS.md` or `dashboard.html`. Dedupe before any TASKS.md append (vault-keeper).
+6. In an unattended run, skip the wizard rather than waiting. Label energy and focus as provisional, write the run sheet, and do not book events.
+7. Select the latest dated Zoom triage note by its YYYY-MM-DD filename. A recently modified MOC is an index, not the latest sweep.
+8. Deduplicate Wispr by meeting ID against the prior daily note's commitment register. IDs absent from the recap prose may already be covered in its register.
+9. Resolve quoted today and tonight against the source date. Midnight snapshots can retain yesterday's meeting asks and deadlines.
+10. Verify Kanban comment writes against task_comments or card history. The task_events kind is commented, not comment.
