@@ -72,7 +72,7 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 
 ## Prod reads and smoke
 
-- Read-only D1: `CI=1 npx wrangler d1 execute champ-harbinger --remote --json --command "<select>"` from `deploy/cloudflare` with `CLOUDFLARE_ACCOUNT_ID` set. Column names: `jobs.created_on`/`state`, `mailbox_connections.created_at` (ms epoch).
+- Read-only D1: `CI=1 npx wrangler d1 execute champ-harbinger --remote --json --command "<select>"` from `deploy/cloudflare` with `CLOUDFLARE_ACCOUNT_ID` set. Column names: `jobs.created_on`/`state`, `mailbox_connections.created_at` (ms epoch). Take the account id from `npx wrangler whoami` and export it: with the variable unset the same read failed with error 7403. For "is channel X really in use", count rows: `outreach_messages` and `channel_accounts` hold voice, WhatsApp and LinkedIn (empty means never used in production, whatever the code says), `sent_emails` holds email, `kg_nodes`/`kg_edges`/`kg_episodes` the graph, `signals`/`signal_results` the signals engine.
 - `deploy/cloudflare/smoke.sh https://champ-harbinger.deep-ae0.workers.dev` needs the base URL argument; without it it exits 1 with a usage line.
 - Deploy from a clean detached worktree of `origin/main` with `ENV_FILE=<canonical checkout>/deploy/cloudflare/env.env`; the container rollout wait takes 15 to 25 minutes, so run it in the background.
 - A deploy that aborts before the LIVE line changed nothing: Cloudflare rejects some pre-deploy database calls (D1 error 7403) and the script stops, so prod keeps serving the previous build. Every state you read during that window describes the old code, including the UI and a healthy-looking jobs table. Confirm identity by `/api/version` after the LIVE line, not by absence of damage.
