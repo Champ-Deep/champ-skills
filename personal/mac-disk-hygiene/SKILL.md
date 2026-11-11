@@ -62,6 +62,9 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - Deleting browser caches (Chrome, playwright, camoufox) always succeeds but pushes a re-download onto the next automation run. Say so before removing, and keep Playwright when QA pipelines are active.
 - `npm cache clean --force` and `pnpm store prune` print scary warnings and are still safe; capture their tail output in the log rather than treating warnings as failures.
 
+- Context safety before any cleanup: the vault is covered by `celsus-backup` (Drive, vault only); Hermes sessions, memory, kanban, cron, scripts and profile DBs are covered by `hermes_state_backup.py` (cron `hermes-context-backup`, daily 15:00, Drive `Hermes Backup`, keep 3, `--verify` lists and checks for leaked credentials). Both use one age key at `~/.config/celsus-backup/key.txt`; if Deep has not stored it off-machine, every Drive backup dies with the laptop. Beacon local history (`beacon endpoint traces reindex`) only reaches back as far as the runtime log, about two days.
+- ~/repos is about 90% regenerable (node_modules/.next/.venv): 39 of 44 GiB measured 2026-11-11. Back them up with `GHB_ROOT=~/repos GHB_KEEP_PUBLIC=1 python3 backup.py` (background, 30+ min) before trimming anything there.
+
 ## RAM, not only disk
 
 - Swap IS disk here: `/System/Volumes/VM` shares the APFS container, so 20 GiB of swapfiles took free space from 50 to 5.6 GiB (2026-11-06). When free space drops with no new files, run `sysctl vm.swapusage` and `ls /System/Volumes/VM` first; killing the RAM holders gave back 10 GiB in 30 seconds.
@@ -69,6 +72,7 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - `node_modules`, `.next`, `.turbo`, `.wrangler` inside done-task workspaces are regenerable and were 8 GiB; blocked-task workspaces keep `node_modules` (they may resume) but lose build caches. Source, evidence and zips stay.
 - Starting OrbStack to prune Docker auto-starts `restart=always/unless-stopped` containers (open-webui, sledgehammer, openbot, softphone). Prune, then `orb stop` to restore the prior state. Unused named volumes (buildx state, miroshark ollama data) are Deep's call.
 
+- `laya-local/decider/mcp_server.py` (the decider MCP) held 18 GB RSS after 4 days up, with swap at 20 GiB. SIGTERM is safe; the next Hermes session respawns it. Swapfiles do not shrink immediately after the kill, so do not count it as freed disk until `sysctl vm.swapusage` drops.
 - "Memory" on this Mac usually means swap thrash, not disk: check `sysctl vm.swapusage` and `top -l 1 -o mem -stats pid,mem,cmprs,command` before `df`. The holder was `celsus_jev.py score` (19 GB RSS, clef-flash on MPS) fired by the celsus-compose cron whenever a new blocked card needed a score; `kanban_clef.py` loads no model unless `--shadow-top` is passed. The model crons now run on a 2h cron expr; keep any model-loading step off a 30-minute interval on a 32 GB machine.
 - Finished kanban workspaces leave `next dev`, `vite` and `.verify/server.mjs` servers running for days (3 to 4 GB RSS mostly in swap). Find them with `lsof -a -d cwd -p <pid>` under `~/.hermes/kanban/workspaces/`, check the task status in `kanban.db`, then `kill -- -<pgid>`.
 - `docker builder prune -af` plus `docker image prune -af` reclaimed 32 GB in one approved pass; `timeout` does not exist on macOS, run long docker commands as a background job.
