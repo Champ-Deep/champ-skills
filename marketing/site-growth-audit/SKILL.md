@@ -46,6 +46,17 @@ git log --oneline 2>&1 | head -3
 
 **Always check the git history before recommending edits.** A worktree with zero commits has no `git revert`, which changes the risk calculus of every change in the plan. Say so in the plan and make a backup step phase zero.
 
+### Auditing a site we do not own (a prospect's or partner's storefront)
+
+No repo exists, so ground truth is the served page. Four rules:
+
+- **Pace the fetches.** Shopify answers 429 after about five quick requests from one address, and a 429 body audits as an empty page. Sleep a few seconds between fetches and open product pages in a real browser, which passes where curl is throttled.
+- **Read both layers.** Raw HTML shows what a crawler or text extractor gets; the rendered DOM shows what a visitor gets. The findings live in the gap: an app that injects a hidden `<h1>` (a location block overlay reading "Access Restricted") leaves pages whose only H1 is that message while the screen looks fine. Count H1s in the raw HTML, then read `getComputedStyle` on each in the browser.
+- **Read the whole page sitemap by name.** Test pages, quiz loading screens and thank you pages sit there in plain sight; open three and check for a robots meta before calling them indexable.
+- **Hash sibling pages by visible text**, not by bytes: two URLs with different titles and 99% identical stripped text are one page twice.
+
+Keyless PageSpeed quota is usually exhausted, so measure weight yourself (requests, domains, transfer size from `performance.getEntriesByType('resource')` in a phone-profile Chromium) and say the connection it was measured on. Never quote a Lighthouse score you did not get. On the client-facing page, verify any "sold out" or price seen in a search snippet against the rendered page before printing it.
+
 ## Phase 2: fan out specialists by concern
 
 One specialist per independent workstream, dispatched in a single call so they run in parallel. Give each one everything it needs: it has no memory of the conversation and no idea what the others are doing.
