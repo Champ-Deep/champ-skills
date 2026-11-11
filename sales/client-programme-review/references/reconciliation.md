@@ -4,7 +4,7 @@ The page is checked by people who hold their own records. Each class below has c
 
 ## How to ask
 
-- One `clarify` batch, at most five questions, recommended option first.
+- One batch (the question tool where there is one), at most five questions, recommended option first.
 - Each question carries both values and both sources: "Their sheet says X (rows pasted today). Ours says Y (delivery record, dated). Which goes on the page?"
 - Never ask the owner to trust a number. Ask them to pick between sources or to name who can confirm.
 - Record the answer in the ledger entry's `by`, with the date.

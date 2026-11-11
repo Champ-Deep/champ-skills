@@ -2,16 +2,35 @@
 
 Built on the `showcase-page` kit (`core.css`, `core.js`, `build.py`, `shoot.py`). One template, one stylesheet, one data script, one build script, one probe.
 
-## Files in a client build
+## Files
 
 | File | Role |
 |---|---|
-| `data.py` | The single evidence table (one row per lead) and the aggregates computed from it. Asserts its own totals. Names its sources. |
-| `ledger.json`, `ledger.py` | The reconciliation ledger and its gate. |
-| `make.py` | Runs `data.py`, loads the simulation run if present, applies the ledger gate, injects the data and the draft ribbon, calls the kit's `build.py`, then checks the built page against the ledger. `--final` refuses on any open entry. |
-| `cases/<client>.tpl.html`, `cases/<client>.css` | Template and styles. |
-| `probe.py` | Drives every control in a browser and asserts the result. |
-| `call_script.py` | Builds the internal call script page. |
+| `engine/make.py` | `python3 make.py <client_dir> [--final]`. Runs `client.py`, loads the simulation run if there is one, applies the ledger gate, fills the template, calls the kit's `build.py`, then checks the built page against the ledger. |
+| `engine/probe.py` | `python3 probe.py <client_dir>`. Drives every control in a browser and asserts the result. Skips sections the build drops. |
+| `engine/review.tpl.html`, `engine/review.css` | Template and styles. Tokens: `{{c:key}}` copy from `COPY`, `{{h:name}}` a list rendered by `make.py`, `{{x:name}}` computed. |
+| `<client_dir>/client.py` | The one file per client. |
+| `<client_dir>/ledger.json` | The reconciliation ledger. An entry may carry `"section": "<id>"`; it is skipped when the build drops that section. |
+| `<client_dir>/sim_notes.json` | Only with a simulation run: `fixes`, `asks`, `rewrite_note`, and the `ranking` the notes were written against. |
+
+## The client.py contract
+
+`make.py` reads these names. The sample defines every one, with comments.
+
+| Name | What |
+|---|---|
+| `SLUG`, `CLIENT`, `BRAND`, `NOTE_TITLE`, `META` | File name, short client name used in sentences, the brand on the page, the first line of the send-back note, and the kit's page meta (title, chip, call to action, footer). |
+| `LEADS` | One dict per lead. Required keys: `id` (1 to n, in order), `co`, `role`, `ind`, `mkt`, `named`. Every other key is yours and is referenced by the config below. |
+| `SENDS` | `[name, dates, clicked, opened without a click, not opened, sent]` per send. |
+| `UNIVERSE` | `contacts`, `emailed`, `dialled`. One dot is drawn per contact. |
+| `NAMED` | `by` and `on`: who named the marked leads, and when. |
+| `MARKETS` | Code to name. The first three get distinct dot colours. |
+| `FILTERS` | `[key, label, field, value, negate]`. The first is the "all" filter with no field. |
+| `CARD` | `facts` and `pills` shown on a lead card, and which answers read as `go`, `no` or `na` (not asked). |
+| `DIMS`, `DISP`, `SUF` | The dimensions the win profile compares, display names for raw values, and suffixes. |
+| `COPY` | Every sentence and list on the page. A missing key stops the build and names itself. |
+| `SECTIONS` | Optional. The section ids to build, in page order. |
+| `SIM_RUN` | Optional. Path to a simulation run. A variant label must end with the number of the send it was used in. |
 
 ## Sections
 

@@ -1,0 +1,6 @@
+kit/cases/
+kit/dist/
+kit/shots/
+kit/export/
+**/dist/
+__pycache__/

@@ -1,0 +1,73 @@
+[
+ {
+  "id": "leads_delivered",
+  "claim": "12 leads delivered",
+  "shown": "12 leads delivered into regional freight operators",
+  "source": "SAMPLE: client lead sheet, 12 rows pasted by the account owner",
+  "as_of": "2026-03-16",
+  "status": "matched",
+  "by": "client lead sheet, compared company by company",
+  "client_can_check": true
+ },
+ {
+  "id": "contracted",
+  "claim": "20 contracted, 8 pending",
+  "shown": "of 20 contracted, 8 pending",
+  "source": "SAMPLE: signed order",
+  "as_of": "2026-01-02",
+  "status": "owner",
+  "by": "account owner, 16 Mar",
+  "client_can_check": true
+ },
+ {
+  "id": "sends",
+  "claim": "1,775 emails across three sends",
+  "shown": "1,775",
+  "source": "SAMPLE: send reports 1 to 3",
+  "as_of": "2026-02-04",
+  "status": "sourced",
+  "client_can_check": false
+ },
+ {
+  "id": "universe",
+  "claim": "universe of about 4,000 contacts",
+  "shown": "about 4,000",
+  "source": "SAMPLE: sizing quoted on the kickoff call, not a database pull",
+  "as_of": "2026-01-02",
+  "status": "caveated",
+  "caveat": "as sized at kickoff, to be refreshed",
+  "by": "account owner, 16 Mar: soften it",
+  "client_can_check": false,
+  "section": "universe"
+ },
+ {
+  "id": "calls_week",
+  "claim": "320 dials, 26 reached",
+  "shown": "26 calls reached the prospect",
+  "source": "SAMPLE: calling report, 2 to 6 February",
+  "as_of": "2026-02-06",
+  "status": "caveated",
+  "caveat": "One week measured, not the whole programme.",
+  "client_can_check": false,
+  "section": "universe"
+ },
+ {
+  "id": "card_details",
+  "claim": "Project, decision, system and timeline on each lead card",
+  "source": "SAMPLE: our call notes",
+  "as_of": "2026-03-10",
+  "status": "caveated",
+  "caveat": "Project, decision, system and timeline come from our call notes.",
+  "client_can_check": true
+ },
+ {
+  "id": "copy_order",
+  "claim": "which copy went with which send",
+  "source": "SAMPLE: assumed from the series order",
+  "as_of": "2026-03-16",
+  "status": "caveated",
+  "caveat": "Copy is paired with each send in series order. If your records show a different order, change the pairing beside the email.",
+  "by": "account owner, 16 Mar: fairly sure",
+  "client_can_check": true
+ }
+]

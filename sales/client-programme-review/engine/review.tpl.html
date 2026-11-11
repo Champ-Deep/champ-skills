@@ -1,0 +1,441 @@
+{{NAV}}
+{{HOLD}}
+<main>
+<!--@DRAFT@-->
+<section class="hero ep-hero">
+{{STARS}}
+{{CLOUDS}}
+<div class="wrap hero-inner">
+<h1 class="display" data-words>{{c:hero_h1}}</h1>
+<p class="eyebrow-s fade" style="--fd:700ms">{{c:hero_eyebrow}}</p>
+<p class="lead fade" style="--fd:900ms">{{c:hero_lead}}</p>
+</div>
+</section>
+
+<section class="floaters" aria-label="Headline numbers"><div class="wrap"><div class="row">
+{{h:floaters}}
+</div></div></section>
+
+<section class="client" aria-label="Programme profile"><div class="wrap">
+<span class="mono">Programme</span>
+<div class="pills">
+{{h:pills}}
+</div>
+</div></section>
+
+<nav class="ep-toc" aria-label="On this page"><div class="wrap">
+{{h:toc}}
+</div></nav>
+
+<!-- ================= UNIVERSE: pinned scroll beats ================= -->
+<section class="ep-uni" id="universe" aria-labelledby="uni-h"><div class="ep-uni-pin"><div class="wrap ep-uni-grid">
+<div class="ep-uni-copy">
+<p class="eyebrow">The universe</p>
+<h2 class="display" id="uni-h">{{c:uni_h}}</h2>
+<ol class="ep-beats" id="beats">
+{{h:beats}}
+</ol>
+</div>
+<div class="ep-uni-stage">
+<canvas id="uni" role="img" aria-label="{{c:uni_aria}}"></canvas>
+<div class="ep-uni-key" aria-hidden="true">{{h:uni_key}}</div>
+<p class="fine">One dot is one contact. Lit dots show volume at each stage, not which individual was contacted.</p>
+</div>
+</div></div></section>
+
+<!-- ================= WHAT WE RAN ================= -->
+<section class="split" id="work"><div class="wrap">
+<div class="stick" data-reveal>
+<p class="eyebrow">What we ran</p>
+<h2 class="display">{{c:work_h}}</h2>
+<p class="note">{{c:work_note}}</p>
+<div class="ep-reports">
+<span class="mono">What your team received along the way</span>
+<ul>
+{{h:reports}}
+</ul>
+</div>
+</div>
+<div class="steps">
+{{h:steps}}
+</div>
+</div></section>
+
+<!-- ================= EMAILS ================= -->
+<section class="viz" id="emails" aria-labelledby="em-h"><div class="wrap">
+<div class="viz-head" data-reveal>
+<div><p class="eyebrow">The messaging</p><h2 class="display" id="em-h">{{c:em_h}}</h2></div>
+<p class="note">{{c:em_note}}</p>
+</div>
+<div class="ep-em">
+<div class="ep-em-list panel gc" data-reveal>
+<div class="panel-head"><div><span class="mono">{{c:em_panel_k}}</span><h3>Clicks per send</h3></div><span class="scale-note">{{x:em_scale}}</span></div>
+<div role="radiogroup" aria-label="Choose an emailer" id="emrg" class="ep-em-rows"></div>
+<p class="fine">{{c:em_fine}}</p>
+</div>
+<div class="ep-em-detail panel gc" data-reveal style="--d:120" aria-live="polite">
+<div class="ep-pair"><label for="em-pair">Copy shown with this send</label><select id="em-pair"></select><button type="button" class="ep-reset" id="em-pair-reset" hidden>Back to series order</button></div>
+<div class="ep-mail">
+<div class="ep-mail-bar"><i></i><i></i><i></i><span id="em-meta" class="mono"></span></div>
+<div class="ep-mail-body" id="em-body"></div>
+</div>
+<div class="ep-em-stats" id="em-stats"></div>
+</div>
+</div>
+</div></section>
+
+<!-- ================= ORACLE ================= -->
+<section class="ep-oracle" id="simulation" aria-labelledby="or-h"><div class="wrap">
+<div class="ep-or-head" data-reveal>
+<div><p class="eyebrow">{{x:brand}} simulation</p><h2 class="display" id="or-h">{{c:sim_h}}</h2></div>
+<p class="note" id="or-note"></p>
+</div>
+<div class="ep-notice" data-reveal><strong>Read this first: model simulation, not a market test.</strong> This is a model simulation. Every number and quote below comes from AI personas built from the audience description, not from real customers or live traffic. It cannot replace a market test; use it to choose which messages deserve your limited test budget, then measure the real result.</div>
+
+<div class="ep-or-grid">
+<div class="ep-dpanel" data-reveal>
+<div class="ep-dhead"><span class="mono">Simulated ranking against what happened</span><h3>Predicted click rate, and the real one</h3></div>
+<div role="radiogroup" aria-label="Choose a message to inspect" id="orrg" class="ep-or-rows"></div>
+<div class="ep-or-key"><span><i class="k1"></i>Simulated, with 80% band</span><span><i class="k2"></i>Actual click rate from the send</span></div>
+<p class="ep-dfine" id="or-match"></p>
+</div>
+<div class="ep-dpanel" data-reveal style="--d:120">
+<div class="ep-dhead"><span class="mono" id="or-pan-k">The panel</span><h3 id="or-pan-h">How each persona reacted</h3></div>
+<div class="ep-personas" id="personas" role="group" aria-label="Simulated personas"></div>
+<div class="ep-or-scale" aria-hidden="true"><span>0, ignores it</span><i></i><span>{{x:ceil}}, the panel's ceiling</span></div>
+<div class="ep-voice" id="voice" aria-live="polite"></div>
+</div>
+</div>
+
+<div class="ep-or-grid ep-or-grid2">
+<div class="ep-dpanel" data-reveal>
+<div class="ep-dhead"><span class="mono">What the panel told us</span><h3>Where the current copy loses people</h3></div>
+<ul class="ep-fixes" id="or-fixes"></ul>
+</div>
+<div class="ep-dpanel" data-reveal style="--d:120">
+<div class="ep-dhead"><span class="mono">What the next round of copy needs</span><h3>{{c:sim_asks_h}}</h3></div>
+<ul class="ep-fixes ep-asks" id="or-asks"></ul>
+<p class="ep-dfine" id="rw-fine"></p>
+</div>
+</div>
+<p class="ep-or-close" data-reveal>Simulations are cheap and fast, so the right use is before a real test: pick the two or three messages worth your test budget, ship them with tracking, and feed the real results back. We are happy to walk through this in more detail and run it against the campaigns you have planned.</p>
+</div></section>
+
+<!-- ================= THE 25 LEADS ================= -->
+<section class="ep-leads" id="leads" aria-labelledby="ld-h"><div class="wrap">
+<div class="viz-head" data-reveal>
+<div><p class="eyebrow">{{c:leads_eyebrow}}</p><h2 class="display" id="ld-h">Tell us which of these are moving, and the page builds their profile.</h2></div>
+<p class="note">{{c:leads_note}}</p>
+</div>
+<div class="ep-ld-grid">
+<div>
+<div class="ep-filter" role="radiogroup" aria-label="Filter the leads" id="ldf"></div>
+<p class="ep-count" id="ld-count" aria-live="polite"></p>
+<div class="ep-cards" id="cards"></div>
+<p class="fine">{{c:leads_fine}}</p>
+</div>
+<aside class="ep-profile panel" id="profile" aria-live="polite" aria-label="Win profile of the selected leads"></aside>
+</div>
+</div></section>
+
+<!-- ================= LEARNED ================= -->
+<section class="viz ep-learn" id="learned" aria-labelledby="ln-h"><div class="wrap">
+<div class="viz-head" data-reveal>
+<div><p class="eyebrow">What we learned</p><h2 class="display" id="ln-h">{{c:learn_h}}</h2></div>
+<p class="note">{{c:learn_note}}</p>
+</div>
+<div class="ep-lgrid" id="lessons"></div>
+</div></section>
+
+<!-- ================= LOOP ================= -->
+<section class="results" id="loop" aria-labelledby="lp-h"><div class="wrap">
+<div class="head" data-reveal><div><p class="eyebrow">What we need to understand</p><h2 class="display" id="lp-h">We can see who agreed to talk. Only your team can see who bought.</h2></div></div>
+<div class="panel gc" data-reveal>
+<div class="panel-head"><div><span class="mono">The closed loop</span><h3>Your outcome on each lead becomes the brief for the next list</h3></div></div>
+<div class="timeline" data-reveal style="--n:{{x:loop_n}}">
+{{h:loop_steps}}
+</div>
+</div>
+<div class="ep-need" data-reveal>
+<div><span class="mono">{{c:need_k}}</span><p class="note">Tick them off as we agree them on the call. Your marks are kept in this browser and nothing is sent.</p></div>
+<ul class="ep-ticks" id="ticks">
+{{h:ticks}}
+</ul>
+</div>
+<div class="ep-back panel" data-reveal>
+<div><span class="mono">Send it back</span><h3>Your marks on this page, as a note</h3><p class="note">The leads you marked, what we agreed, and the order you set below. Copy it and send it to your {{x:brand}} contact. The page sends nothing itself.</p></div>
+<div><pre id="back" tabindex="0" aria-label="Your marks as a note"></pre>
+<div class="acts"><button type="button" class="ep-reset" id="back-copy">Copy the note</button><span id="back-st" role="status" class="fine"></span></div></div>
+</div>
+</div></section>
+
+<!-- ================= RESEARCH ================= -->
+<section class="viz ep-research" id="research" aria-labelledby="rs-h"><div class="wrap">
+<div class="viz-head" data-reveal>
+<div><p class="eyebrow">Win profile research</p><h2 class="display" id="rs-h">A market study built on the leads you convert.</h2></div>
+<p class="note">Once you name the leads that are moving, we research those companies and people in depth and return the profile of the buyer {{x:client}} wins most easily, with the places to find more of them.</p>
+</div>
+<div class="grid-2">
+<div class="panel gc" data-reveal>
+<div class="panel-head"><div><span class="mono">{{c:dims_k}}</span><h3>What the study covers</h3></div><span class="scale-note">{{c:dims_note}}</span></div>
+<div class="ep-dims" id="dims"></div>
+<div class="legend"><span><i></i>{{c:dims_legend}}</span><span><i class="o" style="box-shadow:inset 0 0 0 1.6px var(--purple)"></i>Added by the study</span></div>
+</div>
+<div class="panel gc" data-reveal style="--d:120">
+<div class="panel-head"><div><span class="mono">What comes back</span><h3>Four deliverables</h3></div></div>
+<ol class="ep-deliv">
+<li><b>The ideal customer profile</b>One page on who converts, written from your wins rather than from a template.</li>
+<li><b>A lookalike account list</b>Accounts in our database that match it, by market, with the buying group named.</li>
+<li><b>A channel and content plan</b>The events, communities, publications and creators this audience pays attention to, with what to say in each.</li>
+<li><b>Messages tested before launch</b>Every new angle scored by a simulated panel of the win profile before any budget is spent.</li>
+</ol>
+</div>
+</div>
+<div class="panel gc" data-reveal style="margin-top:clamp(16px,2vw,32px)">
+<div class="panel-head"><div><span class="mono">First pass from public sources, to be validated by the study</span><h3>Where this audience already gathers</h3></div><span class="scale-note">Dates as published by organisers</span></div>
+<p class="ep-bento-how">Drag a tile, or focus its handle and use the arrow keys, to put these in the order you would show up. The study validates the first three first.</p>
+<div class="ep-bento" id="bento" role="list" aria-label="Places this audience gathers, in your order of priority"></div>
+<div class="ep-bento-foot"><p id="bento-out" aria-live="polite"></p><button type="button" class="ep-reset" id="bento-reset">Reset the order</button></div>
+<p class="fine">{{c:bento_sources}}</p>
+</div>
+</div></section>
+
+<!-- ================= TIERS ================= -->
+<section class="ep-tiers" id="tiers" aria-labelledby="tr-h"><div class="wrap">
+<div class="viz-head" data-reveal>
+<div><p class="eyebrow">Three ways forward</p><h2 class="display" id="tr-h">One programme for the year, built in three tiers.</h2></div>
+<p class="note">Each tier includes the one before it. Scope and commercials follow once we agree the tier that fits.</p>
+</div>
+<div class="ep-tier-row" role="radiogroup" aria-label="Compare the three tiers" id="tierrg"></div>
+<div class="ep-tier-detail panel" id="tier-detail" aria-live="polite"></div>
+<div class="ep-why" data-reveal>
+<div><span class="mono">Why paid media belongs in the third tier</span><h3 class="display">Outreach reaches one person at a time. The decision is rarely made by one person.</h3></div>
+<div class="ep-why-grid">
+{{h:why}}
+</div>
+</div>
+</div></section>
+
+<section class="closing"><div class="wrap" data-reveal>
+<blockquote>{{c:closing}}</blockquote>
+</div></section>
+
+{{CTA}}
+</main>
+{{FOOT}}
+<script>
+/*@DATA@*/
+(function(){
+var root=document.documentElement, isStatic=root.classList.contains('static')||new URLSearchParams(location.search).get('static')==='1'||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+var $=function(s,c){return (c||document).querySelector(s)}, $$=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var MK=D.markets, C=D.copy, MKI={}; Object.keys(MK).forEach(function(k,i){MKI[k]=i});
+var pct=function(x,d){return (x*100).toFixed(d==null?1:d)+'%'};
+
+/* roving-focus radiogroup: arrows move and select, one tab stop */
+function radio(rootEl,onPick){
+  var items=$$('[role=radio]',rootEl);
+  function pick(el,focus){items.forEach(function(i){var on=i===el;i.setAttribute('aria-checked',on?'true':'false');i.tabIndex=on?0:-1});if(focus)el.focus();onPick(el.dataset.v,el)}
+  items.forEach(function(i){
+    i.addEventListener('click',function(){pick(i)});
+    i.addEventListener('keydown',function(e){var k=e.key,ix=items.indexOf(i),n=null;
+      if(k==='ArrowRight'||k==='ArrowDown')n=items[(ix+1)%items.length];
+      else if(k==='ArrowLeft'||k==='ArrowUp')n=items[(ix-1+items.length)%items.length];
+      else if(k==='Home')n=items[0]; else if(k==='End')n=items[items.length-1];
+      if(n){e.preventDefault();pick(n,true)}});
+  });
+  var first=items.filter(function(i){return i.getAttribute('aria-checked')==='true'})[0]||items[0];
+  pick(first);
+}
+
+/* marks made on the page (leads, order, ticks, tier) are kept in this browser only; nothing is sent */
+var KEY='pr:'+D.slug, ST={}, isExport=new URLSearchParams(location.search).get('static')==='1';
+try{if(!isExport)ST=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){ST={}}
+var PAIR=(ST.pair&&ST.pair.slice().sort().join()===D.sends.map(function(_,i){return i}).join())?ST.pair.slice():D.sends.map(function(_,i){return i}), repair=function(){};
+function keep(k,v){ST[k]=v;try{if(!isExport)localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){} note()}
+function note(){var el=$('#back');if(!el)return;
+  var ld=$$('.ep-card.sel h3').map(function(h){return h.textContent}), tk=$$('#ticks input').filter(function(i){return i.checked}).map(function(i){return $('b',i.parentNode).textContent}), od=$$('#bento .btile b').slice(0,3).map(function(b,i){return (i+1)+'. '+b.textContent}), tr=$('#tierrg [aria-checked=true]');
+  el.textContent=[D.note_title,$('#cards')?'Leads marked as moving: '+(ld.join('; ')||'none yet'):null,'Agreed on this page: '+(tk.join('; ')||'nothing ticked yet'),$('#bento')?'Where to show up first: '+(ST.order?od.join(', '):'order not changed'):null,tr?'Tier of interest: '+(ST.tier!=null?$('.mono',tr).textContent+', '+$('b',tr).textContent:'not chosen yet'):null,ST.pair&&$('#emrg')?'Copy paired with each send: '+ST.pair.map(function(k,i){return D.sends[i][0]+' = '+MAIL[k].k}).join('; '):null].filter(function(x){return x}).join('\n')}
+
+/* pointer spotlight on cards */
+if(!isStatic&&matchMedia('(hover:hover)').matches){document.addEventListener('pointermove',function(e){var c=e.target.closest&&e.target.closest('.gc');if(!c)return;var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});}
+
+/* ================= universe canvas ================= */
+(function(){
+  var cv=$('#uni'); if(!cv)return; var ctx=cv.getContext('2d'); var U=D.universe, N=U.contacts;
+  var seed=11; function rnd(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296}
+  var pts=[]; for(var i=0;i<N;i++){var a=i*2.399963229728653, r=Math.sqrt((i+.5)/N); pts.push([.5+r*.485*Math.cos(a),.5+r*.485*Math.sin(a),rnd()]);}
+  /* stage membership is a stable random draw per dot */
+  var order=pts.map(function(_,i){return i}).sort(function(a,b){return pts[a][2]-pts[b][2]});
+  var rank=new Array(N); order.forEach(function(ix,k){rank[ix]=k});
+  var leadIx={}; (function(){var nl=D.leads.length,step=Math.floor(N/nl);for(var j=0;j<nl;j++){leadIx[order[(j*step+97)%N]]=D.leads[j].mkt}})();
+  var stage=isStatic?3:0, cur=isStatic?3:0, W=0, raf=null;
+  function size(){var r=cv.getBoundingClientRect(), dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.width*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
+  function draw(){
+    ctx.clearRect(0,0,W,W); var s=cur, base=Math.max(.9,W/520);
+    for(var i=0;i<N;i++){ var p=pts[i], x=p[0]*W, y=p[1]*W, k=rank[i], col='#DCD3EF', rad=base*.95, al=.8;
+      var e1=Math.min(1,Math.max(0,s)), e2=Math.min(1,Math.max(0,s-1));
+      if(k<U.emailed&&e1>0){col='#9A5CEB';rad=base*(.95+.75*e1);al=.8+.2*e1}
+      if(k<U.dialled&&e2>0){col='#DD1286';rad=base*(1.7+.3*e2);al=1}
+      ctx.globalAlpha=al; ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,rad,0,6.2832); ctx.fill(); }
+    var e3=Math.min(1,Math.max(0,s-2)); if(e3>0){ for(var ix in leadIx){ var q=pts[ix], gx=q[0]*W, gy=q[1]*W;
+      ctx.globalAlpha=.22*e3; ctx.fillStyle='#FFB703'; ctx.beginPath(); ctx.arc(gx,gy,base*13*e3,0,6.2832); ctx.fill();
+      ctx.globalAlpha=1; ctx.fillStyle='#FFB703'; ctx.strokeStyle='#1A1230'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.arc(gx,gy,base*(2+3.6*e3),0,6.2832); ctx.fill(); ctx.stroke(); } }
+    ctx.globalAlpha=1;
+  }
+  function tick(){ var d=stage-cur; if(Math.abs(d)<.01){cur=stage;draw();raf=null;return} cur+=d*.12; draw(); raf=requestAnimationFrame(tick) }
+  var beats=$$('#beats li');
+  function setStage(n){ if(n===stage)return; stage=n; beats.forEach(function(b,i){b.classList.toggle('on',i===n);b.classList.toggle('done',i<n)}); if(!raf)raf=requestAnimationFrame(tick) }
+  var sec=$('#universe'), pinned=!isStatic&&matchMedia('(min-width:1000px)').matches;
+  if(pinned){ sec.classList.add('pinned');
+    addEventListener('scroll',function(){ var r=sec.getBoundingClientRect(), total=r.height-innerHeight; var p=Math.min(1,Math.max(0,-r.top/total)); setStage(Math.min(3,Math.floor(p*4))) },{passive:true});
+    beats.forEach(function(b,i){b.addEventListener('click',function(){var r=sec.getBoundingClientRect(), total=r.height-innerHeight; scrollTo({top:scrollY+r.top+total*((i+.5)/4),behavior:'smooth'})})});
+  } else { beats.forEach(function(b){b.classList.add('on')}); stage=cur=3;
+    if(!isStatic){cur=0;stage=3;new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){if(!raf)raf=requestAnimationFrame(tick);o.disconnect()}})},{threshold:.3}).observe(cv)} }
+  addEventListener('resize',size); size();
+})();
+
+/* ================= emails ================= */
+var MAIL=C.mail;
+(function(){
+  if(!$('#emrg'))return;
+  var rg=$('#emrg'), max=Math.max.apply(null,D.sends.map(function(s){return s[2]}));
+  rg.innerHTML=D.sends.map(function(s,i){var rate=s[2]/s[5];
+    return '<button type="button" role="radio" aria-checked="'+(i===0?'true':'false')+'" data-v="'+i+'" class="ep-em-row"><span class="nm"><b>'+s[0]+'</b><small>'+s[1]+'</small></span><span class="trk"><i style="--w:'+(s[2]/max*100).toFixed(1)+'%;--d:'+(i*110)+'"></i></span><span class="val"><b class="tnum">'+s[2]+'</b><small>'+pct(rate)+' of '+s[5]+'</small></span></button>'}).join('');
+  var cur=0, ps=$('#em-pair'), pr=$('#em-pair-reset');
+  ps.innerHTML=MAIL.map(function(m,k){return '<option value="'+k+'">'+esc(m.k)+'</option>'}).join('');
+  /* choosing a copy for this send swaps it with the send that had it, so every copy stays paired with exactly one send */
+  ps.onchange=function(){var k=+ps.value,j=PAIR.indexOf(k);PAIR[j]=PAIR[cur];PAIR[cur]=k;keep('pair',PAIR.slice());show();repair()};
+  pr.onclick=function(){PAIR=D.sends.map(function(_,i){return i});delete ST.pair;keep('reset',0);show();repair()};
+  radio(rg,function(v){cur=+v;show()});
+  function show(){var i=cur,s=D.sends[i],k=PAIR[i],m=MAIL[k];ps.value=k;pr.hidden=PAIR.every(function(x,j){return x===j});
+    $('#em-meta').textContent=s[0]+' · '+m.k+' · excerpt';
+    $('#em-body').innerHTML='<p class="hi">Hi [First Name],</p>'+m.body.map(function(p){return '<p>'+esc(p)+'</p>'}).join('')+(m.list.length?'<ul>'+m.list.map(function(l){return '<li>'+esc(l)+'</li>'}).join('')+'</ul>':'')+'<span class="ep-mail-cta">'+esc(m.cta)+'</span>';
+    var o=D.oracle&&D.oracle.email.vars.filter(function(x){return x.i===k})[0];
+    $('#em-stats').innerHTML='<div><span class="mono">Sent</span><b class="tnum">'+s[5]+'</b></div><div><span class="mono">Clicked</span><b class="tnum">'+s[2]+'</b></div><div><span class="mono">Click rate</span><b class="tnum">'+pct(s[2]/s[5])+'</b></div>'+(o?'<div class="sim"><span class="mono">Simulated panel rank</span><b class="tnum">'+o.rk5+'<small> of '+D.sends.length+'</small></b></div>':'');
+  }
+})();
+
+/* ================= oracle ================= */
+(function(){
+  var O=D.oracle, sc=$('#simulation'); if(!sc)return; if(!O){sc.hidden=true;$$('.ep-toc a[href="#simulation"]').forEach(function(a){a.remove()});return}
+  var E=O.email, vars=E.vars, P=O.personas;
+  $('#or-note').textContent=O.note;
+  var maxv=Math.max.apply(null,vars.map(function(v){return v.high}).concat(D.sends.map(function(s){return s[2]/s[5]})))*1.08;
+  var rg=$('#orrg');
+  rg.innerHTML=vars.map(function(v,ix){
+    return '<button type="button" role="radio" aria-checked="'+(ix===0?'true':'false')+'" data-v="'+ix+'" class="ep-or-row'+(v.i==null?' rw':'')+'"><span class="rk tnum">'+v.rank+'</span><span class="nm"><b>'+esc(v.label)+'</b></span>'+
+      '<span class="trk"><i class="band" style="left:'+(v.low/maxv*100).toFixed(2)+'%;width:'+((v.high-v.low)/maxv*100).toFixed(2)+'%"></i><i class="pt" style="left:'+(v.point/maxv*100).toFixed(2)+'%"></i>'+(v.i!=null?'<i class="act"></i>':'')+'</span>'+
+      '<span class="val"><b class="tnum">'+pct(v.point)+'</b><small class="ac">'+(v.i!=null?'':'not sent')+'</small></span></button>'}).join('');
+  repair=function(){$$('.ep-or-row',rg).forEach(function(b,ix){var v=vars[ix];if(v.i==null)return;var sd=D.sends[PAIR.indexOf(v.i)],a=sd[2]/sd[5];$('.act',b).style.left=(a/maxv*100).toFixed(2)+'%';$('.ac',b).textContent='actual '+pct(a)});
+    $('#or-match').textContent=PAIR.every(function(x,j){return x===j})?O.match:'The pairing of copy to send was changed in the messaging section. The real click rates here follow that pairing. The panel ranking of the copy does not change.'};
+  repair();
+  var box=$('#personas'), voice=$('#voice'), curV=0, curP=null;
+  function shade(l){ /* 0 = muted violet, 0.4 and above = gold: the panel never went higher */ var a=[92,78,128], b=[255,183,3], t=Math.max(0,Math.min(1,l/O.ceil)); return 'rgb('+a.map(function(x,i){return Math.round(x+(b[i]-x)*t)}).join(',')+')' }
+  box.innerHTML=P.map(function(p,i){return '<button type="button" class="ep-p" data-i="'+i+'" aria-pressed="false"><span>'+esc(p.ini)+'</span></button>'}).join('');
+  function showP(i){curP=i;var p=P[i],v=vars[curV],r=v.rx[p.id]||{};$$('.ep-p',box).forEach(function(b,j){b.setAttribute('aria-pressed',j===i?'true':'false')});
+    voice.innerHTML='<div class="who"><b>'+esc(p.name)+'</b><span>'+esc(p.desc)+'</span></div><p class="q">'+(r.q?'"'+esc(r.q)+'"':'No scored reaction came back from this persona for this message.')+'</p><span class="mono">'+(r.l!=null?'Likelihood to click '+r.l.toFixed(2)+' · ':'')+'simulated persona</span>'}
+  function paint(){var v=vars[curV];$('#or-pan-k').textContent='The panel on: '+v.label;$('#or-pan-h').textContent='Average pull '+v.mean.toFixed(2)+' on a scale of 0 to 1';
+    $$('.ep-p',box).forEach(function(b,j){var r=v.rx[P[j].id]||{};var l=r.l==null?0:r.l;b.classList.toggle('none',r.l==null);b.style.setProperty('--c',shade(l));b.style.setProperty('--fg',l>O.ceil*.55?'#1A1230':'#fff');b.setAttribute('aria-label',P[j].name+', '+P[j].desc+': '+(r.l!=null?'likelihood '+r.l.toFixed(2):'no reaction recorded'))});
+    if(curP==null){var best=0,bl=-1;P.forEach(function(p,j){var r=v.rx[p.id];if(r&&r.q&&r.l>bl){bl=r.l;best=j}});showP(best)}else showP(curP)}
+  box.addEventListener('click',function(e){var b=e.target.closest('.ep-p');if(b)showP(+b.dataset.i)});
+  radio(rg,function(v){curV=+v;curP=null;paint()});
+  $('#or-fixes').innerHTML=E.fixes.map(function(f){return '<li><b>'+esc(f[0])+'</b>'+esc(f[1])+'</li>'}).join('');
+  $('#or-asks').innerHTML=E.asks.map(function(f){return '<li><b>'+esc(f[0])+'</b>'+esc(f[1])+'</li>'}).join('');$('#rw-fine').textContent=E.rewrite_note;
+})();
+
+/* ================= leads + win profile ================= */
+(function(){
+  if(!$('#cards'))return;
+  var L=D.leads, ours=L.filter(function(x){return x.named}).map(function(x){return x.id}), sel=(ST.leads||ours).filter(function(i){return L[i-1]}).slice(0,3), filt='all', NB=ours.length?'Show the '+ours.length+' your team named':'';
+  function commit(){renderCards();profile();keep('leads',sel.slice())}
+  var F=D.filters, test={}; F.forEach(function(q){test[q[0]]=function(x){return q[2]==null||((x[q[2]]===q[3])!==!!q[4])}});
+  var f=$('#ldf'); f.innerHTML=F.map(function(x,i){return '<button type="button" role="radio" aria-checked="'+(i===0?'true':'false')+'" data-v="'+x[0]+'">'+x[1]+'<span class="tnum">'+L.filter(test[x[0]]).length+'</span></button>'}).join('');
+  var cards=$('#cards');
+  var CD=D.card; function pill(v,kind){var c=CD.go.indexOf(v)>-1?'go':CD.no.indexOf(v)>-1?'no':CD.na.indexOf(v)>-1?'na':'mid';return '<span class="pl '+c+'"><small>'+kind+'</small>'+esc(v)+'</span>'}
+  cards.innerHTML=L.map(function(x){return '<article class="ep-card gc" data-id="'+x.id+'"><header><span class="mk mk-'+MKI[x.mkt]+'">'+MK[x.mkt]+'</span><button type="button" class="ep-pick" aria-pressed="false" aria-label="Mark '+esc(x.co)+' as moving"><i aria-hidden="true"></i><span>Moving</span></button></header><h3>'+esc(x.co)+'</h3><p class="rl">'+esc(x.role)+' · '+esc(x.ind)+'</p><dl>'+CD.facts.map(function(q){return '<div><dt>'+q[1]+'</dt><dd>'+esc(x[q[0]])+'</dd></div>'}).join('')+'</dl><div class="pls">'+CD.pills.map(function(q){return pill(x[q[0]],q[1])}).join('')+'</div></article>'}).join('')+(C.pending?'<div class="ep-pend" id="pend"><b class="tnum">'+C.pending[0]+'</b><span>'+esc(C.pending[1])+'</span></div>':'');
+  function renderCards(){var n=0;$$('.ep-card',cards).forEach(function(c){var x=L[+c.dataset.id-1],show=test[filt](x),on=sel.indexOf(x.id)>-1;c.hidden=!show;if(show)n++;c.classList.toggle('sel',on);$('.ep-pick',c).setAttribute('aria-pressed',on?'true':'false')});
+    var pe=$('#pend');if(pe)pe.hidden=filt!==F[0][0];$('#ld-count').textContent='Showing '+n+' of '+L.length+'. '+sel.length+' marked as moving.'}
+  var DIM=D.dims, DISP=D.disp||{}, SUF=D.suf||{};
+  function profile(){var S=sel.map(function(id){return L[id-1]}), el=$('#profile');
+    if(!S.length){el.innerHTML='<span class="mono">Win profile</span><h3>Mark one to three leads</h3><p class="note">Choose the leads your team sees progressing. The shared traits appear here as you pick.</p>'+(NB?'<button type="button" class="ep-reset" id="rs">'+NB+'</button>':'');if(NB)$('#rs').onclick=function(){sel=ours.slice();commit()};return}
+    var isOurs=ours.length>0&&sel.length===ours.length&&ours.every(function(i){return sel.indexOf(i)>-1});
+    var need=Math.max(2,Math.ceil(S.length*2/3)), pat=[], nAll=0, mixed=[], unk=[], rows=DIM.map(function(d){var cnt={},rec=0;S.forEach(function(x){var v=x[d[0]];if(v&&CD.na.indexOf(v)<0){cnt[v]=(cnt[v]||0)+1;rec++}});if(S.length>1&&rec<need){unk.push(d[1].toLowerCase());return ''}var top=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a]})[0];if(!top)return '';
+      var all=cnt[top]===S.length&&S.length>1, maj=S.length>1&&cnt[top]>=need; if(maj)pat.push([d[0],top]); if(all)nAll++; var lab=((DISP[d[0]]||{})[top]||top)+(SUF[d[0]]||''); if(S.length>1&&!maj){mixed.push(d[1].toLowerCase());return ''}
+      return '<div class="pr'+(all?' all':maj?' maj':'')+'"><dt>'+d[1]+'</dt><dd>'+esc(lab)+'<small>'+(S.length>1?(all?'all '+S.length:cnt[top]+' of '+S.length):'')+'</small></dd></div>'}).join('');
+    var twins=pat.length?L.filter(function(x){return sel.indexOf(x.id)<0}).map(function(x){return [x,pat.filter(function(s){return x[s[0]]===s[1]}).length]}).filter(function(t){return t[1]>=Math.ceil(pat.length/2)}).sort(function(a,b){return b[1]-a[1]}).slice(0,3):[];
+    el.innerHTML='<span class="mono">'+(isOurs?'Win profile · named by '+esc(D.named.by)+' on '+esc(D.named.on):'Win profile · your selection')+'</span><h3>'+S.map(function(x){return esc(x.co)}).join(', ')+'</h3>'+
+      '<dl class="prs">'+rows+'</dl>'+(mixed.length?'<p class="mx">No pattern on '+mixed.join(', ')+'.</p>':'')+(unk.length?'<p class="mx">Not on record for most of these: '+unk.join(', ')+'.</p>':'')+
+      (S.length>1?'<p class="tw"><b>'+pat.length+'</b> traits form the pattern'+(nAll?', <b>'+nAll+'</b> shared by all '+S.length:'')+'. '+(twins.length?'Closest matches among the other leads: '+twins.map(function(t){return esc(t[0].co)+' ('+t[1]+' of '+pat.length+')'}).join(', ')+'.':(pat.length?'No other lead in the '+L.length+' matches half the pattern, so the lookalikes are in the wider database.':'These leads share little on paper. The study looks for the pattern underneath.'))+'</p>':'<p class="tw">Mark a second lead to see what they share.</p>')+
+      '<div class="acts"><button type="button" class="ep-reset" id="cl">Clear</button>'+(isOurs||!NB?'':'<button type="button" class="ep-reset" id="rs">'+NB+'</button>')+'</div>';
+    $('#cl').onclick=function(){sel=[];commit()}; var rs=$('#rs'); if(rs)rs.onclick=function(){sel=ours.slice();commit()};
+  }
+  cards.addEventListener('click',function(e){var b=e.target.closest('.ep-pick');if(!b)return;var id=+b.closest('.ep-card').dataset.id,ix=sel.indexOf(id);
+    if(ix>-1)sel.splice(ix,1);else{if(sel.length>=3)sel.shift();sel.push(id)} commit()});
+  radio(f,function(v){filt=v;renderCards()}); profile();
+})();
+
+/* ================= lessons ================= */
+(function(){
+  if(!$('#lessons'))return;
+  var A=D.agg, bars=function(rows,max){return '<div class="ep-mb">'+rows.map(function(r,i){return '<div><span>'+r[0]+'</span><i style="--w:'+(r[1]/max*100).toFixed(1)+'%;--d:'+(i*120)+(r[2]?';--c:'+r[2]:'')+'"></i><b class="tnum">'+r[1]+'</b></div>'}).join('')+'</div>'};
+  var S=D.sends;
+  var X=C.lessons.map(function(l){return [l.t,l.ev,bars(l.bars,l.max),l.next]});
+  $('#lessons').innerHTML=X.map(function(x,i){return '<article class="panel gc ep-lesson" data-reveal style="--d:'+(i%3*110)+'"><span class="mono">Lesson '+(i+1)+'</span><h3>'+x[0]+'</h3><p class="ev">'+x[1]+'</p>'+x[2]+'<p class="nx">'+x[3]+'</p></article>'}).join('');
+})();
+
+/* ================= research ================= */
+(function(){
+  if(!$('#dims'))return;
+  var K=C.dims;
+  $('#dims').innerHTML=K.map(function(k){return '<div class="dm'+(k[1]?' kn':'')+'"><b>'+k[0]+'</b><span>'+k[2]+'</span></div>'}).join('');
+  /* drag and swap bento: vanilla port of 21st.dev Draggable Grid Dashboard (id 30238, swapy hover mode). Slots keep their size and rank, tiles swap between them. */
+  var TL=C.tiles;
+  var grid=$('#bento'), out=$('#bento-out'), byId={}, def=TL.map(function(t){return t[0]}), reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  TL.forEach(function(t){byId[t[0]]=t});
+  var start=(ST.order&&ST.order.length===def.length&&ST.order.every(function(i){return byId[i]}))?ST.order:def;
+  grid.innerHTML=start.map(function(id,i){var t=byId[id];return '<div class="bslot" role="listitem"><span class="rk tnum" aria-hidden="true">'+(i+1)+(i===0?' · start here':'')+'</span><article class="btile gc" data-id="'+id+'"><header><button type="button" class="grip"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3h2v2H5zm4 0h2v2H9zM5 7h2v2H5zm4 0h2v2H9zm-4 4h2v2H5zm4 0h2v2H9z" fill="currentColor"/></svg></button><span class="mono">'+t[1]+(t[2]?' · '+t[2]:'')+'</span></header><b>'+esc(t[3])+'</b><span class="pl">'+esc(t[4])+'</span><em>'+t[5]+'</em><a href="'+t[6]+'" target="_blank" rel="noopener">'+t[7]+'</a></article></div>'}).join('');
+  var slots=$$('.bslot',grid);
+  function order(){return slots.map(function(s){return $('.btile',s).dataset.id})}
+  function label(){slots.forEach(function(s,i){var t=$('.btile',s);$('.grip',t).setAttribute('aria-label','Move '+byId[t.dataset.id][3]+'. Position '+(i+1)+' of '+slots.length+'. Arrow keys reorder.')});
+    out.textContent='Your order: '+order().slice(0,3).map(function(id,i){return (i+1)+'. '+byId[id][3]}).join(', ')+'.'}
+  function fly(el,from){if(reduce||!el.animate)return;var to=el.getBoundingClientRect();el.animate([{transform:'translate('+(from.left-to.left)+'px,'+(from.top-to.top)+'px)'},{transform:'none'}],{duration:320,easing:'cubic-bezier(.2,.8,.2,1)'})}
+  function put(tile,slot){var r=tile.getBoundingClientRect();slot.appendChild(tile);fly(tile,r)}
+  function done(){label();keep('order',order())}
+  var drag=null;
+  function move(e){if(!drag||e.pointerId!==drag.pid)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(!drag.on){if(Math.abs(dx)+Math.abs(dy)<6)return;drag.on=true;drag.t.classList.add('drag');grid.classList.add('dragging')}
+    drag.t.style.transform='translate('+dx+'px,'+dy+'px) scale(1.03)';
+    var s=slots.filter(function(s){var r=s.getBoundingClientRect();return e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom})[0];
+    if(s&&s!==drag.home){var x=$$('.btile',s).filter(function(t){return t!==drag.t})[0];if(x)put(x,drag.home);drag.home.classList.remove('home');drag.home=s;s.classList.add('home')}}
+  function end(e){if(!drag||e.pointerId!==drag.pid)return;document.removeEventListener('pointermove',move);document.removeEventListener('pointerup',end);document.removeEventListener('pointercancel',end);
+    var t=drag.t,r=t.getBoundingClientRect();t.style.transform='';t.classList.remove('drag');grid.classList.remove('dragging');drag.home.classList.remove('home');drag.home.appendChild(t);if(drag.on){fly(t,r);done()}drag=null}
+  grid.addEventListener('pointerdown',function(e){var t=e.target.closest('.btile');if(!t||drag||e.button>0||e.target.closest('a'))return;
+    if(e.pointerType!=='mouse'&&!e.target.closest('.grip'))return; /* touch drags from the handle only, so the page still scrolls */
+    if(e.pointerType==='mouse')e.preventDefault();drag={t:t,pid:e.pointerId,x:e.clientX,y:e.clientY,home:t.parentNode,on:false};
+    document.addEventListener('pointermove',move);document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end)});
+  grid.addEventListener('keydown',function(e){var g=e.target.closest('.grip');if(!g)return;var t=g.closest('.btile'),i=slots.indexOf(t.parentNode),j=e.key==='ArrowLeft'||e.key==='ArrowUp'?i-1:e.key==='ArrowRight'||e.key==='ArrowDown'?i+1:e.key==='Home'?0:e.key==='End'?slots.length-1:-9;
+    if(j===-9)return;e.preventDefault();if(j<0||j>=slots.length||j===i)return;var o=$('.btile',slots[j]);put(o,slots[i]);put(t,slots[j]);g.focus();done()});
+  $('#bento-reset').onclick=function(){def.forEach(function(id,i){var t=$('.btile[data-id="'+id+'"]',grid);if(t.parentNode!==slots[i])put(t,slots[i])});label();delete ST.order;keep('reset',0)};
+  label();
+})();
+
+/* ================= tiers ================= */
+(function(){
+  if(!$('#tierrg'))return;
+  var T=C.tiers;
+  var rg=$('#tierrg');
+  rg.innerHTML=T.map(function(t,i){return '<button type="button" role="radio" aria-checked="'+(i===(ST.tier!=null?ST.tier:1)?'true':'false')+'" data-v="'+i+'" class="ep-tier gc"><span class="mono">'+t.n+'</span><b>'+t.t+'</b><span class="s">'+t.s+'</span><span class="lv" aria-hidden="true">'+[0,1,2].map(function(k){return '<i class="'+(k<=i?'on':'')+'"></i>'}).join('')+'</span></button>'}).join('');
+  var tinit=true;
+  radio(rg,function(v){var t=T[+v];if(!tinit)keep('tier',+v);$('#tier-detail').innerHTML='<div><span class="mono">'+t.n+'</span><h3>'+t.t+'</h3><p class="fit">'+t.fit+'</p><div class="mean"><span class="mono">What it would mean</span><p>'+t.mean+'</p></div></div><ul>'+t.inc.map(function(x,i){return '<li class="'+(i===0&&+v>0?'inh':'')+'">'+x+'</li>'}).join('')+'</ul>'});tinit=false;
+})();
+
+/* tick list and the send-back note: kept in this browser, nothing is sent */
+(function(){if(!$('#back'))return;var tk=$$('#ticks input');tk.forEach(function(c,i){c.checked=(ST.ticks||[]).indexOf(i)>-1;c.addEventListener('change',function(){keep('ticks',tk.map(function(x,j){return x.checked?j:-1}).filter(function(j){return j>-1}))})});
+  var st=$('#back-st'), pre=$('#back');
+  function pick(){var r=document.createRange();r.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+  $('#back-copy').onclick=function(){var ok=function(){st.textContent='Copied. Nothing was sent.'}, no=function(){pick();st.textContent='Copy did not work here. The note is selected: press Ctrl or Cmd and C. Nothing was sent.'};
+    try{navigator.clipboard.writeText(pre.textContent).then(ok,no)}catch(e){no()}};
+  note()})();
+})();
+</script>

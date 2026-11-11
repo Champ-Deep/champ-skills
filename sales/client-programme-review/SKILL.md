@@ -1,7 +1,7 @@
 ---
 name: client-programme-review
 description: "Use when a client needs a programme review or report."
-version: 1.0.0
+version: 1.1.0
 author: Champ
 license: MIT
 metadata:
@@ -24,7 +24,9 @@ A programme review is the page an account owner puts in front of a live client: 
 
 What it produces: a reconciled ledger of every client-facing figure, the showcase page (universe, messaging, simulation, lead board with win profile, lessons, asks, tiers), and an internal call script.
 
-Load with this skill: `showcase-page` (the kit, its hard rules, verify and deliver steps), the brand skill, `client-messaging-simulation` (the simulation run), `visual-verify`. This skill adds the reconciliation gate, the section set, the interaction rules and the call script. It does not repeat those skills.
+The skill is self-contained: the page engine, the showcase kit it runs on and a fictional sample client are in `engine/`. These help when they are installed and are not required: `showcase-page` (the full design rules), the brand skill, `visual-verify`. The simulation step needs `client-messaging-simulation` and its tool, which runs on Deep's desk only; without a run the page hides that section.
+
+House rules for every build: never invent a number. Never name an outside delivery partner: it is "our team". No prices unless the owner asks for them. No em or en dashes anywhere, including the PDF. The real logo from the kit, never a drawn one. Look at the built page before calling it done.
 
 This repo is public. Nothing client-specific goes into this skill: no client name, figure, lead list or copy. Client builds live with the client's material (for Deep: the vault).
 
@@ -91,7 +93,7 @@ The discrepancy classes, with the question to ask for each, are in `references/r
 
 - Diff our record against the client's row by row and print the diff: count, set membership, dates, titles. A matching total can hide a different set.
 - The client's record wins on anything the client can see. Correct ours to theirs and tell the owner what changed.
-- Bring every open entry to the owner in one `clarify` batch. Each question states both values and where each came from, with the recommended option first. The options are always some of: use theirs, confirm ours, soften with a caveat, cut, leave open.
+- Bring every open entry to the owner in one batch of questions (the question tool where there is one). Each question states both values and where each came from, with the recommended option first. The options are always some of: use theirs, confirm ours, soften with a caveat, cut, leave open.
 - When the owner is fairly sure but not certain, do not hard-code it. Caveat it on the page and, where it is cheap, let the reader change it there (the copy-to-send selector is the pattern).
 - Reread the story against every confirmed fact. When the client names their best leads, recompute the profile and check each lesson and the closing line against it. A lesson the client's own picks contradict is a discrepancy, the same as a wrong count.
 - A second round is only for facts the first answers raised. Whatever stays unanswered stays `open`.
@@ -99,7 +101,7 @@ The discrepancy classes, with the question to ask for each, are in `references/r
 
 ## 4. Simulation
 
-Run it with `client-messaging-simulation` on the copy as it was actually sent.
+Run it with `client-messaging-simulation` on the copy as it was actually sent. Where that tool is not available (a team Claude account), skip the run: with `SIM_RUN = None` the section hides itself. When the page needs one, ask Deep's desk for a run file, set `SIM_RUN` to its path, and put the hand-written `sim_notes.json` beside `client.py`.
 
 - On the page it is the "<Brand> simulation" (for example "LakeB2B simulation") and its rewrite is the "<Brand> rewrite". The tool name and the model name never appear.
 - Put the real result beside the simulated one for every message that was sent, and say plainly where they disagree.
@@ -108,7 +110,20 @@ Run it with `client-messaging-simulation` on the copy as it was actually sent.
 
 ## 5. Build
 
-Build on the `showcase-page` kit. Sections, what each must prove, and the widget contract for each are in `references/sections.md`.
+The engine builds the page from one file per client. The skill folder may be read-only, so copy the engine out first:
+
+```bash
+cp -R <skill>/engine ./pr && cp -R <skill>/scripts ./scripts   # make.py reads ../scripts/ledger.py
+chmod -R u+w pr scripts                                          # a copy of a read-only folder is read-only
+cp -R pr/sample pr/<client>                                      # every client starts from the sample
+# edit pr/<client>/client.py and pr/<client>/ledger.json
+python3 pr/make.py pr/<client>            # draft, red ribbon while the ledger has an open entry
+python3 pr/make.py pr/<client> --final    # refuses until the ledger is clean
+```
+
+`client.py` is the only file that changes per client: the lead table, sends, calls, the leads the client named, the config for filters and lead cards, and every sentence of copy. Numbers in the copy are computed from the tables, never typed twice. Do not edit `review.tpl.html`, `review.css` or the kit for one client: a change there is a change for every client, and needs the probe rerun on the sample in all three modes. `PR_MODE=review|monthly|weekly` (or the `SECTIONS` list in `client.py`) picks the sections. The output is `pr/<client>/dist/<slug>.html`, one self-contained file, with the data it was built from beside it.
+
+Sections, what each must prove, and the widget contract for each are in `references/sections.md`.
 
 | Section | Review | Monthly | Weekly |
 |---|---|---|---|
@@ -135,9 +150,9 @@ Interaction rules:
 
 ## 6. Verify
 
-1. `python3 make.py --final` exits 0: no open entries, every caveat on the page, every `shown` present.
-2. `python3 probe.py` drives every control in a real browser and asserts the result: the board opens on the named leads or empty, holds three, filters; the bento swaps by keyboard and by mouse and resets; the pairing swap moves the real click rates; marks survive a reload; a fresh visitor sees no claimed choices; zero console errors.
-3. `showcase-page` step 6 and `visual-verify`: 1440 and 390, no overflow, no small targets, the screenshots read.
+1. `python3 pr/make.py pr/<client> --final` exits 0: no open entries, every caveat on the page, every `shown` present.
+2. `python3 pr/probe.py pr/<client>` drives every control in a real browser and asserts the result: the board opens on the named leads or empty, holds three, filters; the bento swaps by keyboard and by mouse and resets; the pairing swap moves the real click rates; marks survive a reload; a fresh visitor sees no claimed choices; zero console errors. It needs Playwright with Chromium. Where there is no browser (most team Claude sessions), say so in the handoff: the engine's controls were proven on the sample and only the data changed, but this build was not re-driven. Never report the probe as run when it was not.
+3. `python3 pr/kit/shoot.py "<slug>"` writes 1440 and 390 screenshots when a browser is available: no overflow, no small targets, and the screenshots read (`visual-verify`).
 4. Search the built page and the PDF text for the tool name, partner names, prices and dashes.
 5. Copy to the delivery folder and assert the SHA-256 matches the audited build.
 
@@ -168,8 +183,12 @@ An internal page for the presenter, never shared and marked so.
 
 ## Files
 
-- `scripts/ledger.py`: the gate. Copy it beside `make.py`.
-- `templates/ledger.sample.json`: a fictional ledger showing each status.
+- `engine/make.py`, `engine/probe.py`, `engine/review.tpl.html`, `engine/review.css`: the page engine. Client-neutral: everything specific comes from `client.py`.
+- `engine/kit/`: the showcase kit the engine builds on, with the LakeB2B logos.
+- `engine/sample/`: a fictional client (`client.py`, `ledger.json`) that builds and passes the probe in all three modes. Its comments are the guide to the file.
+- `scripts/ledger.py`: the gate (`python3 ledger.py --selftest`).
+- `scripts/package.py`: writes the zip for a Claude account, with the fuller description that account needs. Run it after every change to this skill and upload the zip again.
+- `templates/ledger.sample.json`: a fictional ledger showing every status, including `open` and `cut`.
 - `references/reconciliation.md`: discrepancy classes and the question for each.
-- `references/sections.md`: section catalogue, widget contracts, `make.py` wiring.
-- Deep's reference build is private and stays in the Celsus vault: `Other/Skills/client-programme-review/REFERENCE.md` names the folder and the run steps. Start a new client by copying that build into a copy of the showcase kit and replacing the data table, the ledger and the copy. The client-neutral engine with fictional sample data is not in this repo yet, so outside Deep's machine build from `references/sections.md`.
+- `references/sections.md`: section catalogue, widget contracts, the `client.py` contract.
+- A real, private build that the engine reproduces exactly sits in Deep's vault (`Other/Skills/client-programme-review/REFERENCE.md`). It is not needed to use this skill and never enters this repo.
