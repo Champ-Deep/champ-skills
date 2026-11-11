@@ -65,6 +65,15 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - Context safety before any cleanup: the vault is covered by `celsus-backup` (Drive, vault only); Hermes sessions, memory, kanban, cron, scripts and profile DBs are covered by `hermes_state_backup.py` (cron `hermes-context-backup`, daily 15:00, Drive `Hermes Backup`, keep 3, `--verify` lists and checks for leaked credentials). Both use one age key at `~/.config/celsus-backup/key.txt`; if Deep has not stored it off-machine, every Drive backup dies with the laptop. Beacon local history (`beacon endpoint traces reindex`) only reaches back as far as the runtime log, about two days.
 - ~/repos is about 90% regenerable (node_modules/.next/.venv): 39 of 44 GiB measured 2026-11-11. Back them up with `GHB_ROOT=~/repos GHB_KEEP_PUBLIC=1 python3 backup.py` (background, 30+ min) before trimming anything there.
 
+## Clearing local clones (Deep's standing rule: defined ideas live on GitHub and in cloud sessions)
+
+- Classify every folder in ~/repos and ~/Apps&Projects: KEEP when referenced by config, cron, scripts, LaunchAgents or docker mounts, an open kanban card names its path, or a process runs in it; ACTIVE when any non-.git, non-node_modules file changed in 7 days (list it as a move-to-cloud candidate); CLEAR when verify.py says SAFE and neither applies.
+- Re-check at delete time: `git fetch --all`, no unpushed commits, no stash. A dirty tree is clearable only when `GIT_INDEX_FILE=<copy> git add -A && git write-tree` equals the tree of a pushed `backup/<date>/*` snapshot. Remove linked worktrees with `git worktree remove --force` from the common dir; keep a parent whose worktrees remain.
+- After build-folder trimming, clones are small (51 clearable folders were 2.4 GiB). The space is in kanban workspaces, Docker and app data, not source.
+- Done-task workspaces: archive (tar excluding node_modules/.next/.venv | zstd | age) to Drive `Hermes Backup/kanban-workspaces-done-*.tar.zst.age`, verify the listing has every dir, then delete. 133 workspaces went into an 827 MiB archive.
+- OrbStack's data lives in `~/Library/Group Containers/HUAQ24HBR6.dev.orbstack` (49 GiB), invisible to du of the home dir. `docker builder prune -af` plus `image prune -af` freed 36 GB; named volumes holding model weights or build state (ollama data, buildx state) are regenerable; DB volumes are Deep's call.
+- The backup key's off-machine copy is made by Deep running `~/Desktop/Backup Key to 1Password and Drive.command` (his passphrase, Drive `Backup Key/`, plus 1Password once its CLI integration is on). Agents never handle the key or passphrase.
+
 ## RAM, not only disk
 
 - Swap IS disk here: `/System/Volumes/VM` shares the APFS container, so 20 GiB of swapfiles took free space from 50 to 5.6 GiB (2026-11-06). When free space drops with no new files, run `sysctl vm.swapusage` and `ls /System/Volumes/VM` first; killing the RAM holders gave back 10 GiB in 30 seconds.
