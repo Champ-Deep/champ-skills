@@ -12,7 +12,7 @@ metadata:
 
 # Influencer sourcing
 
-Produce a shortlist of creators a brand can actually pay for, each pick justified against the brief. The output is a vault shortlist file plus a decision card if an earlier draft already exists. Full detail on sources and fit signals lives in `references/rate-and-fit-sources.md`; stats gathering lives in `scripts/creator_stats.py`.
+Produce a shortlist of creators a brand can actually pay for, each pick justified against the brief. The output is a vault shortlist file plus a decision card if an earlier draft already exists. Full detail on sources and fit signals lives in `references/rate-and-fit-sources.md`; stats gathering lives in `scripts/creator_stats.py`, which accepts `@handle`, `channel/UC...` and bare channel ids, so a `yt-dlp` search harvest can be fed straight in.
 
 ## When to Use
 
@@ -28,17 +28,20 @@ Produce a shortlist of creators a brand can actually pay for, each pick justifie
 - **Check sponsorship availability, not just interest.** Newsletter and network sponsorships often sell out for the year or sit at four-figure tiers with no public price; verify before listing.
 - **Answer the reasoning question fully.** When Deep asks why a prior pick was chosen, give a per-pick verdict table (why chosen, fits the new brief, keep/drop) before presenting the new list. He is auditing judgment, not asking for a fresh list.
 - **Say what was not checked** (real quotes, audience geography, business emails) in a final line. A shortlist without a limits line reads as more certain than the research is.
+- **Name the platform you harvested.** A YouTube-only screen of B2B creators is a first pass, not a market view: many GTM and demand-gen educators publish on LinkedIn or a newsletter first and their YouTube numbers understate them. When only one platform was searched, say so in the limits line and offer the platform-agnostic screen as the next step rather than letting a thin list read as exhaustive.
 
 ## Procedure
 
 1. **Pin the brief**: who the client is, what they sell, the audience that buys it, budget total, format (video / social / newsletter), and what positioning the client needs. If a budget is given, do the arithmetic early: a pick whose band exceeds the whole budget is reference material, not a recommendation.
-2. **Harvest candidates**: run YouTube searches for the niche's natural queries (e.g. "X review", "best X alternatives", "X tutorial") and group results by channel. Vendor channels (the product's own and its competitors') are not influencers; skip them. Keep individual educators who answer buyer questions.
-3. **Measure each candidate** with `scripts/creator_stats.py <handle> [...]`: subscriber count from the channel page, median views across the last 15 uploads from the YouTube RSS feed, and Fuse price bands when a creator slug exists. Median views beats subscriber count because estimator pricing is subscriber-based and misprices channels whose videos outdraw their subs.
+2. **Harvest candidates**: search the buyer's actual questions, not only the product name ("how to do X without Y", "X tutorial", "best X alternatives"), because the creators who answer them are the ones whose audience is already in market. One command per query, printing channel plus median recent views so weak channels are visible before you spend a call on them:
+   `yt-dlp --socket-timeout 20 --flat-playlist --playlist-end 12 --print '%(channel)s | %(channel_url)s | %(view_count)s | %(title)s' "ytsearch12:<query>"`
+   Group by channel. Vendor channels (the product's own and its competitors') are not influencers; skip them, they are the competition for a paid data or tool offer. Keep individual educators who answer buyer questions.
+3. **Measure each candidate** with `scripts/creator_stats.py <channel> [...]`: subscriber count from the channel page, median views across the last 15 uploads from the YouTube RSS feed, and Fuse price bands when a creator slug exists. Pass whatever the harvest printed: `@handle`, `channel/UC...`, and bare `UC...` are all accepted, so there is no separate step to turn a search result into a handle. Median views beats subscriber count because estimator pricing is subscriber-based and misprices channels whose videos outdraw their subs.
 4. **Verify conflicts**: fetch the creator's X and LinkedIn headline. Record current employer, agency affiliation, and whether they already take affiliate deals in the same category.
 5. **Verify availability**: look for a sponsorship/media page or sold-out notice for newsletters and networks.
 6. **Score against the brief**: keep the top 3-5 with a one-line fit reason each; explicitly drop the prior list's picks that fail the new brief with the reason.
 7. **Recommend a budget split**: combinations whose combined bands fit the stated total, best views per dollar first, plus a single-pick fallback.
-8. **Write the shortlist file** in the effort's folder: verdict table on prior picks, new shortlist table (subscribers, typical views, est. price, fit), recommendation, not-checked line. Then surface any stale unsent draft as a decision card naming the exact draft.
+8. **Write the shortlist file** in the effort's folder: verdict table on prior picks, new shortlist table (subscribers, typical views, est. price, fit), recommendation, not-checked line. Then surface any stale unsent draft as a decision card naming the exact draft. A first-pass screen with no quotes and no conflict checks is written as a **screening list, not a recommendation**, and it carries the stop rule Deep must set before anyone is contacted: the cap, the cost per sales-accepted lead that ends it, and the review date.
 
 ## Pitfalls
 

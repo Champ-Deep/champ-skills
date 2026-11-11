@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 """Creator vetting stats: subscribers, median recent views, Fuse price bands.
 
-Usage: python3 creator_stats.py @handle [@handle ...] [--fuse slug1 slug2 ...]
+Usage: python3 creator_stats.py <channel> [<channel> ...] [--fuse slug1 slug2 ...]
+
+A <channel> is any of:
+  @handle            handle from the channel URL
+  channel/UC...      full channel id (what yt-dlp --flat-playlist prints)
+  UC...              bare channel id
 
 - Subscribers: read from the channel page HTML.
 - Median views: median view count across the channel's YouTube RSS feed
   (last 15 entries), fetched via the channel's externalId.
 - Fuse bands: scraped from https://www.getfused.io/creators/<slug> when a
   slug is supplied (estimates, not quotes).
+
+Harvest candidates first, then measure them:
+  yt-dlp --socket-timeout 20 --flat-playlist --playlist-end 12 \
+    --print '%(channel)s | %(channel_url)s | %(view_count)s | %(title)s' \
+    "ytsearch12:<buyer question>"
 
 Run inside execute_code (needs hermes_tools.terminal) or as plain python3
 with curl available.
@@ -18,9 +28,15 @@ import xml.etree.ElementTree as ET
 UA = ["-A", "Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/120 Safari/537.36",
       "-H", "Accept-Language: en-US", "-b", "CONSENT=YES+1"]
 
+
+def is_channel(a):
+    return a.startswith("@") or a.startswith("channel/") or a.startswith("UC")
+
+
 def curl(url):
     return subprocess.run(["curl", "-sL", "--max-time", "25", *UA, url],
                           capture_output=True, text=True).stdout
+
 
 def channel_stats(handle):
     html = curl(f"https://www.youtube.com/{handle}")
@@ -44,9 +60,10 @@ def channel_stats(handle):
             "median_views": int(statistics.median(views)) if views else None,
             "feed_entries": len(views)}
 
+
 def fuse_bands(slug):
     html = curl(f"https://www.getfused.io/creators/{slug}")
-    txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html))
+    txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", html))
     if "Creator not found" in txt:
         return {"slug": slug, "found": False}
     out = {"slug": slug, "found": True}
@@ -57,19 +74,21 @@ def fuse_bands(slug):
             out[key] = re.sub(r"\s+", " ", m.group(1)).strip(" ,-")
     return out
 
+
 def main():
     args = sys.argv[1:]
     handles, slugs = [], []
     if "--fuse" in args:
         i = args.index("--fuse")
-        handles = [a for a in args[:i] if a.startswith("@")]
+        handles = [a for a in args[:i] if is_channel(a)]
         slugs = args[i+1:]
     else:
-        handles = [a for a in args if a.startswith("@")]
+        handles = [a for a in args if is_channel(a)]
     for h in handles:
         print(json.dumps(channel_stats(h)))
     for s in slugs:
         print(json.dumps(fuse_bands(s)))
+
 
 if __name__ == "__main__":
     main()
