@@ -17,6 +17,9 @@ Load span-brand-guidelines, frontend-design and visual-verify. Main owns content
 
 ## Standing rules
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 Keep the established Dither Grid hero, prominent offer line, four primary fields, visual question rail and halftone footer behind the links. Verified count comparisons use separate adjustable bento boards, not one combined board or a reveal slider.
 
 A stat band after the dark hero is always white with SPAN Green figures, readable muted labels and hairlines. Preserve this inverse scheme across future skins. If source counts are absent, omit the band, do not invent figures to fill it.

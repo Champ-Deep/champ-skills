@@ -26,7 +26,7 @@ Exit code 2 and "Not covered" means the task is not on the list: go to the 21st.
 1. **Brand skill and DESIGN.md.** A library never overrides colour, type, radius or logo from the brand.
 2. **What the project already installed.** Read `package.json` (or run `pick.py --check`). If it uses a listed library, use it. If it uses a rival (react-window instead of Virtuoso), flag it, do not churn the dependency unasked.
 3. **The three layers**, below, in this order: foundation, specialist, design.
-4. **21st.dev search** for anything specific the layers do not cover.
+4. **21st.dev discovery** for the structural regions on every frontend brief, including when a specialist is selected. Inspect previews and record actual ids; discovery need not add a dependency.
 5. **Hand-built**, only when nothing above fits, and say why in the report.
 
 ## The three layers
@@ -51,11 +51,7 @@ Registry also carries a motion-data layer (motion, Cobe, shiki, Satori, torph) a
 
 Use 21st when the task is specific, no single library covers it, or the brief asks for a section pattern (hero, pricing, testimonial, filter bar, stepper).
 
-1. Run the picker first. If a specialist or foundation row answers it, stop there.
-2. `search` the task in plain words (`type: component`, limit 6). Read names and previews, pick one, and record the id.
-3. `get_component` for at most two (free tier allows two code pulls a day). Install with `npx shadcn@latest add https://registry.21st.dev/r/<owner>/<name> --yes --overwrite` when the key is set.
-4. Adapt to the project stack and tokens. Single-file HTML builds port the component to vanilla and credit the id in a comment.
-5. Full quirks list: `frontend-design/references/21st-registry.md`.
+Follow `references/component-adoption.md` before every build or UI polish pass. Inspect the host manifest, run the picker for the actual interaction, then search 21st.dev for structural page regions. Read `get_usage` live: paid component retrieval and hosted AI generation are separate entitlements, so never hardcode a two-pull cap. Inspect previews, retrieve selected source, check licence and dependencies, record ids in the brief, then adapt and mount. Use the command actually returned by the registry without blanket overwrites. Non-React hosts keep their stack and credit a deliberate native or vanilla adaptation. Prove source, mounted use and browser behaviour, not just search or install. Registry quirks live in the `frontend-design` skill at `references/21st-registry.md`.
 
 ## Install and verify (tested 11 Nov 2026)
 

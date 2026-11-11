@@ -155,6 +155,9 @@ strongest real content instead of inventing a gimmick.
 
 ## 6. Build the concept against real data
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 Self-contained single HTML file. No build step, no server, opens from `file://`.
 
 - **Pull real data from the project's built artifact, not mock numbers.** Mock data in

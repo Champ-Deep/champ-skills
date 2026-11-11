@@ -113,6 +113,9 @@ Write what you take from each reference in `README.md` (layout and rhythm only, 
 
 ## Step 6: Build to convert
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 Read `references/conversion.md` and build the page. Stack: whatever the project uses; default Vite + React + Tailwind v4. Every section must pass its rule in `conversion.md`. The short version:
 
 1. **Hero**, the outcome in plain words + for whom, one primary CTA, a second "try it now" action if the product can be tried live (a phone number answered by the product, a demo, a free tool), and a product visual that shows the product working, not a stock image.

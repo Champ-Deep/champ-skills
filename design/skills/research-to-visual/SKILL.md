@@ -143,6 +143,9 @@ Motion rules:
 
 ## Step 7: Build order
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 1. Copy `assets/starter.html`. Set brand tokens and treatment.
 2. Build the verdict first. Put `data-fold` on the headline, each of the three numbers, and the first ask heading. Measure it at 390 before adding anything else.
 3. Add sections one at a time, visual first. Stop at the budget; move the rest into `<details>` or cut it.

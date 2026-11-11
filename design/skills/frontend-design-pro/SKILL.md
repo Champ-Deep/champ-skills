@@ -39,20 +39,20 @@ For a new page, propose one template from `references/templates.md` (Case Study,
 ### 3. Components: library picker, then 21st.dev
 
 <!-- ui-library-picker -->
-First run `ui-library-picker` (`python3 ui-library-picker/scripts/pick.py "<task>"`) for each component the page needs. A foundation or specialist pick (shadcn, Base UI, Sonner, Vaul, cmdk, NumberFlow, Virtuoso) settles that component; do not search further. Design-layer picks (Magic UI, Aceternity, Beautiful UI, RareUI) are the set pieces: one accent per page. Write the chosen libraries and the 21st ids into the brief before building. Then, for anything specific the picker does not cover:
+Load `ui-library-picker` and its `references/component-adoption.md` in every mode, including UI polish. Inspect the host manifest and existing kit, then run `python3 /Users/deep/champ-skills/design/skills/ui-library-picker/scripts/pick.py "<task>" --all`. Reuse compatible foundations and specialists; check Kokonut UI alongside 21st.dev for composition. Search 21st.dev for the structural regions even when a specialist wins. Main records preview-reviewed component ids, source/dependency/licence checks, host file, adaptation and verification in the brief before frontend implements. Preserve the host stack and brand. One expressive accent is a maximum, not a requirement.
 
 List the 3 to 5 components the page depends on most. When the 21st.dev MCP is connected (tools `search`, `get_inspiration`, `get_component`, `search_logo`):
 
 1. `search` each one with the query from `references/components.md` (`type:"component"`, limit 6); use `get_inspiration` when the project has a `.21st/design.json`.
 2. Read names, descriptions and previews; choose.
-3. `get_component` for at most two (free tier allows 2 code pulls a day; `get_usage` shows what is left). Adapt the React and Tailwind code to the project's stack, or port it to vanilla for single-file pages, and credit the id in a comment.
+3. Check `get_usage` live, then retrieve selected source with `get_component`; do not impose a fixed two-pull cap. Deep's paid component retrieval was unlimited on 11 Nov 2026 while hosted AI generation was off. Confirm source is unlocked and found, inspect dependencies and licence, then adapt to the existing stack and tokens. For vanilla HTML explicitly credit the source id and port status. Metadata or an unused install is not adoption.
 4. `search_logo` for brand and partner logos (svgl.app SVGs).
 
 When the MCP is not connected, say so in one line and build from the tested fallbacks in `references/components.md`. Never write an API key into a file, page or the vault; it lives in the connector settings or the `API_KEY_21ST` environment variable.
 
 ### 4. Micro-interactions from MicroKit
 
-Every interactive element gets a hover, focus and touch response from `references/micro-interactions.md` (MicroKit UI patterns, MIT, already ported to vanilla in the showcase kit): arrow slide-through on buttons (keep the label static; a hover label swap is opt-in, not baseline, since it hides the action text at the moment of intent), pointer-following glow on the primary CTA, edge shine on ghost buttons, spotlight rail on step lists, top-rail glow on pills, tilt and sheen on stat cards, animated row reorder on sortable tables. One interaction per element, 200 to 500ms, brand colours, reduced motion respected. In a React project, install originals with `npx shadcn@latest add @microkit/<name>`.
+Every interactive element gets a clear hover, focus and touch response. Reuse its library's accessible baseline first; use `references/micro-interactions.md` only when extra motion improves feedback (MicroKit UI patterns, MIT, already ported to vanilla in the showcase kit): arrow slide-through on buttons (keep the label static; a hover label swap is opt-in, not baseline, since it hides the action text at the moment of intent), pointer-following glow on the primary CTA, edge shine on ghost buttons, spotlight rail on step lists, top-rail glow on pills, tilt and sheen on stat cards, animated row reorder on sortable tables. One interaction per element, 200 to 500ms, brand colours, reduced motion respected. In a React project, install originals with `npx shadcn@latest add @microkit/<name>`.
 
 ### 5. Charts, tables and motion
 

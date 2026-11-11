@@ -120,7 +120,7 @@ Spend boldness in one place and keep the rest quiet. If the source deck has a lo
 
 **Looks to avoid unless Deep asks for them by name:** a brand-gradient hero with a four-up stat grid; the same white rounded card with a corner pill repeated down the page; cream paper with a serif display and a terracotta or teal accent (the old Warm Editorial default); purple-to-blue gradients; emoji markers; 01/02/03 numbering on things that are not a sequence; coloured side-stripe borders on cards.
 
-**Source the components before building (21st.dev, then MicroKit).** List the 3 to 5 components the page depends on (verdict block, status board, the main evidence visual, the ask panel, a table). If the 21st.dev MCP is connected (`search`, `get_inspiration`, `get_component`), search each with the query in `references/components.md`, read the previews, and pull code for at most the two that matter (free tier: 2 code pulls a day). Port to the house kit's vanilla CSS and credit the id in a comment. Take hover and focus details from `references/micro-interactions.md` (MicroKit patterns). If the MCP is not connected, say so in one line and build from the house kit. Never write an API key into a file or page.
+**Source the components before building (21st.dev, then MicroKit).** List the 3 to 5 components the page depends on (verdict block, status board, the main evidence visual, the ask panel, a table). If the 21st.dev MCP is connected (`search`, `get_inspiration`, `get_component`), search each with the query in `references/components.md`, read the previews, and pull code for at most the ones you will use (`get_usage` shows the live quota; no fixed cap). Port to the house kit's vanilla CSS and credit the id in a comment. Take hover and focus details from `references/micro-interactions.md` (MicroKit patterns). If the MCP is not connected, say so in one line and build from the house kit. Never write an API key into a file or page.
 
 **Brand accents.** Champions Group: fill `#F26722`; accent text `#B8420A` on light and `#FF9A62` on dark; ink `#1A1A1A` text on the orange fill (white on `#F26722` is about 3:1 and fails). Lake B2B: `#6D08BE`. Ampliz, SPAN, Ranch: per their brand skills. Semantic colours (red blocked, green on track) are separate from the accent.
 
@@ -169,6 +169,9 @@ Run `no-ai-slop` in Gate mode on every line of copy before building: no binary c
 **Conditional scripts.** When the room's decision has not been made yet, never blend the possible outcomes into one hedged script. Structure it as ask, listen, then exactly one branch: one branch per likely outcome (including each platform or option they might name), a fallback branch for when they commit to none, and a private do-not-say block kept in a separately named internal file. The shareable page states the tradeoffs neutrally; the branches and the do-not-say material live only in the presenter's own file.
 
 ## Phase 5: Build
+
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
 
 One self-contained HTML fragment for the Artifact tool (no doctype, html, head or body tags; `<title>` first, then the fonts `<link>`, then `<style>`). Inline CSS and JS; Google Fonts is the only external request. Icons are inline stroke SVG, never emoji or icon fonts.
 

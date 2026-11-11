@@ -20,7 +20,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `internal-comms` | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to w |
 | `lead-gen-playbook-builder` | Turns a one-line campaign idea into a complete, rep-ready lead-gen playbook: intake, personas, multi-channel cadence, exact pitches per channel, reply-handling flowcharts |
 | `lead-site-growth-loop` | Use when taking a data site from live to leads and revenue. |
-| `meta-ads-low-budget` | Use when planning or reviewing Meta (Facebook and Instagram) paid lead generation on a small budget: offer, opt-in, angle tests, account structure, scaling, and phone fol |
+| `meta-ads-low-budget` | Use when planning or reviewing low-budget Meta lead generation, offers, angle tests, scaling and consented follow-up. |
 | `nostalgia-angle-ads` | Turn a campaign theme into ad concepts by borrowing a world the buyer grew up with and mapping its objects to their data pain, then A/B test two looks per brand (the Lake |
 | `pikvita-push-notifications` | Write and schedule push notifications for Pikvita, the Bangalore independent store delivery app. MANDATORY TRIGGER for: 'push notification', 'notification copy', 'notific |
 | `reddit-reply` | Draft and vet Reddit comments that read as a practitioner rather than a vendor. Use for any Reddit reply, r/Coldemailing daily engagement, or whenever a reply could touch |

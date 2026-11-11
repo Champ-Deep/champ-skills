@@ -76,6 +76,9 @@ The rail, top to bottom: brand line and date; numbered section nav; running figu
 
 ## Phase 4: Build
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 One HTML file, inline CSS and JS, Google Fonts as the only external dependency. Start from the Epicor file's `<style>` block and token system and change only the copy, the data arrays, and the brand tokens:
 
 - Tokens: bg, panel, panel-2, ink, ink-2, ink-3, rule, accent, accent-soft, s-hi, s-mid, s-lo (the sequential stack), track, warn, warn-soft, band, band-ink, band-2. Light values on `:root`, dark values under `prefers-color-scheme: dark` guarded by `:root:not([data-theme="light"])` and again under `:root[data-theme="dark"]`.

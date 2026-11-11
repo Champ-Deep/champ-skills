@@ -8,9 +8,9 @@ Rules that apply to every component: brand colours come from the brand skill and
 
 1. Pick the 3 to 5 components the page depends on most (usually hero, stat cards, the main chart, the table, the CTA).
 2. For each, call the 21st.dev MCP `search` (free) with the query in the table below, `type:"component"`, limit 6. Use `get_inspiration` instead when the project has a `.21st/design.json`.
-3. Read names, descriptions and preview images. Pick at most two to pull with `get_component` (the free tier allows 2 code retrievals a day; check `get_usage` first).
+3. Inspect names, descriptions and actual preview images, then retrieve selected source with `get_component`. Check `get_usage` live rather than imposing a fixed pull limit: paid component access can be unlimited while hosted AI generation remains off. Follow the `ui-library-picker` skill's `references/component-adoption.md` for the selection record, dependency/licence checks and mounted-use proof.
 4. Adapt the pulled React and Tailwind code into the kit's vanilla HTML, CSS and JS, keeping the brand tokens. Credit the source in a CSS comment with the 21st.dev id.
-5. When the MCP is not connected, say so in one line and build from the kit fallback below. Never block on it.
+5. If the MCP is unreachable, record the failure and use a licence-cleared, previously verified local fallback when it fits. If the brief requires unavailable source with no approved fallback, report a capability blocker. Never invent ids or claim a fallback came from the live connector.
 
 Connection: Cowork reads the MCP as a custom connector (`https://21st.dev/api/mcp`, header `x-api-key`). Claude Code reads it from `.mcp.json` (`npx @21st-dev/cli init --client claude --write`, then set `API_KEY_21ST`). Keys live in the environment or the connector settings, never in a skill file, a page, or the vault.
 

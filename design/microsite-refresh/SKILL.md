@@ -59,6 +59,9 @@ Build (reference-string guard and dash guard), then no-ai-slop `slop_lint.py`, t
 
 ## Always-on rules
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 1. Owner rounds time out. If the workshop's owner round gets no answer, take the recommended option, self-author the rest under explicit creative delegation, and record every open decision in `site.json`, `notes.md`, and the gate evidence in `brief.md` so a human can reverse it later.
 2. Carry the `visual-verify` contrast-parser fix (`color(srgb ...)` channels scaled by 255) whenever you run a vendored `audit.py`; without it every translucent colour fails the contrast gate at about 1:1. Treat a wall of identical fails as a broken checker: recompute the value yourself from the live DOM and cite your own number before reporting the gate clean or red.
 3. Verify the deploy by content, not status code: byte-compare the live files against the files the worker actually serves. Fetch with `curl -sSL` plus a browser User-Agent (workers.dev 403s Python's urllib as a bot), and re-fetch once on a mismatch: `cf-cache-status: HIT` right after a deploy can serve the previous build or a stale 404. Worker-served sites may add a thin HTML wrapper the local build does not have; diff before blaming the pipeline.

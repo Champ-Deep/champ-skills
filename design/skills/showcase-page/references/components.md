@@ -8,7 +8,7 @@ Rules that apply to every component: brand colours come from the brand skill and
 
 1. Pick the 3 to 5 components the page depends on most (usually hero, stat cards, the main chart, the table, the CTA).
 2. For each, call the 21st.dev MCP `search` (free) with the query in the table below, `type:"component"`, limit 6. Use `get_inspiration` instead when the project has a `.21st/design.json`.
-3. Read names, descriptions and preview images. Pick at most two to pull with `get_component` (the free tier allows 2 code retrievals a day; check `get_usage` first).
+3. Read names, descriptions and preview images. Pull the ones you will use with `get_component` (check `get_usage` for the live quota; no fixed cap).
 4. Adapt the pulled React and Tailwind code into the kit's vanilla HTML, CSS and JS, keeping the brand tokens. Credit the source in a CSS comment with the 21st.dev id.
 5. When the MCP is not connected, say so in one line and build from the kit fallback below. Never block on it.
 

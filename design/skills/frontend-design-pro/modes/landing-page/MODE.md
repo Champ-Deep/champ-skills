@@ -70,6 +70,9 @@ The fold is the whole page for most visitors. Budget it deliberately.
 
 ## Phase 4: Section architecture
 
+<!-- ui-library-picker -->
+**Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
+
 **The single strongest structural tell of a generated landing page is that every section has the same shape.** Centred heading, centred subhead, then a grid. Six times down the page. Real pages vary their architecture because different arguments want different containers.
 
 Build the middle of the page as a **sequence of claims**, each with the evidence attached, in the order the visitor needs them. A workable spine:

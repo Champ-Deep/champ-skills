@@ -23,6 +23,14 @@ Meta is not the default channel for LakeB2B. Treat it as one capped test run alo
 
 A short guide, "Seven checks before you send a cold list". Content: checks on titles that changed, people who left, role-based inboxes, missing direct dials, consent. Rules: no statistic unless LakeB2B can trace it to its own data and the brand owner signs it; no competitor named; one plain-spoken page. Owner for the writing: Sai or Preeti with the SEO team, owner for the facts: the data lead. Success is judged by sales-accepted leads, not downloads.
 
+### Thanksgiving variant (Deep's proposal, 11 Nov 2026, not approved)
+
+500 free validations on a file the buyer supplies, framed around data enrichment (discussed with Manu and Pallab). It is a third offer to weigh against the 10 names offer and the guide, not a replacement, and it is a different deliverable from enrichment. Gates before any page or ad carries it: what a validation checks, the row cap and who set it, turnaround, who delivers, how the file is received and deleted, and the consent line. Rules: `experiment-controls.md`, section "Report-led offer and 500 validations". Window: a festive frame through 30 Nov only with a real end date.
+
+Deep's second idea for "the report": a messaging simulation of the prospect's own public site and ads, shown as a designed report. That is a per-prospect piece of work, so it suits named accounts and the sales team, not a cold opt-in. Test it on LakeB2B and SPAN themselves first (card t_6a11a330).
+
+Possible caller named by Deep: Pallab Majinder (customer service). Confirm identity and hours before any plan names him.
+
 ### Angle research (where the customers' words are)
 
 - Reddit threads in sales, cold email and B2B marketing communities: bounced lists, stale titles, tools that charge for credits that go to waste.
@@ -42,7 +50,7 @@ Both go to the same offer and page. Held constant: offer, page, form. Varied: an
 
 ### Test design (PROPOSED)
 
-One campaign, broad audience of the chosen roles in the chosen countries, one ad set per angle (two), four ads at most (two looks each), ad-set budgets equal. Budget cap, window, and stop rule: CONFIRM with Deep before launch. Readout: cost per sales-accepted lead from the CRM, with the 60 second call and its notes feeding round two. Do not compare with the LinkedIn test until both read on the same metric.
+Broad audience in the chosen countries (Meta cannot verify job roles, so the copy does the qualifying), ad-set budgets, one ad set per ad, three or four ads at most across the two angles, budgets equal, optimised for leads. Budget cap, window, and stop rule: CONFIRM with Deep before launch. Readout: cost per sales-accepted lead from the CRM, with the 60 second call and its notes feeding round two. Do not compare with the LinkedIn test until both read on the same metric.
 
 ### Phone follow-up
 
@@ -88,7 +96,7 @@ Real photos only (Deep's standing taste; the content creator's footage is the so
 
 ### Test design (PROPOSED)
 
-Broad audience in the cities where offsite and celebration buyers live (CONFIRM list), ad-set budgets equal, one ad set per angle. Leads go to WhatsApp and the CRM with source, angle and look. A Goa-side caller phones in 60 seconds, asks the five questions, and logs the exact phrases. Success is a qualified enquiry and a booked proposal, not clicks. Budget, season window, stop rule: CONFIRM with Deep.
+Broad audience in the cities where offsite and celebration buyers live (CONFIRM list), ad-set budgets equal, one ad set per ad, three or four ads at most across the two angles. Leads go to WhatsApp and the CRM with source, angle and look. A Goa-side caller phones in 60 seconds, asks the five questions, and logs the exact phrases. Success is a qualified enquiry and a booked proposal, not clicks. Budget, season window, stop rule: CONFIRM with Deep.
 
 ### Risks
 
