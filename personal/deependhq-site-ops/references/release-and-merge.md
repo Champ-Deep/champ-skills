@@ -42,6 +42,14 @@ because two of them are irreversible in the wrong sequence.
    approves numbers in a decision card (`needs_input` with the recommended
    defaults first). Fail closed; never pick a default that can spend money.
 
+Remote D1 and secrets ordering (learned on Deepbot v2):
+
+- Additive migrations go BEFORE the merge: the old Worker ignores new tables, and merging to `main` auto-deploys within about 30 seconds, so migrating after the merge puts new code live on missing tables. Take `wrangler d1 time-travel info <db>` first and keep the bookmark.
+- `wrangler secret put` is refused while the latest Worker version is not the deployed one (a PR-branch Workers Builds upload makes them differ). Set new secrets AFTER the merge deploys, not before. A feature gated on a missing secret fails closed, so the gap is safe.
+- `wrangler whoami` may not list a d1 scope yet `d1 migrations apply --remote` works; read the CLI result, not the scope list.
+- Syncing the vault copy: `rsync -a -c` (checksum). Without `-c`, git-archive mtimes make every file look changed (883 vs 87 real).
+- Signed-in live checks need Deep's Clerk session; the browser vault holds no toolkit login. List them as the one open item instead of claiming them.
+
 Pre-merge checklist (release branch):
 
 ```
