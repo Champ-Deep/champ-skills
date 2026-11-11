@@ -1,6 +1,6 @@
 ---
 name: cloudflare-workers-r2-apps
-description: Use when building a Cloudflare Worker with R2, KV, Durable Objects, WebSockets or assets.
+description: "Use when building a Cloudflare Worker with R2, KV, Durable Objects, WebSockets, assets, or outbound email from a Worker."
 ---
 
 # Cloudflare Workers + R2 + KV apps
@@ -46,6 +46,15 @@ the running lane's brief to deploy over it and pin the same URL as its preview.
 Say plainly in the report that an unreviewed build will be publicly visible for
 the window between the lane's deploy and your review, and never report the link
 as finished while it serves the holding page.
+
+## Sending email from a Worker (Cloudflare Email Service)
+
+- Zone, DNS and sending-domain work goes through the connected Cloudflare MCP connector, not an API token: check its status first, and when it is connected use its zone / records / sending tools, which create records server-side. Ask Deep for an API token only when the connector is not connected.
+- Onboard the sending domain before writing code: create the sending subdomain on the zone, then read the DNS status endpoint and require `ready` (it lists the MX, SPF and DKIM records Cloudflare made for you).
+- **Onboarding a sending domain can set a domain-wide DMARC `p=reject`, which governs every sender on that domain, not just this Worker.** Check for other systems sending mail as that domain first, or their mail starts bouncing and nobody will connect it to a Worker deploy.
+- Wire it as `"send_email": [{ "name": "EMAIL" }]` and feature-gate on the binding's presence (`env.EMAIL ? ... : undefined`), so a build without it disables the mail path cleanly instead of half-working. Confirm the binding in the deploy output's binding list for the environment you actually targeted; never assume a top-level binding reached an overlay environment. Types ship with `@cloudflare/workers-types` (`SendEmail.send(message)` or `send(builder)`).
+- Wrap the send in try/catch and log it: mail failure must not fail the request that triggered it (a reset or invite still returns 200).
+- A 200 from the endpoint plus the token row in the database proves the request path ran; only the recipient seeing the message proves delivery, and mail to enterprise addresses can land in junk. Report which of the two you hold.
 
 ## Pitfalls (each one was a real failed run)
 - **A local `wrangler dev` missing a secret the deployment has reports the feature as unconfigured, which reads as a code bug.** After adding any secret, mirror it into `.dev.vars`, then compare the config or health endpoint of the local run against the deployed URL field by field: both must report the same `*_configured` flags before you debug code. Start `wrangler dev` as a tracked background process on a fixed port and stop it by name afterwards (`pkill -f "wrangler dev"` plus a port check), or a stale server keeps answering probes and later tests run against the previous build.

@@ -22,6 +22,13 @@ First use on the Virtusa build (17 to 18 Sep 2026) cost $17.93 for 489 usable co
 
 Write down before any paid call: the account list with domains (search subsidiary and brand domains for global groups: UBS Americas needs ubs.com, IG Wealth needs ig.ca and igmfinancial.com), the persona (levels and functions in, levels and functions out), geography rule, per-account cap, what the deliverable is (client approval file without contact data, internal calling file with it, or both), and the total budget. Use free endpoints to size: companyenrich.companies.search.count is free; GET /catalog/search and GET /catalog/endpoints/{id} are free and give price, latency and success rate. Estimate cost before running: rows expected times price per row, plus verification, plus email finds.
 
+Free sizing loop, run it before quoting any universe number:
+1. Find and inspect the endpoint: `treg catalog search show <name>` (the bare `treg catalog show <name>` form is rejected; the CLI answers with the exact typed form, so run what it suggests). It prints cost, the `treg call ...` invocation, and an example response.
+2. Count with the whole filter object at zero cost: `treg call companyenrich.companies.search.count --method POST --data '{"countries":["IN"],"keywords":["crypto"]}'`. The count endpoint accepts every filter the real search accepts, so tune countries, keywords, industries and employee_ranges here and pay only for the final row pull. Returns `count` (capped at the plan page limit) and `total` (the true match count); quote `total`.
+3. Scan a `companyenrich.companies.search.preview` (free, top 25) BEFORE you request data from a partner or write it into a plan. The preview returns a mixed bag: competitors of the client, media and blogs, tools, and personal-name domains. Exclusions and splits are decided from that sample, not assumed, and a headline count that is half junk must not be quoted to a client as an audience.
+
+When the universe is a partner's to hold (their data team, not ours), the request that goes out specifies per segment: record count, email count, mobile count after DND scrub, consent basis, last refresh date, and a masked sample of 25 to 50 rows, plus a flag for anything that cannot go on RCS or phone. Company counts are not people counts: sizing the company base is free, people rows behind it bill per row, so hold that pull until the partner states what they already hold. Plan with count placeholders and never invent a number.
+
 ## Stage 1: discover names and titles (cheap, no contact data)
 
 Goal: a roster of name, title, LinkedIn URL per account. Do not buy emails or phones here.

@@ -330,6 +330,18 @@ File it under the naming rule in 11c as `DECK RUN SHEET (private)`.
 
 ---
 
+## Teaching the team a new method inside an existing meeting
+
+When Deep's ask is "walk my teams through this at today's meeting", the deliverable is a run he can drive, not an explainer.
+
+1. **Verify the source first, then split it three ways**: confirmed by the primary source, overstated, unknown. An unverified third-party claim shown to a whole marketing team becomes that team's plan.
+2. **Fit the meeting's own intake format.** For the corporate weekly that is the Decision Queue block (DECISION NEEDED, context, affected, recommendation, deadline), so the facilitator triages it like any other item. Do not invent a new agenda section.
+3. **Minute rail plus owners.** Segments that sum to the slot, each with a named owner and a date, ending in a read-back. Every ask has one.
+4. **Lift out the decisions only Deep can make** as options with one recommendation, into a blocked `needs_input` kanban card, and say so in the reply. Decisions parked in chat die there.
+5. **Pair the runbook with something editable on screen**: a tracker the owners fill in during the minute rail, built with `xlsx` (dropdowns on the choice columns, `[CONFIRM]` tags on every unknown) and read back before delivery.
+6. **Check the meeting exists** on the calendar before building against it, and name the missing invite as an ask if it does not.
+7. **Stage nothing irreversible in the room**: logins, verification codes and sends are the owners' to do, so the run reads and assigns, it does not act.
+
 ## Data Retrieval Strategy
 
 For every meeting that needs prep, once the date and the set of meetings are confirmed, pull

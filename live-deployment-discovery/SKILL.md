@@ -319,6 +319,46 @@ options when more than one independent ruling must fit one reply), and what was 
   for a stated window, copy the data across, hold). Never fold "shut it down" into a
   verification report; stopping a service that holds data is his call.
 
+### The data half of a migration is a separate claim
+
+A merged PR, a green suite and a deployed worker prove the *code* moved. They say
+nothing about the *rows*. Split every migration claim into three and report each
+with its own evidence:
+
+1. **code shipped**: merged PR, deployed version.
+2. **rows moved**: counts read out of the live store with a read-only query.
+3. **people can use it**: a session or equivalent real sign-in attributable to a
+   migrated identity.
+
+Command battery, query shapes, the report order, and the write half (carrying
+the old credentials into the new store): `references/auth-migration-audit.md`.
+Five rules that decide whether that audit comes out right:
+
+- **Count rows that prove capability, not rows that record existence.** In an auth
+  store the user table only proves somebody was imported; the credential or
+  provider-account table decides whether a person can sign in. Such a row can be
+  present, verified and active and still have no way to log in, so always report
+  both counts and name their difference as the lockout number.
+- **Tell an imported credential from a freshly minted one by hash shape, never by
+  selecting the hash.** A bcrypt digest (`$2...`, about 60 chars) can only have
+  arrived from an import; the new system's own longer hash means that person
+  signed up after the cutover. Read `length()` and a short `substr()` prefix, put
+  the prefix in the report, and never quote a credential column.
+- **Prove a migration script's absence across every ref.** One branch read proves
+  nothing about the rest: loop `git grep <needle> <ref>` over `git for-each-ref`
+  and pair it with `gh search code --repo <owner>/<repo> "<needle>"`. A script
+  that lives in the plan document and on no ref, against a store full of
+  identities with no credentials, is one finding and not two.
+- **Auth vendors mint ids per environment.** The id stored on a live row can come
+  from the vendor's development instance while the production id sits on a
+  retired placeholder row, so an id that merely *matches the vendor's format* is
+  not an id from the *instance that issued the credentials*. List the vendor's
+  users per instance and reconcile both.
+- **Preserve the identifier the user handed you.** When the email or handle they
+  named does not exist, say so and print the record you actually found.
+  Normalizing it silently to a near-match hides exactly the wrong-person case the
+  query existed to catch.
+
 ## Reporting honestly
 
 State what you found before what you plan. A user asking for a key to be added

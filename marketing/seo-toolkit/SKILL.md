@@ -16,3 +16,5 @@ description: >-
 ## Routing
 
 Decline or loss in the ask means start with `search-intent-audit`, even if the user asks for a fix. A single named page with no decline means `seo-rapid-ranker`. A domain plus seed keywords, or anything about FAQ hubs and PAA, means `paa-seo-builder`. A prospect or pitch ("audit this company's site", "what can we do for them") means `prospect-seo-audit`: crawl every sitemap URL before writing a word, the homepage alone hides duplicate SKU pages, tag-page bloat and templated descriptions. When a mode file says to hand off to another of these skills, read that mode file here. Use Ahrefs data where connected; label anything estimated.
+
+**AI brand claims** (claiming our brands in ChatGPT's Business Hub or any AI answer surface, multi-brand rollout for Champions): `references/ai-brand-claims.md`. Also route any third-party marketing video or thread asking "should we do what this claims" to step 1 of that file: verify against the platform's own policy text first, then split it into confirmed, overstated and unknown.

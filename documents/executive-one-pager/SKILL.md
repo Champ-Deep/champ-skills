@@ -166,6 +166,8 @@ Run `no-ai-slop` in Gate mode on every line of copy before building: no binary c
 
 **Presenter scripts.** Load `vinh-copywriting` for every script block: complexity level 1, speech rhythm, a line break for a natural pause (never the word "pause"), one concrete image per script where the source supports it, and always a bridge to the next slide. Run the Vinh rewrite checklist on every script; scripts sound like a person talking, not bullets read aloud.
 
+**Conditional scripts.** When the room's decision has not been made yet, never blend the possible outcomes into one hedged script. Structure it as ask, listen, then exactly one branch: one branch per likely outcome (including each platform or option they might name), a fallback branch for when they commit to none, and a private do-not-say block kept in a separately named internal file. The shareable page states the tradeoffs neutrally; the branches and the do-not-say material live only in the presenter's own file.
+
 ## Phase 5: Build
 
 One self-contained HTML fragment for the Artifact tool (no doctype, html, head or body tags; `<title>` first, then the fonts `<link>`, then `<style>`). Inline CSS and JS; Google Fonts is the only external request. Icons are inline stroke SVG, never emoji or icon fonts.

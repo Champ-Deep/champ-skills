@@ -19,6 +19,8 @@ Read `references/intake-questions.md`. Extract every answer you can from the con
 
 The intake exists to lock four things: WHO you are chasing (personas), WHAT you are offering (the value and proof), WHY NOW (the trigger that earns a reply), and the CONSTRAINTS (timeline, channels available, compliance, pricing discipline, who has to approve what).
 
+Run the timing gate as part of intake, before any date is promised. Map every candidate seasonal window against the true lead times stacked in front of it: data counts from the partner (days), creative build plus client approval (about a week), compliance setup per channel (DLT template and consent registration, RCS agent verification through an aggregator, up to weeks), and the fact that first leads arrive weeks after launch. Label each window missed, borderline, or on time, and say which channel can realistically make which one. A window that has already passed, and a seasonal hook that the market data contradicts (trading value falling while user counts grow), both go in the brief as honest notes up front rather than being smoothed into an optimistic calendar.
+
 If a real contact dataset exists, profile it before inventing personas. Personas grounded in the actual title and industry distribution of the list beat invented ones every time, and they tell the rep exactly which rows to pull.
 
 ### Phase 2: Personas

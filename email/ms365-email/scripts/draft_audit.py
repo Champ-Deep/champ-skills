@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Read-only audit of every Outlook draft: creates nothing, edits nothing, sends nothing.
+"""Read-only audit + send-readiness triage of every Outlook draft.
+
+Creates nothing, edits nothing, sends nothing.
 
 Known-good invocation (Hermes's own interpreter, not the project one):
 
@@ -8,11 +10,14 @@ Known-good invocation (Hermes's own interpreter, not the project one):
 Drives the inbox profile's stdio MCP mail client. Open that module for the
 current client class name before importing it; the name is not stable.
 
-Prints a JSON report (total drafts, flagged count, one row per flagged draft
-with its flags and extracted [CONFIRM] items) and writes the same JSON to
-out.json when a path is passed. See references/bulk-draft-audit.md.
+Prints a JSON report: total drafts, flagged count, one row per flagged draft
+with its flags and extracted [CONFIRM] items, plus the send-readiness bucket
+counts (needs-confirm / empty-to / stale / ready) and one bucketed row per
+draft. Writes the same JSON to out.json when a path is passed.
+See references/bulk-draft-audit.md sections 2-4.
 """
 import asyncio
+import datetime
 import json
 import re
 import sys
@@ -22,7 +27,7 @@ from inbox_bot import McpMail
 
 SELECT = (
     "id,subject,toRecipients,ccRecipients,body,bodyPreview,"
-    "hasAttachments,categories,lastModifiedDateTime"
+    "hasAttachments,categories,lastModifiedDateTime,receivedDateTime"
 )
 
 # Advisory scan only. For cold outbound drafts the outbound-email
@@ -34,6 +39,9 @@ SPAM_WORDS = [
 ]
 
 DASHES = (chr(0x2014), chr(0x2013))  # em dash, en dash: both banned by house rule
+
+# Heuristic, not policy: report the threshold alongside the counts.
+STALE_DAYS = 6
 
 
 def body_text(msg):
@@ -54,6 +62,16 @@ def confirm_items(text):
         if chunk:
             items.append(chunk)
     return items
+
+
+def age_days(msg):
+    """Days since last touch; None when Graph gave no usable timestamp."""
+    raw = msg.get("lastModifiedDateTime") or msg.get("receivedDateTime") or ""
+    try:
+        when = datetime.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return (datetime.datetime.now(datetime.timezone.utc) - when).days
 
 
 def audit(msg):
@@ -83,6 +101,17 @@ def audit(msg):
     return flags, confirms, to
 
 
+def bucket(flags, age):
+    """First match wins so the counts partition the folder."""
+    if "bot-header" in flags or "confirm-tag" in flags:
+        return "needs-confirm"
+    if "empty-to" in flags:
+        return "empty-to"
+    if age is not None and age >= STALE_DAYS:
+        return "stale"
+    return "ready"
+
+
 async def run(out_path=None):
     mail = McpMail()
     await mail.open()
@@ -96,20 +125,40 @@ async def run(out_path=None):
     finally:
         await mail.close()
     drafts = res.get("value", []) if isinstance(res, dict) else (res or [])
+
     rows = []
+    triage = []
+    counts = {"needs-confirm": 0, "empty-to": 0, "stale": 0, "ready": 0}
     for n, msg in enumerate(drafts):
         flags, confirms, to = audit(msg)
+        age = age_days(msg)
+        name = bucket(flags, age)
+        counts[name] += 1
+        row = {
+            "n": n,
+            "id": msg.get("id"),
+            "subject": msg.get("subject"),
+            "to": to,
+            "age_days": age,
+            "bucket": name,
+            "flags": flags,
+            "modified": msg.get("lastModifiedDateTime"),
+        }
+        triage.append(row)
         if flags:
-            rows.append({
-                "n": n,
-                "id": msg.get("id"),
-                "subject": msg.get("subject"),
-                "to": to,
-                "flags": flags,
-                "confirmations": confirms,
-                "modified": msg.get("lastModifiedDateTime"),
-            })
-    report = {"total_drafts": len(drafts), "flagged": len(rows), "rows": rows}
+            rows.append({**row, "confirmations": confirms})
+
+    # The buckets are a partition: refuse to report a split that does not add up.
+    assert sum(counts.values()) == len(drafts), "triage buckets do not partition the folder"
+
+    report = {
+        "total_drafts": len(drafts),
+        "flagged": len(rows),
+        "stale_threshold_days": STALE_DAYS,
+        "triage_counts": counts,
+        "rows": rows,
+        "triage": triage,
+    }
     print(json.dumps(report, indent=2))
     if out_path:
         with open(out_path, "w") as fh:

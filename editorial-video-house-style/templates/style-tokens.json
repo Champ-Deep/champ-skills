@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "version": "0.5.0",
+  "status": "candidate-refinement",
+  "canvas": {"width":1080,"height":1920,"fps":30},
+  "caption": {
+    "id":"manrope-dialogue-v2-layout", "status":"candidate",
+    "font_family":"Manrope", "font_weight":600,
+    "font_size_px":64, "line_height":1.13, "tracking_px":0,
+    "width_px":820, "left_px":130, "top_px":null,
+    "align_x":"center", "text_align":"center", "anchor":"auto-edge",
+    "requires_source_layout":true,
+    "roles":["dialogue","key-phrase","concept"],
+    "text":"#F5F3ED", "backing":"#131B23", "accent":"#D8ED83",
+    "enter_s":0.16, "travel_px":6,
+    "max_lines":2
+  },
+  "motion": {
+    "id":"weighted-editorial-v1", "status":"candidate",
+    "curves": {
+      "house-enter":"0.20,0,0.18,1",
+      "house-caption":"0,0,0.38,0.9",
+      "house-travel":"0.40,0.14,0.30,1",
+      "house-exit":"0.40,0.14,1,1"
+    },
+    "object_enter_s":0.62,
+    "object_travel_px":100,
+    "label_enter_s":0.40,
+    "label_travel_px":20,
+    "secondary_delay_s":0.0666666667,
+    "node_scale_from":0.96,
+    "transition_s":0.46,
+    "exit_s":0.38,
+    "overshoot_enabled":false
+  },
+  "on_camera_card": {
+    "id":"centered-edge-card-v1", "status":"rule-approved-layout-unresolved",
+    "max_width_px":760, "align_x":"center", "text_align":"center",
+    "anchor":"auto-edge", "resolved_anchor":null,
+    "requires_source_layout":true,
+    "fallback":"delay-omit-or-separate-scene-never-middle"
+  },
+  "layout": {
+    "reference_canvas":[1080,1920],
+    "safe_rect":[120,250,840,1270],
+    "protected_regions_require_breathing_room":true,
+    "verify_animation_midpoints":true,
+    "disallow_overlay_collisions":true
+  },
+  "audio": {
+    "status":"new-source-audition-required",
+    "default_track":null,
+    "do_not_reuse_as_default":["Cipher by Kevin MacLeod", "v5 mix level"],
+    "fixed_music_gain_db":null,
+    "audition_voice_music_relationship":true
+  },
+  "invariants":["preserve meaning", "no word bounce", "no fake outcome claims", "phone-scale readability", "no publication without approval"]
+}

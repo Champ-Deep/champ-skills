@@ -98,6 +98,8 @@ loss, and only reading it tells which.
 
 "The extracted ZIP builds" proves the package compiles, not that it reproduces the artifact you shipped beside it. Build tools that scan a directory (Tailwind `@source`, glob imports) pick up files the packager left out, so the shipped build and the rebuild can differ silently. After rebuilding from the extracted package, diff its output against the shipped artifact (bytes, or the generated class or module list) and either package the missing inputs, rebuild the shipped artifact from the package, or report the delta and why it is inert.
 
+Run the package's own test suite **from the extracted tree**, not from the repo checkout. The mechanism is the same missing-file class one layer down: an untracked fixture, a config file or a seed data file the packager skipped passes in-repo and fails extracted, and that gap is exactly what the bundle is about to hand its next owner. Quote the exit code and the collected test count from the extracted run as their own claim, and never let the in-repo green stand in for it. Package by explicit exclusion (caches, bytecode, worktrees, `.git`) rather than by inclusion list, so a new source file is carried by default.
+
 ## Prove the gate by breaking what it guards
 
 Reintroduce the exact defect, confirm the test fails and names real numbers, revert,
@@ -358,6 +360,10 @@ gating, not a comment), so completing verification cannot satisfy the publish ga
 its own, and confirm the hold still stands immediately before any release step. Name the
 hold in the report's verdict line, not only in a comment, or the green checklist reads
 as sign-off.
+
+## A gate's own label decides whether it gated
+
+Read the gate's configuration line, not just its verdict word: a finding printed as a block beside `WARN-ONLY (in gate-config.json warn_only)` stopped nothing, so "the gate passed" then describes the config rather than the code. Quote the classification back, and when a required audit was skipped because the owner said to proceed, carry the skip into the PR body and the report as an unproven item instead of letting the green checklist stand in for it.
 
 ## Report the shortfall
 

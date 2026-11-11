@@ -185,6 +185,25 @@ The same shape governs who a value is attributed to: a title or role returned
 alongside a name is part of the claim, so label it by what the source actually
 said rather than promoting it to the senior position that was being sought.
 
+**Assert the label at readback, not only at write.** A demo badge set by the
+seed path covers only rows that path wrote: an import, a migration or a test
+inserting a row later ships it unmarked and nothing errors. After the data
+lands, read the rows back through the query a consumer actually runs and assert
+every fixture row carries the flag (`all(...)` over the returned set), then
+report that assertion. "Everything is labelled" must be a measured claim, not a
+claim about the seeding code.
+
+## A score shown as a feature is a derived number under the same gate
+
+A priority, propensity, fit or health score rendered in a product UI is a
+derived figure a reader will act on, so it gets the same treatment as a headline
+count: state on the display what it measures (evidence strength plus freshness,
+say) and what it is not (buying probability, a forecast). A ranking that implies
+a prediction it never computes is read as that prediction, and the correction
+arrives only after a decision was made on it. Where the score blends sources of
+unequal strength, surface the discount on the row itself, so a weak-evidence
+match cannot dress as a strong one.
+
 ## Build the deliverable, then verify its cells against source
 
 Writing the consumer of a number is a verification pass, not just an output

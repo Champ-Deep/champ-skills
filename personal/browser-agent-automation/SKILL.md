@@ -45,6 +45,25 @@ Driving a hosted app with the user's own account, for a demo, a staging walkthro
 5. **Google does not survive a copied profile.** With Hermes `use_real_profile`, GitHub opened signed in but Google opened signed out, though the snapshot held the same Google cookies as the live profile (likely device-bound session credentials). Route Gmail, Calendar and Drive through the `gog` CLI or the connectors. For Google web UI with no API, use a dedicated Chrome user-data-dir the user signs into once and attach with `/browser connect`, because the real-profile snapshot re-syncs its auth files on every fresh session and drops any login made inside it.
 6. **Report the boundary you actually crossed.** Name the screens you drove authenticated and the ones you only saw behind a gate you never crossed.
 
+Two more ways the same boundary gets crossed, both on a vendor's console rather
+than on an app you control:
+
+- **A step-up verification ends the run, it does not start a workaround.** When a
+  console action pops "enter the code we emailed you", stop there: that code
+  belongs to the user's inbox. Trigger the action if triggering is free, then
+  hand over the exact path (app > instance > section > control) and say the mail
+  is from you. Never ask him to paste the code into chat, and do not go and fetch
+  it from his mailbox on your own initiative; either turns a 30-second console
+  click into a credential handoff. If he explicitly tells you to pull the code
+  from his mail, that is his call to make, not a default you infer.
+- **Match the control by exact text and assert the count before clicking.** A
+  vendor settings page puts the benign control and the irreversible one ("delete
+  instance", "set all passwords as compromised") in the same scroll, so a fuzzy
+  selector or a `.first()` on a label match can fire the wrong one. Filter on an
+  exact trimmed-text match, require exactly one hit, and only then click; read
+  the page's own confirmation state back afterwards instead of assuming the
+  click landed.
+
 ## When no browser server is running: drive headless Chrome over CDP directly
 
 The Hermes browser tools need a browser server on port 9377. `~/.hermes/tools/camofox` is only

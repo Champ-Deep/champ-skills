@@ -1,0 +1,17 @@
+{
+  "schema_version":1,
+  "video_id":"",
+  "artifact":"",
+  "source_interval":"",
+  "skill_version":"",
+  "caption_preset":"",
+  "motion_preset":"",
+  "pattern_versions":[],
+  "technical_checks":{},
+  "human_feedback":[],
+  "decisions":{"structure":"unreviewed","captions":"unreviewed","motion":"unreviewed","audio":"unreviewed"},
+  "changes_to_test":[],
+  "promote":[],
+  "reject":[],
+  "next_experiment":""
+}

@@ -42,7 +42,16 @@ types routinely survive after the implementation is stripped, and they read as p
 the application code exists (full-tree search for the feature's package directory), that it
 is *registered* (imported by the composition root, not merely present), and that no orphaned
 unit tests are all that remain. A model plus an orphaned test and zero implementation files
-means the feature is gone.
+means the feature is gone. The same check applies to HTTP services: a handler
+present in the tree but missing from the URL router is unreachable from a client,
+so confirm the route is registered, not just that the code exists.
+
+**Prove the direction you need on a running instance.** Registration checks are
+static; the integration also has to *run*. Config a tool only creates through its
+UI cannot be scripted either way: bring up the edition you would deploy, seed it,
+and drive the exact calls your integration makes in both directions. Anything
+without a reachable write path becomes a named one-time manual setup step in the
+plan, with who does it, not a discovery mid-build.
 
 **Check the vendor's own pages against each other.** The pricing table versus the homepage
 versus the help centre for the same field: feature lists, limits, counts, prices.
@@ -66,6 +75,14 @@ docs never mention is usually licence- or deployment-gated (a Helm chart plus a
 licence token env var, an entitlement flag) rather than unimplemented. Check those
 surfaces before writing that a product cannot self-host or lacks a feature, and
 report the gate instead of the absence.
+
+**Presence in the docs is not presence in the edition you install.**
+Self-hostable products often ship the open-source edition as a separate distribution
+(a GitHub release, a different compose file) with fewer features than the docs
+describe: the default installer may be the vendor's commercial edition with seat
+caps, and time tracking, custom fields, dashboards or SSO may sit behind paid tiers.
+Confirm each feature you are planning around exists in the edition you would
+actually install, by installing it and looking, not by reading the docs.
 
 **Normalize price before you rank anything.** Vendors in one category rarely bill the same
 unit: rate limits, credits, seats, record caps and per-call charges are different

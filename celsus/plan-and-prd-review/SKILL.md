@@ -148,11 +148,16 @@ run-not-read proof standard for claiming a module already exists.
 frequently inverts a standing assumption about what the constraint is, and that
 reordering is worth more than the section itself.
 
+## Reconcile naming systems before mapping anything
+
+When three naming systems describe the same work (the client's phase names, the contract's deliverable codes, the tracker's milestones), map them explicitly at the top of the review and refuse to proceed until each maps to exactly one of the others or is marked unmatched. A review that silently treats a tracker milestone as the client's phase validates the wrong scope and, worse, wires payment to the wrong deliverable. Note which pairs are confirmed by an artifact and which are only assumed, and keep "reported" separate from "verified" in every row: a builder's test count or all-green report is a claim until you rerun it.
+
 ## Plan-versus-reality drift
 
 A plan being executed against goes stale, and a plan patched after the build has
 moved is stale in a second way. After adding sections, also correct:
 
+- the **live tracker, which outranks every local plan.** Issue state is not completion evidence: the comments carry the repo, branch, PR and test counts the state column never shows, so read them and drain the pagination before concluding a board is quiet. A repo that 404s from our account means inaccessible, not absent: say so and keep the workstream open rather than repeating a stale "nothing exists" claim, which sends the next session down the wrong track.
 - the **header status line**, which usually still describes the doc as unbuilt
 - **each phase's own status**, split into what is built, what is verified live,
   and what is outstanding. "Built and tested" and "proven against a real
