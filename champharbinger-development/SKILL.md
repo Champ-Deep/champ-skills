@@ -77,6 +77,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Deploy from a clean detached worktree of `origin/main` with `ENV_FILE=<canonical checkout>/deploy/cloudflare/env.env`; the container rollout wait takes 15 to 25 minutes, so run it in the background.
 - A deploy that aborts before the LIVE line changed nothing: Cloudflare rejects some pre-deploy database calls (D1 error 7403) and the script stops, so prod keeps serving the previous build. Every state you read during that window describes the old code, including the UI and a healthy-looking jobs table. Confirm identity by `/api/version` after the LIVE line, not by absence of damage.
 - Pair each deploy with a re-run of `smoke.sh` and the `/api/version` read in the same background job, so a completion notification carries the evidence instead of a bare exit 0.
+- The staging worker (`champ-harbinger-staging`) is shared: any lane's deploy replaces it, so a `PREVIEW:` comment stops being true the moment another branch ships there. For a preview that must survive until review, deploy under its own name (`CF_WORKER_NAME=champ-harbinger-preview-<branch>` plus the staging `CF_D1_NAME`/`CF_D1_ID`), put the `/api/version` build id in the PREVIEW comment, and re-read `/api/version` right before `kanban_request_review`. Reviewers: compare that build id with the PR head before judging anything on the preview.
+- Screenshots and other evidence go on the card with `kanban_attach`, then `kanban_attachments` to confirm they landed. Paths listed in `kanban_request_review(artifacts=...)` from a profile cache dir are not copied, and that dir is pruned after 24 hours.
 
 ## Proving the review-to-send path end to end
 
