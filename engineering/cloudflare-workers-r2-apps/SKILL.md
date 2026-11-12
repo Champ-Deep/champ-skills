@@ -56,6 +56,12 @@ as finished while it serves the holding page.
 - Wrap the send in try/catch and log it: mail failure must not fail the request that triggered it (a reset or invite still returns 200).
 - A 200 from the endpoint plus the token row in the database proves the request path ran; only the recipient seeing the message proves delivery, and mail to enterprise addresses can land in junk. Report which of the two you hold.
 
+## Before asking Deep for `wrangler login`: check the connector
+
+An unauthenticated local wrangler does not mean no Cloudflare access. `tool_search("cloudflare")` finds the `cloudflare_mcp` connector (EXECUTE, SEARCH, DOCS), already authorised on the `champ-deep` account. Use it first for inventory: accounts, workers.dev subdomain, script names (is the name free), zones, Durable Object namespaces, Workers Builds triggers and build tokens.
+
+Its limits, each tested: the EXECUTE sandbox refuses every outside `fetch` (403 "requests to <host> are not allowed"), so file bytes only reach Cloudflare through the code string you type, which rules out uploading a real bundle. Any secret set through it passes through the chat transcript, so never set a real key that way. A hands-off code deploy without local auth is therefore Workers Builds (a build trigger on a pushed GitHub branch, reusing an existing build token, as the other Champ workers do), with secrets entered by Deep in the dashboard. If secrets must be piped from a box or the Hermes env, local `wrangler login` is still the shorter path: say which and why.
+
 ## Pitfalls (each one was a real failed run)
 - **A local `wrangler dev` missing a secret the deployment has reports the feature as unconfigured, which reads as a code bug.** After adding any secret, mirror it into `.dev.vars`, then compare the config or health endpoint of the local run against the deployed URL field by field: both must report the same `*_configured` flags before you debug code. Start `wrangler dev` as a tracked background process on a fixed port and stop it by name afterwards (`pkill -f "wrangler dev"` plus a port check), or a stale server keeps answering probes and later tests run against the previous build.
 - **R2 `get(key, { range: request.headers })` sets `obj.range` even when no Range header was sent.** Only answer 206 when `request.headers.has('range')`, or every full request comes back partial. Default `offset` to 0 and `length` to `size - offset` (suffix ranges).
