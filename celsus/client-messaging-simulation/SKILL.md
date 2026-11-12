@@ -103,6 +103,16 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
 - **Count scored personas before quoting the panel size.** On DeepSeek Flash with six variants in one prompt only about half of a 24-persona panel returned a usable reaction on two runs in a row. Report "n of N returned a scored reaction", never the audience size alone.
 - **To put real results beside the simulation**, pass the sends as `ads` with `ads_channel: "email_marketing"` (body only when subject lines are not on file for every send, so no variant is advantaged), then show actual click rate against the 80% band per send. The simulation reads copy only, so say that send order and list fatigue are outside it.
 
+- **Never copy the B2C null `mix` into a B2B brief.** For agency founders, marketers or any buyer reading cold email, keep the
+  default traits (`inbox_load` and `decision_role` are what a cold email is judged on) and set `icp.seniority` (for example
+  `["owner", "director"]`) so personas are not `unknown`. An agency panel that nulled them came back with consumer deal attitudes
+  ("discount hunter", "brand loyal") as its only trait segments.
+- **The rank-1 level is often the 3.00x lift ceiling** (`agent_lifts` clips at 3.0). When the winner shows "reacts 3.00x typical
+  copy", its predicted rate is the cap, not a measurement: say so, and judge the lead by panel mean, positive count and band
+  overlap. Re-scoring identical copy in a second panel moved its mean from 0.343 to 0.090, so a within-run gap of that size is a lean.
+- **A rewritten CTA that offers an artifact ("want the full report?") needs that artifact carded** before `final` is handed to
+  staging, and the staging child must get a comment saying so. If the artifact derives from a client's report, sharing it is a
+  Deep decision (needs_input), not a staging step.
 - **`mix` must null out the B2B dimensions for a B2C audience** (`"seniority": null,
   "company_size": null, "decision_role": null, "inbox_load": null`). The ICP builder
   defaults every audience to B2B traits, so a Bengaluru shopper panel otherwise gets
