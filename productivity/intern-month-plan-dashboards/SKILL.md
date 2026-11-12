@@ -157,7 +157,7 @@ Everything between two horizontal rules is paste-ready for Flock; nothing below 
 
 ### Verify before handing over
 
-- Zero em and en dashes: `grep -c $'\u2014\|\u2013'` on the file must return 0.
+- Zero em and en dashes: `python3 -c "import sys;t=open(sys.argv[1]).read();print(t.count('\u2014')+t.count('\u2013'))" FILE` must print 0. Do not use `grep $'\u2014'`: macOS /bin/bash 3.2 does not expand `\u` escapes, so it returns 0 on a file full of dashes.
 - Every wikilink resolves to an existing file (`find Atlas Efforts Calendar -name "<target>.md"`), checked against `_config/link-policy.md` first.
 - Print the weekday of every assigned date and compare against the holiday list in the hub note. Tasks written onto a public holiday are the same failure as a meeting booked on one.
 - If two records disagree about what the person is working on (plan note says one repo, that week's calls say another), name the conflict for Deep in the Deep-only section instead of silently picking one. Two days spent extending the wrong build is cheap; shipping it is not.
