@@ -201,6 +201,7 @@ numbers as **proposals until ruled**, not as decisions taken.
 ## Pitfalls
 - Ground every recommendation in the repo before writing it: cite `file:line` for the mechanism you are changing, and mark each system as already-built / partially-built / not-built so the plan never claims work that does not exist.
 
+- **Check an auto-decomposed card's premise against the source quote before writing.** The decomposer paraphrases the TASKS.md row and can turn "first iteration of their app, for feedback" into "build a feedback app". Read the linked desk note and the original transcript; if the product differs or the brief lives somewhere you cannot read, block with one decision instead of writing a PRD for an invented product.
 - **Do not invent what is missing from a skim.** Read all of it first, then
   name gaps by quoting the section that has the gap.
 - **Do not treat a plan with a clear goal as a finished review.** A strong goal

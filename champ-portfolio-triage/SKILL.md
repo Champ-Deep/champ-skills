@@ -167,6 +167,18 @@ The blocker is credentials and one domain decision, not code.
 - Avatars: LiveKit Agents lists 16 avatar providers (Tavus, LiveAvatar, AvatarTalk, LemonSlice).
 - Booking video: Calendly+Loom is the only shipped precedent (CTA on video end).
 
+## Date a repo by its last default-branch commit, not `pushedAt`
+
+A backup or snapshot sweep pushes to every repo in one evening, so `pushedAt` reads as fresh across the whole org and ranks dead repos beside live ones. Read `commits?per_page=1` for the last commit and `commits?since=` for a 60-day count. That count caps at 100 per page and covers the default branch only, so state both limits next to the number.
+
+## Probe before writing "deployed"
+
+Run the `http` probes in `~/.hermes/scripts/factory_config.json` with their `expect` strings before calling a product live, and read the body, not only the status: a health route can answer 200 while reporting its database disconnected. A probe URL that 404s means either the app is down or it moved and monitoring points at a dead address. Report it as that either-or, not as an outage.
+
+## The status dashboard and its register
+
+The product status dashboard is `Celsus/Artifacts/champ-project-tracker/index.html` (a `DATA` array in the script block). Its rows mirror `Celsus/Efforts/Active/Champ Suite Vision/portfolio.json`, which also holds the verdict per product and the launch plan. No generator script exists, so update both together, and copy the page into `versions/` first. Verdict text lives in each row's `status`, so the search box filters by verdict with no UI change.
+
 ## Pitfalls
 - Compose analyses as real Python inside `execute_code`, calling `terminal` once per command. Do not build a shell `python3 -c '...'` inside an f-string: braces interpolate at the wrong nesting level and literal newlines inside the quoted body break it, so the failure surfaces as a `NameError` or `SyntaxError` in code you never meant to write and reads like the tool itself broke.
 - Correct the status line where it lives (the effort note), not only in chat: "still a draft / runs the old build" becomes false the moment you merge and deploy, and the next session will act on it.

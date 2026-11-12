@@ -10,13 +10,21 @@ Recipe for finding what the team or counterparty already said before drafting, u
 - **A sender hunt needs KQL `search`, not `$filter`.** `contains(from/emailAddress/address,'fragment')` in `$filter` silently degrades to a date-only filter (Graph answers 200 with the whole date window and drops the `from` condition), so unrelated mail comes back and reads as "this sender has written nothing since the cutoff" when the mail exists. Craft the KQL instead: `search: "\"from:rohan.j@lakeb2b.com AND received>=2026-10-22\""` returns exactly that sender's post-cutoff mail. Run it as a cross-check whenever a `$filter` result looks too broad to be true.
 - `select`: `id,subject,from,receivedDateTime,bodyPreview,isRead`. Never request `body` on a list call.
 - `top`: 25. Follow `@odata.nextLink` for more pages; a result set with `result_has_more: true` is truncated, not exhausted.
-- `orderby: receivedDateTime desc` when the newest items are what matters.
+- `orderby: receivedDateTime desc` when the newest items are what matter.
 
 ## Reading the threads
 
 - `get_mail_message` with `select: subject,body` for the two or three threads that are actually live. Fetching bodies for every search hit burns context on threads that are closed.
 - Ticket metadata lives in the subject: `[Request ID :##RE-xxxxx##]` and `Ticket Created [Request ID: #xxxxx]`. Carry the ID into the draft so the team can act on it.
 - An acknowledgement-only reply (`ticket created`, no work reported) means still open. A reply that reports the change means closed; drop it from the draft.
+- **Deep's own earlier reply on the thread outranks every other source for the position the new draft takes.** Read it before choosing a rate, a basis or an eligibility verdict, because he may have already ruled and the new mail would otherwise contradict him in writing.
+
+## Hunting a person or a name
+
+- **Graph free-text search is fuzzy, so a result count is not a match.** `$search` for an unusual spelling returns loosely matched messages that contain neither the string nor anything like it. Open the hits and assert the literal spelling occurs in the subject or body before calling it a hit; when it does not, report `no such mail found` and name the folders swept. Never cite a non-zero count as evidence that a person exists.
+- Sweep spellings, not one string: the stem and its near forms (`Hershey` / `Hershel` / `Hershi`, `Judee` / `Judy` / `Judi`), each against subject, body and sender/recipient, over Inbox, `sentitems` and `drafts`. Report an empty Archive as empty rather than as unchecked.
+- Name the surfaces not checked alongside the result. Absence in one mailbox is not absence overall when the aliases (`sreedeep.s@`, `deep@championsmail.com`) and chat channels are separate stores.
+- A name that survives only in a call transcript or an auto-ingested task row is unverified until a mail or a vault People note corroborates it. Until then the draft carries no such name, only a `[CONFIRM: who]` tag on the decision card.
 
 ## Handoff
 
