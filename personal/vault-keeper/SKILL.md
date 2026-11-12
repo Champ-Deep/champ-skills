@@ -138,7 +138,7 @@ For every file in the vault root that is NOT one of the 4 protected files
 - "Champions_Ranch", "Champions_Club", "Champions_Accelerator", "Prithvi" -> `Atlas/Context Docs/Champions/`
 - "Champions_Group", "CG_Branded", "KOGA", "Sector_Teaser" -> `Atlas/Context Docs/Champions Group/`
 - "Lake_B2B", "LakeB2B", "b2b-pulse" -> `Atlas/Context Docs/Lake B2B/`
-- "SPAN", "Subhakar", "SIG", "Phoenix" -> `Atlas/Context Docs/SPAN Global Services/`
+- "SPAN", "the group chairman", "SIG", "Phoenix" -> `Atlas/Context Docs/SPAN Global Services/`
 - "[[Ampliz]]", "ampliz", "healthtech" -> `Atlas/Context Docs/Ampliz/`
 - "[[VertexGrid]]" -> `Atlas/Clients/VertexGrid/`
 - "Dhruv", "Chatterjee" -> `Atlas/Clients/Dhruv Chatterjee/`
@@ -432,7 +432,7 @@ context summary is ready, and the Decide deck depth is on the record.
 ## Conventions
 
 ### File Naming
-- Atlas notes: `{Display Name}.md` (e.g., `Gary.md`, `Lake B2B.md`)
+- Atlas notes: `{Display Name}.md` (e.g., `the sales lead.md`, `Lake B2B.md`)
 - Daily notes: `Calendar/Daily Notes/YYYY/MM/YYYY-MM-DD.md` (nested, never flat)
 - Meetings: `{Date} - {Topic}.md`
 - Efforts: `{Project Name}.md`

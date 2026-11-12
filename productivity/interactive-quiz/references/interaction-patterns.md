@@ -1064,7 +1064,7 @@ function redrawAllLines() {
 }
 ```
 
-Store connections as pairs: `state.connections = [['champiq','Gary'], ['[[Gary]]','span']]`.
+Store connections as pairs: `state.connections = [['champiq','the sales lead'], ['[[the sales lead]]','span']]`.
 Use `getBoundingClientRect()` relative to the canvas container for SVG line coordinates.
 Redraw all lines on every node reposition.
 

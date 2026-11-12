@@ -25,4 +25,4 @@ The runner prints a markdown table (field accuracy, all-fields-per-card, p50/p95
 - Time the call inside the semaphore, not around it, or queue wait inflates latency.
 - Real photographed cards never go into `bench/cards/` in git (public repo). `bench/cards/r*` is gitignored; add them locally with a matching `.json`.
 - Result 2026-10-29 (39 images): haiku-5.5 1.00 fields, gemini-3.5-flash-lite (OR) 1.00/0.97 per card, gpt-6-luna 0.99, tesseract+regex 0.66. Haiku real latency 2.7 to 3.8s, about $0.0002 per card.
-- `source ~/.hermes/.env` leaks a malformed line as a shell error; read a single key with a python regex instead.
+- Sourcing the local env file outside the repo leaks a malformed line as a shell error; read a single key with a python regex instead.

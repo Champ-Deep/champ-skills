@@ -51,7 +51,7 @@ Available Window: [start_time] → [end_time]
 Total Hours: X.X
 
 Fixed Blocks (non-negotiable):
-├── 4:00 PM, Call with Gary (30min)
+├── 4:00 PM, Call with the sales lead (30min)
 ├── 5:30 PM, Team standup (15min)
 └── 7:00 PM, Dinner break (30min)
 
@@ -119,9 +119,9 @@ When the plan is being injected into the daily note's `🎯 Day at a Glance` sec
 
 | Time | Block | Task | Effort | Status |
 |------|-------|------|--------|--------|
-| 3:00-3:15 | ⚡ Quick Win | Reply to [[Gary]] re: pipeline update | [[ChampIQ Experiment]] | ⬜ |
+| 3:00-3:15 | ⚡ Quick Win | Reply to [[the sales lead]] re: pipeline update | [[ChampIQ Experiment]] | ⬜ |
 | 3:15-4:00 | 🧠 Deep Work | Build ChampConnect webhook integration | [[ChampIQ Product Build]] | ⬜ |
-| 4:00-4:30 | 📞 Meeting | Call with [[Gary]], weekly pipeline review | [[ChampIQ Experiment]] | ⬜ |
+| 4:00-4:30 | 📞 Meeting | Call with [[the sales lead]], weekly pipeline review | [[ChampIQ Experiment]] | ⬜ |
 | 4:30-4:40 | 📝 Buffer | Meeting notes + action items |, | ⬜ |
 | 4:40-5:25 | 🧠 Deep Work | Draft email sequences for [[Lake B2B]] campaign | [[Email Outreach Engine MVP]] | ⬜ |
 | 5:25-5:30 | ☕ Break |, |, |, |
@@ -133,11 +133,11 @@ When the plan is being injected into the daily note's `🎯 Day at a Glance` sec
 
 ### Today's Top 3
 1. **ChampConnect webhook**, [[ChampIQ Product Build]] needs this for WhatsApp integration
-2. **Lake B2B email sequences**, [[Gary]] needs these for Monday's campaign launch
+2. **Lake B2B email sequences**, [[the sales lead]] needs these for Monday's campaign launch
 3. **Corporate pivot doc**, Decision needed by end of week
 
 ### Parked (if time allows)
-- Review [[Preeti]]'s SEO audit findings
+- Review [[the SEO lead]]'s SEO audit findings
 - Update [[Champions Club]] membership page copy
 ```
 
@@ -158,7 +158,7 @@ The Day Planner understands the Celsus vault structure and uses it:
 - **Active Efforts:** Reads `Efforts/Active/` for project context. Cross-reference with TASKS.md
   so a task tagged `[e:ChampGraph Build]` maps to the right effort description and status.
 
-- **People:** Links people to their efforts so the user sees "call [[Gary]]" mapped to "[[ChampIQ Experiment]]"
+- **People:** Links people to their efforts so the user sees "call [[the sales lead]]" mapped to "[[ChampIQ Experiment]]"
 
 - **Products:** Maps tasks to products when relevant
 
@@ -172,7 +172,7 @@ The Day Planner understands the Celsus vault structure and uses it:
 - [ ] Another task [e:EffortName] [u:nice]
 
 ## Waiting On
-- [ ] Blocked task, waiting on Gary since April 15 [e:ChampIQ Experiment]
+- [ ] Blocked task, waiting on the sales lead since April 15 [e:ChampIQ Experiment]
 
 ## Someday
 - [ ] Low-priority idea [u:skip]

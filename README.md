@@ -38,7 +38,7 @@ champ-skills/
 
 ## Plugins
 
-Two plugins are built from this repo through the private marketplace `Champ-Deep/champ-plugins`:
+Two plugins are built from this repo through a private plugin marketplace you keep outside this tree:
 
 - `champ-skills`: every folder except `science/` and `personal/`. Installed by default for the team.
 - `champ-science`: `science/` and `personal/`.

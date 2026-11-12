@@ -12,7 +12,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `app-store-screenshots` | Design & Creative | Use when building App Store or Google Play marketing screenshots. |
 | `awwwards-inspiration` | Design & Creative | Use when a site build needs real award-winning design references. |
 | `brag-slim` | Design & Creative | Use when asked for a ~20s launch video of a project or site. |
-| `campaign-visualization` | Design & Creative | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like the Virtusa and Epi |
+| `campaign-visualization` | Design & Creative | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like a past client campaign |
 | `canvas-design` | Design & Creative | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or  |
 | `deck-doctor` | Design & Creative | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `dembrandt-ux` | Design & Creative | Use when reviewing or building UI, or extracting a site's design system. |
@@ -49,7 +49,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `span-brand-guidelines` | Brand Guidelines | Brand guidelines and design system for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including SPAN web pages |
 | `champions-ranch-docs` | Branded Documents | Create polished, on-brand Champions Ranch documents as print-ready PDFs in the Ranch green-and-gold editorial style, with the Champions Ranch visual identity and voice ba |
 | `lakeb2b-docs` | Branded Documents | Create polished, on-brand LakeB2B documents as print-ready PDFs in the LakeB2B purple-and-gradient enterprise style, with the LakeB2B visual identity and "B2B growth stac |
-| `anusha-hissaria-style` | Marketing & Content | Custom writing style: Anusha Hissaria. Apply only when the user explicitly requests this skill by its exact name 'anusha-hissaria-style'. |
+| `anusha-hissaria-style` | Marketing & Content | Custom writing style for a named writer. Apply only when the user explicitly requests this skill by its exact name 'anusha-hissaria-style'. |
 | `asset-title` | Marketing & Content | Generate high-converting, ICP-matched titles for any marketing or sales asset (case study, blog post, whitepaper, one-pager, report, deck, webinar, ebook). MANDATORY TRIG |
 | `b2b-blog-writer` | Marketing & Content | Full-pipeline B2B blog writing that turns trending topics into authoritative thought-leadership posts for any entity, then optionally enhances the post into a visual cont |
 | `b2b-thought-leader-pulse` | Marketing & Content | Tue/Thu Span Global Services content intelligence pulse. Scans 7 sectors, applies the Thought Leadership Research Playbook to produce 5 Research Briefs with non-commodity |
@@ -132,7 +132,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `human-feedback-learning-loop` | Engineering & Dev | Use when a system learns from human corrections. |
 | `improve-codebase-architecture` | Engineering & Dev | Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, |
 | `interactive-data-app-verification` | Engineering & Dev | Verify interactive HTML data apps by measuring the DOM. |
-| `jev-typesafe-integration` | Engineering & Dev | Use when working with Jev or TypeSafe in ChampSet. |
+| `jev-typesafe-integration` | Engineering & Dev | Use when working with Jev or TypeSafe in the host app. |
 | `knowledge-search-agent` | Engineering & Dev | Use when building a Q&A agent over Deep's notes. |
 | `knowledge-tier-boundaries` | Engineering & Dev | Use when deciding what may sync between Deep's knowledge stores. |
 | `laya-local-decisions` | Engineering & Dev | Use when routing or scoring text with a local model. |
@@ -244,7 +244,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `app-store-screenshots` | Use when building App Store or Google Play marketing screenshots. |
 | `awwwards-inspiration` | Use when a site build needs real award-winning design references. |
 | `brag-slim` | Use when asked for a ~20s launch video of a project or site. |
-| `campaign-visualization` | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like the Virtusa and Epi |
+| `campaign-visualization` | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like a past client campaign |
 | `canvas-design` | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or  |
 | `deck-doctor` | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `dembrandt-ux` | Use when reviewing or building UI, or extracting a site's design system. |
@@ -302,7 +302,7 @@ Blog, campaign, SEO, copywriting, social, thought leadership.
 
 | Skill | What it does |
 |---|---|
-| `anusha-hissaria-style` | Custom writing style: Anusha Hissaria. Apply only when the user explicitly requests this skill by its exact name 'anusha-hissaria-style'. |
+| `anusha-hissaria-style` | Custom writing style for a named writer. Apply only when the user explicitly requests this skill by its exact name 'anusha-hissaria-style'. |
 | `asset-title` | Generate high-converting, ICP-matched titles for any marketing or sales asset (case study, blog post, whitepaper, one-pager, report, deck, webinar, ebook). MANDATORY TRIG |
 | `b2b-blog-writer` | Full-pipeline B2B blog writing that turns trending topics into authoritative thought-leadership posts for any entity, then optionally enhances the post into a visual cont |
 | `b2b-thought-leader-pulse` | Tue/Thu Span Global Services content intelligence pulse. Scans 7 sectors, applies the Thought Leadership Research Playbook to produce 5 Research Briefs with non-commodity |
@@ -406,7 +406,7 @@ MCP, testing, frontend build, auth, scraping, codebase tools.
 | `human-feedback-learning-loop` | Use when a system learns from human corrections. |
 | `improve-codebase-architecture` | Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, |
 | `interactive-data-app-verification` | Verify interactive HTML data apps by measuring the DOM. |
-| `jev-typesafe-integration` | Use when working with Jev or TypeSafe in ChampSet. |
+| `jev-typesafe-integration` | Use when working with Jev or TypeSafe in the host app. |
 | `knowledge-search-agent` | Use when building a Q&A agent over Deep's notes. |
 | `knowledge-tier-boundaries` | Use when deciding what may sync between Deep's knowledge stores. |
 | `laya-local-decisions` | Use when routing or scoring text with a local model. |

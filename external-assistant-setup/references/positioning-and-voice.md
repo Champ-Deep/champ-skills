@@ -21,8 +21,8 @@ He builds in public: deependhq.com carries a daily journey log running since May
 | `github.com/Champ-Deep/champ-skills` | 200+ agent skills, the giveaway library |
 | `deependhq.com` | journey log, essays, toolkit |
 | `github.com/Champ-Deep` | his GitHub |
-| `linkedin.com/in/sreedeep-surapaneni` | LinkedIn |
-| `sreedeep-sura.bsky.social` | Bluesky |
+| `linkedin.com/in/<your-handle>` | LinkedIn |
+| `<your-handle>.bsky.social` | Bluesky |
 
 Rule to put in every pack: open the file first. An assistant may only link or describe a file it has actually opened. Never promise a file it has not read.
 

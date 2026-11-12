@@ -23,7 +23,7 @@ Not for: assessing whether the repo is worth reviving (`champ-portfolio-triage`)
 or judging what a built Settings screen looks like once a signed build can run
 (`visual-verify`).
 
-Repo `/Users/deep/repos/ChampVox`, Deep's macOS dictation, text-to-speech and AI-command
+Repo `~/repos/ChampVox`, Deep's macOS dictation, text-to-speech and AI-command
 app. SwiftPM only, no Xcode project: everything builds, tests and probes from the
 terminal.
 

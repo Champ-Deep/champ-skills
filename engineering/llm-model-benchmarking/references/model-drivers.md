@@ -8,9 +8,9 @@
 
 ```bash
 #!/bin/bash
-set -a; source ~/.hermes/.env 2>/dev/null; set +a
+# Load the model gateway key from the local env file outside the repo. Do not print it.
 export ANTHROPIC_BASE_URL="https://openrouter.ai/api"
-export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+export ANTHROPIC_AUTH_TOKEN="$MODEL_GATEWAY_KEY"
 export ANTHROPIC_API_KEY=""
 export ANTHROPIC_DEFAULT_SONNET_MODEL="<provider/model-id>"
 export CLAUDE_CODE_MAX_CONTEXT_TOKENS="<model context window>"
@@ -29,13 +29,13 @@ exec claude -p "$1" --model sonnet --output-format text \
 
 - Claude Code validates the model name against its catalog before any request goes out. Pass `--model sonnet` (a name the catalog accepts) and let `ANTHROPIC_DEFAULT_SONNET_MODEL` decide what `sonnet` resolves to on the wire. Passing an unknown id directly to `--model` dies at the catalog check.
 - Do not retry the `modelPicker` route in a `--settings` JSON to smuggle an unknown id past the catalog: the catalog check runs before any settings override, so that path cannot work. Keep the settings file only for TUI labelling, and keep it beside the wrapper rather than in a pruned scratch directory.
-- Keys come from `~/.hermes/.env` at runtime and are never stored in the wrapper or printed.
+- Keys come from the local env file outside the repo at runtime and are never stored in the wrapper or printed.
 - `CLAUDE_CODE_MAX_CONTEXT_TOKENS` must match the model's real window, or long-context tasks are truncated by a default.
 - `--permission-mode acceptEdits` plus `--dangerously-skip-permissions` is required because the harness is non-interactive: the model must edit fixtures and run tests with nobody to approve.
 - Price comes from the provider's list price per 1M tokens, entered in `models.json`; state the units in every cost report.
 - Record repeats in the results: a candidate run three times and a reference run once carry different weight, and a report that shows means without run counts invites a comparison the data cannot support.
-- Read the key from `~/.hermes/.env` at spawn time, not from the shell that
-  started the harness: a background shell carries a stale `OPENROUTER_API_KEY`
+- Read the key from the local env file outside the repo at spawn time, not from the shell that
+  started the harness: a background shell can carry a stale key
   while the foreground carries none, and the split makes the same wrapper look
   intermittently broken.
 

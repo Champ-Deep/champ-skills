@@ -2,7 +2,7 @@
 
 ## One owner, small reusable parts
 
-This skill owns Deep's talking-face editing workflow. Use the existing FFmpeg/HyperFrames/GSAP tools rather than building another editor, plugin platform or database. Keep source media and feedback ledgers in a private project folder, not in the shared skill repository. The current local library root is `/Users/deep/Movies/editorial-house-style/library`; create a project-local equivalent on another machine.
+This skill owns Deep's talking-face editing workflow. Use the existing FFmpeg/HyperFrames/GSAP tools rather than building another editor, plugin platform or database. Keep source media and feedback ledgers in a private project folder, not in the shared skill repository. The current local library root is `~/Movies/editorial-house-style/library`; create a project-local equivalent on another machine.
 
 Start the pattern catalog from proven work, not an aspirational inventory. The event proof supplies three design recipes: contrast/gap, progressive process, return-to-speaker. They have evidence for narrative usefulness in that proof. Its old captions and motion polish are not approved merely because the story was praised. A whole proof is a seed composition, not three independently implemented renderers.
 

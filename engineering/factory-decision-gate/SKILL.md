@@ -10,7 +10,7 @@ Deep is not the bottleneck by choice: agents do everything reversible themselves
 ## Before any autonomous action
 
 ```bash
-/Users/deep/laya-local/.venv/bin/python /Users/deep/laya-local/decider/decider.py act <action>
+~/laya-local/.venv/bin/python ~/laya-local/decider/decider.py act <action>
 ```
 
 `decide` means go. `ask_deep` means stop, stage the action, and put it in the next digest or Telegram as ONE question with a recommended answer. Never route around an `ask_deep`.
@@ -48,7 +48,7 @@ Measure before tuning the gate: on 5 Nov 2026, 306 of 487 blocked cards had no b
 
 ## The decision model's place
 
-Clef-flash (Cloudflare, Apache 2.0, 9B; installed under /Users/deep/laya-local, weights in ~/.cache/huggingface, runs offline) replaced Laya on 2026-10-18 (15 of 18 vs 7 of 18 on the Celsus suites). It is a classifier, not a chat model, so it cannot be a Hermes provider, worker or computer-use driver. It is about 7 s per call on this Mac, so it is a gate, not a per-click loop. It runs in shadow only (`ask --shadow`) and never changes a verdict until 300 Deep-adjudicated labels (60+ per class) show it beating the rules on date-held-out rows.
+Clef-flash (Cloudflare, Apache 2.0, 9B; installed under ~/laya-local, weights in ~/.cache/huggingface, runs offline) replaced Laya on 2026-10-18 (15 of 18 vs 7 of 18 on the Celsus suites). It is a classifier, not a chat model, so it cannot be a Hermes provider, worker or computer-use driver. It is about 7 s per call on this Mac, so it is a gate, not a per-click loop. It runs in shadow only (`ask --shadow`) and never changes a verdict until 300 Deep-adjudicated labels (60+ per class) show it beating the rules on date-held-out rows.
 
 When Deep answers a digest question, record it with `decider.py label ID "situation" auto_decide|ask_deep --note ...` so the label count grows without extra work from him.
 
@@ -61,4 +61,4 @@ When Deep answers a digest question, record it with `decider.py label ID "situat
 - Quiet hours 02:00-15:00 IST hold the MESSAGE only; reversible unblocks still fire silently.
 - `--dry-run` changes nothing; `--force` bypasses the change gate; `--selftest` asserts the two verdict classes.
 
-`--shadow-top N` asks Clef-flash on the top N needs-Deep cards and appends rows to `~/.hermes/state/kanban_clef_shadow.jsonl`. Pitfall found live: the sweep normally runs under the Hermes python (no torch), so the script re-execs itself into `/Users/deep/laya-local/.venv/bin/python` when `--shadow-top` is present (`env -u PYTHONPATH -u PYTHONHOME` applied by the re-exec). Cold load is 4+ minutes on this Mac, so shadow is a manually-triggered probe, never part of the cron.
+`--shadow-top N` asks Clef-flash on the top N needs-Deep cards and appends rows to `~/.hermes/state/kanban_clef_shadow.jsonl`. Pitfall found live: the sweep normally runs under the Hermes python (no torch), so the script re-execs itself into `~/laya-local/.venv/bin/python` when `--shadow-top` is present (`env -u PYTHONPATH -u PYTHONHOME` applied by the re-exec). Cold load is 4+ minutes on this Mac, so shadow is a manually-triggered probe, never part of the cron.

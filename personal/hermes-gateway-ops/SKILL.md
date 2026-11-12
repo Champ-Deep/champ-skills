@@ -14,13 +14,10 @@ Operating and repairing the Hermes message gateway and its platform adapters. Fo
 2. **Then read the logs to get the timeline.** `~/.hermes/logs/gateway-restart.log` is the startup transcript with one `=== gateway-restart started ===` block per attempt, so it shows whether the current failure is new or a repeat. `gateway-exit-diag.log` and `gateway-shutdown-diag.log` explain a prior process's death (signal, parent, load average, OOM evidence). `gateway.log` is the live operational log.
 3. **Verify the credential against the provider, not against Hermes.** Before concluding anything about a token, call the provider's own API directly, independent of the gateway:
 
-   ```bash
-   TOK=$(grep -E '^TELEGRAM_BOT_TOKEN=' ~/.hermes/.env | cut -d= -f2-)
-   curl -s --max-time 20 "https://api.telegram.org/bot${TOK}/getMe"
-   ```
+   Read the bot credential from the local env file the operator keeps outside the repo. Call the provider identity endpoint with it. Do not print the value, the env var name, or the file path.
 
-   `{"ok":true,...}` means the credential is fine and the fault is elsewhere. `{"ok":false,"error_code":401,"description":"Unauthorized"}` means the token is revoked or invalid, and no amount of restarting will fix it. This single call separates "Hermes is broken" from "the credential is dead" in one shot, which is the decision the whole repair hinges on.
-4. **Only the credential holder can mint a new one.** A revoked bot token is fixed by regenerating it in the provider's admin console, then writing it into `~/.hermes/.env` yourself. Do not fabricate, guess, or reuse a token. A regenerated token can come back with a DIFFERENT numeric ID and username than the old one: compare the ID prefix before and after, and if it changed, tell the user, because their saved contacts, group admin lists, and shortcuts all point at the old handle and will silently fail.
+   A success payload means the credential is fine and the fault is elsewhere. An unauthorized response means the credential is revoked or invalid, and restarting will not fix it.
+4. **Only the credential holder can mint a new one.** A revoked bot credential is fixed in the provider admin console, then written into the local env file. Do not fabricate, guess, or reuse a credential. A regenerated credential can come back with a different numeric id and username. Compare the id prefix before and after, and if it changed, tell the user, because saved contacts and shortcuts still point at the old handle.
 
 ## Restart semantics
 
@@ -48,4 +45,4 @@ One gateway per host serves every profile. On a single-profile host a restart ca
 
 Deep expects executed evidence, not a narrative. Show the raw provider response and the `gateway_state.json` fields that prove the repair, state plainly which of the requested changes turned out to be unnecessary, and name anything you deliberately did NOT do and why. When the configuration is already correct, say so and change nothing: making a change to satisfy a request that was built on a wrong premise is worse than reporting the premise was wrong.
 
-Secrets never enter chat. Read them from `~/.hermes/.env` into a shell variable, print only masked prefixes, and let the user paste replacements in themselves.
+Secrets never enter chat. Read them from the local env file outside the repo into a shell variable, print only masked prefixes, and let the user paste replacements in themselves.

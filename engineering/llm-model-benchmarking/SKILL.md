@@ -20,7 +20,7 @@ Fire whenever Deep asks to score, compare, or assess an LLM against his task sui
 
 ## Suite location
 
-`/Users/deep/Celsus/Efforts/LLM Bake-off/suite`
+`<path-to-vault>/llm-bake-off/suite`
 
 - `docs.md` and `run.py`: read both first. `run.py` defines the Task shape, scoring, selftest, and report format.
 - `tasks.py`: the intern bank. `deep_tasks.py`: Deep's personal bank, run with `--bank deep_tasks`.
@@ -33,7 +33,7 @@ When Deep asks to assess a model "for the suite of tasks", the suite that matter
 
 ## Eval sequence v2 is the procedure of record
 
-`/Users/deep/Celsus/Efforts/LLM Bake-off/EVAL-SEQUENCE.md` (stages 0 to 9). Run `python3 test_run.py`, `run.py --bank v2_tasks --selftest` and `judge.py --selftest` before any comparison. Candidates k=3, frontier references k=1, parallel processes share `--root`.
+`<path-to-vault>/llm-bake-off/EVAL-SEQUENCE.md` (stages 0 to 9). Run `python3 test_run.py`, `run.py --bank v2_tasks --selftest` and `judge.py --selftest` before any comparison. Candidates k=3, frontier references k=1, parallel processes share `--root`.
 
 Verdict shape: judge on the tier table, never on an overall mean, because one failed tier hides inside a high average. `Efficient pick per tier` means pass on every run first, then price, then speed: a model that fails a tier once in three runs is disqualified from that tier regardless of its mean. Report basic (tiers 1 to 2) and major (tiers 3 to 4) cost separately, since heavy work skews spend toward output tokens while routine work skews input. State repeats beside every score, because a reference run once and a candidate run three times are different evidence. A hosted model at full precision is a stand-in for the local quantised build only; state that gap rather than transferring its score to the 4-bit file.
 

@@ -12,4 +12,4 @@ Tags: VERIFIED means the page text was read in session. CLAIMED means a vendor s
 | Paddle via The Product Folks | 6x revenue, 7x orders for SaaS running BF deals. | CLAIMED, PLG only | Not transferable. |
 | ZoomInfo BFCM page on shipchain.io; Apollo.de Black Weeks | Affiliate page; wrong company (German optician). | EXCLUDED | Enterprise data vendors show no festive offer; claim stays unverified but matches the pattern. |
 
-Competitor free allowances in 2026 (from the 4 Nov handoff ledger): ZoomInfo 1,000 data plus 1,000 AI credits at signup; Clearout 100 credits; BookYourData 10 record sample and BeSpoke builds from $499 per 1,000 records; UpLead 7 day trial, 5 credits. A "500 record free sample" is fifty times the market norm; do not put a number in an ad without Gary's cap.
+Competitor free allowances in 2026 (from the 4 Nov handoff ledger): ZoomInfo 1,000 data plus 1,000 AI credits at signup; Clearout 100 credits; BookYourData 10 record sample and BeSpoke builds from $499 per 1,000 records; UpLead 7 day trial, 5 credits. A "500 record free sample" is fifty times the market norm; do not put a number in an ad without the sales lead's cap.

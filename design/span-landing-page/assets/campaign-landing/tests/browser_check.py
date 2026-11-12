@@ -16,7 +16,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = 'https://share.lakeb2b.com/f/iZ0AciBa/span-msp-landing-us-preview__1_.html'
+SOURCE = 'https://example.com/campaign-preview.html'
 
 
 def check(condition, label):

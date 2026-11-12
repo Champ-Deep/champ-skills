@@ -99,7 +99,7 @@ def main():
 
     # 5. visual audit, when the skill is available
     if not args.no_audit:
-        audit = "/Users/deep/champ-skills/design/skills/visual-verify/scripts/audit.py"
+        audit = "<path-to-repo>/design/skills/visual-verify/scripts/audit.py"
         if os.path.exists(audit):
             for w in (1440, 390):
                 p = subprocess.run([sys.executable, audit, out, "--width", str(w)],

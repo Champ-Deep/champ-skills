@@ -6,7 +6,7 @@ Use the three-layer idea from https://youtu.be/zsCGS-Yzjnw (Griffin Wooldridge, 
 
 Brand skill and DESIGN.md win. Read the host manifest and existing components next. Reuse suitable installed primitives before adding packages. Run the picker from its resolved skill directory, not from the project's cwd:
 
-`python3 /Users/deep/champ-skills/design/skills/ui-library-picker/scripts/pick.py "<interaction or section>" --all`
+`python3 <path-to-repo>/design/skills/ui-library-picker/scripts/pick.py "<interaction or section>" --all`
 
 The CLI ranks keyword matches, not compatibility, licence clearance or production quality. Its first result is a candidate, not an install decision. Check official docs with Context7 before writing library code. Preserve the host framework, package manager and lockfile.
 

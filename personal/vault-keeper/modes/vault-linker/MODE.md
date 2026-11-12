@@ -75,7 +75,7 @@ Drawn from ICM (Van Clief 2026, arXiv:2603.16021) and from what actually failed 
 | Principle | What it means in practice |
 |-----------|---------------------------|
 | **A link is an assertion** | Not decoration. If you would not defend the claim "this text is about that note", do not link it. |
-| **Entity resolution before linking** | One entity, one canonical note, aliases registered. Spelling forks (Ketan and Kethan, Infratech and InfraTech) fragment a graph faster than missing links. |
+| **Entity resolution before linking** | One entity, one canonical note, aliases registered. Spelling forks (two spellings of one first name, and two spellings of one brand) fragment a graph faster than missing links. |
 | **Precision over recall** | 100 correct links beat 1,000 links of which 380 are wrong. A graph you cannot trust is worse than a sparse one. |
 | **Hubs are curated, not generated** | MOCs are written by a human or a deliberate pass. A linker that auto-populates hubs makes them noise. |
 | **Provenance** | Every automated pass writes a dated report saying what it changed and why. |

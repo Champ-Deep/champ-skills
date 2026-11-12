@@ -80,7 +80,7 @@ tags:
 
 For each action item where Sreedeep is the owner (or where ownership is ambiguous and he is the most likely person):
 
-1. Read the current TASKS.md from vault root (`/Users/deep/Celsus/TASKS.md`)
+1. Read the current TASKS.md from vault root (`<path-to-vault>/TASKS.md`)
 2. Add new tasks under the `## Active` section
 3. Use the exact format: `- [ ] **Task title** - Description. From [meeting name] [date]. [e:Effort Name] [c:Company]`
 4. If the task maps to an existing effort, use that effort tag. Otherwise use `[e:Inbox]`.
@@ -117,8 +117,8 @@ If any action items had ambiguous ownership, flag them:
 
 **Sreedeep likely does NOT own it if:**
 - Another person is explicitly assigned
-- It is a technical implementation task for a developer (Hemang, Harsha, etc.)
-- It is an operational task for a specific team member (Preeti for SEO, Murugan for nurturing)
+- It is a technical implementation task for a developer (the engineer, the page builder, etc.)
+- It is an operational task for a specific team member (the SEO lead for SEO, the nurture lead for nurturing)
 - It is a finance/accounting task (Srivatsav's domain)
 
 ## Edge Cases

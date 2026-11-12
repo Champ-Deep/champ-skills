@@ -21,15 +21,15 @@ Meta is not the default channel for LakeB2B. Treat it as one capped test run alo
 
 ### The report variant (to test against the 10 names offer)
 
-A short guide, "Seven checks before you send a cold list". Content: checks on titles that changed, people who left, role-based inboxes, missing direct dials, consent. Rules: no statistic unless LakeB2B can trace it to its own data and the brand owner signs it; no competitor named; one plain-spoken page. Owner for the writing: Sai or Preeti with the SEO team, owner for the facts: the data lead. Success is judged by sales-accepted leads, not downloads.
+A short guide, "Seven checks before you send a cold list". Content: checks on titles that changed, people who left, role-based inboxes, missing direct dials, consent. Rules: no statistic unless LakeB2B can trace it to its own data and the brand owner signs it; no competitor named; one plain-spoken page. Owner for the writing: the content lead or the SEO lead with the SEO team, owner for the facts: the data lead. Success is judged by sales-accepted leads, not downloads.
 
 ### Thanksgiving variant (Deep's proposal, 11 Nov 2026, not approved)
 
-500 free validations on a file the buyer supplies, framed around data enrichment (discussed with Manu and Pallab). It is a third offer to weigh against the 10 names offer and the guide, not a replacement, and it is a different deliverable from enrichment. Gates before any page or ad carries it: what a validation checks, the row cap and who set it, turnaround, who delivers, how the file is received and deleted, and the consent line. Rules: `experiment-controls.md`, section "Report-led offer and 500 validations". Window: a festive frame through 30 Nov only with a real end date.
+500 free validations on a file the buyer supplies, framed around data enrichment (discussed with the web developer and the paid media lead). It is a third offer to weigh against the 10 names offer and the guide, not a replacement, and it is a different deliverable from enrichment. Gates before any page or ad carries it: what a validation checks, the row cap and who set it, turnaround, who delivers, how the file is received and deleted, and the consent line. Rules: `experiment-controls.md`, section "Report-led offer and 500 validations". Window: a festive frame through 30 Nov only with a real end date.
 
 Deep's second idea for "the report": a messaging simulation of the prospect's own public site and ads, shown as a designed report. That is a per-prospect piece of work, so it suits named accounts and the sales team, not a cold opt-in. Test it on LakeB2B and SPAN themselves first (card t_6a11a330).
 
-Possible caller named by Deep: Pallab Majinder (customer service). Confirm identity and hours before any plan names him.
+Possible caller named by Deep: the paid media lead Majinder (customer service). Confirm identity and hours before any plan names him.
 
 ### Angle research (where the customers' words are)
 

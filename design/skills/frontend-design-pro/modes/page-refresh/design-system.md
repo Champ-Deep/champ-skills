@@ -39,9 +39,9 @@ Category positioning: "the B2B growth stack".
 ```
 
 Typography: Montserrat (primary), Alata (accent), JetBrains Mono (technical).
-Use case: Healthcare data, prospect intelligence, anything Ampliz/Charles/Assassins.
+Use case: Healthcare data, prospect intelligence, anything for the healthcare brand.
 
-### SPAN Global Services (Phoenix team)
+### SPAN Global Services (the sales team)
 
 ```css
 --brand-primary: #1E40AF;     /* Deep Blue */
@@ -52,7 +52,7 @@ Use case: Healthcare data, prospect intelligence, anything Ampliz/Charles/Assass
 ```
 
 Typography: Montserrat (primary), Inter (fallback), JetBrains Mono (technical).
-Use case: SPAN sales decks, lead-gen landers, Phoenix team campaigns.
+Use case: SPAN sales decks, lead-gen landers, the sales team campaigns.
 
 ### Champions Group (parent brand, executive/corporate)
 

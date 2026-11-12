@@ -7,7 +7,7 @@ description: "Turns a business card or bare contact details into a researched Ch
 
 Converts contacts collected at real estate, family office and investment events into researched, categorised, ready-to-send meeting requests for Champions Infratech.
 
-The chairman (Subhakar Rao, Champions Group) collects cards at events. Someone else, usually Champ, has to work out who these people are and get a meeting booked before the memory of the handshake fades. Speed and accuracy both matter: a wrong-category pitch to a family office wastes the only warm introduction that contact will ever give.
+The chairman (the group chairman, Champions Group) collects cards at events. Someone else, usually Champ, has to work out who these people are and get a meeting booked before the memory of the handshake fades. Speed and accuracy both matter: a wrong-category pitch to a family office wastes the only warm introduction that contact will ever give.
 
 If a card fits another Champions company or a non-sale mode (partner, invest, buy from) better than an Infratech pitch, say so in the categorisation and route it through the Champions 360 lens (`reach`, `modes/champions-growth-profiler/references/champions-360.md`) instead of forcing the land angle.
 

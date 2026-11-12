@@ -74,7 +74,7 @@ Pricing is Deep's call. For a business decision like this the gate is `mcp__clef
 
 ### 8. Client-facing page (when Deep asks for a shareable version)
 
-Deep rejects flat price lists: every price on the page must read as computed. Worked build: `/Users/deep/repos/runtimeai-bid/` (engine, render script, QA script). Reuse it by copying the folder and editing `engine/inputs.json` and `content.json`.
+Deep rejects flat price lists: every price on the page must read as computed. Worked build: `~/repos/runtimeai-bid/` (engine, render script, QA script). Reuse it by copying the folder and editing `engine/inputs.json` and `content.json`.
 
 - **Engine first.** Pure `pricing.mjs` plus `inputs.json` plus a `node:test` file, written and passing before any HTML. The render script writes engine output into the HTML (so static and PDF exports carry final values) and inlines the engine verbatim for the live calculator. Assert the inlining byte for byte.
 - **Anchor in three steps.** (1) Work: one seat's month on a per-seat rate card, divided by the funnel's qualified meetings per seat, rounded DOWN to the nearest 10 ("the fee never runs above the seat"). The outcome-weighted fee is the same ledger minus the labour line. (2) Value: meeting value = ACV x close rate, and a quarter of it is the most a meeting should cost. Sliders let the client enter their own numbers. (3) Market: published per-meeting ranges as range bars, with our fee and the moving value ceiling marked.

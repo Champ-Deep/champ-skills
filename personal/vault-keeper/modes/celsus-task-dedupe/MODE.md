@@ -4,7 +4,7 @@
 
 ## When to use
 
-Every single time you are about to add a line to `/Users/deep/Celsus/TASKS.md`. This is not a final pass. It is the step before the write.
+Every single time you are about to add a line to `<path-to-vault>/TASKS.md`. This is not a final pass. It is the step before the write.
 
 TASKS.md holds 1,389 open items in `## Active` and 1,516 open overall. The list stopped being a list because agents file the same task every week. Measured on 2026-09-26: the Santosh Core 7 ask exists **five times** (`TASKS.md:44, 75, 134, 358, 364`) and the Sales Leaders Update three times (`:45, 76, 135`). The Ampliz ownership question has regenerated for twelve straight weeks.
 
@@ -12,8 +12,8 @@ Every append costs the reader a triage decision later. Dedupe before you write, 
 
 ## The procedure
 
-1. Build the search key before you compose the line: **company + verb + object**, lowercased, singular. `virtusa + recap + management call`, not "Virtusa management call recap draft thing".
-2. Search `## Active` in `/Users/deep/Celsus/TASKS.md` for that key. Use `search_files` with `output_mode: content`, never eyeball the file. `## Waiting On` counts as a hit too, and so does `## Done`: a task closed and re-opened by a fresh append is a duplicate, not new work.
+1. Build the search key before you compose the line: **company + verb + object**, lowercased, singular. `client + recap + management call`, not "client management call recap draft thing".
+2. Search `## Active` in `<path-to-vault>/TASKS.md` for that key. Use `search_files` with `output_mode: content`, never eyeball the file. `## Waiting On` counts as a hit too, and so does `## Done`: a task closed and re-opened by a fresh append is a duplicate, not new work.
 3. **Hit found:** do not create a line. Append a dated progress note inside the existing task body, so the history is one thread:
 
 ```

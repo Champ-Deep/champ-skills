@@ -39,7 +39,7 @@ For a new page, propose one template from `references/templates.md` (Case Study,
 ### 3. Components: library picker, then 21st.dev
 
 <!-- ui-library-picker -->
-Load `ui-library-picker` and its `references/component-adoption.md` in every mode, including UI polish. Inspect the host manifest and existing kit, then run `python3 /Users/deep/champ-skills/design/skills/ui-library-picker/scripts/pick.py "<task>" --all`. Reuse compatible foundations and specialists; check Kokonut UI alongside 21st.dev for composition. Search 21st.dev for the structural regions even when a specialist wins. Main records preview-reviewed component ids, source/dependency/licence checks, host file, adaptation and verification in the brief before frontend implements. Preserve the host stack and brand. One expressive accent is a maximum, not a requirement.
+Load `ui-library-picker` and its `references/component-adoption.md` in every mode, including UI polish. Inspect the host manifest and existing kit, then run `python3 <path-to-repo>/design/skills/ui-library-picker/scripts/pick.py "<task>" --all`. Reuse compatible foundations and specialists; check Kokonut UI alongside 21st.dev for composition. Search 21st.dev for the structural regions even when a specialist wins. Main records preview-reviewed component ids, source/dependency/licence checks, host file, adaptation and verification in the brief before frontend implements. Preserve the host stack and brand. One expressive accent is a maximum, not a requirement.
 
 List the 3 to 5 components the page depends on most. When the 21st.dev MCP is connected (tools `search`, `get_inspiration`, `get_component`, `search_logo`):
 

@@ -16,14 +16,14 @@ No creative until the offer survives these checks. SPAN is quote based and sales
 
 - Percent off belongs to self serve, card payment products under about $100 a month. Sales led vendors that discount train accounts to wait for the next holiday. SPAN runs a festive frame (gratitude, a free check, a free count), never a discount. See `references/holiday-offer-research.md`.
 - A free sample alone is table stakes (ZoomInfo credits, Clearout credits, BookYourData 10 records). The differentiator is a check of the buyer's own list or a count for the buyer's vertical.
-- Every offer carries a named gate: the process exists (Santhosh in writing), the cap or price is set (Gary), consent text exists (legal) if a list is uploaded, and the form has a thank you page with a turnaround. No gate, no spend.
+- Every offer carries a named gate: the process exists (the data lead in writing), the cap or price is set (the sales lead), consent text exists (legal) if a list is uploaded, and the form has a thank you page with a turnaround. No gate, no spend.
 - Window: vendors are live from 9 Nov. Start mid November, not Thanksgiving week.
 
 ## 2. Copy rules
 
 - Zero em or en dashes. Check with `text.count('\u2014') + text.count('\u2013') == 0` on every copy file and prompt.
 - No number, count, badge, client name or turnaround that is not confirmed in writing. Write "free sample for your vertical", not "500 records".
-- Name the vertical (Healthcare, Cybersecurity, Legal Tech). Lead with the offer, not a freshness claim (Gary rejected "Refreshed Every 30 Days").
+- Name the vertical (Healthcare, Cybersecurity, Legal Tech). Lead with the offer, not a freshness claim (the sales lead rejected "Refreshed Every 30 Days").
 - One tone per campaign. Thanksgiving already supplies warmth; do not stack Y2K or music gags on top. One dry line inside the festive frame is enough.
 - No artist names, song titles or lyrics.
 - Google RSA: headline 30 characters, description 90, counted by script and the count saved.
@@ -59,10 +59,10 @@ Formats per concept: LinkedIn feed 4:5, website hero 21:9, display 5:4 (the 300 
 
 ## 5. Finals
 
-After approval, build each ad in HTML with the brand hex, Montserrat and Inter, and the real logo file. Render to PNG at platform size, pixel sample each background (within 8 channel points of its hex or redo), proof every line at full size, ship the PNG set with its copy file so Preeti and Manu can edit text without re rendering. Route the build to the frontend lane with the concept renders attached as direction.
+After approval, build each ad in HTML with the brand hex, Montserrat and Inter, and the real logo file. Render to PNG at platform size, pixel sample each background (within 8 channel points of its hex or redo), proof every line at full size, ship the PNG set with its copy file so the SEO lead and the web developer can edit text without re rendering. Route the build to the frontend lane with the concept renders attached as direction.
 
 ## 6. Deliver
 
 - Vault: a REVIEW note in the effort folder with the research table (every row tagged VERIFIED, CLAIMED or EXCLUDED), a verdict table against prior decisions, the concept matrix, the render check, open decisions with owner and date.
 - `concepts/` with the PNGs, `contact-sheet.png` (rows concepts, columns formats, labelled), the render script and `render-log.json` (prompts and URLs).
-- Approval is Deep's, then Gary (offer), Pallab (budget and page), Preeti (page and copy). Stage a needs_input kanban card naming the exact files; never send to them directly.
+- Approval is Deep's, then the sales lead (offer), the paid media lead (budget and page), the SEO lead (page and copy). Stage a needs_input kanban card naming the exact files; never send to them directly.

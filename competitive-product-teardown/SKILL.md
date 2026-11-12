@@ -50,7 +50,7 @@ the specialists against, and you will be wrong in front of the user otherwise.
 ```bash
 # locate the local repo before anything else. A broad search over the home directory
 # times out and skips protected macOS folders; list the known project parent instead.
-ls -d /Users/deep/Apps\&Projects/*/
+ls -d ~/Apps\&Projects/*/
 
 git -C <repo> log --oneline -25
 git -C <repo> branch -a

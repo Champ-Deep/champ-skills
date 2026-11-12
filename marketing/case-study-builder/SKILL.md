@@ -76,7 +76,7 @@ A prioritized pipeline table ranked by case study value score:
 For every "Build Now" client, explicitly call out whether this is a niche or high-ticket
 account with no existing case study. These are the highest-priority candidates.
 
-For Lake B2B accounts: Sean (Customer Service and file delivery) is the right person to
+For Lake B2B accounts: the delivery lead (Customer Service and file delivery) is the right person to
 confirm what outcomes are on record. Note this in the table where verification requires
 delivery data.
 
@@ -103,7 +103,7 @@ Use `AskUserQuestion` to run the intake. Maximum two rounds. Batch all questions
 **Second round (if needed):**
 - What was their situation before they came to you? What problem were they solving?
 - What was the timeline from purchase to measurable result?
-- Is there campaign data, delivery reports, or file-based evidence that CS or Sean can pull?
+- Is there campaign data, delivery reports, or file-based evidence that CS or the delivery lead can pull?
 
 After intake, present the completeness table from `references/intake-checklist.md` and give
 a clear verdict: proceed now, or go back for more evidence first.
@@ -119,7 +119,7 @@ CS records, campaign delivery files, client approvals, and what to do when data 
 
 **Core verification questions to resolve:**
 - Can campaign data be confirmed against what was actually delivered? For Lake B2B accounts,
-  Sean in CS/file delivery has access to what was sent, when, and to what contacts.
+  the delivery lead in CS/file delivery has access to what was sent, when, and to what contacts.
 - Has the client approved being named? If not, what anonymization keeps this compelling?
 - Are outcome numbers from actual tracking data or client self-reported? Both are usable,
   but they require different framing.
@@ -133,7 +133,7 @@ with no placeholder and no stand-in figure, and move it into an internal
 EVIDENCE-AND-CONSENT-CHECKLIST carrying the questions in the order the people who can
 answer them will be asked: delivery record, account owner, then client contact. Come
 back to the user with the specific request, for example: "To confirm the open rate
-figure, can Sean pull the delivery report for this campaign?"
+figure, can the delivery lead pull the delivery report for this campaign?"
 
 ### Phase 3: Audience Mapping
 
@@ -213,9 +213,9 @@ When running Pipeline Scan or advising what to build next, always check whether 
 already has proof content. If it does not, escalate urgency. One well-placed case study in
 an uncovered vertical can open an entire segment.
 
-For Lake B2B accounts: Sean (CS and file delivery) is the canonical source for delivery
+For Lake B2B accounts: the delivery lead (CS and file delivery) is the canonical source for delivery
 records, contact list specs, and campaign file confirmation. Route all verification that
-requires delivery data through Sean.
+requires delivery data through the delivery lead.
 
 ---
 

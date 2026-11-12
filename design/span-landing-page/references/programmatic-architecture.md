@@ -1,6 +1,6 @@
 # Programmatic page families: architecture rules
 
-Depth for taking SPAN variant families from generated HTML files to a real system. The full plan (DDL, Sanity schemas, route table, phases, decisions for Preeti) lives in the Celsus vault, Ideation folder: "SPAN programmatic pages, Astro Sanity Supabase plan". These are the rules that must survive into any version of that build.
+Depth for taking SPAN variant families from generated HTML files to a real system. The full plan (DDL, Sanity schemas, route table, phases, decisions for the SEO lead) lives in the Celsus vault, Ideation folder: "SPAN programmatic pages, Astro Sanity Supabase plan". These are the rules that must survive into any version of that build.
 
 ## Rendering and routing
 
@@ -24,4 +24,4 @@ Depth for taking SPAN variant families from generated HTML files to a real syste
 
 ## Editorial split
 
-Data team never touches the CMS; the writer never touches counts; Preeti approves in the Studio and owns which pages are indexable; frontend owns components, routes and the Worker route. Deep owns the variable model and gate thresholds.
+Data team never touches the CMS; the writer never touches counts; the SEO lead approves in the Studio and owns which pages are indexable; frontend owns components, routes and the Worker route. Deep owns the variable model and gate thresholds.

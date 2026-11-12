@@ -6,7 +6,7 @@ why a feature ships enabled in code and silently off in production.
 ## Set secrets in bulk, from the repo
 
 ```bash
-cd /Users/deep/repos/deependhq-refresh
+cd <path-to-worker-repo>
 npx wrangler whoami               # proves auth before anything else
 cp .env.example .dev.vars          # gitignored template, comments say where each key comes from
 # fill .dev.vars, then:
@@ -40,13 +40,6 @@ npx wrangler secret bulk .dev.vars # every KEY=VALUE in one request, up to 100 k
 
 ## Key inventory for this Worker
 
-Read the names off the code, not memory: `grep -ohE "env\.[A-Z_]{4,}" worker/*.js | sort -u`.
+Read secret and binding names from the worker source, not from memory. Keep values in a gitignored local file and upload them with the platform CLI. Do not copy a production inventory into this skill.
 
-| Key | Kind | Consequence when absent |
-|---|---|---|
-| `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | secret | sign-in hidden, toolkit fails closed |
-| `CLERK_WEBHOOK_SIGNING_SECRET` | secret | paid grants from billing webhooks not verified |
-| `CLERK_JWT_KEY`, `CLERK_JS_URL`, `CLERK_ADMIN_IDS`, `CLERK_AUTHORIZED_PARTIES` | secret | optional; falls back to defaults in code |
-| `TREG_API_KEY`, `OPENROUTER_API_KEY`, `JEV_API_KEY`, `LEAD_SCORER_MODEL` | secret | that tool disables itself |
-| `TOOLKIT_DB` | D1 binding | wallet and billing unavailable, tools refuse to run |
-| `ANALYTICS` | Analytics Engine binding | `/api/collect` answers 204 and records nothing |
+When a required secret is absent, the matching feature fails closed: sign-in stays hidden, that tool disables itself, or the database features refuse to run. An analytics binding that is missing can still answer the collect call and record nothing. An operator setting stored as a database row is not an env var, and no secret turns that feature on if the row is missing.

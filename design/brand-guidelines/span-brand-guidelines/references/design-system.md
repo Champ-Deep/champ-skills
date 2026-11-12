@@ -89,8 +89,8 @@ For anything interactive beyond these, take a component from 21st.dev and port i
 
 ## 7. Governance
 
-1. Harsha builds. Writers supply structured content only.
-2. The first two or three pages get Preeti's or Manu's approval before any deployment, then review is weekly.
+1. the page builder builds. Writers supply structured content only.
+2. The first two or three pages get the SEO lead's or the web developer's approval before any deployment, then review is weekly.
 3. A token, component or spacing change goes into this file first, with a one-line reason, then into pages. Pages never carry a private variant.
 4. Deep reviews this file. A weekly or monthly design review keeps it current.
 

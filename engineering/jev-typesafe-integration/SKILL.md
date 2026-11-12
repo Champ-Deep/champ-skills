@@ -1,6 +1,6 @@
 ---
 name: jev-typesafe-integration
-description: Use when working with Jev or TypeSafe in ChampSet.
+description: Use when working with Jev or TypeSafe in the host app.
 version: 1.0.0
 license: AGPL-3.0
 author: Deep
@@ -14,13 +14,13 @@ metadata:
 
 ## When to Use
 
-Any change touching `backend/src/jev/` in ChampSet, the confidence score, the
+Any change touching `backend/src/jev/` in the host app, the confidence score, the
 Gate 1/2/3 routing, or a new "ask JEV to judge X" question. Also when a
 per-item judgement is being added anywhere and you are deciding whether to loop
 or batch.
 
-ChampSet uses JEV for probabilistic judging (gates 1 to 3) in
-`/Users/deep/Apps&Projects/ChampSet/backend/src/jev/`. Upstream docs live at
+The host app uses JEV for probabilistic judging (gates 1 to 3) in
+`<path-to-repo>/backend/src/jev/`. Upstream docs live at
 `docs.typesafe.ai`; the client is `@typesafe-ai/sdk`.
 
 ## Score is 0-indexed (the rule that keeps biting)
@@ -31,7 +31,7 @@ zero", and the API normalises by `criteria.length - 1`.
 
 **Why:** a 1-based legend in the prompt plus a `0..N-1` validator plus a `+1`
 remap silently turns "does not fit" into a middling score. This shipped in
-ChampSet and was never tested at the boundary.
+the host app and was never tested at the boundary.
 
 **How to apply:** write score criteria as a bare ordered list with no numeric
 prefixes and let the wire format define the indices. If you need a 1-based
@@ -85,12 +85,12 @@ Builders: `choice(instructions, criteria)`, `noul(instructions)`,
 ## Local alternative when the API key is missing
 
 Clef-flash (Cloudflare, Apache 2.0, 9B) replaced Laya here on 2026-10-18 and keeps
-the same request shape; the install and probe are in `/Users/deep/laya-local`
+the same request shape; the install and probe are in `~/laya-local`
 (`probe_clef.py`), about 7 s per call on an M1 Pro, so read "Laya" below as the
 local decision model. Laya (Convai Innovations, Apache 2.0) was a decision model with a Jev-compatible
 interface: same `state` + `questions` shape, same `choice` / `score` / `noul`
 primitives, downloadable weights, runs offline in Python. A verified local install
-lives at `/Users/deep/laya-local` (venv, package `laya`, README with the exact
+lives at `~/laya-local` (venv, package `laya`, README with the exact
 commands and measured latency). Use it when `TYPESAFE_API_KEY` is absent or when a
 gate must not depend on a network call.
 
@@ -108,7 +108,7 @@ own decisions is what makes it usable.
 - **`state` must be the same type at train and inference.** Train on a plain string and call `Router.predict(string, questions)`. A dict at inference serialises differently from the string it trained on.
 - **Evaluate on held-out rows only.** Passing the training file as `--eval` prints 1.0 accuracy after two epochs; that is memorisation. Split by date, not at random.
 
-Base Laya zero-shot is not a safe gate: it called a client-trial decision `auto_decide` at 0.61. Keep a deterministic rule layer in front and run Laya in shadow, logging its answer beside the rule verdict, until a fine-tuned checkpoint beats the rules on held-out labels. A working example with the gate, shadow log and training export lives at `/Users/deep/laya-local/decider/`.
+Base Laya zero-shot is not a safe gate: it called a client-trial decision `auto_decide` at 0.61. Keep a deterministic rule layer in front and run Laya in shadow, logging its answer beside the rule verdict, until a fine-tuned checkpoint beats the rules on held-out labels. A working example with the gate, shadow log and training export lives at `~/laya-local/decider/`.
 
 ## Failure modes to respect
 
@@ -120,7 +120,7 @@ put boundary cases in the criteria).
 
 ## Content-addressed records cannot hold a single owner
 
-ChampSet's evidence passages are content-addressed: `passageId` is
+The host app's evidence passages are content-addressed: `passageId` is
 sha256(url + index + text). Two rows scraped from the same page resolve to the
 IDENTICAL passage id, so any mutable single-owner field on that record lets the
 last writer steal it from the others. It shipped: one row lost every citation
@@ -144,7 +144,7 @@ See `tests/evidence-ownership-guard.test.ts`.
 
 ## Design rule learned the hard way
 
-A missing judgement must never score better than a successful one. ChampSet
+A missing judgement must never score better than a successful one. the host app
 shipped `fitScore === undefined -> factor 1.0`, so JEV being down made rows look
 *more* trustworthy. Degraded paths get a mild penalty (`UNJUDGED_FACTOR`),
 never a free pass. Keep a regression test asserting unjudged <= judged.

@@ -42,7 +42,7 @@ Three sentences for when they answer, then two questions. The questions come bef
 
 Mr [Name],
 
-Our chairman, Subhakar Rao, met you at [Event] last week and mentioned your [City] township. Champions Infratech builds man-made beach communities in India on licensed Crystal Lagoons technology.
+Our chairman, the group chairman, met you at [Event] last week and mentioned your [City] township. Champions Infratech builds man-made beach communities in India on licensed Crystal Lagoons technology.
 
 In practice that means a beach at the centre of your masterplan, so units across the scheme sell as waterfront rather than one premium tower carrying the whole project. It works inland, with no coastline required.
 
@@ -55,7 +55,7 @@ Fifteen minutes this week: [scheduler link]
 
 **LinkedIn note**
 
-Mr [Name], you met our chairman Subhakar Rao at [Event]. I look after Champions Infratech, we build man-made beach communities anchored on Crystal Lagoons technology. Would like to stay connected on the [City] scheme.
+Mr [Name], you met our chairman the group chairman at [Event]. I look after Champions Infratech, we build man-made beach communities anchored on Crystal Lagoons technology. Would like to stay connected on the [City] scheme.
 
 **WhatsApp nudge**
 
@@ -77,7 +77,7 @@ Would a fifteen minute call this week work to look at the lagoon footprint for y
 
 [Name],
 
-Our chairman, Subhakar Rao, met you at [Forum] and the conversation turned to real-asset allocation in India.
+Our chairman, the group chairman, met you at [Forum] and the conversation turned to real-asset allocation in India.
 
 Champions Infratech builds man-made beach communities anchored on licensed Crystal Lagoons technology. There are two entry routes: at project level alongside the developer, or into the lagoon infrastructure itself, which earns from the uplift it creates across the masterplan.
 

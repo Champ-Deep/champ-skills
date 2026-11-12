@@ -95,13 +95,13 @@ dimensions are weaker.
 
 ## Verification Source for Lake B2B Accounts
 
-For any client served by Lake B2B, Sean (Customer Service and file delivery) is the
+For any client served by Lake B2B, the delivery lead (Customer Service and file delivery) is the
 canonical source for:
 - Exactly what contact lists were delivered and when
 - Campaign file specifications (count, segment, geography, job titles)
 - Any post-delivery communication from the client confirming quality
 
-Always note "Sean to verify" in the pipeline table when the Verifiability score is below 3
+Always note "the delivery lead to verify" in the pipeline table when the Verifiability score is below 3
 and delivery records are the missing piece.
 
 ---

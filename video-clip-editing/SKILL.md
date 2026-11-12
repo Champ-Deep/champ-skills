@@ -18,7 +18,7 @@ and proves a layout never changes.
 
 Deep's own material already answers most brief questions, and searching for it is
 faster than waiting on him. Before asking for audience, brand, glossary or
-end card, search the Celsus vault (`/Users/deep/Celsus`) for the effort, the
+end card, search the Celsus vault (`<path-to-vault>`) for the effort, the
 meeting prep note and the company. A discovery call recording almost always has
 a prep note that names the series, the format, the audience and the open
 questions. `_config/glossary.md`, `_config/identity.md` and `_config/org-map.md`
@@ -166,7 +166,7 @@ costs far more than the smoke test ever does.
 - A correction Deep gives once ("captions never over the face") becomes a line in this skill, not a chat memory.
 - Review the full output. Error rate grows with length, so long-form needs a full watch-through.
 
-Curriculum and drills: `/Users/deep/Celsus/Atlas/Research/Editing Curriculum - Social Content King.md`.
+Curriculum and drills: `<path-to-vault>/Atlas/Research/Editing Curriculum - Social Content King.md`.
 
 ## Standing rules
 

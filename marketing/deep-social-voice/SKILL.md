@@ -89,10 +89,10 @@ Rules when picking a track:
 
 ## Daily draft process (cron `social-daily-draft`)
 
-1. Read the last 14 entries in `/Users/deep/Celsus/Efforts/Active/Social Posts/log.md` to avoid repeating a topic or a comment word. Then reconcile against the dated files: a `log.md` row with no `<date>.md` next to it means the post was pre-drafted in a batch, so pull that day's cuts out of the batch file (`Week 1 Posts.md`, sections `## Day N (<date>)`) instead of drafting a duplicate. Stop if `<date>.md` already exists.
+1. Read the last 14 entries in `<path-to-vault>/social-posts/log.md` to avoid repeating a topic or a comment word. Then reconcile against the dated files: a `log.md` row with no `<date>.md` next to it means the post was pre-drafted in a batch, so pull that day's cuts out of the batch file (`Week 1 Posts.md`, sections `## Day N (<date>)`) instead of drafting a duplicate. Stop if `<date>.md` already exists.
 2. Pick today's source, in this order of preference: something Deep shipped in the last 48 hours (check `git log` in `~/champ-skills` and recent `Calendar/` daily notes), else the next unused Sales Desk file, else a standing rule from `_config/standing-orders.md` told as a story.
 3. Draft the LinkedIn post, the X/Bluesky cut, the comment word, and the daily video script (section below).
-4. Write `/Users/deep/Celsus/Efforts/Active/Social Posts/<YYYY-MM-DD>.md` with the three cuts and the artifact path, and append one line to `log.md`: `date | topic | WORD | artifact path | status: draft`.
+4. Write `<path-to-vault>/social-posts/<YYYY-MM-DD>.md` with the three cuts and the artifact path, and append one line to `log.md`: `date | topic | WORD | artifact path | status: draft`.
 5. Create a kanban card for profile `content`, title `Social post <date>: <hook>`, body = the three cuts plus "Approve by replying POST, or edit the file and reply POST". Block it as `needs_input` so it reaches Deep as a decision card.
 6. On approval the content worker sends through Postiz (`~/postiz/README.md` has the API call) and flips the log line to `status: posted <platforms>`.
 
@@ -117,7 +117,7 @@ Rules:
 - Add one `On-screen:` line: the title card, 6 words at most.
 - An avatar read goes through `tts-safe-script` before any voice render. The talking-head read does not.
 
-Plan and format split: `/Users/deep/Celsus/Efforts/Active/Deep Socials Engine/Video System Plan Nov-Dec 2026.md`.
+Plan and format split: `<path-to-vault>/social-posts/video-plan.md`.
 
 ## Batch-writing a week
 

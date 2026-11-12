@@ -1,5 +1,5 @@
 {
-  "target": "file:///Users/deep/Celsus/Atlas/Research/Jev%20Operator%20Card.html",
+  "target": "file:///<path-to-vault>/sample-page.html",
   "shots": [
     ".verify/light-390-fold.png",
     ".verify/light-390-full.png",

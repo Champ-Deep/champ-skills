@@ -13,10 +13,10 @@ Use this for product work in the Champions B2B Workspace, including vendor acces
 
 1. Verify repository identity and branch state before planning:
    ```bash
-   git -C '/Users/deep/Apps&Projects/champ-workspace' fetch origin
-   git -C '/Users/deep/Apps&Projects/champ-workspace' status --short --branch
-   git -C '/Users/deep/Apps&Projects/champ-workspace' remote -v
-   git -C '/Users/deep/Apps&Projects/champ-workspace' log --oneline --decorate -12
+   git -C '~/Apps&Projects/champ-workspace' fetch origin
+   git -C '~/Apps&Projects/champ-workspace' status --short --branch
+   git -C '~/Apps&Projects/champ-workspace' remote -v
+   git -C '~/Apps&Projects/champ-workspace' log --oneline --decorate -12
    ```
    Preserve uncommitted and unpushed prerequisite work. Do not silently reset to `origin/main` or start a feature from an older base.
 2. Read `CONTEXT.md`, `README.md`, and the existing `DESIGN.md` before changing behavior or UI.
@@ -127,7 +127,7 @@ Work on a `feat/...` branch. Do not commit, push, or open a PR unless Deep asks.
 
 ## A real key is already on this machine, and the mock is the real risk
 
-`$HOME/.hermes/.env` holds a working `OPENROUTER_API_KEY`. Copy it into
+The local env file outside the repo holds a working model gateway key. Copy it into
 `backend/.env` before concluding that "no LLM call has ever run" (G7 in
 AUDIT.md) is still true. Verified 2026-10-01: real runs serve on
 `deepseek/deepseek-v4.1-flash` and `z-ai/glm-5.3-flash` through
@@ -135,13 +135,13 @@ AUDIT.md) is still true. Verified 2026-10-01: real runs serve on
 
 Two traps that cost real time, both worth checking before debugging the app:
 
-- **A stale `OPENROUTER_API_KEY` in the Hermes runtime env silently wins.**
+- **A stale model gateway key in the process environment silently wins.**
   `app/__init__.py` deliberately never overwrites a real environment variable,
   so a server launched from this agent inherits the runtime's key, not
   `backend/.env`. Symptom: health says `OpenRouter HTTP 401` and a direct
   `httpx` call with the `backend/.env` key returns 200. Compare with
   `ps eww -p <pid>` (hash the value, never print it). Fix: start the server
-  with `env -u OPENROUTER_API_KEY ...`.
+  with `env -u <MODEL_GATEWAY_KEY> ...`.
 - **Port 3000 is OrbStack, not the workspace.** Something else on this machine
   already serves 3000, and it answers 200, so a naive curl check passes while
   you screenshot a completely different application. Use 3100, and confirm
@@ -360,7 +360,7 @@ animated group around an inner translated group for exactly this reason.
 
 ## Pitfalls
 
-- Do not use the Champbeam skill or `/Users/deep/Apps&Projects/ChampUTM`; that is a different product.
+- Do not use the Champbeam skill or `~/Apps&Projects/ChampUTM`; that is a different product.
 - Do not call the vendor portal missing merely because upload is missing; authentication, assignment scoping, threads, and approved-work reads already exist, so a replacement would duplicate security-critical behavior.
 - Do not reuse the small source upload path for large audio or video; it buffers the whole request and can exhaust the worker.
 - Do not route every mailbox message through an LLM; deterministic filtering avoids cost, latency, and model authorization mistakes.

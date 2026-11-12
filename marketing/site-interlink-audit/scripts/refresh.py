@@ -137,7 +137,7 @@ def refresh_one(host, cap, force, skip_verify, skip_audit):
 
     # ---- 4. visual audit -------------------------------------------------
     if not skip_audit:
-        audit = "/Users/deep/champ-skills/design/skills/visual-verify/scripts/audit.py"
+        audit = "<path-to-repo>/design/skills/visual-verify/scripts/audit.py"
         if os.path.exists(audit):
             fails = []
             for w in (1440, 390):

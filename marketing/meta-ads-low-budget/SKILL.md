@@ -44,7 +44,7 @@ The video connects Meta's ads MCP to Claude, asks for a 7-day readout of winners
 
 ### 6. Phone the lead inside 60 seconds (17:48 to 18:32)
 
-For consented enquiries in staffed local calling hours, target a first attempt within 60 seconds and log attempted versus connected timestamps. Define after-hours handling and opt-out before launch. Ask why they opted in, record their language with permission and feed it into new angle hypotheses. A download is not unlimited calling consent. Verify caller identity and capacity, especially Pallab Majinder versus ads operator Pallab P.
+For consented enquiries in staffed local calling hours, target a first attempt within 60 seconds and log attempted versus connected timestamps. Define after-hours handling and opt-out before launch. Ask why they opted in, record their language with permission and feed it into new angle hypotheses. A download is not unlimited calling consent. Verify caller identity and capacity, especially the paid media lead Majinder versus ads operator the paid media lead P.
 
 ### Also in the video, not in the pasted summary
 

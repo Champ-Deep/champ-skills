@@ -32,7 +32,7 @@ other end shares no context with you.
 
 ## 0. Ground it before drafting
 
-Search the Celsus vault (`/Users/deep/Celsus`) plus the brand-guideline skills
+Search the Celsus vault (`<path-to-vault>`) plus the brand-guideline skills
 for the company, the campaign and any standing voice preference. Brand palette,
 fonts, naming rules and client-facing restrictions live in the brand skill, never
 in your own judgement. If no brand shows on screen, say which brand you assumed

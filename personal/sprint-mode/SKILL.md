@@ -35,7 +35,7 @@ Sprint Mode activates in two ways:
    ```
 
 2. **From conversation**: The user says something like "I have 2 hours, go" or "sprint mode, 1 hour."
-   In this case, read TASKS.md yourself from `/Users/deep/Celsus/TASKS.md`.
+   In this case, read TASKS.md yourself from `<path-to-vault>/TASKS.md`.
 
 ## Execution Protocol
 

@@ -58,10 +58,9 @@ def gh(args, body=None, timeout=45, tries=4):
 def main():
     dry = "--dry-run" in sys.argv
     repos = [
-        # (full_name, current_default, has_main)
-        ("Champ-Deep/100xLongevity", "frontend-implementation", True),
-        ("Champ-Deep/ChampHQ", "claude/odysseus-productization-hp0dv0", False),
-        ("Champ-Deep/lakeb2b-affiliate-portal", "claude/plan-online-strategy-6z5gx", False),
+        # Fill in repos you are allowed to publish. Do not commit private repos
+        # or internal branch names.
+        # ("your-org/your-repo", "current-default-branch", False),
     ]
     for full, cur, has_main in repos:
         print(f"\n── {full}  (default was {cur})")

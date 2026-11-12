@@ -7,7 +7,7 @@ import sys, json, os
 from playwright.sync_api import sync_playwright
 
 _arg = sys.argv[1] if len(sys.argv) > 1 else \
-    "/Users/deep/Apps&Projects/span-interlink-report.html"
+    "~/Apps&Projects/span-interlink-report.html"
 if not _arg.startswith(("file://", "http://", "https://")):
     _arg = "file://" + os.path.abspath(_arg).replace("&", "%26")
 URL = _arg

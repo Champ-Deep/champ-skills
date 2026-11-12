@@ -10,7 +10,7 @@ Laya (convaiinnovations/laya, 0.4B ModernBERT) answers typed questions about a t
 ## Run
 
 ```bash
-cd /Users/deep/laya-local/decider && ../.venv/bin/python decider.py ask "<situation>" [--shadow]   # gate verdict, optional Clef-flash shadow (~7 s warm)
+cd ~/laya-local/decider && ../.venv/bin/python decider.py ask "<situation>" [--shadow]   # gate verdict, optional Clef-flash shadow (~7 s warm)
 # Arbitrary typed questions (choice/score/noul, Jev shape): mcp_clef_ask via the `clef` MCP server, or decider/mcp_server.py directly.
 ```
 
@@ -22,7 +22,7 @@ Question types: `choice` (criteria is a dict), `score` (criteria is an ordered l
 - Triage and routing only: intent, urgency, phishing, tone, department. Keep arithmetic, dates and counting in code.
 - It is not a judge of strategy: a vendor penalty-waiver test returned accept at 0.91. Escalate to the human below about 0.85 confidence and spot-check on Deep's own data before automating anything.
 - Env lives at ~/laya-local/.venv (uv, python 3.12). Rebuild: `uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python laya`. `uv cache clean` while this venv's cache is held blocks on the lock (`UV_LOCK_TIMEOUT`, default 300 s); find the holder with `pgrep -fl uv` rather than raising the timeout to force it.
-- Clef-flash (Cloudflare, 9B, Apache 2.0) is the decision model of record since 2026-10-18 and runs on MPS from `/Users/deep/laya-local/.venv` (19 GB in the HF cache, ~7 s per call). Deep's decision gate is `/Users/deep/laya-local/decider/decider.py ask "<situation>" [--shadow]`: rules plus vault precedents decide, Clef answers in shadow only. `desk_eval.py --clef` scores both against the Decision Desk cards.
+- Clef-flash (Cloudflare, 9B, Apache 2.0) is the decision model of record since 2026-10-18 and runs on MPS from `~/laya-local/.venv` (19 GB in the HF cache, ~7 s per call). Deep's decision gate is `~/laya-local/decider/decider.py ask "<situation>" [--shadow]`: rules plus vault precedents decide, Clef answers in shadow only. `desk_eval.py --clef` scores both against the Decision Desk cards.
 - Inside Hermes it is the stdio MCP server `clef` (`decider/mcp_server.py`, tools `mcp_clef_decide`, `mcp_clef_ask`, `mcp_clef_label`; per-call timeout 300 s for the 75 s cold load; the model unloads after 15 min idle to give 18 GB RAM back). Self-check: `env -u PYTHONPATH -u PYTHONHOME ../.venv/bin/python test_mcp_server.py --clef`. Any python run from that venv in a Hermes terminal needs `env -u PYTHONPATH -u PYTHONHOME` or Hermes's 3.14 site-packages leak in (pydantic_core errors, httpx2 timeouts), and `UV_CACHE_DIR` must be unset too or uv re-fetches into a scratch dir on every run. `noul` answers come back as `{"noul": p}`, not `probability`.
 - Re-downloading Clef: `HF_HUB_DISABLE_XET=1` or the fetch crawls at 300 KB/s on this link (8 MB/s without Xet). Fine-tuning Clef locally is not possible (no training code shipped, 9B bf16 does not train on 32 GB MPS); the model learns the vault through the precedents retrieved into the state, not through weights.
 - Judge re-scoring must not straddle judge versions: when the judge changes, re-score every row into a fresh `--root` and compare whole roots. Mixing old rows with new ones in one table makes the verdict a mixture of two scorers.
@@ -32,7 +32,7 @@ Question types: `choice` (criteria is a dict), `score` (criteria is an ordered l
 The swipe triage app (`~/.hermes/scripts/swipe_triage.py`) appends every ruling to `~/.hermes/state/decision_log.jsonl` (id, kind, choice, answer, section, ts). That log trains the gate, not Clef's weights:
 
 ```bash
-cd /Users/deep/laya-local/decider && ../.venv/bin/python decider.py backfill   # seed the log from card history when thin
+cd ~/laya-local/decider && ../.venv/bin/python decider.py backfill   # seed the log from card history when thin
 ../.venv/bin/python decider.py label   # add a labelled ruling
 ../.venv/bin/python decider.py tune    # fit gate weights on the log
 ../.venv/bin/python decider.py eval --limit 60   # score against the current baseline
@@ -45,7 +45,7 @@ Ship a tune only when held-out accuracy beats the baseline; a regression keeps t
 The gate above answers "should we act at all"; per-card confidence answers "which of these decisions is cheap for Deep". Both run after `celsus_compose.py` has composed the pile:
 
 ```bash
-cd ~/.hermes/scripts && /Users/deep/laya-local/.venv/bin/python celsus_jev.py score --max 500   # writes ~/.hermes/state/celsus_jev.json
+cd ~/.hermes/scripts && ~/laya-local/.venv/bin/python celsus_jev.py score --max 500   # writes ~/.hermes/state/celsus_jev.json
 curl -s localhost:3177/api/cards | python3 -c "import sys,json,collections as c;d=json.load(sys.stdin);print(c.Counter(round(x['confidence'],1) for x in d if x['confidence']))"
 ```
 

@@ -104,7 +104,7 @@ def body_title(html):
 
 if __name__ == "__main__":
     import sys
-    sys.path.insert(0, "/Users/deep/.hermes/cache/scratch/sitearch")
+    sys.path.insert(0, "~/.hermes/cache/scratch/sitearch")
     from discover import fetch
     tests = [
         "https://www.spanglobalservices.com/technology-lists/zendesk-users-list",

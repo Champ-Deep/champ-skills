@@ -35,9 +35,9 @@ READY kits are picked up by the daily 6 PM draft-dispatch task and staged as Out
 
 - Drafts only. NEVER send anything.
 - No em dashes anywhere.
-- Terminology: "InfraTech", never "Infotech". Scheduler link: https://scheduler.zoom.us/sreedeep.
-- Lake B2B and SPAN Global Services never appear in the same client's materials.
-- Routing: real estate/infrastructure to Champion InfraTech (Aditya S aditya.s@championsmail.com, Kiran K Addala kiran.a@championinfratech.com); marketing/data to Lake B2B side; technology services to Cirralogix / IP Momentum.
-- Exclude internal recurring meetings (Leaders Meeting, Club Weekly, Accelerator Weekly, Friday Forum, Tuesday, Genz Training, Lead gen session) and solo notes sessions.
+- Terminology: keep each brand's spelling consistent. Scheduler link: <your-scheduler-link>.
+- Fill in brand pairs that must never appear in the same client's materials.
+- Routing: fill in a table of industry, destination brand, owner role, and mailbox (you@example.com). Leave the live roster out of this public skill.
+- Exclude the internal recurring meetings and solo notes sessions you list here.
 - Output must be 10-second glanceable; Deep reads ~35% of output, front-load P0s.
 

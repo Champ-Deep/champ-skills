@@ -3,14 +3,14 @@
     "name": "Span Global Services",
     "domain": "https://www.spanglobalservices.com",
     "logo": "logo.png",
-    "phone": "877.755.0023",
+    "phone": "(555) 010-0199",
     "phoneHref": "+18777550023",
     "privacyUrl": "https://www.spanglobalservices.com/privacy"
   },
   "meta": {
     "title": "MSP Email List and Contact Database | Span Global Services",
     "description": "MSP email list and contact database from SPAN Global Services. Request a sample to see whether the available contacts fit your target market.",
-    "canonical": "https://share.lakeb2b.com/f/iZ0AciBa/span-msp-landing-us-preview__1_.html"
+    "canonical": "https://example.com/campaign-preview.html"
   },
   "headlines": {
     "default": "Your Next MSP Customer Starts With The Right Contact.",
@@ -240,7 +240,7 @@
         "title": "Contact",
         "items": [
           {
-            "label": "877.755.0023",
+            "label": "(555) 010-0199",
             "href": "tel:+18777550023"
           },
           {

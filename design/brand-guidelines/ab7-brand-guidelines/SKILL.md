@@ -5,12 +5,12 @@ description: "Brand guidelines for AB7 Solutions (Champions sub-vendor partner).
 
 # AB7 Solutions Brand Guidelines
 
-Use this skill whenever Champions Group produces a document, deck, page or asset that goes out under the AB7 Solutions brand (for example, proposals AB7 fronts while Champions delivers as a white-label sub-vendor, such as the KW Delhi NCR real estate requirement).
+Use this skill whenever Champions Group produces a document, deck, page or asset that goes out under the AB7 Solutions brand (for example, proposals AB7 fronts while Champions delivers as a white-label sub-vendor, such as a white-label real estate requirement).
 
 These guidelines were reconstructed from the live styles of ab7solutions.com on 24 September 2026. They are NOT an official AB7 brand book. Treat the open items at the end as blockers for anything client-facing.
 
-Full visual reference (HTML, with the logo embedded): `/Users/deep/Celsus/Atlas/Context Docs/AB7 Solutions/AB7 Brand Guidelines.html`
-Logo file: `/Users/deep/Celsus/Atlas/Context Docs/AB7 Solutions/ab7-logo.png` (88 x 98 px PNG, transparent background)
+Full visual reference (HTML, with the logo embedded): `<path-to-vault>/brand-references/guidelines.html`
+Logo file: `<path-to-vault>/brand-references/logo.png` (88 x 98 px PNG, transparent background)
 
 ## Brand overview
 
@@ -19,7 +19,7 @@ Logo file: `/Users/deep/Celsus/Atlas/Context Docs/AB7 Solutions/ab7-logo.png` (8
 - **Positioning:** pre-vetted remote professionals and outsourced delivery; speed and risk reduction
 - **Seven service lines (numbered 01 to 07 on the site, keep this order):** 01 BPO & KPO Outsourcing, 02 Cybersecurity, 03 Digital & Development, 04 AI & Automation, 05 Complete Recruitment Solutions, 06 Remote Professional Staffing, 07 Background Verification. Newer offer: AI & Robotics services with human-in-the-loop review.
 - **Offices:** India HQ, Kalkat Bhawan, 2nd Floor, Airport Chowk, Mohali, Punjab 160062. USA, 525 Route 73 North, Suite 104, Marlton, NJ 08053.
-- **Phones:** +1 321 341 7733 (US), +91 98156 88660 (India HQ)
+- **Phones:** +1 (555) 010-0000 (US), +91 55555 01000 (India HQ)
 - **Web:** ab7solutions.com
 
 ## Logo

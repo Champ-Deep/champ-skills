@@ -12,14 +12,14 @@ Deliverable: `template-v2.html` next to `template.html`, a `--template` flag on 
 
 | What | Path |
 |---|---|
-| Builder and templates | `/Users/deep/champ-skills/design/span-landing-page/assets/campaign-landing/` |
+| Builder and templates | `<path-to-repo>/design/span-landing-page/assets/campaign-landing/` |
 | Current template (read, do not edit) | `template.html` |
 | New template (create) | `template-v2.html` |
 | Builder (edit: add `--template PATH`, default `template.html`) | `build.py` |
 | Unit tests (must stay green; add one v2 case) | `tests/test_build.py` |
 | Browser checks (reuse pattern) | `tests/browser_check.py` |
 | Component rules | `VISUALS.md` |
-| Demo variants | `/Users/deep/Celsus/Efforts/Active/Ideation/programmatic-demo/` (`make_demo.py` builds three variants, `check_demo.py` tests them; both must accept the v2 template via env `SPAN_TEMPLATE=/abs/path/template-v2.html`) |
+| Demo variants | `<path-to-vault>/Efforts/Active/Ideation/programmatic-demo/` (`make_demo.py` builds three variants, `check_demo.py` tests them; both must accept the v2 template via env `SPAN_TEMPLATE=/abs/path/template-v2.html`) |
 | Brand | skill `span-brand-guidelines`, Brand dialect |
 
 Skills to load first: `frontend-design`, `span-brand-guidelines`, `visual-verify`, `responsive-viewport-qa`.

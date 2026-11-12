@@ -142,7 +142,7 @@ Calendar gives the day's shape. Zoom and Wispr fill it with substance.
   - Create wikilinks to meeting notes if they exist in `Calendar/Meetings/`
 - Wispr Flow also exposes calendar tools (`search_calendar_events`, `get_calendar_event`). Use these as a fallback when the Google Calendar connector is unavailable.
 - If nothing is available: `*(Calendar integration pending)*`
-- **Known correction:** Sreedeep is NOT in the InfraTech Weekly (4:30 PM). He IS in the Cirralogix/Recruit Champ Weekly (3:30 to 4:30 PM). Always verify meeting labels against this.
+- **Known correction:** Fill in which recurring meetings the operator attends and which they skip, with the local time. Always verify meeting labels against that list.
 - NEVER leave blank
 
 Build a working list of calendar events. This becomes the spine that Zoom and Wispr results attach to.
@@ -463,7 +463,7 @@ Table: `Meeting | With | Time (IST) | Key Takeaways | Source`
 - Link the Zoom recording play URL on the meeting name when one exists, and the Wispr share link when there is no Zoom recording
 - Action item checkboxes below the table, sourced from Wispr `todos` merged with Zoom next-steps
 - Attendance from Zoom `participants` when available, not the invite list
-- IMPORTANT: Sreedeep attends Cirralogix/Recruit Champ Weekly at 3:30 to 4:30 PM (NOT InfraTech Weekly)
+- IMPORTANT: Fill in the recurring meetings the operator attends and the ones they skip, with local times.
 - Meetings with no recording or transcript: flag explicitly
 
 **Meeting Intelligence:**
@@ -724,11 +724,11 @@ After all outputs are created, provide a short bullet-point summary:
 ## Known Corrections (Hardcoded, Update as needed)
 
 - Time zone: Sreedeep is in Bangalore, IST (Asia/Kolkata, UTC+05:30). Zoom `search` requires this be supplied explicitly and will refuse to infer it. Wispr returns UTC and must be converted before display.
-- Meetings: Sreedeep is NOT in InfraTech Weekly (4:30 PM). He IS in Cirralogix/Recruit Champ Weekly (3:30 to 4:30 PM). Never prep or attend InfraTech Weekly.
+- Meetings: record the recurring meetings the operator attends and the ones they skip, with local times. Do not prep or attend a meeting on the skip list.
 - Email: Outlook integration is NOT available in Cowork. Always note this.
 - ChampIQ: On back burner (as of 2026-03-16). Primary build: Champmail + ChampGraph in parallel.
 - ChampVoice: MVP live, maintain only.
-- Cirralogix + Recruit Champ: Deep Focus, Sreedeep is deeply involved, weekly 3:30 to 4:30 PM meeting.
+- Focus brands: list the brands the operator is deeply involved in, and the weekly meeting time, in your own notes.
 - Apple Notes: Access requires computer-use MCP. If blocked, note the failure and add a carried-forward task.
 - Zoom `get_meeting_assets`: prefer UUID over numeric ID for recurring meetings, and double-encode the ID.
 - Wispr `since`/`until`: filters on modified time, not start time. Always verify actual meeting start against the target day.

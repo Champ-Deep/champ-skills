@@ -4,7 +4,7 @@ Entry points probed for a "chat with your file" feature. Read before designing
 anything that chains Workbench, Enrich, and a query tool; re-verify the line
 numbers, they drift.
 
-## Toolkit: /Users/deep/repos/dh-workbench-v5 (deependhq.com)
+## Toolkit: ~/repos/dh-workbench-v5 (deependhq.com)
 
 - Cloudflare Worker + D1 + R2, Clerk auth, credit ledger. User files live in
   R2, rows in D1 (`migrations/0001_toolkit.sql`: `files`, `toolkit_runs`,
@@ -17,7 +17,7 @@ numbers, they drift.
   Workbench (six stages) and Deep Enrich are the two existing tools.
 - `WORKERS.md` documents the site's other endpoints and required secrets.
 
-## Queryable chatbot: /Users/deep/repos/Queryable-chatbot (Veeresh-champ)
+## Queryable chatbot: ~/repos/Queryable-chatbot (Veeresh-champ)
 
 - FastAPI + Mongo, OpenUI Lang rendering (`@openuidev/*`), Jev router for
   natural language to validated read-only query. Frontend `openui_test/`.
