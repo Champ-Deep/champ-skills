@@ -80,7 +80,7 @@ it back in the same test.
 
 ## A refusal gate is a classifier: probe both directions on held-out prompts
 
-A safety or refusal rule set (regex gates, keyword lists) that passes its own bank proves only the bank, because the bank is what it was tuned on. Before reporting it done, run at least 10 held-out prompts it must refuse and 10 it must answer, written after the rules, in the product's real phrasing ("can I have magnesium-rich food" is a food question that a drug-name list will refuse). Paste the per-prompt table, and list every miss in either direction as a stated limit or a fix. A widened term list mostly buys recall with false refusals, and only the must-answer half shows that.
+A safety or refusal rule set (regex gates, keyword lists) that passes its own bank proves only the bank, because the bank is what it was tuned on. Before reporting it done, run at least 10 held-out prompts it must refuse and 10 it must answer, written after the rules, in the product's real phrasing ("can I have magnesium-rich food" is a food question that a drug-name list will refuse). Paste the per-prompt table, and list every miss in either direction as a stated limit or a fix. A widened term list mostly buys recall with false refusals, and only the must-answer half shows that. Every rule added in a fix round gets its own must-answer probes that reuse its trigger words with an ordinary object, in the users' dialect: a rule for "what should I take for acidity" also refused "what should I take for breakfast", which is how Indian English asks what to eat, and a held-out set written before the rule never tried it.
 
 ## A fix fitted to the reported input is proven on that input only
 
