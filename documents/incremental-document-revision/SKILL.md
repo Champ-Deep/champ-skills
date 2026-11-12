@@ -138,6 +138,7 @@ itself a defect.
 - **Verifying only the final pass.** Defects survive across passes; re-run every
   invariant every time.
 - **Reusing pre-mutation indices.** Re-derive by text after any structural edit.
+- **A summary line that counts or ranks items goes stale when you add one.** "Of the four lines, the first two are true today" was right until a fix pass inserted a fifth line (true) in fourth place, and the reviewer had asked for that summary line in the prior round. After adding or removing any list item, grep the page for number words and ordinals ("two", "four", "first", "N of M") and re-derive each from the list itself.
 
 ## Verification
 
