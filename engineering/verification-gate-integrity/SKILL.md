@@ -258,6 +258,16 @@ report each item on the record but absent from the output with a one-line reason
 excluded. A brief that names N items is a starting list, not the denominator, when the
 record has kept growing since the brief was written.
 
+## A quote matched against your own transcription is not a citation check
+
+A strict citation pass that compares a ledger quote with a vision transcription you wrote
+checks the transcription against itself. Vision models both invent and autocorrect typos:
+one brief told a writer to fix "Candiate" in a graphic that OCR reads as "Candidate". Before
+any finding that rests on exact image spelling or a figure read from an image, run OCR with
+language correction off (`tesseract img.png -`, or Apple Vision `VNRecognizeTextRequest`
+with `usesLanguageCorrection=false`) and require two readers to agree. Report the image
+quote as transcribed, not as verified.
+
 ## A test asserting the removed contract fails by design
 
 When a deliberate redesign removes a pattern (a hover label swap, a chip UI), grep the test
