@@ -189,6 +189,16 @@ a fix round at a defect that is not there, and a genuinely corrupted value judge
 redacted ships. Never quote a printed identifier as proof of what the file holds.
 Measure the artifact, report the measurement.
 
+## An edit is claimed only after the file reads back changed
+
+A script that raises before its `write` leaves the file as it was, and every
+later gate (count, dash grep, parse) still passes on the old content, because
+none of them checks the fix. Before reporting a fix, read the field you changed
+back from disk and assert the new value (`json.load(...)[...] == expected`), and
+check the file's mtime moved. One ledger fix round claimed three JSON edits; the
+script had errored on its first assert, the JSONs kept their old mtime, and
+only the markdown summary was rewritten.
+
 ## Promotion is a sequence of claims, not one
 
 Deploying is a chain (find the version, deploy it, promote it), and the tool's success
