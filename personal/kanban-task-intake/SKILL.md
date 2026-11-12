@@ -197,6 +197,12 @@ Loop breaker: a card blocked, unblocked and re-blocked for the same kind twice l
 
 **Jev auto-go is a trickle, not a clearing lane.** Measure it before leaning on it: `jev_decisions.jsonl` for the week to 12 Nov 2026 shows 384 cards scored and 1 released, with 319 gated `uncertain` at the 0.90 bar. The pile is cleared by the daily ruling pass (1e) and bounded by the desk cap (1f); Jev only catches the rare high-confidence prep card in between.
 
+**When Deep says the board is not moving, measure creation against completion before touching dispatch.** On 12 Nov 2026 the lanes finished about 190 cards in two days and created 538 (reviewer 180, planner 113, default 112, meeting watcher 52), and 139 of the new ones were questions for him. A board that makes 2.8 cards per card finished never drains however fast it runs, and capping what he sees only hides it. Fix the makers: the grounded retro has a budget of 2 follow-up cards per batch and none for Deep (`kanban_retro.py`), and the meeting watcher runs WORK FIRST (preparation is created running with the assumption on its first line, never as a child of a decision; no card to confirm speakers or ownership; at most 2 decision cards per meeting). A shelved decision with `todo` children is the tell: 93 such cards held 141 pieces of preparation.
+
+**Do not auto-apply the recommended option; his own picks do not support it.** Backtest from card comments (his swipe and chat rulings against the `A (recommended)` letter on the same card): 98 rulings, 57 took the recommendation (58%), and 37 of the 41 misses were C, which is hold or drop. More than a third of what the board asks him to approve he would rather not do at all, so silence is not consent to A. The lever is asking for less and showing finished work, not executing defaults. Rerun the backtest before proposing any auto-rule, and report the n.
+
+**A shelved (`scheduled`) card cannot be completed.** `hermes kanban complete` refuses it. To rule a shelved decision so its preparation starts: comment the ruling on every `todo` child (workers read their own card's comments, not an archived parent's), then archive the parent, which promotes the children to ready.
+
 ## 3. Decision card format (mandatory for every `needs_input` block)
 
 The block reason, and the body of any card created blocked, must be this shape and nothing longer. Evidence goes in a comment, not the reason.
