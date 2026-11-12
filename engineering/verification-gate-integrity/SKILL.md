@@ -365,6 +365,10 @@ also fails a 44px minimum.
   pre-existing rows, or scope the assertion to your own keys, before fixing the code
   the failure appears to indict.
 
+## Prepared widgets need warm-failure and reopen probes
+
+Test lazy widgets after preparation as well as before it. Let the module and overview requests finish, switch the browser offline, then open: a failure handler attached only to import rejection cannot show the promised offline recovery once the import is cached. Reject each required overview independently too, and assert the actual recovery control and contact fallback rather than merely an Offline label. For dialogs, close and reopen through the real launcher, then press Tab and Shift+Tab without seeding focus inside the panel; a trap tested only after manually focusing its last control misses a reopen path that leaves focus on the host page. Add fixed chrome after widget mount and resize it without dispatching a window resize, because an observer attached only to the initial node list misses later host components.
+
 ## Browser probes: read the DOM, do not guess selectors
 
 Labels and element order change with state. A quick action labelled one way in the
