@@ -47,6 +47,10 @@ Roll this out gradually. Move each campaign onto these rules as its next sequenc
 
 Before research, ask for (or confirm from context): selling brand, sender name and title, phone, and the prospecting domain plus its website URL. If the website is missing or does not carry the five required pages, say so in one line and offer to draft the one-page site copy. Never fill the signature with Champions Group.
 
+**Copy written for a simulation is the copy that ships.** When the variants feed a ChampOracle panel (email_cold) before staging, the sender identity is part of what the panel judges: a body signed `Deep` with `my team` and no company tests an anonymous email, and the winner is then re-edited before send, so the tested copy is not what goes out. Put the who-is-writing line and the selling-brand sign-off in the simulated body now. If the brand is truly undecided, name the product being offered (the one the report and signup link live on) rather than deferring identity to the send lane.
+
+**A supplied proof figure gets traced to its run before it goes in copy.** When a card hands you a result ("85% to 0% in a 20 persona panel"), find the artifact that produced it (for ChampOracle, `~/repos/champoracle-agent/data/reports/<client>-<date>.html`) and write the metric it actually measures and the medium it was measured on (for example, share of the panel reacting positively to two Meta ads). Writing "not independently verified" when the report is on disk is a skipped check. Anonymizing a client is right without consent, but keep the category and medium ("a Bengaluru delivery app's Meta ads"), or the proof reads as a number about nothing.
+
 ---
 
 ## Phase 1: Prospect Research
