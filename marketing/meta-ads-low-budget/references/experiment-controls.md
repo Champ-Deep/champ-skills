@@ -10,6 +10,8 @@ Test two belief/pain angles with offer and static format held fixed. If affordab
 
 Write the cap, primary qualified outcome, review window and pause/escalation rules before launch. Choose evidence thresholds from expected qualified-lead cost and sales-cycle lag, not a universal 30 to 50 leads or seven days. A small budget can produce inconclusive results; never exceed it to hit a sample target. Report spend, valid/reachable leads, qualified leads, opportunities/bookings, dates and denominators. CBO and 80/20 are optional later tests after real evidence and Deep approval, never automatic budget changes. AI drafts analysis only.
 
+Compute every readout date in code from the launch or ruling date and compare it to the season dates it is argued against (a 30 day read from 18 Nov lands 18 Dec, before Christmas week, not after). Check any "no excerpt is dated X" line against each excerpt's own date field, and any "owner named in <card>" line against that card's body and comments, before it goes into a strategy file or a decision comment.
+
 ## Report-led offer and 500 validations
 
 Deep proposed 500 free validations of a buyer-supplied file. This is a proposed cap, not a live entitlement. Validation, contact enrichment and messaging simulation are different deliverables. Confirm eligible rows, supported fields, checks performed, catch-all/unknown handling, deduplication, exclusions, delivery owner, turnaround and method before publishing. A hero mechanism must be real; urgency, safety and fleet claims require evidence.
