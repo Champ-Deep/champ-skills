@@ -160,6 +160,15 @@ its neighbours:
   against counted sessions from an analytics tag is two different measures, so
   "flat there, up here" is a mismatch to name, not a failed replication.
 
+## The viewer must not be able to move the number
+
+A screen that shows a tracked counter (opens, clicks, views) must not offer
+the tracked URL as a clickable link to the person reading the counter. A
+vendor who clicks their own share link from the analytics view records an
+open, and the derived status flips from sent to viewed with no prospect
+involved. Show the URL as text with the house copy control, and in review,
+click the link from the view and re-read the counter to prove it cannot move.
+
 ## A zero can mean nobody was measuring
 
 Before publishing that a source shows nothing, or that it "does not back" a
