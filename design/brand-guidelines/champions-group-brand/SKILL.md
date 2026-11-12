@@ -299,6 +299,19 @@ function headerCell(text, width) {
 - Rounded corners (12-16px) for card images and screenshots
 - Illustrations: flat/semi-flat with orange accent elements
 
+## Meeting backdrops (Zoom, Teams, Meet)
+
+Deep's rulings on Champions Group backdrops, from a full reject round:
+
+- One scene in one art style, dark or dusk with warm orange light. Deep's benchmarks for quality are an aurora night photo and a 16-bit pixel landscape. Reversed logo on these grounds.
+- Rejected as shabby: clay or paper dioramas, flat icon tiles, a names-only text column, pennant walls, an illustrated tree, and photoreal prop shelves ("fake and hyperrealistic").
+- All 12 companies appear, each with a picture that shows what it does, not a pun on its name. Lake B2B is a network of contacts feeding a funnel, never a lake. Champions Club is people around a table, never a framed photo or a clubhouse.
+- The person sits in the centre: six companies in the left 30 percent, six in the right 30 percent, nothing that matters in the middle 36 percent. A solar system with the sun behind the head is the layout Deep pointed to.
+- Reserve the top-left 26 by 27 percent for the logo in the prompt, then measure the plate under the logo box plus 40px: brightness spread should stay near flat. Place the logo above the first scene element found, and shrink it (never below 160px) before letting anything sit within 40px.
+- Names only, large. Adding a descriptor line halves the lettering and reads as clutter.
+- No public example was found of a group putting every company in one backdrop; groups publish one scene per brand. Offer a per-ecosystem set when a single image keeps reading as twelve stickers.
+- The logo PNGs are cropped flush to the ink with no padding. That is not clipping, but leave real margin around them.
+
 ## Key Stats (for content)
 
 | Metric | Value | Source |
