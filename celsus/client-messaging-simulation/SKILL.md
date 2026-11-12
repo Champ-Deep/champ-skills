@@ -24,10 +24,14 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
    - Pull the client's real copy from their public site and Meta Ad Library;
      never invent placeholder copy and never paraphrase their ads.
    - ICP comes from the vault client note when one exists. Roles are segments
-     the report will report on, so name them as the client would.
+     the report will report on, so name them as the client would. Exception: when
+     the note or a meeting restricts the ICP to one brand group (SPAN ICP stays in
+     the SPAN group), or the note holds vendor invoices, staffing or proposals, take
+     personas from public site copy only and give each persona its `source_ids`.
 2. **Run it live**:
    ```
-   cd ~/repos/champoracle-agent && set -a && source ~/.hermes/.env && set +a
+   cd ~/repos/champoracle-agent && export OPENROUTER_API_KEY="$(grep '^OPENROUTER_API_KEY=' ~/.hermes/.env | cut -d= -f2-)"
+   sh <skill dir>/scripts/key_health.sh   # limit fields only; stop if limit_remaining is too low
    export CHAMPORACLE_LLM_MODEL=deepseek/deepseek-v4.1-flash
    uv run champoracle report data/briefs/<client>.json --out data/reports/<client>-<date>.html
    ```
@@ -81,7 +85,10 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
   Keychain: `security find-generic-password -s champoracle-ops -w`. Prove the LLM path on the production image locally with
   `docker run ... -e CHAMPORACLE_LLM_KEY=... co-local` rather than putting a shared key on the host.
 - Never `source` or `set -a; . ~/.hermes/.env`: a malformed line echoes a secret into the transcript. Read one var with
-  `grep '^NAME=' ~/.hermes/.env | cut -d= -f2-`.
+  `grep '^NAME=' ~/.hermes/.env | cut -d= -f2-` only inside an assignment or `$(...)` that is never echoed; run bare, it prints
+  the key. For key health use `scripts/key_health.sh` by path. Never paste a secret-reading command into a kanban comment or
+  card body: the board redactor turns the `$(grep` and `KEY='` parts into `***`, so the stored command no longer runs and the
+  worker falls back to whatever the body said.
 - Wrangler API calls 504 during Cloudflare partial outages (check cloudflarestatus.com); retry the deploy, do not change code.
   `ImagePullError: runtime failed unpacking the image` in `wrangler containers info <app>` is the same class of transient.
 
