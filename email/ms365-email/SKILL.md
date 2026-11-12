@@ -67,6 +67,8 @@ Don't use for: inbox triage or reply policy (`email-inbox-triage`), terminal IMA
 
 ## Pitfalls
 
+- **Never set `from` on a draft.** The ms365 server is signed in as one mailbox (`get-current-user` returned `deep@lakeb2b.com` on 12 Nov 2026) and the tools ignore an `account` argument, so every draft is created there. A draft whose From is another address (`deep@championsmail.com`) saves fine and then fails at Send with "You do not have permission to send the message on behalf of the specified user". Leave From unset; when a mail must leave from another mailbox, say so on the card so Deep switches From or sends it from that Outlook. Check with `get-current-user` before claiming which mailbox a draft is in.
+
 - **`list_mail_attachments` on a marketing or delivery mail can return megabytes of inline base64.** Every `isInline: true` image rides along as `contentBytes`, so the tool result spills to a cache file instead of the conversation, and that spilled JSON carries raw control characters a strict `json.loads` rejects. Parse it with the tolerant `json_parse` helper from `hermes_tools`, not `json.loads`. When you only need the file inventory, ask for `name,contentType,size,id` so `contentBytes` never comes back.
 - Attaching before checking the file: the draft exists but the deliverable cannot complete, leaving a half-built draft. Validate path, size, and type first.
 - Asking for missing data in prose when you could attach the input sheet. Prefill every field you already know and set dropdowns on the choice fields, so the recipient fills gaps instead of re-typing what the mail already carried; verify the written sheet by reopening it and asserting row counts, not by trusting the writer call.
