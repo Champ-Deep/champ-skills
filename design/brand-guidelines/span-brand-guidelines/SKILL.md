@@ -188,7 +188,8 @@ A stat band (contact counts, refresh date, provider counts) that follows a dark 
 
 ## Logo Rules
 
-- Source: the SPAN brand book (HTML and PPTX), held by Deep's team. Ask Deep for the current files. A transparent PNG logo ships inside `span-landing-page/assets/campaign-landing/examples/`.
+- Source: the SPAN brand book (HTML and PPTX), held by Deep's team. Ask Deep for a larger file.
+- **A logo file exists; never write "no SPAN logo available".** `span-landing-page/assets/campaign-landing/examples/span-msp-us/logo.png` (200 by 57, RGBA, green mark plus black wordmark, sha1 7bfc5037). The same file sits in the vault at `Efforts/Active/Span Thanksgiving Offer/finals/assets/span-logo.png`. Use it on white or light grounds at 200px or less, never upscaled; its tagline is about 5px tall. Black text does not read on navy, so keep it off the dark hero unless a white variant is supplied.
 - Primary logo: horizontal lockup, SPAN Green on white or white on dark
 - Minimum clear space: match height of capital "S"
 - Never: recolor outside palette, stretch, place on busy backgrounds
