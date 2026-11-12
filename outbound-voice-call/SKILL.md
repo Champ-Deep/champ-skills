@@ -29,6 +29,19 @@ The driver is the `dial` CLI (getdial.ai). Load `dial-cli` for its command surfa
 - Name the placing platform and number when reporting, so the principal can tell the recipient what to expect on their caller ID.
 - Calling Indian businesses from the US Dial number mostly fails: unknown +1 caller IDs go unanswered (worse on Sundays), and IndiaMART/Justdial relay lines (+91 79..., +91 80 4xxx) drop or garble audio. Prefer the business's own mobile from its website, call Mon to Sat 10:00 to 18:00 IST, and send the written ask in parallel instead of waiting on the call. Measured cost: about 66 cents for 84 s of connected India time.
 
+## A call that must happen at a set time while nobody is there
+
+Use a one-shot `no_agent` cron job pointing at a script under `~/.hermes/scripts`, never an agent run: a phone call must not depend on a model's mood. Worked example: `~/.hermes/scripts/lev_briefing_call.py`.
+
+- The script dials only inside a narrow window around the target time and stays silent outside it, so a late or repeated tick cannot ring anyone.
+- Write a done marker before dialing and pass `--idempotency-key`. Never retry: a failed placement is reported, not repeated.
+- Give the principal a veto that the script reads just before dialing: a skip file, and the decision card (archived status, or a comment matching the "no call" option). Skip the agent's own evidence comments when scanning, and test the pattern against the real ruling formats (`Deep: C`, `Deep (via Grok Bot): C`, free text from the desktop).
+- `dial` is a node script. In a bare cron PATH it fails silently, so call it by absolute path and put its own `bin` directory first on PATH. Prove it with `env -i HOME=$HOME PATH=/usr/bin:/bin python3 <script> --dry-run`.
+- Return from the tick right after placement and hand the wait and the record save to a detached child, so a script timeout cannot lose the transcript.
+- Free Dial accounts refuse a duration cap above 300 seconds. A four minute briefing needs about 290.
+- The opening line names the system that is really placing the call. A fallback placed through the CLI must not introduce itself as the product it is standing in for.
+- Create the decision card first, with the fallback as the stated default and its deadline, then schedule. A chat question asked at night times out unanswered.
+
 ## References
 
 - `references/voice-language-controls.md` - the full voice and language control matrix, accent A/B recipe, duration cap mechanics and cost measurement.
