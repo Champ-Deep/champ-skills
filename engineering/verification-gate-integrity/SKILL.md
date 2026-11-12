@@ -109,6 +109,12 @@ Reintroduce the exact defect, confirm the test fails and names real numbers, rev
 confirm green. Run this on converted and inherited gates, not only the ones just written. A
 gate never seen failing is a gate nobody knows is armed.
 
+A `disabled` assertion is vacuous when the fixture trips a second disabling condition. A
+Send button asserted disabled "while unpublished" on an event with an empty team, with
+audience `team`, stays disabled for the empty team even after the publish guard is removed.
+Build the fixture so the guard under test is the only reason for the state (a team member,
+a filled message, audience `everyone`), then delete that guard and require red.
+
 ## A removal is proved by absence
 
 Checking that the new shape exists proves nothing about what was taken out: an old field can
