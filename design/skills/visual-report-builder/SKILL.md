@@ -558,6 +558,13 @@ reports the app generates.
    media queries for layout shifts only.
 8. **Never invent a number.** Every figure comes from the source; rates and shares
    computed from stated figures are allowed and labeled as computed.
+9. **Never invent a rule either.** A label or explanation that describes system logic
+   (what a gate means, what would flip it, which statuses a stat counts) is a claim
+   about code. Read the code that defines it and match the words to it: a "held for a
+   person" stat that also counts `todo` cards waiting on dependencies is false, and a
+   counter-condition for a gate written from its name rather than its predicate is
+   invented. If you cannot read the source, render Unavailable. Cite the file and
+   line in the handoff.
 
 ---
 
