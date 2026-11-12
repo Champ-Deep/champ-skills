@@ -475,6 +475,8 @@ Never write "verified" if you did not open the images.
 
 When the deliverable is a set of files others open later (a showcase, a handoff, a deck), persist the report beside them as `VERIFICATION.md`: checks executed with counts, visual defects found and fixed, and explicit limits (devices not tested, no deployment, what was left unverified). A chat message ages out; the file travels with the artifact and answers the reviewer's first question without a rebuild.
 
+Screenshots a card requires as attachments: `kanban_attach` takes inline base64 only and `kanban_attach_url` refuses localhost, so a 150 KB PNG is a heavy but valid call. Re-export as JPEG q75 at 1x (or one contact sheet per theme, under 250 KB) and attach one file per call, then read the list back with `kanban_attachments`. Never write "screenshots on the card" in a PR body or handoff before that readback, and never hand off with the attach step skipped as a "tool limit": scratch is pruned, so a path in a workspace folder is not evidence a reviewer can open later.
+
 A pull request into a product repo is the exception: the report goes in the PR body and the task's evidence attachments, never committed. A root-level `VERIFICATION.md` or per-fix `DESIGN.md` lands on main permanently, clutters a repo that may be public, carries internal process notes (lane names, task rulings, local interpreter paths) out of the company, and squats the `DESIGN.md` name the repo's design-system spec owns. Keep the committed diff to product code, tests and any verification script, and give that script its own run instructions in a header comment.
 
 ---
