@@ -78,6 +78,10 @@ key. A test named for a negative guarantee ("the refused write changed nothing")
 create the before-state, attempt the write with a value that differs from it, and read
 it back in the same test.
 
+## A refusal gate is a classifier: probe both directions on held-out prompts
+
+A safety or refusal rule set (regex gates, keyword lists) that passes its own bank proves only the bank, because the bank is what it was tuned on. Before reporting it done, run at least 10 held-out prompts it must refuse and 10 it must answer, written after the rules, in the product's real phrasing ("can I have magnesium-rich food" is a food question that a drug-name list will refuse). Paste the per-prompt table, and list every miss in either direction as a stated limit or a fix. A widened term list mostly buys recall with false refusals, and only the must-answer half shows that.
+
 ## A fix fitted to the reported input is proven on that input only
 
 A precision fix for a heuristic (a scraper, a classifier, a parser rule) that is

@@ -215,6 +215,7 @@ the author. Run the visual verification gate and open the screenshots.
 - **A docstring claiming a property is a lead, not a proof.** "Atomically" over
   a two-round-trip implementation is the most productive thing to grep for in
   an unfamiliar codebase.
+- **A routing key in a durable row is a consumer claim.** A notification `go`, deep link or enum written by a migration lands wherever the client's map sends it. Read the map entry (for example `onGo` in the app shell) before writing "opens X" in a handoff, because an existing key can already point at an unrelated screen.
 - **A scaffolded feature reads as shipped.** The emitting half (event, hook,
   config key) can be complete and tested while the consuming half lives in
   another repo, unbuilt; grep the deploying repo for the consumer before
