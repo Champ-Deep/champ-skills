@@ -29,7 +29,7 @@ Any HTML, page, form, checklist, dashboard or single-file artifact deliverable s
 
 This skill is **Phase 1**: structure, the design system, and the first cut of styling. It pairs with a **Phase 2** refinement skill, `ui-polish`, which hunts the residual "AI tells" (emoji icons, default palettes, decorative graphics where data belongs, overstuffed sidebars, static pricing) and replaces them with senior-designer choices.
 
-Always produce the DESIGN.md (below). It is the contract the polish pass reads, so the two phases never fight. After you finish Step 3, hand off to Step 4.
+Always produce the DESIGN.md (below). It is the contract the polish pass reads, so the two phases never fight. When the work is a fix or feature PR into an existing product repo that already owns a DESIGN.md, keep the per-change DESIGN.md and any VERIFICATION.md in the task workspace or the PR body and out of the diff: committed, they squat the repo's spec name and carry local paths and stale process notes onto main. After you finish Step 3, hand off to Step 4.
 
 ## Priority System
 
