@@ -394,6 +394,10 @@ its own, and confirm the hold still stands immediately before any release step. 
 hold in the report's verdict line, not only in a comment, or the green checklist reads
 as sign-off.
 
+## A "known" account in a probe is a claim about the database
+
+An enumeration, timing or delivery probe compares a known account with an unknown one, and a generic response ("If this email exists...") is identical for both, so the HTTP output cannot tell you the known side was known. Before the probe, prove the address exists with a count-only query (`SELECT count(*) FROM users WHERE lower(email)=?` must be 1), and after it, prove the known path ran (for a reset: the verification or token table count rose by one, count only, never the value). An owner's work address is not his app account: one deploy proof timed two unknown addresses, reported the oracle closed, and asked the owner to look for a reset mail the server never sent.
+
 ## A gate's own label decides whether it gated
 
 Read the gate's configuration line, not just its verdict word: a finding printed as a block beside `WARN-ONLY (in gate-config.json warn_only)` stopped nothing, so "the gate passed" then describes the config rather than the code. Quote the classification back, and when a required audit was skipped because the owner said to proceed, carry the skip into the PR body and the report as an unproven item instead of letting the green checklist stand in for it.
