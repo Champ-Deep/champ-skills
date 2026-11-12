@@ -1,6 +1,6 @@
 ---
 name: span-brand-guidelines
-description: Brand guidelines and design system for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including SPAN web pages, landing pages, presentations, documents, SEO content, emails, sales assets, internal tools, or any design work requiring SPAN branding. Also trigger for anything involving the Phoenix team, Murugan, Preeti, Gary, or SPAN-facing campaigns. MANDATORY TRIGGER for all SPAN-related content creation and design tasks.
+description: Brand guidelines and design system for SPAN Global Services, a B2B data and demand generation company. Use when creating any SPAN-branded content including SPAN web pages, landing pages, presentations, documents, SEO content, emails, sales assets, internal tools, or any design work requiring SPAN branding. Also trigger for anything involving the sales team or a SPAN campaign. MANDATORY TRIGGER for all SPAN-related content creation and design tasks.
 ---
 
 # SPAN Global Services Brand Guidelines
@@ -200,18 +200,18 @@ A stat band (contact counts, refresh date, provider counts) that follows a dark 
 
 | Person | Role | Content Link |
 |--------|------|-------------|
-| Gary | Head of Sales, Phoenix team lead | Pricing, deals, case studies |
-| Murugan | Nurturing Specialist | Lead sequences, content distribution |
-| Preeti | SEO Specialist, owns SPAN SEO and page approval | Content optimization, landing pages, final say on page content |
-| Manu | Developer on SPAN web | Technical approval of new pages and deployment |
-| Aishwarya | Content Writer, reports to Preeti | Answer pages, profiles, comparisons |
-| Santhosh | Data team | Confirms every count before it is published |
-| Pallab | Reviews SPAN ad landing pages and budget | Paid campaign sign-off |
-| Harsha | Page builder: structures, designs and deploys SPAN pages from team content | Landing pages and content pages |
-| Lam | Account Manager | Prospect volume, account intel |
-| Tim / Travis | BD Coordinators | Outbound execution |
+| the sales lead | Head of Sales, the sales team lead | Pricing, deals, case studies |
+| the nurture lead | Nurturing Specialist | Lead sequences, content distribution |
+| the SEO lead | SEO Specialist, owns SPAN SEO and page approval | Content optimization, landing pages, final say on page content |
+| the web developer | Developer on SPAN web | Technical approval of new pages and deployment |
+| the content writer | Content Writer, reports to the SEO lead | Answer pages, profiles, comparisons |
+| the data lead | Data team | Confirms every count before it is published |
+| the paid media lead | Reviews SPAN ad landing pages and budget | Paid campaign sign-off |
+| the page builder | Page builder: structures, designs and deploys SPAN pages from team content | Landing pages and content pages |
+| the account manager | Account Manager | Prospect volume, account intel |
+| the coordinators | BD Coordinators | Outbound execution |
 
-New pages: Harsha builds, Preeti or Manu approves the first two or three before deployment, then review is weekly.
+New pages: the page builder builds, the SEO lead or the web developer approves the first two or three before deployment, then review is weekly.
 
 ---
 
@@ -230,12 +230,12 @@ SPAN's SEO strategy is vertical-specialist and technology-led content to out-fla
 
 ## Usage Notes
 
-Anything proposed to the design team (Manu, Harsha, Preeti) ships as a visual page, not a text document: live HTML mockups of the proposed state next to screenshots of the live page, measured facts under each, concept renders at their real aspect ratios, ad copy rendered as the ad will appear. A docx of proposals gets read once; a before and after gets decided on. Build on the palette currently approved in principle and say so on the page.
+Anything proposed to the design team (the web developer, the page builder, the SEO lead) ships as a visual page, not a text document: live HTML mockups of the proposed state next to screenshots of the live page, measured facts under each, concept renders at their real aspect ratios, ad copy rendered as the ad will appear. A docx of proposals gets read once; a before and after gets decided on. Build on the palette currently approved in principle and say so on the page.
 
 Load this skill whenever creating:
 - SPAN-branded onboarding materials, internal tools, or templates
 - SEO content, blog posts, or landing pages for SPAN
-- Sales assets, email sequences, or outreach for the Phoenix team
+- Sales assets, email sequences, or outreach for the sales team
 - Any HTML/CSS artifact in the SPAN color system
 - Reports or dashboards surfaced to the SPAN team
 

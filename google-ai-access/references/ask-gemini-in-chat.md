@@ -8,7 +8,7 @@ help page if a feature list matters to a build; these features move.
 1. Eligible **Google Workspace subscription** (consumer Google AI plans do not
    unlock it). English only, for now.
 2. Admin enables **Gemini in Workspace in Chat** and **Workspace Intelligence**
-   for the org. Deep admins `championsmail.com`, so he flips these himself.
+   for the org. If you administer the workspace, you flip these yourself.
 3. The user is enrolled in **Workspace Smart Features**.
 4. Admin may need beta features on for message-level Ask Gemini.
 

@@ -111,7 +111,7 @@ Before presenting, grep your output for:
 
 ### Step 7: Save and present
 
-- Save to `/Users/deep/Celsus/{descriptive-name}.html` (vault root, so the user can open immediately).
+- Save to `<path-to-vault>/{descriptive-name}.html` (vault root, so the user can open immediately).
 - If the source was a vault note, also offer to update the source note with a wikilink to the refreshed page.
 - Present using a single computer:// link with a one-line description. Do not over-explain.
 

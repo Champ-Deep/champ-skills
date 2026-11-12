@@ -12,7 +12,7 @@ did not touch.
 
 ## The shape
 
-Champions backends (ChampLantern, Champions B2B Workspace, Champbeam) register
+Champions backends register
 capabilities behind a `get_x(provider)` factory: `get_messaging`,
 `get_meeting`, `get_calendar`, `get_llm`. Settings carry a `*_provider` string.
 Before extending one, check whether the setting is actually honoured. A

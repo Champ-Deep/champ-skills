@@ -30,12 +30,13 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
      personas from public site copy only and give each persona its `source_ids`.
 2. **Run it live**:
    ```
-   cd ~/repos/champoracle-agent && export OPENROUTER_API_KEY="$(grep '^OPENROUTER_API_KEY=' ~/.hermes/.env | cut -d= -f2-)"
+   cd ~/repos/champoracle-agent
+   # Put the model gateway key in the environment from the local env file outside the repo. Do not print it.
    sh <skill dir>/scripts/key_health.sh   # limit fields only; stop if limit_remaining is too low
    export CHAMPORACLE_LLM_MODEL=deepseek/deepseek-v4.1-flash
    uv run champoracle report data/briefs/<client>.json --out data/reports/<client>-<date>.html
    ```
-   Key comes from `CHAMPORACLE_LLM_KEY` or `OPENROUTER_API_KEY` in `~/.hermes/.env`;
+   Key comes from the environment (the product key or the model gateway key). Load it from the local env file outside the repo;
    the model defaults to `anthropic/claude-haiku-4.5` when `CHAMPORACLE_LLM_MODEL`
    is unset. Never print the key. Without any key the run falls back to the builtin
    panel, which is fine for tests and wrong for a client deliverable.
@@ -62,7 +63,7 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
   because `wrangler dev` dies with `spawn EBADF` under the agent terminal.
 - UI briefs with the decided 21st.dev ids: `champoracle-agent/docs/ui-brief-v1.md` (share view) and
   `deependhq-site/docs/ui-brief-oracle-v1.md` (toolkit page). The 21st.dev MCP may not be loaded in the
-  main lane; call `https://21st.dev/api/mcp` directly with `tools/call` `search` (key from `~/.hermes/.env`,
+  main lane; call `https://21st.dev/api/mcp` directly with `tools/call` `search` (key from the environment,
   never printed) and open 3 preview images with vision before writing a component table.
 - Hosting is a Deep decision (Clef: client-facing plus spend). Deep chose Cloudflare on 2026-11-09.
 
@@ -81,11 +82,9 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
 - deependhq has an undeployed version, so `wrangler secret put` there fails; use `wrangler versions secret put` and let the page
   card deploy the version.
 - Functional check of any running instance: `CHAMPORACLE_URL=... CHAMPORACLE_KEY=... uv run python scripts/hosted_smoke.py --panel 8 [--hosted]`
-  (21 checks: auth, validation, job to done, share page and JSON, leak checks, backup routes). The ops key lives in the macOS
-  Keychain: `security find-generic-password -s champoracle-ops -w`. Prove the LLM path on the production image locally with
+  (21 checks: auth, validation, job to done, share page and JSON, leak checks, backup routes). The ops key lives in the operator's secret store, not in this repo. Do not print it. Prove the LLM path on the production image locally with
   `docker run ... -e CHAMPORACLE_LLM_KEY=... co-local` rather than putting a shared key on the host.
-- Never `source` or `set -a; . ~/.hermes/.env`: a malformed line echoes a secret into the transcript. Read one var with
-  `grep '^NAME=' ~/.hermes/.env | cut -d= -f2-` only inside an assignment or `$(...)` that is never echoed; run bare, it prints
+- Never `source` or `set -a` on the local env file outside the repo: a malformed line echoes a secret into the transcript. Read one var with a line parser only inside an assignment that is never echoed; run bare, it prints
   the key. For key health use `scripts/key_health.sh` by path. Never paste a secret-reading command into a kanban comment or
   card body: the board redactor turns the `$(grep` and `KEY='` parts into `***`, so the stored command no longer runs and the
   worker falls back to whatever the body said.

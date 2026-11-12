@@ -642,16 +642,16 @@ ElevenLabs endpoints (verified in their API reference):
 
 ## Test number for our own use
 
-`+1 (971) 405-8440`, PN `PNdd5bf15107aefd6267ef56f27fc60954`, account
-`AC...3cad`, region US1, voice-capable. Purely a
+`+1 (555) 010-0199`, PN `<phone-sid>`, account
+`<account-sid>`, region US1, voice-capable. Purely a
 test line. NOT yet imported into ElevenLabs - import needs the Twilio
 **Auth Token**, which was never supplied (and must not be pasted into chat).
 Get it: Twilio Console -> Account -> Auth Token, then
 
 ```bash
-export TWILIO_ACCOUNT_SID=AC...3cad
+export TWILIO_ACCOUNT_SID=<account-sid>
 export TWILIO_AUTH_TOKEN=...      # from console, keep out of chat
-export TWILIO_TO_NUMBER=+19714058440
+export TWILIO_TO_NUMBER=+15550100199
 python3 import_twilio_number.py   # idempotent: imports, binds, places a call
 ```
 
@@ -665,7 +665,7 @@ api_token, api_subdomain and an applet_id.
 
 ## Test console (built 2026-10-03)
 
-`/Users/deep/Celsus/voice-test/` - `index.html` + `voice_test_proxy.py`.
+`<path-to-vault>/voice-test/` - `index.html` + `voice_test_proxy.py`.
 Run the proxy, open http://localhost:8787, enter E.164 number + instruction.
 Proxy exists because browsers cannot call api.elevenlabs.io (CORS) and the API
 key must stay server-side. Secrets come from env only, never the HTML.

@@ -9,13 +9,13 @@ Source of truth: the live site www.metricfox.com (logo artwork and `assets/css/s
 
 ## Where the assets live
 
-The logo files (`assets/`) and the Word builder (`scripts/mf_docx.py`) are kept in the Celsus vault at `/Users/deep/Celsus/Other/Skills/metricfox-brand-guidelines/`. When this skill runs without those files next to it, stage them from that vault folder first. If the vault is not reachable, download the logo from https://www.metricfox.com/assets/images/metricfox-home-logo.jpg (blue wordmark on black) and apply the palette below by hand.
+The logo files (`assets/`) and the Word builder (`scripts/mf_docx.py`) are kept in the Celsus vault at `<path-to-vault>/brand-assets/`. When this skill runs without those files next to it, stage them from that vault folder first. If the vault is not reachable, download the logo from https://www.metricfox.com/assets/images/metricfox-home-logo.jpg (blue wordmark on black) and apply the palette below by hand.
 
 ## When MetricFox is the sender
 
 - MetricFox documents carry **only MetricFox**. Do not mention Champions Group, LakeB2B, Span, Ampliz or any sister brand unless the user asks.
 - Proof points come from MetricFox's own retainer work (see "Proof points" below).
-- Default contact: Shine Solomon, shine.s@metricfox.com, unless the user names someone else.
+- Default contact: the brand contact, you@example.com, unless the user names someone else.
 
 ## Brand at a glance
 

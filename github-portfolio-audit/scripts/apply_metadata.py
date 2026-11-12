@@ -33,9 +33,6 @@ DESCRIPTIONS = {
         "Market simulation command centre. Build a knowledge graph from an intelligence "
         "brief, run AI agents against it, and debrief the outcome before committing real "
         "resources. Runs on a self-hosted Neo4j graph.",
-    "Champ_Bot":
-        "Near read-only WhatsApp team memory bot for the Lake B2B team. Listens to group "
-        "conversations and writes them to shared memory.",
     "Champion-Ranch-Tracking-System":
         "Champions Ranch room tracking system API.",
     "Deep_kit":

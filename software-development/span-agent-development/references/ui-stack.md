@@ -5,7 +5,7 @@ Where: `ui/` inside the worktree. React 19 + TypeScript, esbuild (`build.mjs`), 
 ## Commands
 
 ```bash
-cd /Users/deep/repos/span-data-cards/ui
+cd <path-to-data-checkout>/ui
 source ~/.nvm/nvm.sh && nvm use default    # Deep's canonical node
 npm run typecheck     # tsc --noEmit
 npm run build         # esbuild -> dist/, served by server.py
@@ -34,7 +34,7 @@ A build script fetches Natural Earth GeoJSON (public domain), filters to the reg
 
 ## 21st.dev components
 
-The Filter Bar (`serafimcloud/filter-bar`) is installed from 21st.dev under `src/components/ui/filter-bar.tsx`, alongside shadcn primitives (`command.tsx`, `popover`, `badge`, `button`, `toggle-group`, ...). The key lives in `~/.hermes/.env` as `TWENTY_FIRST_API_KEY`. Install procedure and registry quirks: see `frontend-design/reference/21st-registry.md`.
+The Filter Bar (`serafimcloud/filter-bar`) is installed from 21st.dev under `src/components/ui/filter-bar.tsx`, alongside shadcn primitives (`command.tsx`, `popover`, `badge`, `button`, `toggle-group`, ...). The registry key lives in the local env file outside the repo. Install procedure and registry quirks: see `frontend-design/reference/21st-registry.md`.
 
 - Controlled usage: `FilterBar` takes `value`/`onValueChange` over `FilterState`; views render as tabs, groups as multi-select facets with counts, toggles as chips, plus a collapsible search and an actions slot.
 - The facet counts come from `GET /api/facets` (`facet_counts()` in `server.py`): technology counts marked `source: "data_cards"` are real SPAN-supplied US counts; everything else counts demo company records and must be labelled as such in the UI (`defensible-data-counts`).

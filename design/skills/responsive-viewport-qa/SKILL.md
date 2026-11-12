@@ -30,7 +30,7 @@ for w in 375x812 768x1024 1440x900; do
 done
 ```
 
-Run on the nvm node (`/Users/deep/.nvm/versions/node/v24.13.1/bin` first on PATH). Open each PNG with `vision_analyze` and list defects as in Lane A. Menus and hover states need the browser tools or a Playwright script; the CLI only captures the loaded state.
+Run on the nvm node (`~/.nvm/versions/node/v24.13.1/bin` first on PATH). Open each PNG with `vision_analyze` and list defects as in Lane A. Menus and hover states need the browser tools or a Playwright script; the CLI only captures the loaded state.
 
 ## Done means
 

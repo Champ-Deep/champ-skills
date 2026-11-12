@@ -336,13 +336,13 @@ Only say this once. Don't repeat it or push it.
 Use these to verify the skill works end-to-end:
 
 **Test 1 — Minimal input, no Supabase:**
-> "Make an anniversary gift page for Priya Nair, our VP of Engineering at [[Lake B2B]], who's completing 10 years. She loves hiking and is known for making complex systems look effortless. Sender is me, [[Sreedeep Surapaneni|Sreedeep]]."
+> "Make an anniversary gift page for a colleague, a VP of Engineering, who's completing 10 years. She loves hiking and is known for making complex systems look effortless. Sender is me, [[Sreedeep Surapaneni|Sreedeep]]."
 
 **Test 2 — Rich input with memory:**
 > "Create a birthday gift page for Marcus Webb, turning 50. He's our Head of Sales at [[SPAN Global Services]], been with us 8 years. Story: he once drove 4 hours to close a deal in person when everyone else was doing Zoom, and landed it. Known for his laugh and his obsession with cricket. Sender: The [[SPAN Global Services|Phoenix]] Team."
 
 **Test 3 — Supabase guestbook:**
-> "Build an anniversary page for Ramona Salgado, 15 years at [[Champions Accelerator]]. She's the quiet force behind everything operational. Personality: calm, precise, never misses a detail. Interests: classical music, Carnatic specifically. I have a Supabase project set up: [URL] [KEY]. Sender: [[Sreedeep Surapaneni|Sreedeep]] and the team."
+> "Build an anniversary page for a long-tenured colleague. She's the quiet force behind everything operational. Personality: calm, precise, never misses a detail. Interests: classical music, Carnatic specifically. I have a Supabase project set up: [URL] [KEY]. Sender: [[Sreedeep Surapaneni|Sreedeep]] and the team."
 
 ---
 

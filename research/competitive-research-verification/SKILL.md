@@ -117,7 +117,7 @@ proposing a new one.** List the project parent directory rather than searching t
 directory, which times out and skips protected folders:
 
 ```bash
-ls -d /Users/deep/Apps\&Projects/*/           # local checkouts
+ls -d ~/Apps\&Projects/*/           # local checkouts
 gh api 'user/repos?per_page=100&affiliation=owner,organization_member&sort=pushed' \
   --jq '.[] | [.full_name, .pushed_at[0:10], (.private|tostring), ((.description//"")[0:60])] | @tsv'
 ```

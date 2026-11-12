@@ -13,9 +13,9 @@ Load `deependhq-site-ops` for the pipeline mechanics and `deependhq-design-syste
 
 | What | Where |
 |---|---|
-| Site worktree (no `.git` of its own, publish via `scripts/publish.sh`) | `/Users/deep/Celsus/Efforts/Active/TheDeepEndHQ/deependhq-site` |
-| Daily notes | `/Users/deep/Celsus/Calendar/Daily Notes/YYYY/MM/YYYY-MM-DD.md` |
-| News drafts | `/Users/deep/Celsus/Efforts/Active/DeependHQ Site/news-drafts/` |
+| Site worktree (no `.git` of its own, publish via `scripts/publish.sh`) | `<path-to-vault>/Efforts/Active/TheDeepEndHQ/deependhq-site` |
+| Daily notes | `<path-to-vault>/Calendar/Daily Notes/YYYY/MM/YYYY-MM-DD.md` |
+| News drafts | `<path-to-vault>/Efforts/Active/DeependHQ Site/news-drafts/` |
 | Live data | `https://deependhq.com/data.js` |
 
 ## Job 1: daily notes to the site

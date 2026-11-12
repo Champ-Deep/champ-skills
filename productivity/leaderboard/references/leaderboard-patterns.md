@@ -206,7 +206,7 @@ tallest, #2 flanks left, #3 flanks right. On mobile, stack vertically with #1 on
   <!-- #2 -->
   <div class="lb-podium-card" data-rank="2">
     <div class="lb-position-badge" data-rank="2">2</div>
-    <div class="lb-podium-name">Lam</div>
+    <div class="lb-podium-name">Person B</div>
     <div class="lb-podium-score">87</div>
     <div class="lb-podium-metric-label">Deals Closed</div>
     <div class="lb-delta lb-delta-up">+12</div>
@@ -214,7 +214,7 @@ tallest, #2 flanks left, #3 flanks right. On mobile, stack vertically with #1 on
   <!-- #1 -->
   <div class="lb-podium-card" data-rank="1">
     <div class="lb-position-badge" data-rank="1">1</div>
-    <div class="lb-podium-name">Gary</div>
+    <div class="lb-podium-name">Person A</div>
     <div class="lb-podium-score">112</div>
     <div class="lb-podium-metric-label">Deals Closed</div>
     <div class="lb-delta lb-delta-up">+24</div>
@@ -222,7 +222,7 @@ tallest, #2 flanks left, #3 flanks right. On mobile, stack vertically with #1 on
   <!-- #3 -->
   <div class="lb-podium-card" data-rank="3">
     <div class="lb-position-badge" data-rank="3">3</div>
-    <div class="lb-podium-name">Tim</div>
+    <div class="lb-podium-name">Person C</div>
     <div class="lb-podium-score">71</div>
     <div class="lb-podium-metric-label">Deals Closed</div>
     <div class="lb-delta lb-delta-down">-3</div>
@@ -364,7 +364,7 @@ tr[data-rank="3"] .lb-rank-num { color: var(--lb-bronze); }
     <tbody>
       <tr data-rank="1">
         <td class="lb-col-rank"><span class="lb-rank-num">1</span></td>
-        <td class="lb-col-name">Gary</td>
+        <td class="lb-col-name">the sales lead</td>
         <td class="lb-col-score">112</td>
         <td class="lb-col-delta"><span class="lb-delta lb-delta-up">+24</span></td>
         <td class="lb-col-trend">
@@ -541,7 +541,7 @@ Shows how many spots a person moved since last period.
   <div class="lb-metric-card">
     <div class="lb-metric-label">Best Streak</div>
     <div class="lb-metric-value" style="color: var(--lb-gold)">5w</div>
-    <div class="lb-metric-context">Gary at #1</div>
+    <div class="lb-metric-context">Person A at #1</div>
   </div>
 </div>
 ```
@@ -1125,12 +1125,12 @@ The key difference: replace the `fetchData()` function with a hardcoded array:
 ```javascript
 async function fetchData() {
   return [
-    { name: 'Gary',    score: 112, prevScore: 88 },
-    { name: 'Lam',     score: 87,  prevScore: 75 },
-    { name: 'Tim',     score: 71,  prevScore: 74 },
-    { name: 'Travis',  score: 64,  prevScore: 61 },
-    { name: 'Murugan', score: 58,  prevScore: 42 },
-    { name: 'Preeti',  score: 52,  prevScore: 55 },
+    { name: 'Person A', score: 112, prevScore: 88 },
+    { name: 'Person B', score: 87,  prevScore: 75 },
+    { name: 'Person C', score: 71,  prevScore: 74 },
+    { name: 'Person D', score: 64,  prevScore: 61 },
+    { name: 'Person E', score: 58,  prevScore: 42 },
+    { name: 'Person F', score: 52,  prevScore: 55 },
   ];
 }
 ```

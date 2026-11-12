@@ -81,7 +81,7 @@ Now analyze the extracted content through this lens. Produce:
 
 2. **Business Application**: How does this content connect to the user's world? Name specific companies, products, efforts, or people using `[[wikilinks]]`. Prioritize connections to Deep Focus companies and Primary Build products. Example: "This video's approach to AI-driven email personalization directly applies to [[Champmail]]'s outreach cadence design. The sender rotation technique could reduce bounce rates in the Lake B2B pipeline."
 
-3. **Recommended Next Steps** (2-3 concrete tasks): Frame these as checkbox items the user can act on. Each should be specific enough to execute without further research. Example: "Share the sender rotation technique with [[Charles]] for Champmail's next sprint" rather than "Consider improving email deliverability."
+3. **Recommended Next Steps** (2-3 concrete tasks): Frame these as checkbox items the user can act on. Each should be specific enough to execute without further research. Example: "Share the sender rotation technique with the brand lead for Champmail's next sprint" rather than "Consider improving email deliverability."
 
 4. **Relevance Score**: Rate as High, Medium, or Low:
    - **High**: Directly applies to a Deep Focus company or Primary Build product, and the user could act on it this week

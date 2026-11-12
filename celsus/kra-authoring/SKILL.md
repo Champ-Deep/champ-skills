@@ -30,12 +30,12 @@ If Deep asks whether prior conversations exist on the topic, search conversation
 
 | Need | Read |
 |---|---|
-| The house structure: five buckets A to E, weight schedule, rating scale with the cross-brand gate, scoped reporting, conflict tie-breakers | `Efforts/Active/KRA Framework Q2 2026/KRA-Brand-Owner-Framework.md` (Section 7 is the reusable template) |
-| A full worked document at senior/specialist depth: identification, role summary, cadence table, allocation, KPI tables, mutual commitments, escalation, acknowledgment | `Efforts/Active/Kethan KRA Operationalization/Kethan-KRA-v1-Final.md` |
-| The current short-form sheet for interns/trainees (weights must sum to 100) | `Efforts/Active/Accelerator KRAs Q3 FY27/`, and read `Accelerator-KRAs-Q3-FY27.xlsx` with the `xlsx` skill: that workbook is the format authority for the Excel deliverable, not its prose sibling |
-| A plain bullet KRA for a junior under a senior's team | the Aishwarya section of the SPAN content send pack in `Efforts/Active/SPAN Content/` |
+| The house structure: five buckets A to E, weight schedule, rating scale with the cross-brand gate, scoped reporting, conflict tie-breakers | `<path-to-vault>/examples/kra-framework.md` (Section 7 is the reusable template) |
+| A full worked document at senior/specialist depth: identification, role summary, cadence table, allocation, KPI tables, mutual commitments, escalation, acknowledgment | `<path-to-vault>/examples/specialist-kra.md` |
+| The current short-form sheet for interns/trainees (weights must sum to 100) | `<path-to-vault>/examples/trainee-kras/`, and read `Accelerator-KRAs-Q3-FY27.xlsx` with the `xlsx` skill: that workbook is the format authority for the Excel deliverable, not its prose sibling |
+| A plain bullet KRA for a junior under a senior's team | the junior example in `<path-to-vault>/examples/junior-kra.md` |
 
-Since the 29 Jul reviews the scale is out of 10 (HR-measured), not 1 to 5. For the Excel, load `Efforts/Active/Appraisal & Org Restructure Aug 2026/KRA - A Sameulla.xlsx`, copy cell styles, and rebuild rows from one shared Python data list that also writes the note, so the two cannot drift. LibreOffice may be absent: read formulas back by row and say they were not recalculated.
+Since the 29 Jul reviews the scale is out of 10 (HR-measured), not 1 to 5. For the Excel, load `<path-to-vault>/examples/kra-workbook.xlsx`, copy cell styles, and rebuild rows from one shared Python data list that also writes the note, so the two cannot drift. LibreOffice may be absent: read formulas back by row and say they were not recalculated.
 
 Reuse the skeleton verbatim: identification (both hats plus scoped dotted lines), role summary, reporting and cadence, allocation, KRAs with KPI tables, rating scale, mutual commitments, escalation path, acknowledgment. Never invent a new section shape.
 
@@ -66,12 +66,12 @@ Then annotate, never close, the `TASKS.md` row: what was written, where it lives
 
 ### 6. Verify before delivering
 
-- Every wikilink target exists: `find /Users/deep/Celsus -name "<basename>.md" -not -path "*/.git/*"`. Replace a missing target with plain text rather than creating a note just to satisfy a link.
+- Every wikilink target exists: `find <path-to-vault> -name "<basename>.md" -not -path "*/.git/*"`. Replace a missing target with plain text rather than creating a note just to satisfy a link.
 - Run `scripts/verify_links.py` from the `celsus-vault` skill on the new file.
 - No em or en dashes anywhere in the markdown files (python sweep, per `celsus-vault`); check the Excel's text cells in the same sweep.
 - Aliases piped per `_config/link-policy.md` (`[[SPAN Global Services\|SPAN]]`), never-link list respected.
 - For the Excel: read it back with `xlsx_read.py --sheets` and `--formulas` before claiming it is done. Confirm weights total 100, every weighted formula points at its own row (off-by-one row arithmetic is the common defect when the spec is assembled programmatically), each KRA average covers exactly its KPI rows, and the score column is the only filled input column.
-- Sweep every Excel text cell and the cover email for people's names and keep only the subject, Deep and the people named in the note's scoped lines. A workbook started from another person's KRA keeps that person's name and questions (a Kethan sheet shipped "Open questions for Preeti ..."), and the dash and formula checks cannot catch it. Also confirm the Summary tab's open-questions line points at this note's own question list.
+- Sweep every Excel text cell and the cover email for people's names and keep only the subject, Deep and the people named in the note's scoped lines. A workbook started from another person's KRA keeps that person's name and questions (a a colleague sheet shipped "Open questions for the SEO lead ..."), and the dash and formula checks cannot catch it. Also confirm the Summary tab's open-questions line points at this note's own question list.
 - Deliver with `MEDIA:` only for files verified to exist.
 
 ### 7. Send only on an explicit go

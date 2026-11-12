@@ -80,7 +80,7 @@ for cron `monitor` mode.
 ## Rules that make the output trustworthy
 
 - **Verify every `risk` before reporting it.** Other chats' transcripts are
-  claims, not facts. Real example: a chat reported "ChampLantern tree is clean"
+  claims, not facts. Real example: a chat reported "the repo tree is clean"
   (true) and missed that 6 commits / 35 files / 5,023 insertions existed only on
   that laptop with no upstream. Run `git` and quote real numbers.
 - **Run git for risk yourself; do not also mine the chat text for it.** The
@@ -133,7 +133,7 @@ Lessons from a real sweep across Deep's repos:
 - `.gitignore` rules like `.env`, `.env.local`, `.env.*.local` **do not cover
   `.env.openrouter.bak`**. The `.bak` suffix falls through every one. Add `*.bak`.
 - `.env.openrouter.bak` was the single EXPOSED file across all of
-  `/Users/deep/Apps&Projects`; every other `.env` was properly ignored.
+  `~/Apps&Projects`; every other `.env` was properly ignored.
 - A secret can be in history while HEAD looks clean. HEAD only had
   `.env.example`, yet `.env.bak-2026-09-08` and `.env.bak-preswap` existed in
   commit `675cd50`, which was pushed to `origin/feature/gamified`. **History is

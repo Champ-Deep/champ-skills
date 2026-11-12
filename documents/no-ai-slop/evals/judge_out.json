@@ -3,7 +3,7 @@
     "A": {
       "slop": [
         {"pattern": "aphorism / portability failure", "quote": "New reps are only as effective as the list they're handed on day one."},
-        {"pattern": "padding before the ask (soft pitch phrasing)", "quote": "I'd like to walk you through how we did it and what a rebuilt list could look like for Kova."}
+        {"pattern": "padding before the ask (soft pitch phrasing)", "quote": "I'd like to walk you through how we did it and what a rebuilt list could look like for the sample company."}
       ],
       "unsupported": [
         "\"If your Malaysia team is about to start prospecting APAC SMBs\" assumes timing and target (hedged as a conditional, so minor)"
@@ -18,7 +18,7 @@
         "Subject says \"SDR hires\" but the brief says openings (minor)"
       ],
       "compliance_issues": [
-        "None. 64 words, all three facts used, ask present. Line 2 states the purpose. It could tie the bounce result to Kova a little more explicitly"
+        "None. 64 words, all three facts used, ask present. Line 2 states the purpose. It could tie the bounce result to the sample company a little more explicitly"
       ]
     },
     "winner": "B",
@@ -127,7 +127,7 @@
       ]
     },
     "winner": "A",
-    "why": "A puts the deadline ask in the subject and the second line, so Mei can act from the preview, while B buries it under a numbered list and a colon lead-in."
+    "why": "A puts the deadline ask in the subject and the second line, so the client lead can act from the preview, while B buries it under a numbered list and a colon lead-in."
   },
   "B5_landing_hero": {
     "A": {

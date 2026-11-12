@@ -192,7 +192,7 @@ There is a single `CLAUDE.md` at the vault root, the authoritative AI context fi
 ## Conventions
 
 ### File Naming
-- Atlas notes: `{Display Name}.md` (e.g., `Gary.md`, `Lake B2B.md`, `Champ IQ.md`)
+- Atlas notes: `{Display Name}.md` (e.g., `the sales lead.md`, `Lake B2B.md`, `Champ IQ.md`)
 - Daily notes: `YYYY/MM/DD.md` (nested year/month folders)
 - Meetings: `{Date} - {Topic}.md`
 - Efforts: `{Project Name}.md`
@@ -203,7 +203,7 @@ Every note MUST have YAML frontmatter with at minimum:
 - `tags:`, array of relevant tags per the taxonomy in CLAUDE.md
 
 ### Wikilinks
-- Always use canonical case: `[[Gary]]` not `[[gary]]`
+- Always use canonical case: `[[the sales lead]]` not `[[gary]]`
 - Use display syntax when needed: `[[Display Name|Note Name]]`
 - Priority connections: Person↔Effort, Effort↔Product, DailyNote↔Effort
 - Templates in `Other/Templates/` use `{{variable}}` placeholders, these are NOT real wikilinks

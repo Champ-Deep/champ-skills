@@ -7,12 +7,12 @@ description: "Build, verify and deliver account-based contact lists through the 
 
 Treg (treg.to) is an API gateway, not a database. One key, one base URL, 3,400 plus third-party endpoints, each priced per call or per row and relayed verbatim. It verifies the call, never the fact. Every dollar spent on a row that does not reach the deliverable is waste, so this skill runs in gated stages and pays only for rows that survived the previous gate.
 
-First use on the Virtusa build (17 to 18 Sep 2026) cost $17.93 for 489 usable contacts, with about $12 of that on rows never delivered. Run this way, the same output costs $6 to $8.
+First use on a client build (17 to 18 Sep 2026) cost $17.93 for 489 usable contacts, with about $12 of that on rows never delivered. Run this way, the same output costs $6 to $8.
 
 ## Non-negotiables
 
-1. The API key lives in one place: TREG_API_KEY in /Users/deep/Celsus/.env (dotfile so Obsidian and Obsidian Sync skip it; mode 600; git-excluded), filled by Deep with read -s. ~/.hermes/.env holds only a pointer comment, never the key. Load it per run with `set -a; . /Users/deep/Celsus/.env; set +a`. Never in a vault .md note, a script, a log or a chat reply; a key pasted in chat is exposed, so ask for rotation and never use it. Grep the working folder for the key before finishing.
-2. Every Treg call is made with that API key so spend is tracked per key. The treg CLI must be logged in with `treg login --token "$TREG_API_KEY"`, never a browser or email session: a session token in ~/.treg/config.json bills the org without an API key attached, which is the untracked spend Deep wants gone. Code reads TREG_API_KEY only; do not add a TREG_TOKEN fallback.
+1. The gateway API key lives in one gitignored env file outside this repo (mode 600), loaded only for the run. A second env file may hold a pointer comment, never the key. Never put the key in a note, a script, a log, or a chat reply. A key pasted in chat is exposed, so ask for rotation and never use it. Grep the working folder for the key before finishing.
+2. Every Treg call is made with that API key so spend is tracked per key. The treg CLI must be logged in with `treg login --token "$GATEWAY_API_KEY"`, never a browser or email session: a session token in the CLI's home config bills the org without an API key attached, which is the untracked spend Deep wants gone. Code reads the gateway API key only; do not add a session-token fallback.
 3. Snapshot the balance before and after every stage: GET /orgs then GET /orgs/{id}/balance. Read X-Treg-Cost-Micro on every response and keep a ledger file (stage, endpoint, calls, cost). Report the ledger with the deliverable.
 4. Set a dollar cap per stage before the first call and stop at the cap. Ask the user before any stage expected to cost more than $5, and before any endpoint priced above $0.05 per call.
 5. Save every raw response under raw/ so nothing is bought twice.
@@ -108,19 +108,18 @@ key, and Treg is the first paid source in any product waterfall (ChampHarbinger
 `src/lib/enrichment/config.ts`, treg rank 12, moltsets on the house key behind it).
 
 Pitfall: connections belong to the Treg identity that holds them, not to every key you own.
-A product whose TREG_API_KEY was minted under a different Treg login or org will route past
+A product whose gateway API key was minted under a different Treg login or org will route past
 your connected vendor and pay a Treg-billed provider instead, while the call never appears
 in your `treg audit`. Before claiming a vendor is live in a product, call the product with a
 known contact and check (a) the vendor shows as the field source or X-Treg-Served-By and
 (b) the call appears in `treg audit` under the account that holds the connection. If it does
 not, either mint the product's key in that org (`treg org agent-new <product>`, so spend
 has its own audit trail) or connect the vendor in the account the product key belongs to.
-The MoltSets connection (2026-11-03) lives in the Champions Accelerator org under
-deep@championsmail.com; direct call proof: moltsets.people.enrich.linkedin hit, 0 micro.
+A vendor connection belongs to the org and login that created it. Confirm with a direct call that returns zero markup before you treat it as live.
 
 ## Cost model to quote before starting
 
-Per usable contact, staged: roster $0.002 to $0.005, verification $0.002 to $0.004, email $0.005 (on about 20 percent of rows), total about $0.012 to $0.015. Unstaged (buy contact data first, filter later) ran at $0.037 on the Virtusa build. Company lookalike checks: about $0.007 per named company across two providers; avoid CompanyEnrich company-search pages unless the free count shows 80 or more rows and the rows themselves are the deliverable.
+Per usable contact, staged: roster $0.002 to $0.005, verification $0.002 to $0.004, email $0.005 (on about 20 percent of rows), total about $0.012 to $0.015. Unstaged (buy contact data first, filter later) ran at $0.037 on that client build. Company lookalike checks: about $0.007 per named company across two providers; avoid CompanyEnrich company-search pages unless the free count shows 80 or more rows and the rows themselves are the deliverable.
 
 ## Provider quirks seen
 

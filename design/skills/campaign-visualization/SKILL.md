@@ -1,18 +1,18 @@
 ---
 name: "campaign-visualization"
-description: "Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like the Virtusa and Epicor campaign reviews. Trigger on campaign report, campaign review, campaign learnings, beautify this report, visualize the campaign, client review page."
+description: "Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like a past client campaign review. Trigger on campaign report, campaign review, campaign learnings, beautify this report, visualize the campaign, client review page."
 ---
 
 # Campaign Visualization
 
-Entry point: `research-to-visual` routes a campaign report to the Report format; load `visual-report-builder` for the report craft and this skill for the full-width sales and marketing review layout (Virtusa and Epicor pattern).
+Entry point: `research-to-visual` routes a campaign report to the Report format; load `visual-report-builder` for the report craft and this skill for the full-width sales and marketing review layout (the past client pattern).
 
-A campaign report arrives as tables in emails, a lead workbook, and a meeting recap. This skill turns that into one page a sales or marketing leader can read in three minutes and act on: what ran, what came out, what the calls and emails taught us, what we own, what changes. The reader may be the client (Li zhen at Epicor, Aseem at Virtusa) or the internal team. Savvy readers will check the arithmetic, so every chart must sum and every figure must trace to a source.
+A campaign report arrives as tables in emails, a lead workbook, and a meeting recap. This skill turns that into one page a sales or marketing leader can read in three minutes and act on: what ran, what came out, what the calls and emails taught us, what we own, what changes. The reader may be the client (a named client contact) or the internal team. Savvy readers will check the arithmetic, so every chart must sum and every figure must trace to a source.
 
 Reference pages, both from 29 Sep 2026, are the standard. Copy their structure and token system rather than inventing a new look:
 
-- `Atlas/Clients/Epicor/Epicor Campaign Review 29 Sep.html` (standalone HTML, latest version of the system)
-- The Virtusa Campaign Learnings page (same system, one generation earlier)
+- `<path-to-vault>/clients/sample-campaign-review.html` (standalone HTML, latest version of the system)
+- The earlier client campaign learnings page (same system, one generation earlier)
 
 The sibling skill `executive-one-pager` is for one decision on one screen. This skill is for a campaign's full evidence, laid out wide, with more charts and a leads table. If the reader needs a verdict and one ask, use that skill instead.
 
@@ -40,7 +40,7 @@ Gather everything, then reconcile. Typical sources for a LakeB2B or SPAN campaig
 | Daily dispatch and handoff notes | `Atlas/Ops/Dispatch/Daily/{date}/client/`, `Atlas/Clients/{client}/Daily/` | Latest leads, nurture decisions, standing rules |
 | Client file and update log | `Atlas/Clients/{client}.md`, `{client}_Update_Log.md` | Commercial terms, target, timeline, what not to say |
 
-Confirm with the sender which report is the latest (Sean confirmed Emailer 5 as latest on 29 Sep before the Epicor page used it). Sort search results by date yourself; the mail search is relevance ranked.
+Confirm with the sender which report is the latest (the delivery lead confirmed Emailer 5 as latest on 29 Sep before the client page used it). Sort search results by date yourself; the mail search is relevance ranked.
 
 Reconcile before building:
 
@@ -65,7 +65,7 @@ Use the ones the data supports. Each row names the visual that carries it; a sec
 | Hero | Eyebrow (segment, markets, date range), assertion h1, three-sentence lede, one-line meta, four stat tiles (the last tinted as the number that matters) | Stat tiles with the split in the caption ("Singapore 2, Malaysia 9, Indonesia 4") |
 | 01 What ran, in order | Timeline track, 8 to 10 steps, key steps filled in the accent, pauses and deadlines as dashed dots | Horizontal track, stacks vertical on phone |
 | 02 The leads or slots | Status breakdown bars (to scale) beside the claim; full-width table grouped into bands (A strongest fit, B re-qualify, C nurture) with pills for the qualifying answers | Table with band rows, pills: go, warn, neutral for "not asked" |
-| 03 By market or by account | Three market tiles (slots as the big number, contacts emailed and list size beneath, one email rate) or the per-account strip from the Virtusa page | Tiles with a scaled meter, or account strip |
+| 03 By market or by account | Three market tiles (slots as the big number, contacts emailed and list size beneath, one email rate) or the per-account strip from the earlier client page | Tiles with a scaled meter, or account strip |
 | 04 The client's qualifying questions | One small bar chart per question (project status, decision authority, current platform, timeline), then four learning cards each ending in a Change line | Three cards in a row, four learning cards below |
 | 05 Email | Stacked bars per send (clicked, opened no click, not opened), legend, per-country table for the latest send, two learning cards | Stacked bars, sequential single hue |
 | 06 What we own | Dark band, four items, each a bold miss plus what changes | Band |
@@ -79,7 +79,7 @@ The rail, top to bottom: brand line and date; numbered section nav; running figu
 <!-- ui-library-picker -->
 **Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
 
-One HTML file, inline CSS and JS, Google Fonts as the only external dependency. Start from the Epicor file's `<style>` block and token system and change only the copy, the data arrays, and the brand tokens:
+One HTML file, inline CSS and JS, Google Fonts as the only external dependency. Start from the latest client file's `<style>` block and token system and change only the copy, the data arrays, and the brand tokens:
 
 - Tokens: bg, panel, panel-2, ink, ink-2, ink-3, rule, accent, accent-soft, s-hi, s-mid, s-lo (the sequential stack), track, warn, warn-soft, band, band-ink, band-2. Light values on `:root`, dark values under `prefers-color-scheme: dark` guarded by `:root:not([data-theme="light"])` and again under `:root[data-theme="dark"]`.
 - Accent comes from the entity's brand skill (LakeB2B purple on both reference pages). Status colours (warn) are separate from the accent.

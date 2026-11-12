@@ -12,7 +12,7 @@
     "weasel_attribution",
     "colon_reveal"
    ],
-   "text": "Hi Priya,\n\nI hope this email finds you well. Here's the thing\u2014 most APAC SaaS teams aren't struggling with leads. It's not a volume problem. It's a data problem.\n\nOur robust, cutting-edge platform empowers revenue teams to unlock seamless pipeline growth. Studies show that 70% of B2B data decays every year.\n\nThe best part: it takes five minutes to set up.\n\nWorth a chat?\n\nDeep"
+   "text": "Hello,\n\nI hope this email finds you well. Here's the thing\u2014 most APAC SaaS teams aren't struggling with leads. It's not a volume problem. It's a data problem.\n\nOur robust, cutting-edge platform empowers revenue teams to unlock seamless pipeline growth. Studies show that 70% of B2B data decays every year.\n\nThe best part: it takes five minutes to set up.\n\nWorth a chat?\n\nDeep"
   },
   {
    "id": "S2_linkedin",
@@ -91,7 +91,7 @@
   {
    "id": "C1_plain_email",
    "channel": "email",
-   "text": "Hi Priya,\n\nWe met at the SaaSBoomi session in Bengaluru on 3 September. You mentioned your SDRs lose about a day a week to bounced emails.\n\nIn June we rebuilt a 12,000-contact list for a Singapore fintech, and their bounce rate fell from 18% to 4% on the first send.\n\nWould a 20-minute call on Thursday or Friday work to see if the same fix applies to your APAC list?\n\nDeep"
+   "text": "Hello,\n\nWe met at the SaaSBoomi session in Bengaluru on 3 September. You mentioned your SDRs lose about a day a week to bounced emails.\n\nIn June we rebuilt a 12,000-contact list for a Singapore fintech, and their bounce rate fell from 18% to 4% on the first send.\n\nWould a 20-minute call on Thursday or Friday work to see if the same fix applies to your APAC list?\n\nDeep"
   },
   {
    "id": "C2_legit_colon_list",
@@ -147,13 +147,13 @@
    "expect": [
     "colon_reveal"
    ],
-   "text": "Subject: Singapore ERP campaign: 2 appointments booked\n\nHi Mei,\n\nWe've booked 2 appointments for the Singapore ERP campaign:\n\n1. CFO, logistics firm: confirmed for Thursday, 10:00 SGT.\n2. IT Director, distributor: tentative for Friday. We'll confirm this tomorrow and update you.\n\nOne thing we need from you: please send us the name of the person from your side attending Thursday's meeting by 6pm today.\n\nFull details are in the attached sheet.\n\nThanks,\nDeep\n"
+   "text": "Subject: Singapore ERP campaign: 2 appointments booked\n\nHello,\n\nWe've booked 2 appointments for the Singapore ERP campaign:\n\n1. CFO, logistics firm: confirmed for Thursday, 10:00 SGT.\n2. IT Director, distributor: tentative for Friday. We'll confirm this tomorrow and update you.\n\nOne thing we need from you: please send us the name of the person from your side attending Thursday's meeting by 6pm today.\n\nFull details are in the attached sheet.\n\nThanks,\nDeep\n"
   }
  ],
  "clean_generated": [
   {
    "id": "G_B1_cold_email",
-   "text": "Subject: Kova's Malaysia SDR hires\n\nHi Priya,\n\nI saw Kova posted 3 SDR openings for Malaysia. I'd like to talk about the contact list those reps will start with.\n\nIn June, LakeB2B rebuilt a 12,000-contact list for a Singapore fintech. Their bounce rate fell from 18% to 4% on the first send.\n\nCould we do a 20-minute call on Thursday or Friday?\n\nDeep\nLakeB2B\n"
+   "text": "Subject: Sample company's Malaysia SDR hires\n\nHello,\n\nI saw the sample company posted 3 SDR openings for Malaysia. I'd like to talk about the contact list those reps will start with.\n\nIn June, LakeB2B rebuilt a 12,000-contact list for a Singapore fintech. Their bounce rate fell from 18% to 4% on the first send.\n\nCould we do a 20-minute call on Thursday or Friday?\n\nDeep\nLakeB2B\n"
   },
   {
    "id": "G_B2_linkedin_post",
@@ -165,7 +165,7 @@
   },
   {
    "id": "G_B4_client_followup",
-   "text": "Subject: 2 appointments booked, Thursday attendee name needed by 6pm\n\nHi Mei,\n\nWe've booked 2 appointments for your Singapore ERP campaign. Please send me the name of the person from your side attending Thursday's meeting by 6pm today.\n\nThe CFO of a logistics firm is confirmed for Thursday at 10:00 SGT. The IT director at a distributor is tentative for Friday, and we will confirm that one tomorrow.\n\nDetails for both are in the attached sheet.\n\nDeep\n"
+   "text": "Subject: 2 appointments booked, Thursday attendee name needed by 6pm\n\nHello,\n\nWe've booked 2 appointments for your Singapore ERP campaign. Please send me the name of the person from your side attending Thursday's meeting by 6pm today.\n\nThe CFO of a logistics firm is confirmed for Thursday at 10:00 SGT. The IT director at a distributor is tentative for Friday, and we will confirm that one tomorrow.\n\nDetails for both are in the attached sheet.\n\nDeep\n"
   },
   {
    "id": "G_B5_landing_hero",

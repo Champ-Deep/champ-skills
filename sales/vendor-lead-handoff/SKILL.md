@@ -194,34 +194,34 @@ Format: date, account, the question, the ruling, the reasoning.
 
 ---
 
-**2026-09-07 · Epicor · Does a second source's leads go into the shared tracker?**
+**2026-09-07 · a client · Does a second source's leads go into the shared tracker?**
 No. Separate tab or separate sheet. The incumbent has edit access to the shared tracker and would see a second supplier delivering on an account where it has filed four consecutive blank days. Vendor-to-vendor exposure destroys leverage rather than merely leaking a fact.
 
-**2026-09-07 · Epicor · Who sends the calendar invite when the vendor offers to?**
+**2026-09-07 · a client · Who sends the calendar invite when the vendor offers to?**
 We do, from the client-facing corporate mailbox, never a personal or Gmail account. The vendor is told explicitly not to contact the prospect about the meeting. An invite from a vendor domain identifies the supply chain in the prospect's calendar, permanently, and a prior invite sent from a Gmail address on this account was not received by the client.
 
-**2026-09-07 · Epicor · Appointment-generation leads arrived where the contract buys tentative-slot SQLs.**
+**2026-09-07 · a client · Appointment-generation leads arrived where the contract buys tentative-slot SQLs.**
 Deliver first, price second, but price it inside the week. Do not imply in the delivery email that they count against the contracted number, and do not imply that they do not. The acceptance criteria were written against the weaker unit, so a better unit is a commercial conversation, not an automatic win. Commercial owners answer before the next batch.
 
-**2026-09-07 · Epicor · Should a good-news lead delivery carry the outstanding bad news about missed daily numbers?**
+**2026-09-07 · a client · Should a good-news lead delivery carry the outstanding bad news about missed daily numbers?**
 No. Separate emails. The client was already owed a numbers-and-plan email at a committed time; folding it into an appointment handover reads as using the good news to bury the bad, and dilutes both. Send the appointments the night they arrive because a meeting is inside 24 hours, and keep the committed slot for the numbers.
 
-**2026-09-07 · Epicor · The vendor's handover email had a distinctive house style.**
+**2026-09-07 · a client · The vendor's handover email had a distinctive house style.**
 Rewrite from scratch, never edit the vendor's text down. Retained phrasing is a tell, and a client who has seen one vendor's writing recognises it in the next email. Structure, greeting and sign-off all get rebuilt in our voice.
 
-**2026-09-07 · Epicor · The handed-over meeting is the next morning and the client probably cannot staff it.**
+**2026-09-07 · a client · The handed-over meeting is the next morning and the client probably cannot staff it.**
 Do not send an ask that only works if they reply in time. Name the short notice yourself, ask for one name, offer two concrete alternative slots, then state the default action and a cutoff so silence resolves instead of stalling. Default to moving the meeting rather than risking a no-show, because a client no-show burns the prospect outright while a move with ninety minutes of notice is recoverable. Draft the prospect reschedule note and the informal-channel nudge at the same time, not when the cutoff hits. Add a standing ask for a default short-notice attendee so the scramble does not repeat.
 
-**2026-09-07 · Epicor · Which alternative slots to offer.**
+**2026-09-07 · a client · Which alternative slots to offer.**
 Offer two, same time of day, and pick at least one that sits immediately before or after something already in the client's calendar for that account, such as the weekly review. It lowers the cost of saying yes and makes the alternative feel like less of a new commitment.
 
-**2026-09-07 · Epicor · The lead sheet was clean in every visible cell. Was it safe to send?**
+**2026-09-07 · a client · The lead sheet was clean in every visible cell. Was it safe to send?**
 No. `dc:creator` and `cp:lastModifiedBy` in the workbook's `docProps/core.xml` carried two vendor staff names, one of them the sender of the handover email. A visual scan of the grid passes a file that a right-click on Properties fails. **Always unzip and read the metadata rather than eyeballing the content, and verify the fields again after stripping.** Rebuilding the rows in our own template is the more reliable fix, because it removes the metadata and the vendor's formatting in one move.
 
-**2026-09-07 · Epicor · The recordings were shared on the vendor's personal cloud folder with no vendor name in the URL or filenames. Forward the link?**
+**2026-09-07 · a client · The recordings were shared on the vendor's personal cloud folder with no vendor name in the URL or filenames. Forward the link?**
 No. Absence of a vendor name is necessary, not sufficient. The filenames carried a prospect's name plus company and a prospect's live email address, the folder was anyone-with-the-link with download and re-share enabled, the vendor can delete it at any time, and an anonymous test view is not the view a signed-in corporate recipient gets. Download, rename to an internal reference, rehost on our storage, send our link.
 
-**2026-09-07 · Epicor · The cover email said both meetings were confirmed with a time. The attachment said one was not.**
+**2026-09-07 · a client · The cover email said both meetings were confirmed with a time. The attachment said one was not.**
 The attachment wins, always. The vendor's own notes said the second time was "discussed, but not explicitly confirmed by the prospect". Passing the cover email's version through would have made the overstatement ours, in front of a client who had already put rejection criteria in writing. Mark firm items firm and soft items soft in the client email, and say who is locking the soft one and when. **Reconciling the cover note against the evidence is now a required step, not a nicety.**
 
 ---

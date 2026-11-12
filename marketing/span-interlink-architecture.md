@@ -11,7 +11,7 @@ whole structure visible and clickable rather than described in prose.
 
 ## Deliverable
 
-`/Users/deep/Apps&Projects/span-sitemap.html` (self-contained, no network calls), built by
+`~/Apps&Projects/span-sitemap.html` (self-contained, no network calls), built by
 `build_app.py` in the scratch dir. Three views: **Site map** (squarified treemap by section plus
 a full page list), **Entity graph** (185 technologies, existing vs suggested links, click a node
 for its plan), **Link queue** (1,125 suggestions grouped by the page you would edit, tickable,

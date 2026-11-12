@@ -78,7 +78,7 @@ Read every `.md` file in `Efforts/Active/`. For each file:
 
 ```json
 "effortStatus": {
-  "ChampGraph Build": { "status": "blocked", "reason": "Hemang -- server-side memory + variable scope" }
+  "ChampGraph Build": { "status": "blocked", "reason": "the engineer -- server-side memory + variable scope" }
 }
 ```
 

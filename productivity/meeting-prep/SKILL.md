@@ -229,7 +229,7 @@ When invoked via the morning routine (after Phase 4, Day Planner):
    * 5:30 PM, Marketing Performance Review (weekly, last met Mar 9)
 
    LIGHT PREP (recurring sync):
-   * 3:30 PM, Gary Weekly Pipeline Sync (recurring, last met Mar 9)
+   * 3:30 PM, the sales lead Weekly Pipeline Sync (recurring, last met Mar 9)
 
    NO PREP NEEDED:
    * 6:00 PM, Team standup (15 min, status-only)
@@ -457,7 +457,7 @@ After pulling from all sources:
 
 ### LIGHT Prep (Recurring Syncs)
 
-For meetings like Gary's weekly pipeline sync or team standups. Consultative even when
+For meetings like the sales lead's weekly pipeline sync or team standups. Consultative even when
 it's internal, Sreedeep doesn't do lazy status updates.
 
 ```markdown
@@ -470,13 +470,13 @@ it's internal, Sreedeep doesn't do lazy status updates.
 ## The Story Since Last Time
 [2-3 sentences narrating what's moved, what hasn't, and what's surprising.
 Not a list, a story. "The pipeline is warmer than last week, 3 responses came in
-from the Lake B2B campaign, but Gary's budget approval is still in purgatory.
+from the Lake B2B campaign, but the sales lead's budget approval is still in purgatory.
 Meanwhile, ChampIQ just hit Day 19 and the experiment metrics need a reality check."]
 
 ## Open Action Items from Last Time
-- [ ] @Gary, Send updated pipeline numbers -> Status: ?
+- [ ] @the sales lead, Send updated pipeline numbers -> Status: ?
 - [ ] @Sreedeep, Review ChampIQ dashboard mockup -> Status: Done
-- [!] @Murugan, Follow up with 3 warm leads -> OVERDUE (7 days)
+- [!] @the nurture lead, Follow up with 3 warm leads -> OVERDUE (7 days)
 
 ## Suggested Talking Points
 1. Pipeline update, any movement on the 3 warm leads?
@@ -668,7 +668,7 @@ it shouldn't be there. Every ICP, every content idea, every solution should trac
 ```
 Last Meeting (Mar 9)          This Meeting (Mar 16)
 +-----------------------+     +-----------------------------+
-| Action: Gary to       |---->| Status check: Did Gary      |
+| Action: the sales lead to       |---->| Status check: Did the sales lead      |
 | send pipeline nums    |     | send the numbers?           |
 |                       |     |                             |
 | Decision: Pivot to    |---->| Follow-up: How is the       |
@@ -755,7 +755,7 @@ After the meeting, say "process meeting notes" or "meeting debrief" to:
 - "meeting prep for [meeting name]"
 - "get me ready for the [time] call"
 - "what do I need for today's meetings"
-- "prep for Charles" / "prep for Gary sync"
+- "prep for the brand lead" / "prep for the sales lead sync"
 - "SPIN prep for [company]"
 - "prep me for the intern interview" / "interview questions for [candidate]" (Interview Mode)
 

@@ -142,7 +142,7 @@ data, established process, client retention.
 **Structure emphasis for this buyer:**
 - Keep it short. One page. They skim.
 - Lead with a named, credible client if possible — brand recognition reduces their risk perception
-- Include the metric AND the source ("per campaign tracking," "per Sean's delivery records")
+- Include the metric AND the source ("per campaign tracking," "per the delivery lead's delivery records")
 - Close with any evidence of ongoing/repeated engagement (shows the relationship holds)
 
 **Tone:** Conservative, factual, credibility-first. Do not oversell. Understated claims that

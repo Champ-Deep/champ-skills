@@ -6,7 +6,7 @@ from PIL import Image
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 os.makedirs(OUT, exist_ok=True)
-LOGO = "/Users/deep/.hermes/cache/scratch/span-logo.png"
+LOGO = "~/.hermes/cache/scratch/span-logo.png"
 
 STYLE = ("Flat, premium B2B advertising graphic, exact brand colours: dark navy #0F2B3C, SPAN green #1B6B3A, "
          "light green #3DBE6E, amber #F5A623, off white #F5F7F9. Headline in a bold geometric sans serif like Montserrat, "

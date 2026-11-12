@@ -23,7 +23,7 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 
 ## Repo identity
 
-- Canonical checkout `/Users/deep/repos/ChampHarbinger-cf`. Per-branch worktrees appear as `/Users/deep/repos/ChampHarbinger-cf-<branch>`; run `git worktree list` before creating one so concurrent lanes do not collide, and branch off `main` unless a card says otherwise.
+- Canonical checkout `~/repos/ChampHarbinger-cf`. Per-branch worktrees appear as `~/repos/ChampHarbinger-cf-<branch>`; run `git worktree list` before creating one so concurrent lanes do not collide, and branch off `main` unless a card says otherwise.
 - Never trust a folder name: `git remote -v`, `git fetch origin`, then compare `HEAD` against `origin/main` before planning against "the local codebase".
 - No em dashes in any output, including commit messages, PR bodies and UI strings. Before every commit run `git diff --cached | grep '^+' | grep '[–—]'` on its own (it exits 1 when clean, so never chain it with `&&`): only an added line can violate the rule, and one second of grep beats re-reading the diff by eye.
 

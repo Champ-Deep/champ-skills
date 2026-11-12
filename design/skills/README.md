@@ -8,7 +8,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 | `app-store-screenshots` | Use when building App Store or Google Play marketing screenshots. |
 | `awwwards-inspiration` | Use when a site build needs real award-winning design references. |
 | `brag-slim` | Use when asked for a ~20s launch video of a project or site. |
-| `campaign-visualization` | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like the Virtusa and Epi |
+| `campaign-visualization` | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like a past client campaign |
 | `canvas-design` | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or  |
 | `deck-doctor` | Executive review, fact-verification, and rebuild of any pitch/partnership/sales slide deck, producing an enhanced master source document, a sanitized deck source, and a c |
 | `dembrandt-ux` | Use when reviewing or building UI, or extracting a site's design system. |

@@ -30,7 +30,7 @@ through their day while collecting structured data for the Day Planner.
 **Pattern:** Priority Ranking Tiles (tap-to-cycle: Skip → 🔥 Must Do → ⚡ Nice to Have)
 **Options:** Dynamically populated from:
 - Active efforts in `Efforts/Active/` (e.g., "[[ChampIQ Experiment]]", "[[Email Outreach Engine]]")
-- Phase 2 inbox priorities (e.g., "Reply to [[Gary]] re: pipeline")
+- Phase 2 inbox priorities (e.g., "Reply to [[the sales lead]] re: pipeline")
 - Carried-forward tasks from yesterday
 - Add 2-3 standing options: "Clear inbox", "Deep thinking time", "Team check-ins"
 **Priority tag:** Critical (red)

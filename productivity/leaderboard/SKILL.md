@@ -72,9 +72,7 @@ Use AskUserQuestion to clarify. Common leaderboard types by team context:
 | Engineering | PRs merged, story points, bugs fixed | Velocity (use carefully, context matters) |
 | General/Custom | Any numeric metric the user defines | Flexible |
 
-If the user says something vague like "make a leaderboard for Phoenix team," check CLAUDE.md
-and vault context to understand who Phoenix is (SPAN Global Services sales team: Gary, Lam,
-Tim, Travis, Murugan, Preeti) and suggest relevant sales metrics.
+If the user says something vague like "make a leaderboard for the sales team," ask which roster and which metric to use, then suggest relevant sales metrics.
 
 ### Step 2: Gather the Data
 
@@ -133,7 +131,7 @@ FOOTER          Data source attribution + "Updated [timestamp]"
 
 **Metric cards:**
 - Pick 2-4 stats that give context to the ranking
-- Examples: "Team Total: 142 deals", "Average: 14.2", "Gap: #2 is 8 behind #1", "Longest Streak: Gary (5 weeks at #1)"
+- Examples: "Team Total: 142 deals", "Average: 14.2", "Gap: #2 is 8 behind #1", "Longest Streak: Person A (5 weeks at #1)"
 
 ### Step 4: Choose Output Format
 

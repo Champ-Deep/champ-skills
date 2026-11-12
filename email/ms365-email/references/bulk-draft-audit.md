@@ -16,7 +16,7 @@ Bulk route, one process over the whole folder:
 env -u PYTHONPATH -u PYTHONHOME ~/.hermes/hermes-agent/venv/bin/python draft_audit.py out.json
 ```
 
-The script drives the inbox profile's stdio MCP mail client at `/Users/deep/.hermes/profiles/inbox/inbox-bot/inbox_bot.py`: `open()` -> `preflight()` for the signed-in address -> `call("list-mail-folder-messages", mailbox, mailFolderId="drafts", select=..., fetchAllPages=True)` -> `close()` in a `finally`. Open that module for the current client class name before importing it.
+The script drives the inbox profile's stdio MCP mail client at `~/.hermes/profiles/inbox/inbox-bot/inbox_bot.py`: `open()` -> `preflight()` for the signed-in address -> `call("list-mail-folder-messages", mailbox, mailFolderId="drafts", select=..., fetchAllPages=True)` -> `close()` in a `finally`. Open that module for the current client class name before importing it.
 
 When the pages belong in the conversation instead of on disk, the live `mcp__ms365__list_mail_folder_messages` connector performs the same fetch with the same paging discipline.
 

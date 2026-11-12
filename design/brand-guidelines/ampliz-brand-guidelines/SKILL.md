@@ -1,6 +1,6 @@
 ---
 name: ampliz-brand-guidelines
-description: Brand guidelines for Ampliz, a B2B and Healthcare Data Intelligence company. Use when creating any Ampliz-branded content including presentations, documents, social media posts, marketing materials, emails, sales assets, or any design work requiring Ampliz branding. Also use when users ask about Ampliz brand colors, fonts, logo usage, visual identity standards, or healthcare-specific design guidelines. Also trigger for anything involving Charles, Advik, or the Ampliz/Assassins team.
+description: Brand guidelines for Ampliz, a B2B and Healthcare Data Intelligence company. Use when creating any Ampliz-branded content including presentations, documents, social media posts, marketing materials, emails, sales assets, or any design work requiring Ampliz branding. Also use when users ask about Ampliz brand colors, fonts, logo usage, visual identity standards, or healthcare-specific design guidelines. Also trigger for anything involving the brand lead, the product lead, or the brand team.
 ---
 
 # Ampliz Brand Guidelines

@@ -3,7 +3,7 @@
     "name": "Span Global Services",
     "domain": "https://www.spanglobalservices.com",
     "logo": "logo.png",
-    "phone": "877.755.0023",
+    "phone": "(555) 010-0199",
     "phoneHref": "+18777550023",
     "privacyUrl": "https://www.spanglobalservices.com/privacy"
   },
@@ -419,7 +419,7 @@
         "title": "Contact",
         "items": [
           {
-            "label": "877.755.0023",
+            "label": "(555) 010-0199",
             "href": "tel:+18777550023"
           },
           {

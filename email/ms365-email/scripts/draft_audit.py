@@ -22,7 +22,7 @@ import json
 import re
 import sys
 
-sys.path.insert(0, "/Users/deep/.hermes/profiles/inbox/inbox-bot")
+sys.path.insert(0, "~/.hermes/profiles/inbox/inbox-bot")
 from inbox_bot import McpMail
 
 SELECT = (
@@ -117,7 +117,7 @@ async def run(out_path=None):
     await mail.open()
     try:
         who = await mail.preflight()
-        mailbox = who[0] if isinstance(who, list) and who else "deep@lakeb2b.com"
+        mailbox = who[0] if isinstance(who, list) and who else "you@example.com"
         res = await mail.call(
             "list-mail-folder-messages", mailbox,
             mailFolderId="drafts", select=SELECT, fetchAllPages=True,

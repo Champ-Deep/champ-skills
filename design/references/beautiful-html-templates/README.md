@@ -358,4 +358,4 @@ All 34 templates. Three slides per template (cover · mid-deck · later) to give
 
 ## License
 
-[MIT](./LICENSE) — free to use, modify, and distribute.
+License terms for these templates are not shipped in this folder.

@@ -5,7 +5,7 @@
     {
       "id": 1,
       "name": "msp-count-free-source",
-      "prompt": "Use the SPAN landing-page skill on https://share.lakeb2b.com/f/iZ0AciBa/span-msp-landing-us-preview__1_.html. Preserve its offer and source qualifications and deliver a static preview.",
+      "prompt": "Use the SPAN landing-page skill on https://example.com/campaign-preview.html. Preserve its offer and source qualifications and deliver a static preview.",
       "expected_output": "Source-backed MSP page with the established SPAN hero and footer, optional phone, offer-specific Custom list requirements, illustrative field layout, no invented proof or sent confirmation.",
       "assertions": [
         "Builds through the bundled builder with no unresolved tokens.",

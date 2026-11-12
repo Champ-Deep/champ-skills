@@ -13,19 +13,19 @@ be confirmed.
 
 ### 1. CS and File Delivery Records (Lake B2B)
 
-**Who:** Sean (Customer Service and File Delivery, Lake B2B)
+**Who:** the delivery lead (Customer Service and File Delivery, Lake B2B)
 **What he can confirm:**
 - Exactly what was delivered: contact count, segment composition (job titles, geographies, industries)
 - When it was delivered and to whom (which Lake B2B AM sent it, which contact at the client received it)
 - Any post-delivery exchanges (bounce reports, replacement requests, re-sends)
 - Data quality confirmation from the client side if it was captured
 
-**How to request:** Ask the user to check with Sean directly, or flag: "Sean can pull the delivery
+**How to request:** Ask the user to check with the delivery lead directly, or flag: "the delivery lead can pull the delivery
 record for [client name] [approximate date]. Can you ask him to confirm the contact count and any
 client feedback on record?"
 
 **When critical:** Any claim involving data volume, data quality, or deliverable specifications
-must run through Sean before publishing.
+must run through the delivery lead before publishing.
 
 ### 2. Campaign Reports and Delivery Files
 
@@ -37,7 +37,7 @@ must run through Sean before publishing.
 **Where to find:**
 - The outreach platform used (Champmail, campaign tool, or the client's own system)
 - The account manager for the relevant company
-- Sean for the underlying data/list component
+- the delivery lead for the underlying data/list component
 
 **Framing note:** If the open rate comes from the client's own tool (their ESP, not yours),
 it is client self-reported data. Frame it as: "According to [client]'s campaign tracking,
@@ -78,7 +78,7 @@ has the relationship. A verbal "yes" relayed through the AM is workable if docum
 If a Tier 1 evidence item cannot be verified, you have three options:
 
 **Option 1: Pause and get the data.** This is always the right answer for hard metrics.
-Prompt the user with a specific, actionable ask: "Can you ask Sean to pull the April 14
+Prompt the user with a specific, actionable ask: "Can you ask the delivery lead to pull the April 14
 delivery report for VertexGrid? We need the contact count and the segment breakdown."
 
 **Option 2: Downgrade to Tier 2 framing.** If the hard number cannot be confirmed but the
@@ -110,8 +110,8 @@ number exists on your side; it does not prove the client agrees with it. Say whi
 
 | Claim type | Who verifies |
 |------------|-------------|
-| Data volume (contacts delivered) | Sean (CS/delivery) |
-| Data quality (client approved samples) | Sean + the AM + client communication on record |
+| Data volume (contacts delivered) | the delivery lead (CS/delivery) |
+| Data quality (client approved samples) | the delivery lead + the AM + client communication on record |
 | Campaign open/response rates | AM + the outreach platform |
 | Client approval to name/quote | AM who holds the relationship |
 | Deal scope and contract value | Finance team or CRM |

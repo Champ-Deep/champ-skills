@@ -23,7 +23,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `human-feedback-learning-loop` | Use when a system learns from human corrections. |
 | `improve-codebase-architecture` | Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, |
 | `interactive-data-app-verification` | Verify interactive HTML data apps by measuring the DOM. |
-| `jev-typesafe-integration` | Use when working with Jev or TypeSafe in ChampSet. |
+| `jev-typesafe-integration` | Use when working with Jev or TypeSafe in the host app. |
 | `link-graph-visualization` | Visualize crawled site and link data as a readable graph. |
 | `live-server-browser-gates` | Use when a browser test drives a real server. |
 | `llm-model-benchmarking` | Use when assessing a model on Deep's LLM bake-off suite. |

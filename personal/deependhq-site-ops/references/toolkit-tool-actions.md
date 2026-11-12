@@ -32,7 +32,7 @@ Rules that hold for any model-emitted output, not just plans:
 
 ## Pitfalls
 
-- A worktree's `node_modules` is a symlink; `Cannot find package '@clerk/backend'` means it points at a tree without the toolkit deps. Repoint it at `/Users/deep/repos/dh-toolkit-v4/node_modules`, never reinstall.
+- A worktree's `node_modules` is a symlink; `Cannot find package '@clerk/backend'` means it points at a tree without the toolkit deps. Repoint it at `~/repos/dh-toolkit-v4/node_modules`, never reinstall.
 - A model reply that is not valid JSON must degrade to a designed state, not an exception: treat parse failure exactly like a null plan (the question / setup message the UI already renders).
 - The pricing question does not need a new price. Reusing the existing metering (reserve, settle at real token cost, daily cap) is a default worth stating on the decision card, not a decision to invent around.
 - Keep the browse-and-enrich chain cheap: hand the next tool the rows it already has (`w.load(rows, name)`) instead of re-uploading, and keep that handoff to one function call.

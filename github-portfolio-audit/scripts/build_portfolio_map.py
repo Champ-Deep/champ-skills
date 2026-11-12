@@ -46,11 +46,10 @@ DOMAIN_RULES = [
 # is listed here so it can be argued with.
 OVERRIDES = {
     # Graph and agent work is platform, not data: ChampGraph is the spine that
-    # ChampIQ, ChampOracle and Champ_Bot all sit on.
+    # ChampIQ and ChampOracle sit on the same spine.
     "Graphiti-knowledge-graph": "Agent Platform",
     "ChampIQ": "Agent Platform",
     "ChampOracle": "Agent Platform",
-    "Champ_Bot": "Agent Platform",
     "champ-workspace-mvp": "Agent Platform",
     "champ-agent-mesh": "Agent Platform",
     "Deep_kit": "Agent Platform",
@@ -65,7 +64,6 @@ OVERRIDES = {
     "lakeb2b-email-personalizer": "Signal & Sales",
     "Voice-Qualified-Template": "Signal & Sales",
     "Champ-Voice-Agent": "Signal & Sales",
-    "ChampLantern": "Signal & Sales",
     "ChampMail": "Signal & Sales",
     "ChampQuest": "Signal & Sales",
     "pikvita-mobile-app-android-fix": "Signal & Sales",
@@ -79,8 +77,6 @@ OVERRIDES = {
     "Investor-Module": "Data & Enrichment",
     "LakeStream": "Data & Enrichment",
     "LakeCurrent": "Data & Enrichment",
-    "ChampSet": "Data & Enrichment",
-    "100xLongevity": "Health & Lifestyle",
     "champions-wellness": "Health & Lifestyle",
     "champ-vault": "Health & Lifestyle",
     "ChampHQ": "Agent Platform",

@@ -22,7 +22,7 @@ Deep recalls an idea, list, or decision from past sessions and asks what it was 
 
 1. **Name the claims to verify.** Split the question into: (a) did the idea/discussion exist, (b) was it ever captured as a task/note, (c) is any part built and done. Each claim gets its own evidence below. Keep a short list of search terms: the user's exact term, its likely synonyms, and one broader query for homonyms (step 7).
 
-2. **Vault first.** `TASKS.md` is the canonical record of tasks: `grep -in '<term>' /Users/deep/Celsus/TASKS.md`. Then a vault-wide content search across the other layers for the discussion itself (notes, Atlas, Efforts). If TASKS.md has no line, the idea never became a tracked task, regardless of what other stores show.
+2. **Vault first.** `TASKS.md` is the canonical record of tasks: `grep -in '<term>' <path-to-vault>/TASKS.md`. Then a vault-wide content search across the other layers for the discussion itself (notes, Atlas, Efforts). If TASKS.md has no line, the idea never became a tracked task, regardless of what other stores show.
 
 3. **Kanban via the tool, not the file.** Call `kanban_list` (filter by status/assignee if the term is a known lane). Never grep `~/.hermes/kanban/boards/<board>/board.json` for task content: that file is a stub/index, not the task store, and a grep of it returns nothing while looking authoritative. Harvest the card ids from TASKS.md's `[kanban:<id>]` tags and read each with `kanban_show(task_id)`: one call returns the body, status, every prior attempt with its full run metadata (the verification commands run, what the run skipped, reviewer checks) and the whole comment thread, which is where the current verdict and the open decision cards live. Never go looking for card rows in sqlite: `~/.hermes/kanban/` holds only `board.json` plus a zero-byte literal `*.db`, while task rows live in per-profile `~/.hermes/profiles/<p>/state.db`, so probing the kanban directory reads empty and looks like proof the card never existed. `kanban_list` returns only the newest rows (default 50, max 200, `truncated: true` on overflow) with no offset, so absence in that window proves nothing about older work: treat TASKS.md as the authoritative absence check and the tool as confirmation of current state.
 
@@ -30,7 +30,7 @@ Deep recalls an idea, list, or decision from past sessions and asks what it was 
 
 5. **Side stores for stray captures.** Reminders: `remindctl list | grep -i '<term>'`. Apple Notes: `memo` search. A reminder-shaped ask that appears in no store in steps 2-4 usually never became a task; say so explicitly rather than implying it was lost later.
 
-6. **Repos and code, bounded.** Search `~/repos` with a bounded command: `find /Users/deep/repos -maxdepth 3 -not -path '*/node_modules*' -not -path '*/.git/*' \( -name '*.md' -o ... \) -print0 | xargs -0 grep -il '<term>'`. Never an unbounded grep/rg over `/Users/deep/repos`: the tree is large enough to time out and yields nothing usable.
+6. **Repos and code, bounded.** Search `~/repos` with a bounded command: `find ~/repos -maxdepth 3 -not -path '*/node_modules*' -not -path '*/.git/*' \( -name '*.md' -o ... \) -print0 | xargs -0 grep -il '<term>'`. Never an unbounded grep/rg over `~/repos`: the tree is large enough to time out and yields nothing usable.
 
 7. **Homonym pass.** Run one broad query to catch the term meaning something else (a palette name, product codename, theme token). Report the collision in the answer so future searches use a distinct word; a homonym is also why a zero-result search must not be reported as "never existed".
 
@@ -49,6 +49,6 @@ For a local service, "still works" is proven by starting it and reading a health
 - Treat a `truncated: true` kanban_list as a full inventory: it caps at the newest rows, and the idea you are hunting is usually older than the window.
 - Add terms to an FTS5 session query until it returns nothing: AND semantics make every extra word a filter, so a two-word query can miss the one message that has the phrase. Query the rarest single term, then OR.
 - Search only the active profile for past work: cards routed to content/frontend/inbox/worker sessions are stored in their own profile DBs and will not appear.
-- Grep `/Users/deep/repos` unbounded: the walk times out on node_modules and .git before reaching a hit. Bound with `-maxdepth` and path excludes.
+- Grep `~/repos` unbounded: the walk times out on node_modules and .git before reaching a hit. Bound with `-maxdepth` and path excludes.
 - Report "done" from a chat transcript or a delegated agent's summary: those are self-reports. Prove it with git output or a read-back of the target system.
 - Report a zero-result search as "we never did X": name collisions (palette, codename, theme token) produce false zeros; run one homonym query and disclose what it found.

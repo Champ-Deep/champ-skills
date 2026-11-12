@@ -12,7 +12,7 @@ decision before building the sync.
 
 | Store | Visibility | Holds |
 |---|---|---|
-| Celsus vault (`/Users/deep/Celsus`) | Deep only | Everything, client-named, no de-identification |
+| Celsus vault (`<path-to-vault>`) | Deep only | Everything, client-named, no de-identification |
 | `champ-knowledge` (BearDrive) | Whole org, forever | T0 de-identified patterns only |
 | `champ-drives` (BearDrive) | Whole org, forever | Commercial per-brand drives |
 | Champ Workspace | Authenticated, per route, audit-logged | Client-named records, decisions, live work |
