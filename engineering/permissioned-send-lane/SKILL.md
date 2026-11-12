@@ -75,6 +75,17 @@ in its own status string. That gives a real database and a real transport
 interface to exercise approve -> send -> precedent against, with no possibility
 of mailing anyone.
 
+## Suppression must match the person, not one identifier
+
+When an inbound path (a handoff API, an import) resolves its recipient to a
+stored contact, look the person up by every identifier the store holds (member
+urn, profile handle compared case-insensitively, normalised URL) before
+creating anything. A dedupe keyed on one field creates a fresh, unsuppressed
+duplicate when the suppressed row was stored under the other identifier, and
+the send goes out with every gate green. Test it by seeding the suppressed row
+under the identifier your request does NOT carry, and under a case variant of
+the one it does, then assert the fake transport recorded zero sends.
+
 ## Where an LLM restates a human
 
 Any step that rewrites what a person said must be able to report what it could
