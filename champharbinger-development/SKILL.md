@@ -25,7 +25,7 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 
 - Canonical checkout `/Users/deep/repos/ChampHarbinger-cf`. Per-branch worktrees appear as `/Users/deep/repos/ChampHarbinger-cf-<branch>`; run `git worktree list` before creating one so concurrent lanes do not collide, and branch off `main` unless a card says otherwise.
 - Never trust a folder name: `git remote -v`, `git fetch origin`, then compare `HEAD` against `origin/main` before planning against "the local codebase".
-- No em dashes in any output, including commit messages, PR bodies and UI strings.
+- No em dashes in any output, including commit messages, PR bodies and UI strings. Before every commit run `git diff --cached | grep '^+' | grep '[–—]'` on its own (it exits 1 when clean, so never chain it with `&&`): only an added line can violate the rule, and one second of grep beats re-reading the diff by eye.
 
 ## Where production truth lives
 
@@ -49,7 +49,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 4. Test: `pnpm exec vitest run <touched suites>`, then the full suite before claiming green. Unit tests mock `@/db`, so they cannot touch prod state.
 5. Report only gates whose command output you ran in that same turn.
 6. When the full suite reports timeouts in files you did not touch, check `uptime` first: this suite pays a per-test setup cost, so a loaded machine inflates timeouts across unrelated files. Re-run the named files alone, and let CI on a clean runner arbitrate the final verdict. State in the PR body that the local run was noisy and CI is the gate, rather than re-running the whole suite until the box quiets down.
-7. Poll `gh pr view <n> --json statusCheckRollup` for the conclusions (not `gh pr checks`, which reports `pending` for jobs that already finished) and require `mergeStateStatus=CLEAN` before merging.
+7. `vitest.config` restricts `testMatch` per project, so a path-restricted run can match zero test files while other files in the same command do run. Read the `Test Files` count of every shard and require it above 0 before quoting a pass number: a shard that matched nothing is an unrun shard, not a green one.
+8. Poll `gh pr view <n> --json statusCheckRollup` for the conclusions (not `gh pr checks`, which reports `pending` for jobs that already finished) and require `mergeStateStatus=CLEAN` before merging.
 
 ## Shipping
 
@@ -78,8 +79,11 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Run `npx wrangler whoami` before promising anything that needs a deploy or a D1 read, and again just before the deploy: the OAuth session on this Mac can die mid-session ("You are not authenticated" while the stored expiry is still in the future). Only Deep can restore it with `npx wrangler login`: the Cloudflare login page sits behind a bot challenge, the Hermes browser copy is not signed in and no login is stored. Card it at once as a `needs_input` decision with that one command, because every later step (merge value, deploy, seeding, prod reads) waits on it.
 - Voice keys reach production only through a deploy. `DIAL_API_KEY` set in `env.env` does nothing until `deploy.sh` pushes it, so "the key is in env.env" is not "production can dial". Prove it with `npx wrangler secret list` after the LIVE line.
 - A route the worker reaches through `postInternal()` must be listed as public in `src/proxy.ts` and verify the worker secret itself. Without the entry the job dies on a silent 401. `src/proxy.test.ts` enforces this; add the new path to its required list in the same change.
+- `signals.slug` is unique across all tenants. Code that looks a signal up by a fixed slug must also require `isBuiltin` true and `clerkUserId` null, and the user-facing creator must refuse that slug prefix, or one tenant can hold the slug, collect every tenant's `signal_results` on their row and delete them by cascade.
+- `isTest` on a `ChannelMessage` is not a trust signal: the chat agent's `callContact` sets it for any number with no contact record. Gate a relaxed rule on a flag only the allowlist-checked routes set (`approvedNumber`), never on `isTest`.
+- A job with `retryLimit: 0` that is refused at run time is gone. Check everything that can refuse it (cap, throttle, spacing against other queued and just-placed work) when it is queued, count queued jobs against the same cap as placed ones, and treat `expired` as terminal next to `failed` when counting what is still waiting.
 - A deploy that aborts before the LIVE line changed nothing: Cloudflare rejects some pre-deploy database calls (D1 error 7403) and the script stops, so prod keeps serving the previous build. Every state you read during that window describes the old code, including the UI and a healthy-looking jobs table. Confirm identity by `/api/version` after the LIVE line, not by absence of damage.
-- Pair each deploy with a re-run of `smoke.sh` and the `/api/version` read in the same background job, so a completion notification carries the evidence instead of a bare exit 0.
+- Pair each deploy with a re-run of `smoke.sh` and the `/api/version` read in the same background job, so a completion notification carries the evidence instead of a bare exit 0. That exit code belongs to the wrapper, not the command inside it: a job written as `cmd > log; echo "exit $?"` reports success even when `cmd` failed, so grep the captured log for the command's own result line before reporting either outcome.
 - The staging worker (`champ-harbinger-staging`) is shared: any lane's deploy replaces it, so a `PREVIEW:` comment stops being true the moment another branch ships there. For a preview that must survive until review, deploy under its own name (`CF_WORKER_NAME=champ-harbinger-preview-<branch>` plus the staging `CF_D1_NAME`/`CF_D1_ID`), put the `/api/version` build id in the PREVIEW comment, and re-read `/api/version` right before `kanban_request_review`. Reviewers: compare that build id with the PR head before judging anything on the preview.
 - Screenshots and other evidence go on the card with `kanban_attach`, then `kanban_attachments` to confirm they landed. Paths listed in `kanban_request_review(artifacts=...)` from a profile cache dir are not copied, and that dir is pruned after 24 hours.
 
