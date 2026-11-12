@@ -30,7 +30,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 ## Where production truth lives
 
 - The dashboard is a cache viewer. Health, limits and capacity screens read snapshot tables and fail closed, so an empty table renders as an alarming failure state. Empty means "never checked", not "failing".
-- Answer "is X actually true in prod" with a read-only SELECT against the live D1 for that worker, never from a screenshot or from what the code ought to do. Diff the `jobs` table by schedule name across the gap when something "stopped working", and read `mailbox_connections` before assuming a mailbox row exists.
+- Answer "is X actually true in prod" with a read-only SELECT against the live D1 for that worker, never from a screenshot or from what the code ought to do.
+- "Is it wired?" and "is anyone using it?" are two different reads. For wiring, `npx wrangler secret list` on the prod worker name returns the secret NAMES only (never values, so it is safe to print): a feature built and unit-tested in code still cannot work in prod when its provider credentials were never pushed, and the UI renders the dead button anyway. For adoption, count rows: `auth_users`, `team_members` (an empty table means the launch never happened), and `sent_emails` grouped by recipient domain, since every send to an address the app's own owner holds proves only that bytes moved, not that a prospect ever received mail. Diff the `jobs` table by schedule name across the gap when something "stopped working", and read `mailbox_connections` before assuming a mailbox row exists.
 - The provider console (InboxKit / OpenMail) is the authority for domain DNS status and inbox credentials. Any Harbinger message that names a specific check must be backed by a row that check wrote; otherwise the message is inventing evidence.
 - You have no session in production. Anything that needs Deep's auth (an import button, a manual re-check) gets an endpoint he can call while logged in; do not try to fake it.
 
@@ -102,6 +103,15 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - The staging worker (`champ-harbinger-staging`) is shared: any lane's deploy replaces it, so a `PREVIEW:` comment stops being true the moment another branch ships there. For a preview that must survive until review, deploy under its own name (`CF_WORKER_NAME=champ-harbinger-preview-<branch>` plus the staging `CF_D1_NAME`/`CF_D1_ID`), put the `/api/version` build id in the PREVIEW comment, and re-read `/api/version` right before `kanban_request_review`. Reviewers: compare that build id with the PR head before judging anything on the preview.
 - Screenshots and other evidence go on the card with `kanban_attach`, then `kanban_attachments` to confirm they landed. A full screenshot set (MBs) is too big for inline base64, and `kanban_attach_url` refuses localhost (SSRF guard). Host the set on a Cloudflare Pages branch and attach it from the pages.dev URL. That also needs wrangler auth, so check `npx wrangler whoami` before shooting.
 - Copy shots out of the profile cache dir into the card workspace the moment they exist. The cache is pruned after 24 hours. Paths listed in `kanban_request_review(artifacts=...)` from a profile cache dir are not copied, and that dir is pruned after 24 hours.
+
+## Preview workers and agent keys
+
+- A preview that must not touch prod gets its own worker AND its own D1 (`npx wrangler d1 create <name>`), not the shared staging D1: two workers ticking one `jobs` table can run each other's scheduled jobs against the wrong code. Deploy with a wrapper env file that sources the canonical `env.env` and then overrides `HARBINGER_PUBLIC_URL`, `CF_WORKER_NAME`, `CF_D1_NAME`, `CF_D1_ID`. Without the URL override the preview's jobs `postInternal` into production.
+- `smoke.sh` reads the D1 name from `wrangler.jsonc`, so against a preview it minted its invite in the live D1 and failed 7 checks. Pass `CF_D1_NAME` (fixed on rc/agent-call, PR #152).
+- Check whether `env.env` holds a value with `grep -cE '^NAME="?[^"]'`, never `^NAME=.+`: the template writes `NAME=""`, which `.+` matches. That mistake reported Dial and OAuth keys as present when every one was empty.
+- Through an `hb_live_` key, a super admin's dial-anyone right must not apply: the voice test-call route requires an allowlisted number (`VOICE_TEST_CALL_NUMBERS`) when the proxy's `x-hb-api-user` header is present.
+- "Test email to Deep" on prod: `deep@championsmail.com` has replied before, so its enrollments are halted (send-now 409 `halted`), and Quick Send refuses any person with a sent or pending draft (`already_drafted`). A plus address verified undeliverable. The honest test is the reply path: Deep replies to the last Harbinger mail, the answer draft is approved, it sends.
+- Deep's local browser: background tabs freeze and `Runtime.evaluate` times out. `Target.activateTarget` plus `Page.bringToFront` on the Harbinger tab first, then evaluate with the tab's own session id.
 
 ## Proving the review-to-send path end to end
 
