@@ -133,6 +133,16 @@ When a standing rule (voice, formatting, addressing, delivery target) is wrong f
 3. Re-read the job records from disk and assert three things per job: the old sentence is gone, the skill is attached, the new rule is present. A zero exit code only proves the CLI accepted the edit.
 4. Never fire an agent job as a test run (see migration step 4); the first scheduled fire is the test.
 
+## Diagnosing a failed agent job
+
+An interrupted tool call (`exit_code 130`), "Operation interrupted: waiting for model response" or a bare `agent reported failure` on a laptop job is usually the Mac sleeping mid-run, not the prompt. Check three things before naming a cause:
+
+1. Every run after the failed one: `last_status`/`last_error` in `~/.hermes/cron/jobs.json` and the newer files in `~/.hermes/cron/output/<job_id>/`. One failure that recurs is a pattern, and "retry on the next fire" is then already disproven.
+2. `pmset -g log | grep -E "^<date> 0[0-2]" | grep -E "\b(Sleep|Wake|DarkWake)\s"`: a `Clamshell Sleep` or `Low Power Sleep` line inside the run window, with the failure seconds after the next full `Wake`, is the cause. The pmset store rotates after about a week, so read it the day of the failure.
+3. A silent gap in `gateway.log` across the run window, or a tool call that ran far past its own `timeout`, points the same way when pmset has rotated.
+
+The fix for sleep is a schedule or power decision for Deep (earlier fire time, AC only, or keep awake), not a prompt edit.
+
 ## Related
 
 [[Skills MOC]]
