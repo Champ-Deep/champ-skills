@@ -13,6 +13,8 @@ Use when a tool exists on a configured stdio MCP server (per `config.yaml`) but 
 5. **Clean up in `finally`.** Terminate the process; kill if terminate times out.
 6. **Still verify through the normal connector read tools.** Transport-level success is not state success.
 
+**Before parking a mail task on an inbox card, prove that lane can spawn at all:** run `hermes kanban dispatch --dry-run --json` and check the card is not listed in `skipped_nonspawnable`. The usual cause is the quota guard (`~/.hermes/scripts/kanban_quota_guard.py`, cron every 15 min), which rewrites `kanban.dispatch_profiles` from live provider headroom and drops it to `['default']` (or `[]`, a full pause) while a provider sits inside its reserve. While that holds, every inbox card stays in `ready` with no worker, and the draft Deep is waiting for never exists. Stage it from the main lane over stdio instead, then close the inbox card as done by hand.
+
 The default profile's ms365 block is calendar-read only (scopes `User.Read Calendars.Read`). Take the mail-capable block from `~/.hermes/profiles/inbox/config.yaml` (read only, never edit it): its `--enabled-tools` regex and `User.Read Mail.Read Mail.ReadWrite Calendars.Read` scopes, with `MS365_MCP_TENANT_ID` in env. Verified: `list-mail-folder-messages`, `create-draft-email` and `get-mail-message` work from the main lane this way, so never say the main lane has no mail access and do not park a draft on an inbox card before trying it. Tool names use hyphens over stdio.
 
 The `--enabled-tools` regex in the server's config already covers the common mail tools; when spawning standalone, reuse the config's args rather than inventing a fresh set, so scope and auth match the configured server.
