@@ -77,6 +77,7 @@ Hard rules:
 - Verticals are small-caps no space: SalesTech, MarTech, RecruitTech, GrowthTech.
 - Write "[[Lake B2B|LakeB2B]]" with no space, except in prose ("[[Lake B2B]]") or all-caps lockups.
 - Avoid disrupt, revolutionary, game changer, synergy, point solution, vendor.
+- Print type floor, measured on the PDF not the CSS: A4 body 9.5pt or more, mono labels 7pt or more, footer 6.5pt or more. Check with PyMuPDF span sizes. A page that ends with 100pt or more of blank space has room to grow the type, so grow it. Never print a build term ("status pill", "tile") as a visible label.
 
 ## Files
 
