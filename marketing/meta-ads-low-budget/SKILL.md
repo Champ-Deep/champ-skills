@@ -11,6 +11,8 @@ A planning and review playbook for small-budget Meta lead generation. Written fo
 
 Source video: https://youtu.be/u57s5wmdl5s (Sabri Suby, "How to Scale Meta Ads on a Low Budget", uploaded 4 Nov 2026), supplied by Deep on 11 Nov 2026. The tactics were checked against the auto-generated caption transcript that day; the timestamped notes, the creator's own numbers and what our rules change are in `references/video-evidence.md`. Captions are machine text and nothing shown only on screen was read. Creator figures are his claims for a $1,000, $30 a day lead-gen budget, not our results. Read `references/experiment-controls.md` before applying any tactic: it governs research honesty, angle tests, budget gates, the proposed 500 validations and consented follow-up. Our CRM-qualified outcomes and current approved brand plan outrank creator benchmarks.
 
+Operating depth: once a test is live, the vendored `ads` skill (references `meta-decision-system.md`, `meta-andromeda-playbook.md`, `b2b-paid-playbook.md`) holds the kill, graduate and scale rules; use `ad-creative` for variants, `conversion-tracking` for pixel and CAPI, `cro` for the opt-in page, `lead-magnets` for the guide, `offers` for the offer sentence. This skill stays the Champions-specific plan.
+
 ## Step 0: fit gate (do this before any spend)
 
 | Check | Pass condition | If it fails |
