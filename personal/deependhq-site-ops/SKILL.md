@@ -13,6 +13,8 @@ metadata:
 # deependhq.com Site Ops
 
 > **Security gate (mandatory):** every deploy runs `ultimate-security`'s deploy gate (pre-push hook, `predeploy`, or publish.sh) plus a `security-audit` guidance-mode review of the diff. A bare CLI deploy runs `python3 ~/champ-skills/security/ultimate-security/scripts/deploy_gate.py check .` first. `AUDIT-REQUIRED` means a full Cloudflare audit before shipping. Never override without Deep.
+>
+> **Preflight before invoking the publisher:** execute the gate separately on a disposable, reconciled candidate tree and inspect its redacted findings, not just its exit code. An existing `warn_only` exemption can print `AUDIT-REQUIRED` or `BLOCK` and still exit zero, allowing publish.sh to push before its output is returned. If those findings appear, leave the entry ingested and staged, stop before publish.sh, and route the audit/remediation through the existing security card. Do not change exemptions, reset a baseline or claim a clean pass. Keep scanner findings distinct from verified exploitation.
 
 Operate and repair the nightly loop that publishes deependhq.com from Deep's Obsidian vault.
 
