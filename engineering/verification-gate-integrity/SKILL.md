@@ -369,6 +369,8 @@ also fails a 44px minimum.
 
 Test lazy widgets after preparation as well as before it. Let the module and overview requests finish, switch the browser offline, then open: a failure handler attached only to import rejection cannot show the promised offline recovery once the import is cached. Reject each required overview independently too, and assert the actual recovery control and contact fallback rather than merely an Offline label. For dialogs, close and reopen through the real launcher, then press Tab and Shift+Tab without seeding focus inside the panel; a trap tested only after manually focusing its last control misses a reopen path that leaves focus on the host page. Add fixed chrome after widget mount and resize it without dispatching a window resize, because an observer attached only to the initial node list misses later host components.
 
+For observer-driven placement, wait on the resulting geometry with a bounded predicate, not a fixed 150ms sleep. Record elapsed time separately. A ResizeObserver followed by requestAnimationFrame can settle later under browser load; rerun a fixed-sleep failure and measure the settled rect before calling it a persistent collision. Preserve the failed run as a flaky harness result, never silently replace it with the later green.
+
 ## Browser probes: read the DOM, do not guess selectors
 
 Labels and element order change with state. A quick action labelled one way in the
