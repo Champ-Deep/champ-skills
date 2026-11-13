@@ -14,5 +14,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `leaderboard` | Create beautiful internal leaderboards that rank people and teams across any metric. Produces screen-ready and print-friendly HTML with podium heroes, ranking tables, tre |
 | `meeting-followup` | Everything after a meeting, in one skill. Intake: file meeting notes, summaries, transcripts or recordings into structured vault knowledge and tasks. Follow-up: act on th |
 | `meeting-prep` | SPIN-driven meeting preparation, plus CLF (Champions Leadership Framework) pitch prep for sales and BD reps. Scans the calendar, pulls meeting history from Google Calenda |
+| `wait-what` | Stop. That last message did not land: re-pitch it. |
+| `writing-for-agents` | Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md. |
 
 See the master [INDEX.md](../INDEX.md) for every skill.

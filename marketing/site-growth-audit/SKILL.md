@@ -1,13 +1,22 @@
 ---
 name: site-growth-audit
 description: "Audit a live site and turn findings into a ranked plan."
+version: 1.1.0
+author: Deep (Champions Group)
+license: internal
+metadata:
+  hermes:
+    tags: [marketing, growth, audit, seo, conversion]
+    related_skills: [lead-site-growth-loop, live-site-design-audit]
 ---
 
 # Site Growth Audit
 
+## When to Use
+
 Turn a running site into a verified, prioritized plan. The deliverable is a document someone can act on in order, not a list of things that could be better.
 
-**Trigger on:** 'audit my site', 'why isn't my site ranking', 'site strategy', 'improve conversions', 'visitor tracking', 'what should I fix first', 'review my personal brand site', 'plan growth for <site>'. Also use when a named tool, folder or doc in the user's request turns out not to exist and the plan has to be grounded in what is actually deployed.
+**Trigger on:** 'audit my site', 'why isn't my site ranking', 'site strategy', 'improve conversions', 'visitor tracking', 'what should I fix first', 'review my personal brand site', 'plan growth for <site>'. Also use when a named tool, folder or doc in the user's request turns out not to exist and the plan has to be grounded in what is actually deployed. When the ask is a growth plan for the business rather than one surface, diagnose the funnel stages first: see `references/funnel-diagnosis-race.md`.
 
 ## Before anything else: the site is not what you were told
 

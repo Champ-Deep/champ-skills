@@ -32,6 +32,7 @@ A third variant exists when the owner delegates thinking, not typing: mark it `E
    - CLAIMED: stated by a person or a source, not checked.
    - JUDGMENT: the sender's view.
    A CLAIMED fact never reads as VERIFIED.
+   Two tags are easy to blur. Confirming that a line exists in a file verifies the LINE, not the number typed into it: figures lifted from meeting notes, calls or someone's memory stay CLAIMED even after you grep them, and the ledger says what was checked (existence) and what was not (the figure against the live system). Only a pull from the system of record (CRM, ad platform, analytics) earns VERIFIED, and the row carries the source system, the period covered and the pull date.
 5. **Artifacts.** Path, what it is, status (sketch, draft, final, staged, live).
 6. **Open decisions.** Options, recommendation, and who decides. Every irreversible action (send, post, pay, publish, merge, delete) is listed here and is never done by the receiver.
 7. **Not checked.** Known gaps, stated plainly.
@@ -51,6 +52,8 @@ When the owner says the next session should think part of it out, that part must
 
 ## Rules
 - Re-read a file before quoting it. Do not quote from memory.
+- Before proposing work, inventory what already exists: grep TASKS.md, Kanban and related effort folders for each item in the plan. An open card or task for the same fix makes the plan a duplicate, so the handoff lists it as "already open" instead of inventing a second one, and the receiver's first step checks these anyway.
+- A handoff the receiver will execute or design from goes in a frontmatter block the vault recognizes: `type: effort`, `status: active`, `company: "[[Client]]"`, `updated: YYYY-MM-DD`.
 - Quote numbers with source and date. Prices, discounts and spend are questions for the owner, not numbers.
 - No secrets. Never copy keys, tokens or credential contents into the handoff.
 - No em dashes or en dashes in any deliverable for Deep. Use periods, commas, colons.

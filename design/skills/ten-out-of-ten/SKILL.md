@@ -80,7 +80,7 @@ Be honest. A 6/10 site is a 6/10. The rebuild has to earn its points.
 Read `references/taste.md` and apply it to everything after this step. Then layer in whichever design skills are installed. The rules in `taste.md` are the floor either way.
 
 - **ui-ux-pro-max:** run its `--design-system` search for the business's product type and industry, and note the recommended type, palette direction and landing pattern in `_brand/DESIGN.md`.
-- **Taste** (`design-taste-frontend`): follow it while building.
+- **Taste** (`design-taste-frontend`): use only its current installed release. This library ships no `design-taste-frontend` skill today, and the one local copy, `higgsfield-websites/references/design-taste-frontend.md`, is a retired upstream version whose house rules collide with ours: it builds from its own kit instead of the mandated component source, forbids violet against a purple house brand, and bans scroll-in reveals. If the current release has not been adopted through a decision card, skip it and let `taste.md` be the floor.
 - **Impeccable:** run its setup once (`/impeccable init`) with the facts from step 1, so its critique knows the audience and brand.
 - **Emil Kowalski's `emil-design-eng`:** use it for every interaction that moves (hover, press, menus, the few animations `taste.md` allows): easing, duration, what never to animate.
 

@@ -1,6 +1,6 @@
 ---
 name: credential-and-secret-handling
-description: "Use when a credential lands in chat or a URL needs auth."
+description: "Use when auth must be proven or a credential lands in chat."
 version: 1.0.1
 author: Hermes Agent
 license: MIT
@@ -18,6 +18,9 @@ metadata:
 - Deep pastes a password, API key, token, or OTP into chat, including inside an
   out-of-band message.
 - A task needs auth for a URL, app, or API and no credential is stored yet.
+- He asks whether an app, CLI or lane is signed in, or "do I have Google auth
+  set up".
+- An OAuth flow wants a code typed somewhere, or he asks how to finish one.
 - He asks to "save this in my vault" or "log in and pull the docs".
 - Any secret-bearing file needs auditing before it reaches a repo.
 
@@ -44,6 +47,35 @@ printing the value answers a question he may not have asked and costs a round
 trip to correct. Only when he asks for the value itself do you decline the print
 and offer the copy command instead (`grep '^KEY=' <file>` piped to the
 clipboard, never into chat).
+
+## Interactive sign-in: hand him the command
+
+An OAuth flow that ends in a typed code can only be finished by a human at a
+keyboard. Never start one from a tool call, a background job, or a subprocess:
+its stdin is not his keyboard, so the code prompt can never be answered, and the
+flow re-emits the same URL on every retry, which reads to him as "it keeps giving
+me the command".
+
+Hand over four things in one message, then stop:
+
+1. The exact command.
+2. The terminal it runs in: his own, not chat, not a tool call.
+3. Where the code goes: at that command's own prompt, in that same window.
+4. The status command that proves the sign-in took, so he can confirm it without
+   you guessing.
+
+A code he pastes into chat instead is a credential like any other: one line that
+it is exposed, then move on to the work that is not blocked. Short-lived
+single-use codes need no rotation, let the flow capture the next one; a refresh
+token is long-lived, so treat its exposure as sign-out and re-authorise.
+
+## Proving a lane is authorized
+
+A stored file, a file timestamp, a `list` subcommand, and a green "connected"
+badge each prove something is saved; none prove it still works. Authorization is
+proven by one live call the service itself answers (a `models`/`status` command
+the provider runs, one real read against the API). Report the pair: what is
+stored, and what the live call returned.
 
 ## Procedure
 
@@ -136,6 +168,12 @@ railway variables | grep -oE '^[A-Za-z_][A-Za-z0-9_]*'    # names only
 If a value has already been printed, treat it exactly like a paste: one line
 saying it is exposed and should be rotated, then continue with the work that is
 not blocked.
+
+A credential file is the same trap. Printing the parsed JSON to see its keys
+prints every value with it, and a nested `token` object dumps the live refresh
+token even when you only meant the top-level keys. Walk the keys instead and
+print only shape and lifetime: key names, `expiry`/`scope` as they are, and
+`<present, N chars>` for anything secret-shaped.
 
 ## Secrets in repos
 

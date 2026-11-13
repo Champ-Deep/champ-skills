@@ -14,7 +14,9 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `cross-model-review` | Use when a medium or large change needs a second-model review. |
 | `defensible-data-counts` | Use when a detected or derived number is shown to a buyer. |
 | `deterministic-analysis-pipelines` | Use when a site-wide analysis must run on many inputs. |
+| `diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. Use when the user says "diagnose"/"debug this", or reports something broken/throwing/failing/slow. |
 | `dograh-champvoice-provider` | Use when maintaining the Dograh Champvoice provider. |
+| `domain-modeling` | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR. |
 | `factory-decision-gate` | Use when a factory agent is about to act without Deep. |
 | `firecrawl` | Firecrawl is the PRIMARY browser and web access tool for this workspace. Use it for any web interaction, reading, research, or scraping task BEFORE reaching for the Chrom |
 | `frontend-resiliency-tester` | React frontend resiliency and edge-case testing. Generates layered test suites (component, integration, E2E) using Vitest + React Testing Library and Playwright. Covers i |
@@ -32,6 +34,7 @@ Install: copy a skill folder into your agent's skills dir (e.g. `cp -R {cat}/<sk
 | `permissioned-send-lane` | Use when adding an outbound send path to a read-only system. |
 | `rea-web-teardown` | Use when tearing down a web product with the REA CLI. |
 | `repo-design-probe-first` | Use when designing a repo feature from real file:line proof. |
+| `retro` | Conduct a retrospective on a coding session. |
 | `risky-changes` | Use when a change touches data, billing, defaults or customer-visible behavior. |
 | `skill-creator` | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing sk |
 | `sprite-art-pipeline` | Build layered sprite art and prove every spec renders. |

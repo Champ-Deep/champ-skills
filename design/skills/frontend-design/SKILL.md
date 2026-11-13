@@ -24,6 +24,7 @@ Any HTML, page, form, checklist, dashboard or single-file artifact deliverable s
 | A part, page or site that must not read as generic AI output | `genjutsu` (the anti-generic checklist) |
 | Critique, polish or audit of an existing UI rather than a new build | `impeccable` |
 | A visual page built from text (report, one-pager, showcase) | start at `research-to-visual`, which routes to the format skill; this skill supplies the design system underneath |
+| Revising one page across several rounds of the user's rulings while a build is still running | `celsus-client-call-prep`'s audience-facing resource page: queue a self-contained delta brief per round, rebuild the whole page once, re-run the gate, never patch the built file in parallel |
 
 ## Two-phase pipeline: build, then polish
 

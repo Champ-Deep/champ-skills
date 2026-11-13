@@ -1,9 +1,23 @@
 ---
 name: model-api-capability-verification
 description: "Use before claiming a model API can or cannot do something."
+version: 1.1.0
+author: Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [verification, models, api, capability, vendor-terms]
+    related_skills: [champharbinger-development, competitive-research-verification]
 ---
 
 # Verifying what a model API can actually do
+
+## When to Use
+
+Before any statement of the form "X can't do that" / "X is supported" about a
+model, endpoint, platform or vendor entitlement: a capability claim, a pricing
+claim, an auth-path claim, or a question about whether a user's own subscription
+may pay for a third-party app (see `references/subscription-shares.md`).
 
 ## The rule
 
@@ -100,6 +114,7 @@ human).
 
 ## References
 
-- `references/openrouter-multimodal.md` — verified modality counts, the two
-  dedicated audio endpoints with working request shapes, per-model traps, and
-  cheapest-first model picks for STT and TTS.
+- `references/subscription-shares.md` — whether a user's ChatGPT or Claude
+  subscription can pay for a third-party app: the three separately gated
+  claims, each vendor's verified position with its source page, and the
+  no-permission route (a connector inside the vendor's own app).

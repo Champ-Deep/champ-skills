@@ -20,6 +20,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
 | `model-routing` | Use when routing work across subscription and API lanes. |
 | `release-integration-engineering` | Use when consolidating branches into a gated release. |
+| `remote-podcast-recording` | Use when setting up a podcast or webinar recording. |
 | `schedule` | Create or migrate scheduled tasks in Hermes cron. |
 | `skill-repo-sync` | Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo. |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |

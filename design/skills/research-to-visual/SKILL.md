@@ -74,7 +74,7 @@ If the research has few numbers, do not invent any. Use structure visuals instea
 |---|---|
 | One headline count | Big number cell with comparator |
 | Ranking of 3 to 8 items | Horizontal bars, value on the mark, sorted descending |
-| Part of a whole, 2 to 4 parts | Stacked bar with a key of shares (round so they sum to 100) |
+| Part of a whole, 2 to 4 parts | Stacked bar with a key of shares (round so they sum to 100). Put only the count inside each segment and carry the full names in a keyed legend beneath: a segment under about a quarter of the bar cannot hold a readable label at 390, and `scrollWidth` on the span is what proves it. |
 | Progress toward a target | Tick strip of N cells, plus "X to go in Y days" |
 | Before and after | Paired bars or delta cells from stated numbers |
 | A count the reader should feel (under about 500) | Unit dots, 1 dot = 1 item, caption says so |
@@ -89,6 +89,13 @@ If the research has few numbers, do not invent any. Use structure visuals instea
 | Source agreement or confidence | Strip of N cells, one per source, filled when it agrees |
 | Geography | Ranked bars by country (a dot map only if you can draw it cleanly) |
 | A trend over 8+ points | Hand-built SVG line, or Chart.js |
+
+### When the source is a meeting transcript
+
+1. **Read the whole transcript before you quote any of it.** Pull it in full with `read_file` offset pagination until `next_offset` runs out, and keep pulling past the point where your first answer seems formed. A long transcript is the one source that most rewards a partial read and most punishes it, because the passages that change the conclusion sit at the far end.
+2. **Agreed is not the same as proposed.** Split what the room produced into three buckets and label each on the page: agreed (someone else answered yes), proposed (offered, no ruling), and gaps (nobody answered). A proposal from the person drafting the page belongs in the proposed bucket and is marked as such, never promoted by proximity to the agreed material.
+3. **Keep attribution on every quote.** Take names and timestamps from the recording metadata and never guess a speaker; where attribution is genuinely unclear, show the quote unattributed and flag it rather than crediting the most senior voice. A quote with no clear speaker is a gap, not a licence to assign it.
+4. **Do not quietly supersede an earlier artifact of the same work.** When a previous pass already produced a draft of this document, say on the record which file supersedes which and why, because two files in one folder will both get sent otherwise.
 
 Chart rules: values sit on or beside the mark; bar widths are computed from the stated number, never by eye; dot and bubble sizes scale by area; colour encodes one thing per chart (accent or ink for "ours", neutral for "missing", red outline for a risk); every chart has a one-line caption saying what a mark means; each unit gets its own scale.
 

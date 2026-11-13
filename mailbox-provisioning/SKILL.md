@@ -1,7 +1,7 @@
 ---
 name: mailbox-provisioning
-description: Use when buying or wiring mailboxes for an outreach domain.
-version: 1.0.0
+description: Use when buying, wiring or verifying mailboxes on domains.
+version: 1.1.0
 author: Deep / Hermes
 license: MIT
 metadata:
@@ -14,26 +14,33 @@ metadata:
 
 ## When to Use
 
-When buying domains or mailboxes on an inbox provider, wiring them into the sending product, choosing a Google/Microsoft mix, or preparing avatar files and CSVs for import.
-
-Buying domains/mailboxes on an inbox provider, wiring them into the sending product, and handing the list to the user.
+When buying domains or mailboxes on an inbox provider, wiring them into the sending product, verifying what a domain actually hosts today, choosing which domain serves which sending lane, or preparing avatar files and CSVs for import.
 
 ## Always-on rules
 
 - Match the mailbox provider to the recipient: Google-hosted mailboxes land best in Gmail inboxes, Microsoft-hosted in Outlook. Mix domains by who gets written to, not by name.
 - One avatar file per person, JPEG under 2 MB, named `<username>.jpg`. GIFs and animated avatars are wasted effort: Gmail and Outlook flatten profile pictures to the first frame, and a synthetic face on a cold mail hurts trust. Funnels work, humans win; funnels where synthetic faces help are the exception.
 - Always include a first.last alias row alongside the bare first-name row; sequences usually send from the alias.
+- One domain, one lane. Nurture (Zoho or equivalent), CRM and marketing (HubSpot or equivalent) and cold outreach each get their own domains and never share one, because a listing or complaint on one lane then throttles every lane sending from that domain.
+- No cold or marketing domain may link, redirect or point its website at the root brand domain once that root is on a blocklist: URI blocklists score the redirect target, so the clean domain inherits the listing.
+- Treat every domain name arriving in a transcript, Wispr note or meeting note as unverified. Speech-to-text inserts dashes and swaps brand words, and planning or buying on the corrupted string wastes a round trip.
+- Report mailbox existence from live DNS, never from a note, plan or prior card. A plan claiming "5 mailboxes live" while the apex shows only the registrar's forwarding MX and its SPF means nothing is hosted there.
 
 ## Procedure
 
-1. Check domain and mailbox state through the provider API with a short-lived session (create, use, revoke in the same run). Read the actual key/env value before blaming a 401 on the provider: an env var holding `""` is unset, not blank.
-2. Import into the sending product through its own import path so the login gets verified; an unverified connection will not send. Read back the connection table (`from_address`, `status`, `is_default`) to confirm.
-3. Deliver the CSV with the file-upload column present so avatars can be dragged in directly; no separate hosting step.
-4. If the test made a new connection the default sender, pin the previous default back when done.
+1. Prove the current state before planning: run `scripts/domain_state.sh <domain...>` (the same RDAP plus `dig` NS/MX/SPF/DMARC/`_domainkey` calls by hand). It answers what no note can: is the name registered, who hosts it, and is any mail authentication published. Record where the note and DNS disagree instead of averaging them.
+2. Check domain and mailbox state through the provider API with a short-lived session (create, use, revoke in the same run). Read the actual key/env value before blaming a 401 on the provider: an env var holding `""` is unset, not blank.
+3. Import into the sending product through its own import path so the login gets verified; an unverified connection will not send. Read back the connection table (`from_address`, `status`, `is_default`) to confirm.
+4. Deliver the CSV with the file-upload column present so avatars can be dragged in directly; no separate hosting step.
+5. If the test made a new connection the default sender, pin the previous default back when done.
+
+When money or an access grant is involved (domain order, plan purchase, vendor key), that step is a `needs_input` kanban block, not a chat paragraph: DECISION with A recommended, B, C, a `Default if silent by <absolute IST time>: hold`, and the exact reply form. The DNS work you can do yourself starts when the order id comes back.
 
 ## Pitfalls
 
 - Purchased mailboxes are inactive until the provider's own onboarding finishes; importing before activation fails login verification and must be redone.
 - Auto-publishing a provider's DNS records into someone's zone: act on the record's `purpose` field, never on its shape. An inbound `mx` record at a name that already has MX records takes over the owner's inbound mail, so report it as a conflict and add nothing; SPF merges by hand; an existing DMARC stays. Build the test fixture from the provider's documented record list (OpenMail: apex MX, long DKIM TXT, `bounce` MX + SPF, `_dmarc`), not from a guess, or the dangerous case never runs.
 - Comparing a long TXT (DKIM) for idempotency: Cloudflare stores content over 255 bytes as quoted strings (`"part1" "part2"`). Join the strings before comparing, or every re-run posts a duplicate record.
-- Verify availability through the provider's own check (live API call in the same session), never from a registration-page screenshot or an availability aggregator.
+- Verify availability through the provider's own check (live API call in the same session), never from a registration-page screenshot or an availability aggregator. An RDAP 404 reads as "unregistered" only when that RDAP server serves the TLD, and even then it is a race: unregistered means buyable now, not held, so re-check at checkout and treat registrar and price as unconfirmed until an order id returns.
+- Assuming a domain sits in the registrar the rest of the brand's zone uses. Check NS first: a domain bought as an inbox-provider test lives on that provider's nameservers, and moving it to the usual dashboard costs a transfer lock, while staying put drops whatever bundled mailboxes came with it.
+- Phrasing a colleague's or vendor's estimate ("ready Monday or Tuesday") as verified readiness. Estimate, warm-up start and inbox placement are three different states; DNS and one delivered test message are the proof, and where they are missing the plan says so instead of promising a date.

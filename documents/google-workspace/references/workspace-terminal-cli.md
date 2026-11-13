@@ -32,6 +32,18 @@ management). The Google Workspace CLI's brew formula is
 - **`oauth2: "invalid_grant"` on every call means the stored refresh token is
   dead, not that the query is wrong.** Re-run `gog auth add <email>`; do not
   debug the command or the API path.
+- **`gog auth list` proves a token is stored, not that it is valid.** An account
+  stays listed long after its refresh token was revoked, so confirm the lane
+  with one live read (`gog drive ls`) before calling it working.
+- **Re-auth is his click, not yours.** `gog auth add <email>` opens a browser
+  round trip; in a headless shell use `--remote`, which prints the URL and takes
+  a pasted code. Either way the code must be typed where the command is running,
+  so hand him the command rather than starting it from a tool call (see the
+  `credential-and-secret-handling` skill).
+- **`gog` is not `gcloud`.** `gcloud auth list` and an ADC file can be healthy
+  while every gog call fails, and the reverse. When he asks whether "Google
+  auth" works, check each lane separately: gog, gcloud/ADC, the agy Antigravity
+  CLI, and the Hermes Google connectors.
 - **Account identity beats command syntax.** Commands that exist will fail
   with a domain error if the authorized account is the wrong type (gmail vs
   Workspace). Check `gog auth list` before anything else.

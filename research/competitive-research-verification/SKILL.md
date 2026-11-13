@@ -147,7 +147,29 @@ screened shortlist plus one tested recommendation, not a star-count table.
 3. **Read SKILL.md itself before ranking.** Rigor shows in the file: named phases, scripts
    with real jobs, mandatory render-and-look steps, a concept checkpoint that stops before
    expensive work. A README claim is a claim.
-4. **Fan out a skills x subjects matrix, one child per cell, in a single dispatch.** Each
+4. **Check the copy we already hold before ranking anything.** A skill file already sitting in
+   our library proves currency only after a diff against the upstream tag: an upstream that
+   parks old versions in a retired-versions repo makes a stale local file look canonical, and
+   an untracked copy carries no version at all. Name the release our file actually is before
+   quoting its rules.
+5. **Run the candidate's key-free gates against a build we already own, before any fan-out.**
+   A linter or checker that takes a file and exits 0 or 1 is deciding evidence in seconds: no
+   key, no child agents, no new brief. Choose an owned artifact close to the candidate's
+   intended use, or the output will not mean anything.
+6. **Split the candidate's findings into its house rules and universal defects, and quote both
+   numbers.** A style gate scores against the system it ships with, its section grid, its banned
+   motion, its palette rules, so a raw FAIL count mostly measures distance from its house style
+   rather than breakage. Report "N house-rule, M universal" (clipped text, contrast, overflow,
+   missing label, broken focus) or the count reads as a false alarm on healthy work.
+7. **Diff the candidate's own rules against our standing conventions, one row per conflict, and
+   let the adoption scope be the answer.** Mandated component source, house brand colours,
+   mandated motion, and the licence of bundled assets are the usual collisions. Each row
+   resolves to an explicit split, the candidate owns X and the house stack keeps Y, or to no;
+   never to silence.
+8. **Check that the enforcement runs in the harness that will run the skill.** Frontmatter
+   hooks fire in Claude Code only, so under Hermes a gate wired to a hook never fires unless
+   the brief names the command that invokes it.
+9. **Fan out a skills x subjects matrix, one child per cell, in a single dispatch.** Each
    child gets the skill's path (instruct it to follow that file as if loaded), a fixed brand
    brief so no cell asks questions nobody can answer, a dedicated output directory, the
    phases to run and where to stop, and a `output_schema` that forces overview artifact
@@ -155,17 +177,19 @@ screened shortlist plus one tested recommendation, not a star-count table.
    Pin `provider` and `model` explicitly on every cell. A run landed on the wrong model
    invalidates the comparison the matrix exists to produce, so confirm from the child's own
    report which model ran before you treat the cell as comparable.
-5. **In every brief, force evidence over assertion:** render every artifact and *look* at it
+10. **In every brief, force evidence over assertion:** render every artifact and *look* at it
    with a vision tool instead of trusting a script exit code; report which steps failed
    rather than smoothing them; no paid API calls; no em dashes in any file or reply; no
    invented facts about the subject; never send, post, push or modify the cloned repo.
-6. **Grade the outputs yourself in the main lane.** Child ratings are self-reports. Look at
+11. **Grade the outputs yourself in the main lane.** Child ratings are self-reports. Look at
    the rendered overviews, check small-size legibility on your own, and hold the list to the
    same rubric for every cell before recommending.
-7. **Gate adoption behind licence and intake.** Installing or vendoring a vetted skill still
+12. **Gate adoption behind licence and intake.** Installing or vendoring a vetted skill still
    runs `skill-repo-sync`'s `references/skill-vendoring.md` (that file lives in the
    `skill-repo-sync` skill's directory) plus `skill-creator`'s untrusted
    intake gate, and the adopt-versus-ignore call goes to Deep as a decision card first.
+   The pre-fan-out checks, their commands and the conflict-table template live in
+   `references/skill-repo-screening.md`.
 
 **Community sentiment, when asked:** gather it *before* the runs, because anonymous Reddit
 serves roughly one request per minute per IP. Batch every thread URL into a single background

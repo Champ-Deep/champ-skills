@@ -6,6 +6,7 @@ UI/UX, frontend design and design pro, decks, visuals, infographics, art.
 |---|---|
 | `algorithmic-art` | Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, al |
 | `app-store-screenshots` | Use when building App Store or Google Play marketing screenshots. |
+| `apple-design` | Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/s |
 | `awwwards-inspiration` | Use when a site build needs real award-winning design references. |
 | `brag-slim` | Use when asked for a ~20s launch video of a project or site. |
 | `campaign-visualization` | Turns a dull campaign report (vendor rollouts, lead sheets, meeting recaps) into a full-width visual review page for sales and marketing readers, like the Virtusa and Epi |

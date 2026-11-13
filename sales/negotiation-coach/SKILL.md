@@ -1,13 +1,13 @@
 ---
 name: negotiation-coach
-description: "Real-time negotiation coaching (Getting to Yes framework). Two modes: PREP before a meeting (BATNA, interest mapping, opening strategy, concession plan) and CATCH-ME-UP during/after a live call (paste notes, get tactical coaching points). MANDATORY TRIGGER for: 'negotiate', 'negotiation prep', 'catch me up on this negotiation', 'they're pushing back on price', 'how do I respond to this offer', 'BATNA', 'they won't budge', 'anchoring', 'concession strategy', 'walk-away point', 'ZOPA', 'getting to yes', 'what's my leverage', 'how do I close this deal', or any pricing tension, contract pushback, deal tactics, or competitive bidding situation. Also trigger when meeting-prep or meeting-intake was already run and catch-me-up notes mention a deal discussion. The team's go-to for winning negotiations without burning bridges."
+description: "Real-time negotiation coaching (Getting to Yes framework). Three modes: PREP before a meeting (BATNA, interest mapping, opening strategy, concession plan), CATCH-ME-UP during/after a live call (paste notes, get tactical coaching points), and RELAYED PUSHBACK when an account owner forwards the client's objection and asks how to take it forward. MANDATORY TRIGGER for: 'negotiate', 'negotiation prep', 'catch me up on this negotiation', 'they're pushing back on price', 'how do I respond to this offer', 'BATNA', 'they won't budge', 'anchoring', 'concession strategy', 'walk-away point', 'ZOPA', 'getting to yes', 'what's my leverage', 'how do I close this deal', or any pricing tension, contract pushback, deal tactics, or competitive bidding situation. Also trigger when meeting-prep or meeting-intake was already run and catch-me-up notes mention a deal discussion."
 ---
 
 # Negotiation Coach
 
 Real-time negotiation coaching for Champions Group teams, powered by the **Getting to Yes** framework (Fisher & Ury). This skill turns every team member into a sharper negotiator — whether they're prepping for a call tomorrow or need tactical help mid-conversation.
 
-## Two Modes
+## Three Modes
 
 ### Mode 1: PREP (Before the Meeting)
 
@@ -113,6 +113,19 @@ Format each point as a concrete action:
    - Reframe from positions to interests: "I hear that [X] is important to you. Can you help me understand why?"
    - Use negotiation jujitsu — don't push back, redirect. Ask "why?" and "why not?" and "what would be fair?"
 
+### Mode 2b: Relayed pushback
+
+The objection did not come from the counterpart directly. An account owner forwards their message on WhatsApp or chat and asks how to take it forward. Coach the answer for the owner to send, not a reply you send.
+
+**Do this, in this order:**
+
+1. **Find the original quote and its unit definition in the vault before anything else.** The figure we sent was not kept in chat, so the size of their gap is unknowable from the forwarded message alone. Record it in the note as an open check when it cannot be found.
+2. **Run the decision gate before writing.** Pricing and client-facing rulings are always-ask: `mcp__clef__decide` on the situation. Cite the precedent it returns, for example the appointment-pilot pricing rule for a bank client. When it abstains, that abstention is the reason the card exists; land the card anyway.
+3. **Make their benchmark apples to apples.** Their number is only comparable when you state its unit (booked or held), its geography, and how large the buyer universe actually is, then multiply it against our committed volume and test it against the estimated cost floor. If it clears the floor only at a volume we cannot reach from their listed markets, the counter is volume or scope, never price.
+4. **Flag capability claims as unconfirmed.** Language coverage, native speakers, local calling hours: none of it is a fact until the delivery owner confirms it. Guessing coverage in the reply creates a promise delivery cannot keep.
+5. **Draft the reply for the owner.** In their voice, on their channel, three moves: the unit difference that justifies our number, a condition tied to volume or scope if we accept their ceiling, then the ask. No internal cost, no vendor name, no unverified claim.
+6. **Land a needs_input card, recommendation first.** Hold price, conditional accept at their ceiling tied to volume or scope, then match-or-walk, ordered by recommendation. The staged reply goes inside as a NOT SENT block naming who sends it, and every open check is listed under it.
+
 ---
 
 ## The Four Principles (Quick Reference)
@@ -158,6 +171,7 @@ This skill works alongside the Champions Group ecosystem:
 - **meeting-intake**: If the user pastes post-meeting notes through meeting-intake, and the content involves a negotiation or deal discussion, offer to run negotiation-coach analysis on it.
 - **clf-meeting-prep**: For enterprise sales negotiations, CLF prep handles the pitch; negotiation-coach handles the deal dynamics after the pitch lands.
 - **reach-engage / reach-cadence**: When follow-up emails need to reflect negotiation positioning, this skill's concession plan and framing language should inform the tone.
+- **client-outreach-proposal**: When the ask is not "help me argue this price" but "they handed us channels, a monthly volume and an outcome-only pricing model, build the quote", run that skill first for the cost model, anchor and floor, then bring this skill's concession plan and fair-standards framing to the conversation where the client pushes back on it. Its cost model is the arithmetic step 3 of Mode 2b depends on.
 
 ---
 
