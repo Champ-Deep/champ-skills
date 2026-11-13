@@ -73,6 +73,14 @@ decision. "Do not adopt" is the last option, not the first.
 | Attribution required in a place you cannot render | Attribution duty applies even on empty results |
 | Retention or caching limit below the feature's refresh rate | The feature's own cadence violates the terms |
 | Rate limit or price discovered only at checkout | Budget the real number before committing the build |
+| A policy cites "our other terms of use" or binds "use of this Site" to Terms, and no terms page resolves | Unfound terms are a finding, not SILENT; quote the reference and list every URL tried |
+
+A keyword sweep (scraping, robots, database, permission) misses two shapes. Also
+grep for `terms of use|terms and conditions|these Terms|continued use|licensee|licen[cs]e`,
+because incorporation by reference and data-reuse clauses rarely use the scraping
+words. Quote an enumerated clause whole: sources often run `1) ... 2) ... 3) ...`
+with no punctuation between items, so a quote cut at `2)` drops the clause about
+combining the data with other sources.
 
 ## 4. Gate the adapter in code
 
