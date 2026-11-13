@@ -130,6 +130,13 @@ grepped and the artifact you grepped, never "the field is gone". The same applie
 a health endpoint that still advertises the removed capability is a leak of the same kind and
 counts as a failed removal.
 
+An absence assertion must target the shape the data actually takes. A test ran
+`assert.doesNotMatch(src, /label:\s*['"]Bake Sets['"]/)` against a dock defined as
+`[['beam', 'ChampBeam'], ...]` tuples with no `label:` key, so adding `['bake', 'Bake Sets']`
+would have stayed green. Evaluate the list the UI renders (the exported array, the catalog
+function's output) and assert on its items, then plant the forbidden item and require red.
+"Present once" is a count (`items.filter(x => x.title === 'X').length === 1`), not a regex match.
+
 ## The gate you wrote for a deployment has never run anywhere
 
 A smoke script, deploy check or post-rollout probe is unverified code until something
