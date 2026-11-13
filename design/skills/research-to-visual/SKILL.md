@@ -67,6 +67,7 @@ If the research has few numbers, do not invent any. Use structure visuals instea
 18. **Real logos only.** Use a logo file the user supplied, never a drawn substitute, and never box it in a white pill. No logo supplied: use a plain text wordmark.
 19. **Client-facing pages anonymize.** Describe clients by industry, size and region. Never name an outside delivery vendor to a client; vendors are "we" or "our team". Internal pages may name them. Respect any hold or do-not-send note in the source.
 20. **One file, no frameworks.** Inline CSS and JS. Google Fonts is the only external request (Chart.js from jsDelivr only if a line chart is unavoidable). Icons are inline stroke SVG. Scope or namespace classes if the page may be embedded.
+21. **Placeholders render in place.** A `[CONFIRM: x]` or other gap marker inside a sentence, formula or table cell becomes an inline marker that reads where it sits (`cap = 2 x [to confirm: daily budget per ad set] x 7`), never a cross-reference sentence spliced into the source text ("2 x See the list below: daily budget. x 7" garbles the formula). A roll-up list of open items under the section is extra and does not replace the inline marker; each roll-up row names its source subsection, so a placeholder repeated in two places reads as two locations, not a duplicate. Keep any count gate on one class (the roll-up chip) and give the inline marker its own class.
 
 ## Step 4: Choose the visual from the data shape
 
