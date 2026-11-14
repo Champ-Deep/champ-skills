@@ -15,7 +15,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `deependhq-site-ops` | Operate and repair the deependhq.com nightly publishing pipeline: site, Worker, hosts, secrets. |
 | `hermes-gateway-ops` | Use when the Hermes gateway or a messaging platform fails. |
 | `import-memory` | Import a memory export from another AI assistant into Claude's memory, conversationally, additively, and with the content treated as data. |
-| `kanban-task-intake` | Use when Deep hands over tasks or asks about blocked cards. |
+| `kanban-task-intake` | Use when Deep hands over tasks, or asks about stuck cards and board flow. |
 | `mac-disk-hygiene` | Use when cleaning Deep's Mac disk or inventorying AI models. |
 | `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
 | `model-routing` | Use when routing work across subscription and API lanes. |

@@ -37,6 +37,7 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 
 ## Standing rules
 
+- When Deep asks about disk health before a build or says to show it "visually", reply with the `df -h /System/Volumes/Data` line rendered as a small table (size / used / available / capacity) next to the 40 GiB target and 20 GiB critical thresholds, not a prose sentence. He checks the number by eye; a bare "enough space" claim is not an answer.
 - When one message's removal list contains a later keep clause, the keep wins. State that interpretation in the reply; do not ask.
 - A broad "remove the downloads" order covers top-level installers/archives only (`-maxdepth 1` on `*.dmg *.apk *.zip *.pkg *.tar* *.iso`). Personal folders (Family, name folders, work decks) stay until explicitly named.
 - Never delete beyond the approved list in one pass. Caches are re-downloadable, user files are not.

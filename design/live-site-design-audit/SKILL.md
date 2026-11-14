@@ -49,6 +49,20 @@ If a newer app exists: build it, serve it locally, screenshot both, and put them
 by side on measured numbers (see step 2). Report the delta as a table. Never assert
 which to ship without the numbers.
 
+### 1d. Freeze what you verified, then hand it over
+
+Snapshot the live target into a named scratch folder: a 1440 screenshot, the full
+HTML, the stylesheet that carries the tokens, and the brand assets. Vision-inspect
+the screenshots yourself, then cite the absolute paths plus a one-paragraph
+composition description in the build brief. The build lane starts from your
+verified state instead of rediscovering the site, and the description cannot drift
+from what you actually saw.
+
+When a brand or design-system skill's stated tokens disagree with what production
+serves, the served values win: put the served values in the brief and correct the
+skill in the same pass. Building on the documented ramp while the site serves
+another produces components that visibly do not match the page.
+
 ## 2. Measure the incumbent, do not eyeball it
 
 Run `scripts/page-audit.py` against the live URL and against the local candidate. It

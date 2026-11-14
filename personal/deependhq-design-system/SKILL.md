@@ -66,9 +66,11 @@ mare's face blaze is the same idea in the mascot.
 
 Copy these verbatim. Do not invent new values. If something needs a value not on a scale, the design is wrong.
 
+**What production serves wins.** The ramp below is the identity-kit Navy, the palette the mark was derived from. The stylesheet actually served by deependhq.com (`site-v3.css`, `:root`) reads `--bg:#0D0F14 --surface:#12151D --card:#181C26 --card-2:#1E2330 --line:#2A2E3A --line-2:#3A3F50 --text:#E8E4DC --muted:#A8A8A2 --dim:#8A8A92 --win:#C9A84C`, and computed body background confirms it. Before building any surface, fetch the live `:root` (or read `getComputedStyle(document.body)`) and build on the served values: a component set on the identity ramp while the page serves the near-black ramp visibly fails to match the page. The contrast ratios below were measured on the identity palette only, so re-run them on whatever production serves before claiming AA.
+
 ```css
-/* surfaces. Night Ink from the Deep identity kit (identity/assets). The
-   ramp moves toward Slate #24314F, never toward cream, or the surfaces go
+/* identity-kit surfaces (the mark's ramp, still the light scheme's source).
+   The ramp moves toward Slate #24314F, never toward cream, or the surfaces go
    light and every text token collapses. */
 --bg:#0E1A33; --surface:#1A2742; --card:#212E4B;
 --line:#24314F;

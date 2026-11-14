@@ -93,6 +93,8 @@ with sync_playwright() as p:
   hosted onboarding whose baseline you do not control, pick the current browser
   channel from the first launch instead of discovering it after a crash.
 
+- **Unroute your interception before closing, or teardown noise reads as page errors.** A `page.route` handler left registered when the context closes has its pending work cancelled and prints warnings into the same output as real failures, so a QA run that genuinely passed hands the next reader scary lines it cannot classify. Stall endpoints this way on purpose (delay or never-resolve a session/auth call to reach a loading or recovery state, then let it settle to prove the state clears), then release the request you are holding (`route.abort()` or `route.fulfill()` on the stalled handler), because unrouting clears only the route table while a dispatch already in flight is what gets cancelled at teardown; then remove the patterns you added (`page.unroute(...)` / `page.unroute_all()`) before `context.close()`, and report harness/teardown warnings separately from page console errors. A caveat apologizing for harness noise is not a fix: the reader cannot tell the two apart, so clean the run instead of explaining it.
+
   ❌ **Don't** inspect the DOM before waiting for `networkidle` on dynamic apps
 ✅ **Do** wait for `page.wait_for_load_state('networkidle')` before inspection
 

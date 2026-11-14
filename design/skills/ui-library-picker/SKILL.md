@@ -26,7 +26,7 @@ Exit code 2 and "Not covered" means the task is not on the list: go to the 21st.
 1. **Brand skill and DESIGN.md.** A library never overrides colour, type, radius or logo from the brand.
 2. **What the project already installed.** Read `package.json` (or run `pick.py --check`). If it uses a listed library, use it. If it uses a rival (react-window instead of Virtuoso), flag it, do not churn the dependency unasked.
 3. **The three layers**, below, in this order: foundation, specialist, design.
-4. **21st.dev discovery** for the structural regions on every frontend brief, including when a specialist is selected. Inspect previews and record actual ids; discovery need not add a dependency.
+4. **21st.dev discovery** for the structural regions on every frontend brief, including when a specialist is selected. Inspect previews and record actual ids; discovery need not add a dependency. Record rejections too, with the reason (wrong texture, wrong projection, wrong art direction), and note in each brief row what NOT to take from the reference, usually its palette or grid: an unrecorded rejection gets re-proposed by the next pass.
 5. **Hand-built**, only when nothing above fits, and say why in the report.
 
 ## The three layers

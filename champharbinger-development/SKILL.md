@@ -27,6 +27,14 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Never trust a folder name: `git remote -v`, `git fetch origin`, then compare `HEAD` against `origin/main` before planning against "the local codebase".
 - No em dashes in any output, including commit messages, PR bodies and UI strings. Before every commit run `git diff --cached | grep '^+' | grep '[–—]'` on its own (it exits 1 when clean, so never chain it with `&&`): only an added line can violate the rule, and one second of grep beats re-reading the diff by eye.
 
+## Auth, orgs and provider keys (checked 13 Nov, origin/main e1608ed)
+
+- Auth is home-grown on D1 (`auth_users`, `auth_sessions`, `auth_invites`); Clerk was removed in PR #92. `better-auth` is NOT in package.json: Deep may say "we use Better Auth", but this repo does not. There are no organizations; Admin > Teams are budget groups only ("Data stays per-user"), and many tables still carry a leftover `clerk_org_id` from the Clerk era.
+- Provider key resolution (`src/lib/keys/resolve.ts`): user key (Settings > Keys, `user_api_keys`) -> one global super admin key (`app_settings`) -> env. There is no per-org layer. Draft PR #122 adds a provider registry API for the Keys drawer.
+- Prod has 2 auth users, so an auth migration now moves almost nothing. Decision card t_53ef29a9 (pending): move to the Better Auth organization plugin (orgs, owner/admin/member roles, custom permissions such as `providerKeys: read/update`, invitations; verified via Context7 `/better-auth/better-auth`), or build orgs on the current login, or stay global-admin-only.
+- Target key chain after that change: user key -> org admin key (per-org, permission-gated) -> Champions house key (Champions orgs only) -> env.
+- Build order ruling (Deep, 13 Nov): job changes for sales and marketing roles (a new VP Sales, CRO, CMO, Head of Demand Gen or RevOps lead in their first 30 to 90 days) is the biggest signal. The five plays from the LakeB2B / Ampliz Presales Playbook 2027 (Charles Berry, slide 10) live in `Celsus/Efforts/Active/Champ Harbinger/2026-11-13 - Always-on AI SDR Plan.md` section 9, play 1 first. Provider for job-change signals was still being researched; check `references/presales-provider-evaluation.md` for the evaluation procedure and the provider map note for pricing and terms before building that card.
+
 ## Where production truth lives
 
 - The dashboard is a cache viewer. Health, limits and capacity screens read snapshot tables and fail closed, so an empty table renders as an alarming failure state. Empty means "never checked", not "failing".

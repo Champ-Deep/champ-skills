@@ -45,6 +45,8 @@ Give the opening both ways and let the host toggle: version A has the producer h
 
 When the guest has arrived with her own prepared questions, they go in word for word as the large spoken lines. Never paraphrase them, never expand them into a longer version, and never rewrite them into "better" questions: she has rehearsed that exact wording, and the script's job is to hand her back what she prepared. Around each question, one short conversational lead-in is enough ("Let's start with the dashboards themselves."), and the probes stay to two, skipped when she already answered them in the answer itself.
 
+When the guest is known publicly by a different name than the one on the invite, carry both: label his lines with the private name, and put one line at the top of the opening telling the host which name to use on air. Never let a corrected name erase the other one from the page.
+
 Shortening the script means cutting spoken lines, not the minute windows. The run-of-show parser keys off the fixed window prefixes (`0 to 2`, `5 to 13`, ...), so a redo that renumbers the windows must update the parser's row regex in the same pass or the build asserts out. When the interview itself will be shorter, say so on the page (the host can stop early) instead of padding the script to fill the clock.
 
 ## Step 5: Show notes as a tool roundup, not a marketing page
@@ -54,6 +56,16 @@ The page must be hosted as a public URL that loads before the episode airs, not 
 Deep's rule for a podcast resources page: the tools are the content. One card each with a real screenshot taken in the build, a short description taken from the tool's own page or README, a "why it is here" line and one link. No testimonials, no pricing, no scroll animation, no performance claims, no star counts. Exclusions are deliberate: internal tools, competitor tools, unverified tools and anything whose assessment has not been read are left out and listed as exclusions in the handover.
 
 Every link is curl-checked before a card ships and a dead link drops the card rather than the whole page. Do not invent a description because the page cannot be fetched; drop it.
+
+## Rebuild discipline: the generator, never the built page
+
+Both pages (private script and public resource page) come out of one build script that reads a host pack or source markdown. The generator is the source of truth, so:
+
+1. Make every edit in the pack, the source markdown or the generator, then rebuild. Never edit the built HTML: the next build overwrites it and the edit vanishes.
+2. Before editing a generator, copy it to `<file>.bak-<time>` first, so a patch that goes wrong is one `cp` back.
+3. If another lane already fixed the built page directly (a review round, a second session), those fixes are gone the moment you rebuild. Port each one into the generator in the same pass, then rebuild once, rather than rebuilding first and discovering the loss.
+4. Re-run the acceptance checks on the rebuilt output, not on what you remember seeing: count `blockquote.spoken` nodes against the expected number of spoken lines, assert no `h3` with no following content (an empty heading renders as a bare label), grep the public page for internal names, file paths, card ids, em/en dashes and the `Free tool` label, and confirm the public page makes zero http(s) requests from `file://`.
+5. Drive the script page in a real browser with the actual copilot server running on its port, not a mocked endpoint: only that exercises the shapes the widget really receives (empty `advice` while idle, `status` and `err` strings on failure, `ratio` as a string).
 
 ## Step 6: The copilot (optional, and only if a permission exists)
 
@@ -67,4 +79,5 @@ Serve it on `127.0.0.1` and add `Access-Control-Allow-Origin: null` to its JSON 
 - **A summary of the guest's own introduction is a rewrite.** Use her words verbatim for why she is qualified, because she is the one on the call and the summary will be checked against her answer.
 - **Never leave verify tags in spoken text.** Anything unconfirmed gets an amber chip and a confirm-before-broadcast line, so a fact that is wrong on air is caught in the tech check, not by the audience.
 - **A copilot that cannot capture is a permission problem, not a broken feature.** Report the permission to grant and the one-line proof of it working; do not describe the code path as working.
+- **Edits to a built page do not survive the next build.** The build script regenerates both pages from source, so a fix applied only to the generated HTML is silently reverted; port it into the generator and re-verify on the rebuilt file.
 - **Show notes are not the place for internal names.** The public page must not carry producer names, internal tool names, file paths or card ids; those live in the host's private script.

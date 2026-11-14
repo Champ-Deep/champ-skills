@@ -167,6 +167,20 @@ did not reproduce.
 
 Green runs of a timeout flake on an idle machine cannot discriminate: the unfixed code passes there too. Before claiming a deflake, reproduce the failure on the base commit (run base and fix suites concurrently, or under the same machine load the report came from), then run the fix under that same load. Report the flaky test's own duration against its timeout in every run (`--reporter=verbose` prints it), not just the pass count: a fix that moves 5.2s to 4.3s under load still has under 1s of margin and will fail again. If the base failure never reproduced, say the green runs are unproven rather than calling them proof.
 
+## A failure set of only timeouts measures the machine, not the code
+
+When every failure in a full run is `Test timed out in Nms` with zero assertion failures
+and the summary shows import, transform or environment times in the hundreds of seconds,
+the run reports contention: the global timeout fires on whichever test lost the race that
+round, whatever that test's correctness, so the failure set tracks machine load rather
+than the change. Do not attribute it to the change and do not call the run green. Rerun
+the whole suite at reduced workers with raised test and hook timeouts as a diagnostic
+run, never as the reported gate, and compare the two failure sets: failures that survive
+as assertion failures are real, failures that vanish are contention and still need a
+per-test timeout proven under load. Report both runs with their timeout configuration,
+because a pass count whose timeout default went unnamed cannot be compared with the next
+run's.
+
 ## Time a delay inside the page, not around the driver
 
 A hover-intent or debounce assertion written as `hover(); wait_for_timeout(60); expect closed` measures Playwright's own actionability, scroll and IPC time as part of the window, so a correct 120 ms open delay fails whenever the first browser context is cold. Record timestamps in the page (`performance.now()` on `pointerenter` and when the open class lands, via a `MutationObserver`) and assert the difference, or drive the event with `dispatchEvent` and read state on the next frame. Run any timing gate three times before reporting it green: one red in three is a flaky gate, not a pass.
@@ -319,6 +333,12 @@ cannot start locally (uninstalled runtime deps, no database), a compile check pl
 pure-function suite proves the logic layer only. Name the unexercised layer (HTTP
 routes, wiring, migration) as an explicit gap in the report, or land a follow-up card
 covering it, instead of presenting a tiered pass as end-to-end verification.
+
+The same split applies when the reported failure itself never reproduced: a fix proven
+against a simulated version of the condition proves the fix handles that condition, not
+that the live cause was found. Report "the fix survives a stalled request" and "the
+production root cause is identified" as two separate claims, and never let the first
+stand in for the second.
 
 ## Green lanes are not an integrated pass
 
