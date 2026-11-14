@@ -339,6 +339,9 @@ The tag lives hand-authored in the 40 root, `company/` and `post/` shells (prere
 
 ## Agent integration verification
 
+- Running the agent repo's pytest: `uv venv --python 3.12 <scratch>/venv && uv pip install --python <scratch>/venv/bin/python -r requirements-dev.txt`. Python 3.13 fails on `pgserver` (no cp313 wheel) and the bare anaconda python lacks respx and apscheduler, which is where the "42 collection errors" come from. Compare against a clean base with `git archive <base> | tar -x -C <scratch>/base`; macOS has no `timeout`. Baseline on b12022d with the venv: 2 failures (test_news::test_api needs Postgres, test_email_ledger date-dependent).
+- Voice (`POST /tts`): `TTS_PROVIDER=fish` hits Fish's native `/v1/tts` (model in a `model` header, voice id as `reference_id`); `openai` covers OpenRouter's Fish models via `input_references`. Voice stays off until both `TTS_DAILY_CHARS_PER_SESSION` and `TTS_DAILY_CHARS_TOTAL` are set; contract in `docs/pixel-host/CONTRACT-voice.md` of the agent repo.
+
 - Check the host page CSP, not only the agent origin. Shadow DOM inherits the host CSP: external news pictures require allowed image origins and YouTube requires an explicit frame origin. Use narrow approved origins or a validated media route, never a wildcard bypass.
 - Compare `static/deep-host.js` with the public site's computed tokens. The pixel skin owns separate palette literals and can retain navy while the main site has moved to charcoal. Audit light mode explicitly; a hardcoded dark skin is not scheme synchronization.
 - Exercise the pixel loader path independently. `widget.js` returns early for `data-skin=pixel`, bypassing the legacy loader's idle and hover preparation. Fetch timing for the skin, messenger module, config, Help and News must be measured separately before blaming article scraping or cold starts.
