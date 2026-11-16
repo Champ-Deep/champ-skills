@@ -43,6 +43,11 @@ Following up on a discussion means, in priority order:
   meetings Zoom never saw (in-person, phone, Meet) and mirrors calendar subjects; local recordings under
   Downloads/Zoom are the last resort. Always pass the server prefix: Zoom and Wispr both expose
   `search_meetings`, and an unqualified call resolves to the wrong one.
+- A `notes.wisprflow.ai/shared/...` link is not a transcript source: it can serve an unrelated note or a
+  login wall for any id. Before calling a call's wording "unrecoverable", use `get_meeting` with the Wispr
+  meeting id, or grep the watcher's stored tool result for the register quote:
+  `sqlite3 -readonly ~/.hermes/state.db "select id from messages where role='tool' and content like '%<quote>%'"`.
+  A follow-through card that maps a promise to a tool must quote the transcript lines that name it.
 - Sweep the mailbox for the same evening (Outlook `$search="keyword AND received>=YYYY-MM-DD"`): follow-ups
   get emailed after the call, and final pricing, attached decks, and internal decisions live in mail bodies
   and attachments. A ledger built from the transcript alone misses commitments that were sent rather than said.
