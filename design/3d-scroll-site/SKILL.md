@@ -78,7 +78,7 @@ for f in 0 .25 .5 .75 1: scrollTo(stage.top + f * (stage.height - innerHeight));
   read window.__scene.progress, each module's world position, camera.position; screenshot
 ```
 
-Pass when: module distances to dock decrease monotonically to 0; camera position differs at every fraction; five screenshots differ pairwise; reduced motion yields 0 running animations and the poster; no console or WebGL errors; frame time under 16 ms at 1440 on the dev machine (`requestAnimationFrame` delta sampled over 2 s). Put the five rows of numbers in `brief.md`. Then run the `visual-verify` matrix and the `live-site-design-audit` page audit at 1440 and 390.
+Pass when: module distances to dock decrease monotonically to 0; camera position differs at every fraction; five screenshots differ pairwise; reduced motion yields 0 running animations and the poster; no console or WebGL errors; frame time under 16 ms at 1440 on the dev machine (`requestAnimationFrame` delta sampled over 2 s, in a headed browser with a blank-page control; headless runs on software GL and its timings are invalid). Put the five rows of numbers in `brief.md`. Then run the `visual-verify` matrix and the `live-site-design-audit` page audit at 1440 and 390.
 
 ## 6. Pitfalls
 
