@@ -34,6 +34,8 @@ Never: em or en dashes, "I hope this email finds you well" to someone mid-thread
 
 When the ask is for data he does not have, the ask goes out as an attached input sheet rather than a list of questions in prose: prefilled with every row and column already known from the thread (names, teams, times), dropdowns on the choice fields, and a flag on any row where the recipient's own source contradicts itself. A recipient answers gaps in a table in two minutes; the same fields in an email body take a reply chain, and asking in prose for facts you hold reads as not having read the mail. The body still names the attachment and the date, and "attached" never appears until the read-back shows the file.
 
+**A status ask starts from the status Deep already has.** Before staging "which of these is done, which is pending", search the recipients' own outbound mail where Deep is To or Cc (their handoffs to a developer, designer or vendor), and check any URL that mail names against a made-up control path on the same site. Then state the known stage in the body ("Preeti sent the Oracle vs SAP content to Harsha on 11 Nov; the page is not live yet") and ask only for what is still unknown. Re-asking a handoff he was copied on reads as not having read his own inbox; searching only the inbound inputs thread misses it.
+
 ## 2. Structure
 
 Every draft is: greeting, one context line, the body, one clear ask with a date, sign-off.
