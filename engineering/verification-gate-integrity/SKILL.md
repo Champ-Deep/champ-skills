@@ -119,6 +119,13 @@ audience `team`, stays disabled for the empty team even after the publish guard 
 Build the fixture so the guard under test is the only reason for the state (a team member,
 a filled message, audience `everyone`), then delete that guard and require red.
 
+A style assertion is vacuous the same way when the fixture's own CSS, or the browser default,
+already produces the value. A CTA fixture declared `button:focus-visible{outline:2px solid}`
+and Chromium draws a focus ring anyway, so `outlineStyle != 'none'` stayed green with the kit's
+new outline rule deleted from every copy. Give the fixture the hostile host state the rule
+exists for (`*:focus{outline:none}`), assert the exact value, and assert a control without the
+attribute stays unstyled so the rule's scope is proved too.
+
 ## A removal is proved by absence
 
 Checking that the new shape exists proves nothing about what was taken out: an old field can
