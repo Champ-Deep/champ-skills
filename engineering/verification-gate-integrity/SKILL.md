@@ -174,6 +174,8 @@ did not reproduce.
 
 Green runs of a timeout flake on an idle machine cannot discriminate: the unfixed code passes there too. Before claiming a deflake, reproduce the failure on the base commit (run base and fix suites concurrently, or under the same machine load the report came from), then run the fix under that same load. Report the flaky test's own duration against its timeout in every run (`--reporter=verbose` prints it), not just the pass count: a fix that moves 5.2s to 4.3s under load still has under 1s of margin and will fail again. If the base failure never reproduced, say the green runs are unproven rather than calling them proof.
 
+A concurrent base-plus-fix gate doubles the load it measures: on a 10-core Mac two full suites drove the 1m load from about 190 to 560, four times the load the flake was reported at, and a fourth pre-existing test (also red on base 5 of 5) started timing out on the fix. Record the ambient load before the gate. Use the concurrent run to reproduce the base failure, then judge the acceptance runs at the reported load (the fix suite alone, same ambient). Report any extra timeout that appears only above the reported load as its own card with the per-test ms table, not as a defect of the fix under review.
+
 ## A failure set of only timeouts measures the machine, not the code
 
 When every failure in a full run is `Test timed out in Nms` with zero assertion failures
