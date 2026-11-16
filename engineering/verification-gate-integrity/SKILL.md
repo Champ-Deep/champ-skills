@@ -118,6 +118,10 @@ Send button asserted disabled "while unpublished" on an event with an empty team
 audience `team`, stays disabled for the empty team even after the publish guard is removed.
 Build the fixture so the guard under test is the only reason for the state (a team member,
 a filled message, audience `everyone`), then delete that guard and require red.
+Mutate the handler's early return and the `disabled` prop separately, too: React drops
+clicks on a disabled button, so a UI test cannot reach the handler guard, and removing
+it alone stays green. Report that guard as unarmed (defence in depth), or call the
+handler directly if it must be proved.
 
 A style assertion is vacuous the same way when the fixture's own CSS, or the browser default,
 already produces the value. A CTA fixture declared `button:focus-visible{outline:2px solid}`
