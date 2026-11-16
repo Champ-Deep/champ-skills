@@ -38,7 +38,7 @@ Don't use for: routing which lane runs the bot or firing it ad hoc (`model-routi
 2. Read the draft back (`get-mail-message`, `select=id,isDraft,body`) and take the body for what it is: Graph returns `body` as either a `{contentType, content}` object or a raw string, so branch on `isinstance` before calling `.get()`.
 3. Format with `build_clean_reply_html(reply_text, raw_body, raw_type)`. Feed it plain paragraphs separated by a blank line (it splits on `\n\n`). It emits reply paragraphs as 11pt Aptos `<p>` blocks, a thin divider, then the quoted history carried over from the read-back body as a bold From/Sent/To/Cc header block over grey 10pt paragraphs.
 4. Patch the body: `update-mail-message` with the message body `{'contentType': 'html', 'content': formatted}`.
-5. Read back again and assert two things: `isDraft` is still true, and the reply text is present in the body. The update call's own success proves neither; the content assertion is what catches a patch that silently no-ops.
+5. Read back again and assert three things: `isDraft` is still true, the reply text is present in the body, and the first quoted paragraph under the header block starts with the first line of the original message's `uniqueBody` (usually `Hi Deep,`). The update call's own success proves none of these. The third catches a formatter that slices the quote at the wrong offset: one version leaked the subject's last two characters (`t!`) as a stray paragraph above the counterparty's greeting, once per pass, so a re-patched draft carried two.
 
 Never rebuild the body from the reply text alone: the quoted history read in step 2 must be re-embedded by the formatter, or the draft ships with no thread.
 
@@ -73,4 +73,5 @@ Strip `PYTHONPATH`/`PYTHONHOME` exactly as an ad hoc run of the script does (`mo
 - Reporting a body patch from the update call's success. The draft renders what Graph stored, so assert the text on a fresh read-back.
 - Letting a scratch probe script grow its own copy of `build_clean_reply_html`: the next fix lands in the copy and production keeps the old look.
 - Fixing only the reply text and dropping the quoted history: the create response still looks right and the mail ships as a threadless new approach to someone already answered.
+- Cutting the quoted body at `len(header_text)` when the header match does not start at index 0: the `________________________________` split leaves a leading `\r\n`, so the body starts two characters early. Slice at the match's `end(1)` instead.
 - Treating a green unittest run as proof the rendered draft is fixed: the fakes accept any body, so the real proof is the Outlook rendering plus the content assertion in step 5.
