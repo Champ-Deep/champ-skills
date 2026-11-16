@@ -227,6 +227,16 @@ check the file's mtime moved. One ledger fix round claimed three JSON edits; the
 script had errored on its first assert, the JSONs kept their old mtime, and
 only the markdown summary was rewritten.
 
+## An empty search result with a backend error is a failed search
+
+`web_search` can return `"web": []` together with `backend_error` (for example
+Firecrawl out of credits, served by the keyless fallback). That is a search that
+did not run, not a search with 0 results. Before writing "returned 0 results" or
+"none found" into a ledger, read the raw tool result for `backend_error` or
+`rescued_from`, and retry the query until it returns a clean result. Record what
+that clean result held. One ads ledger wrote "returned 0 results" for a query whose
+only call had failed this way; the same query returned 5 unrelated pages on retry.
+
 ## Promotion is a sequence of claims, not one
 
 Deploying is a chain (find the version, deploy it, promote it), and the tool's success
