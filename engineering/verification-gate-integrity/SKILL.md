@@ -137,6 +137,13 @@ would have stayed green. Evaluate the list the UI renders (the exported array, t
 function's output) and assert on its items, then plant the forbidden item and require red.
 "Present once" is a count (`items.filter(x => x.title === 'X').length === 1`), not a regex match.
 
+An absence claim is proved with the exact case and pattern you report. `git grep websocket`
+returning nothing says nothing about `WebSocket`. A lane reported "zero WebSocket hits" in a
+repo where `git grep WebSocket` returns one hit, in a design doc, because it had searched the
+lower-case token. Run the pattern you will quote, verbatim, and paste the hit file when the count
+is zero. The hit is evidence, not the conclusion: one doc mention does not implement a feature, so
+state the finding as "no implementation, one doc mention at <path:line>" rather than a clean zero.
+
 ## The gate you wrote for a deployment has never run anywhere
 
 A smoke script, deploy check or post-rollout probe is unverified code until something
