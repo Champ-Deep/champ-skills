@@ -183,6 +183,10 @@ Green runs of a timeout flake on an idle machine cannot discriminate: the unfixe
 
 A concurrent base-plus-fix gate doubles the load it measures: on a 10-core Mac two full suites drove the 1m load from about 190 to 560, four times the load the flake was reported at, and a fourth pre-existing test (also red on base 5 of 5) started timing out on the fix. Record the ambient load before the gate. Use the concurrent run to reproduce the base failure, then judge the acceptance runs at the reported load (the fix suite alone, same ambient). Report any extra timeout that appears only above the reported load as its own card with the per-test ms table, not as a defect of the fix under review.
 
+Count the work, not only the waits. Removing a real-clock deadline (a fake `SECONDS`, fake timers) stops premature expiry but not the timeout when each poll still spawns a process: a rollout test that ran `node -e` twice per poll stayed at 1 to 2.5s idle and timed out at 5 to 11s under paired load in the reviewer's runs, while the implementer's five runs happened to pass. Count the spawns per test, then cut them (fewer polls) or give the describe a budget with a `shortcut:` comment, and gate every test in the touched file, not only the named one.
+
+Hoisting an import into `beforeEach` to keep cold setup out of the assertion fills the module registry before the test body runs. A test named "importing X does not throw when the key is missing" then imports a module already evaluated with the key set, and stays green when X is made to validate eagerly. Call `vi.resetModules()` inside any test whose claim is about import-time behaviour, and prove it with that mutation.
+
 ## A failure set of only timeouts measures the machine, not the code
 
 When every failure in a full run is `Test timed out in Nms` with zero assertion failures
