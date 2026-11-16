@@ -6,7 +6,7 @@ version: 1.0.0
 
 # Hermes gateway ops
 
-Operating and repairing the Hermes message gateway and its platform adapters. For MCP connectors use `hermes-mcp-wiring`; for agent config beyond this skill's scope use the bundled `hermes-agent` skill.
+Operating and repairing the Hermes message gateway and its platform adapters. For MCP connectors use `hermes-mcp-wiring`; for agent config beyond this skill's scope use the bundled `hermes-agent` skill. When adopting ideas from SuperBot, Grok Bot or another agent wrapper, load `references/native-bot-upgrades.md` first: reuse native profiles and safety controls rather than adding a second orchestrator.
 
 ## Triage order: state, then logs, then the provider
 
