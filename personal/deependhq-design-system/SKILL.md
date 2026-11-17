@@ -223,9 +223,9 @@ When mockups or a Figma file come back:
 
 Sign off with: *That's the deep end.*
 
-## Home hero: one full scene (18 Nov ruling)
+## Home hero: one full scene
 
-Deep rejected a boxed interactive scene beside the copy. The home hero is one full-bleed scene with the copy on top of it.
+Standing rule for the home hero: one full-bleed scene with the copy on top of it. A boxed interactive scene beside the copy reads as a widget and is rejected; so is a letter-assembly headline (the split-flap board is retired, plain prerendered type only).
 
 - **Scene:** `islands/aquarium.island.jsx` wraps the Ascii Aquarium port and fills `.v3-hero`. It is decoration (`aria-hidden`); the headline and both actions are prerendered plain text and never wait on it. No split-flap or letter assembly headline.
 - **Scrim is a pocket, not a column.** Put a feathered block of `--bg` behind the copy (`box-shadow` blur on a pseudo element). A full-height column gradient reads as a second panel and hides every fish that swims left.
