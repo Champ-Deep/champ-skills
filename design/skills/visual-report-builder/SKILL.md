@@ -565,6 +565,16 @@ reports the app generates.
    counter-condition for a gate written from its name rather than its predicate is
    invented. If you cannot read the source, render Unavailable. Cite the file and
    line in the handoff.
+10. **A closed `<details>` is not a visual.** Disclosure is for evidence (full tables,
+   verbatim excerpts, long prose), never for the section's lead visual (cards, bars,
+   ranking). A report that folded its persona cards, message cards and segment bars
+   into closed disclosures passed overflow, count and click gates, because each gate
+   opened everything first, while the page at rest showed one summary line per
+   section. Gate it: at rest, measure each section's height and require its lead
+   visual to have a non-zero box. The caveat repeats the same way: put the full text
+   once in a callout and a short footnote at each score, or 240 full repeats push the
+   stat strip off the 390 first screen. Measure the stat numbers' tops against the
+   phone viewport height when the brief names a first-screen contract.
 
 ---
 
