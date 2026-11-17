@@ -222,3 +222,16 @@ When mockups or a Figma file come back:
 - [ ] Primary content renders without client JS
 
 Sign off with: *That's the deep end.*
+
+## Home hero: one full scene (18 Nov ruling)
+
+Deep rejected a boxed interactive scene beside the copy. The home hero is one full-bleed scene with the copy on top of it.
+
+- **Scene:** `islands/aquarium.island.jsx` wraps the Ascii Aquarium port and fills `.v3-hero`. It is decoration (`aria-hidden`); the headline and both actions are prerendered plain text and never wait on it. No split-flap or letter assembly headline.
+- **Scrim is a pocket, not a column.** Put a feathered block of `--bg` behind the copy (`box-shadow` blur on a pseudo element). A full-height column gradient reads as a second panel and hides every fish that swims left.
+- **No box around anything on the scene.** A bordered card on the canvas turns the scene back into a widget. Use a soft radial of `--bg` behind small text instead.
+- **Phones: copy and both actions first, the scene as a band below.** Text over the scene fails contrast at phone sizes, and a band above the copy pushes the booking action under the fixed dock.
+- **Canvas components cannot read `var(--token)`.** Resolve each token through a probe element and a 1x1 canvas at mount and on every `data-scheme` change, then pass hex. Never hard-code a colour in the island.
+- **Prove legibility on pixels.** Make hero text transparent, screenshot 8 frames while the scene moves, compare every pixel behind each text box with that text colour. Hide fixed overlays and grow the viewport to the hero height first, or the dock and the fold give false readings. Script: `qa/hero-aquarium/hero_qa.py`.
+- **`npm run check` and `npm run build` rewrite data.js, feed.xml, llms*.txt, agents.txt, humans.txt.** Restore them before committing a design change.
+- **A selftest that asserts markup you retired on purpose gets rewritten to the new markup's guarantee**, never deleted (the flip-board check became "headline is readable before JS").
