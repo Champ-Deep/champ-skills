@@ -243,6 +243,7 @@ Standing rule for the home hero: one full-bleed scene with the copy on top of it
 - **Fish are written in Deep's words**, one phrase per fish, picked by grid cell (`word[(c + r * 5) % word.length]`) so the text stays put and a fish reveals it. Picking by body position makes the words read backwards whenever a fish turns.
 - **The schooling minnows are `>_` prompts.** The lone drifters stay `>=<`.
 - **The mare is a seahorse**, drawn in the same lettered tiles from a 13 by 9 mask, with one blank lit eye, saying STAY LIT. Line-art ASCII (one thin character per cell) did not read as any creature at cell size; a filled tile mask did. Assert the mask is one connected piece when you edit it.
+- **The source never goes to a public repo.** `Champ-Deep/deependhq-site` is public, and the upstream licence allows changing and bundling the component but forbids publishing its source, changed or not; its top comment stays byte-identical, so notes about our changes go below the import. Run `gh repo view --json isPrivate` before any push that carries a pasted component, and remember every branch push starts a Cloudflare Workers build.
 - **New words must be Deep's own published lines** (headline, tagline, the one offer). Nothing invented goes on a fish.
 
 ## One mode per page
