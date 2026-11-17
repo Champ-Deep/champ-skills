@@ -235,3 +235,16 @@ Standing rule for the home hero: one full-bleed scene with the copy on top of it
 - **Prove legibility on pixels.** Make hero text transparent, screenshot 8 frames while the scene moves, compare every pixel behind each text box with that text colour. Hide fixed overlays and grow the viewport to the hero height first, or the dock and the fold give false readings. Script: `qa/hero-aquarium/hero_qa.py`.
 - **`npm run check` and `npm run build` rewrite data.js, feed.xml, llms*.txt, agents.txt, humans.txt.** Restore them before committing a design change.
 - **A selftest that asserts markup you retired on purpose gets rewritten to the new markup's guarantee**, never deleted (the flip-board check became "headline is readable before JS").
+
+## The aquarium art is ours
+
+`islands/ascii-aquarium.tsx` is a changed copy of the upstream component; every change is marked `Ours:`. Never paste the upstream file back over it, and never touch the `// ls:keep` choreography lines.
+
+- **Fish are written in Deep's words**, one phrase per fish, picked by grid cell (`word[(c + r * 5) % word.length]`) so the text stays put and a fish reveals it. Picking by body position makes the words read backwards whenever a fish turns.
+- **The schooling minnows are `>_` prompts.** The lone drifters stay `>=<`.
+- **The mare is a seahorse**, drawn in the same lettered tiles from a 13 by 9 mask, with one blank lit eye, saying STAY LIT. Line-art ASCII (one thin character per cell) did not read as any creature at cell size; a filled tile mask did. Assert the mask is one connected piece when you edit it.
+- **New words must be Deep's own published lines** (headline, tagline, the one offer). Nothing invented goes on a fish.
+
+## One mode per page
+
+A heading-only fix leaves hybrids: a Fraunces headline over a green mono kicker and a mono lede. The mode class on the page wrapper (`mode-editorial` or `mode-operator`, tokens in `system.css`) must decide the display face, accent, eyebrow and body together. When a page looks like another site, read its wrapper's mode first: pillars and privacy shipped as `mode-operator`, and writing, posts and company pages shipped with no mode at all.
