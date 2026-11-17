@@ -20,6 +20,10 @@ The runner prints a markdown table (field accuracy, all-fields-per-card, p50/p95
 
 ## Lessons
 
+- Prove the app with the key the app ships, not the Railway key. `scripts/prod_smoke.py` reads `APP_API_KEY` from Railway, so it passes while the live web app (`event-scout-delta.vercel.app`, hardcoded `CONFIG.API_KEY` in `mobile-frontend.html`) gets 401 on every call: "Failed to load contacts" and scans that never finish. Compare the two values in python without printing either, then run one scan through the page's own `#galleryInput` (CDP `DOM.setFileInputFiles`).
+- Read `railway logs` after a passing scan to see which provider served it. A pass can hide a dead primary: two OpenRouter 401s, then Gemini, at 8 to 10 s a card against a 30 s client timeout.
+- For event readiness run a concurrent burst (10 cards, one user), not a single scan, and delete the contacts after. There is no user delete endpoint, so save the test user's id and reuse it instead of registering again.
+
 - A 0.00 accuracy row is usually a dead key or retired model, not OCR quality. Found 2026-10-29: `gemini-2.0-flash` NOT_FOUND, Railway Gemini key free tier RESOURCE_EXHAUSTED, Railway OpenRouter key 401, `anthropic/claude-sonnet-4-5` gone from OpenRouter. Check `GET /v1beta/models?key=` and `GET openrouter.ai/api/v1/models` first.
 - Pin Gemini direct to `-latest` aliases (`gemini-flash-lite-latest`); dated flash models retire within months and the scan path dies silently.
 - Time the call inside the semaphore, not around it, or queue wait inflates latency.
