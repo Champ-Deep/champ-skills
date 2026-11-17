@@ -242,9 +242,18 @@ Standing rule for the home hero: one full-bleed scene with the copy on top of it
 
 - **Fish are written in Deep's words**, one phrase per fish, picked by grid cell (`word[(c + r * 5) % word.length]`) so the text stays put and a fish reveals it. Picking by body position makes the words read backwards whenever a fish turns.
 - **The schooling minnows are `>_` prompts.** The lone drifters stay `>=<`.
-- **The mare is a seahorse**, drawn in the same lettered tiles from a 13 by 9 mask, with one blank lit eye, saying STAY LIT. Line-art ASCII (one thin character per cell) did not read as any creature at cell size; a filled tile mask did. Assert the mask is one connected piece when you edit it.
+- **No creature without choreography.** A seahorse built as a bobbing tile sprite was rejected the same night: next to fish that bend and turn on measured keyframes, anything that only translates reads as dead. Add a creature only when it comes with its own motion data, and never claim motion quality from still frames.
 - **The source never goes to a public repo.** `Champ-Deep/deependhq-site` is public, and the upstream licence allows changing and bundling the component but forbids publishing its source, changed or not; its top comment stays byte-identical, so notes about our changes go below the import. Run `gh repo view --json isPrivate` before any push that carries a pasted component, and remember every branch push starts a Cloudflare Workers build.
 - **New words must be Deep's own published lines** (headline, tagline, the one offer). Nothing invented goes on a fish.
+
+## The home page is short and ends once
+
+Deep rejected a 16-screen home with a sign-off band above a two-part footer. Measure page height with motion ON: scroll-pinned sections double under motion (the seven-stage day was 2,123px reduced and 4,145px playing), so a reduced-motion measurement hides the problem.
+
+- Ceiling: about 6 screens at 1440 by 900. Order: hero, how I can help (the doors, with the booking action), the log as proof, things to try, the twelve companies, writing, off the clock, one final call, one footer.
+- Long explanations leave the home page for the page they explain (the day anatomy lives on the Mission Log).
+- One ending: no sign-off band above the footer, no giant wordmark below it. Footer 360px or less at 1440.
+- Components come from Deep's 21st.dev bookmarks first (`list_bookmarks`, and the list named "Try for DeependHQ"). Squiggly Text, Encrypted Text and the Floating Dock are his picks: keep them when a section is rebuilt. Text Flipping Board is for counters, never a headline. Skip a saved component when the site has no real data for it (testimonials) or when it adds scroll pinning.
 
 ## One mode per page
 
