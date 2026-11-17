@@ -36,6 +36,8 @@ When the ask is for data he does not have, the ask goes out as an attached input
 
 **A status ask starts from the status Deep already has.** Before staging "which of these is done, which is pending", search the recipients' own outbound mail where Deep is To or Cc (their handoffs to a developer, designer or vendor), and check any URL that mail names against a made-up control path on the same site. Then state the known stage in the body ("Preeti sent the Oracle vs SAP content to Harsha on 11 Nov; the page is not live yet") and ask only for what is still unknown. Re-asking a handoff he was copied on reads as not having read his own inbox; searching only the inbound inputs thread misses it.
 
+**A colleague's live initiative on the same topic is the thread, not background.** When the pre-draft search finds a colleague already running the thing (Deep To or Cc), reply on that thread or say in the handback why not, name it in the body by its own name and date, and when the draft asks for something different from what that colleague asked (keep records with HR while she asked for an export), write that conflict as the DECISION on the send card. Otherwise the recipient holds two contradictory asks and the colleague learns from a Cc that Deep overruled her.
+
 ## 2. Structure
 
 Every draft is: greeting, one context line, the body, one clear ask with a date, sign-off.
