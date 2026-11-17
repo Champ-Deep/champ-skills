@@ -124,19 +124,36 @@ def scan_secrets(d, log_opts=None):
     exe = shutil.which("gitleaks")
     if not exe:
         return None, ["gitleaks not installed (brew install gitleaks)"]
-    fd, rep = tempfile.mkstemp(suffix=".json")
-    os.close(fd)
     git_src = log_opts is not None or is_git(d)
-    cmd = [exe, "git" if git_src else "dir", "--redact", "--no-banner", "--exit-code", "1", "-f", "json", "-r", rep]
-    if log_opts:
-        cmd.append(f"--log-opts={log_opts}")
-    r = run(cmd + ["."], cwd=d)  # cwd so .gitleaksignore and .gitleaks.toml in the repo apply
-    if r.returncode not in (0, 1) or not os.path.getsize(rep):
+    # a git scan reads history only; the uncommitted tree about to be committed needs a dir scan too
+    # dir findings are kept only for files git would commit (modified/untracked/staged): history is covered by git mode, ignored files never ship
+    modes = ["git", "dir"] if git_src and log_opts is None else ["git" if git_src else "dir"]
+    found = []
+    for mode in modes:
+        fd, rep = tempfile.mkstemp(suffix=".json")
+        os.close(fd)
+        cmd = [exe, mode, "--redact", "--no-banner", "--exit-code", "1", "-f", "json", "-r", rep]
+        if log_opts:
+            cmd.append(f"--log-opts={log_opts}")
+        r = run(cmd + ["."], cwd=d)  # cwd so .gitleaksignore and .gitleaks.toml in the repo apply
+        if r.returncode not in (0, 1) or not os.path.getsize(rep):
+            os.unlink(rep)
+            return None, [f"gitleaks failed: {r.stderr.strip()[-300:]}"]
+        with open(rep) as f:
+            got = json.load(f) or []
         os.unlink(rep)
-        return None, [f"gitleaks failed: {r.stderr.strip()[-300:]}"]
-    with open(rep) as f:
-        found = json.load(f) or []
-    os.unlink(rep)
+        if mode == "dir" and git_src:
+            top = run(["git", "rev-parse", "--show-toplevel"], cwd=d).stdout.strip()
+            st = run(["git", "status", "--porcelain", "-uall", "-z"], cwd=d).stdout.split("\0")
+            live, skip = set(), False
+            for e in st:
+                if skip:
+                    skip = False
+                elif len(e) > 3:
+                    live.add(os.path.realpath(os.path.join(top, e[3:])))
+                    skip = e[0] in "RC"  # next field is the rename source
+            got = [x for x in got if os.path.realpath(os.path.join(d, x.get("File", ""))) in live]
+        found += got
     return len(found), [f"secret {x.get('RuleID')} {x.get('File')}:{x.get('StartLine')} commit {str(x.get('Commit', ''))[:8]}" for x in found]
 
 

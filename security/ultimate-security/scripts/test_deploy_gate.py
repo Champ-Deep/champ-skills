@@ -81,6 +81,45 @@ sha = git(repo, "rev-parse", "HEAD")
 r = sh(hook, "origin", "x", cwd=repo, stdin=f"refs/heads/main {sha} refs/heads/main {'0'*40}\n")
 assert r.returncode == 0, r.stderr
 
+# 5b. an untracked, uncommitted key in a git repo blocks too (publish.sh scans before git add)
+key2 = "ghp_" + "".join(random.choices(string.ascii_letters + string.digits, k=36))
+write(repo, "src/new.js", f"export const t = '{key2}'\n")
+# call scan_secrets directly: trivy's secret scanner would otherwise mask a gitleaks miss
+sys.path.insert(0, os.path.dirname(GATE))
+import deploy_gate
+n, lines = deploy_gate.scan_secrets(repo)
+assert n == 1 and "src/new.js" in lines[0] and key2 not in "".join(lines), (n, lines)
+os.remove(os.path.join(repo, "src/new.js"))
+
+# 5c. dir-scan filter: committed key counts once, baselined key stays 0, ignored .env passes,
+# modified tracked file and depth-1 clone are caught
+def rg(*a, cwd):
+    r = subprocess.run(["git", *a], cwd=cwd, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    return r.stdout.strip()
+def mkrepo(name):
+    d = os.path.join(tmp, name); os.makedirs(d)
+    rg("init", "-q", cwd=d); rg("config", "user.email", "t@t", cwd=d); rg("config", "user.name", "t", cwd=d)
+    return d
+def fresh():
+    return "ghp_" + "".join(random.choices(string.ascii_letters + string.digits, k=36))
+d1 = mkrepo("c1"); write(d1, "a.js", f"x='{fresh()}'\n"); rg("add", ".", cwd=d1); rg("commit", "-qm", "k", cwd=d1)
+n, lines = deploy_gate.scan_secrets(d1)
+assert n == 1, (n, lines)  # once, not git + dir
+fp = rg("log", "--format=%H", cwd=d1) + ":a.js:" + lines[0].split()[1] + ":1"
+write(d1, ".gitleaksignore", fp + "\n"); rg("add", ".", cwd=d1); rg("commit", "-qm", "base", cwd=d1)
+assert deploy_gate.scan_secrets(d1)[0] == 0, "baselined finding must stay 0"
+write(d1, ".gitignore", ".env\n"); write(d1, ".env", f"K='{fresh()}'\n")
+assert deploy_gate.scan_secrets(d1)[0] == 0, "gitignored .env must not block"
+d2 = mkrepo("c2"); write(d2, "b.js", "x=1\n"); rg("add", ".", cwd=d2); rg("commit", "-qm", "i", cwd=d2)
+write(d2, "b.js", f"x='{fresh()}'\n")
+n, lines = deploy_gate.scan_secrets(d2)
+assert n == 1 and "b.js" in lines[0], (n, lines)  # modified tracked file
+d3 = os.path.join(tmp, "c3"); rg("clone", "-q", "--depth", "1", "file://" + d2, d3, cwd=tmp)
+write(d3, "new.js", f"x='{fresh()}'\n")
+n, lines = deploy_gate.scan_secrets(d3)
+assert n == 1 and "new.js" in lines[0], (n, lines)  # publish.sh shape
+
 # 7. stamp refuses an incomplete audit run and accepts a complete clean one
 run = os.path.join(tmp, "run-1")
 os.makedirs(run)

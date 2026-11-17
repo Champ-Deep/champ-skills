@@ -45,6 +45,7 @@ When the caption tool aligns from word timings and must keep word count, use hyp
 4. Feed only the `.tts` copy to the engine. Captions, on-screen text, storyboard and transcript keep the original.
 5. Provider extras, when available and only on top of respelling: ElevenLabs pronunciation dictionaries (alias rules per project, so SEO is said the same way in every film), `<phoneme>` tags on Flash v2 and Turbo v2 only, IPA in `/slashes/` on Eleven v3. HeyGen, Kokoro, Fish and phone agents have no such control, so respelling is the only lever.
 6. Verify by ear, or by machine when nobody can listen: transcribe the take (Whisper, `media-use` transcribe route) and confirm every acronym line comes back as its letters. The first thing Deep listens to is the line with the most acronyms.
+7. **A green respeller is not a green take.** It checks spelling safety only, never whether the engine kept the meaning: run a differential transcription (Whisper against the synthesised audio, compare to the source line by line) and require zero mismatches before the audio is used, and before it is ever baked into subtitles. A line that still misreads after plainer wording gets merged into its neighbouring chunk rather than tolerated: ASR is unreliable on very short utterances, and a three-word line will hallucinate a word even when the audio is correct, so the chunk boundary, not the ear, is usually what failed. Change one chunk and re-run only that one; durations shift, so re-derive every downstream cue time from the regenerated file.
 
 ## Phone and voice agents
 
