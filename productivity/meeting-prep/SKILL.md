@@ -592,6 +592,11 @@ verdict and candidate labels, vault paths): a zero dash count is not a leak test
 pass every visual gate with the internal notes still on screen. Depth on the file pair, the
 localStorage tickables and the routing of the build itself lives in `celsus-client-call-prep`,
 `references/call-artifacts-html.md`. Name files by role, never p1, p2 or ds.
+When a prep note points Deep at an existing showcase, pick the file a done fix or review card
+approved, matched by the sha256 in that card's metadata, never by a "(share)" or newest-looking
+name. Before writing "reuse the reviewed page", grep the board for open or done cards on that
+page and `shasum -a 256` the file you name. One AWS prep sent Deep to the 12 Nov (share) page that
+QA had called unfit, while the fixed `Showcase v2.html` sat beside it.
 12. **Source Reference Index**, Every claim footnoted
 
 **Grounding rule.** Every number carries its source or a stated absence of one. Standing brand
