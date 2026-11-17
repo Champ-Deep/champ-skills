@@ -25,3 +25,5 @@ description: >-
 8. Deduplicate Wispr by meeting ID against the prior daily note's commitment register. IDs absent from the recap prose may already be covered in its register.
 9. Resolve quoted today and tonight against the source date. Midnight snapshots can retain yesterday's meeting asks and deadlines.
 10. Verify Kanban comment writes against task_comments or card history. The task_events kind is commented, not comment.
+11. Protect the 11 a.m. run-sheet deadline: write the provisional Day at a Glance immediately after the minimum source reads, before optional audits or dashboard delegation. In cron, delegate_task joins synchronously and can consume the whole deadline; append enrichment afterward rather than waiting to create the daily note.
+12. Dashboard effort overrides come only from a YAML frontmatter block starting on line 1. A body line such as Status: blocked before implementation is not effort-status metadata. Preserve existing overrides and reject that false-positive case in the refresh check.
