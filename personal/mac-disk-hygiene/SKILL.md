@@ -85,6 +85,7 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - `laya-local/decider/mcp_server.py` (the decider MCP) held 18 GB RSS after 4 days up, with swap at 20 GiB. SIGTERM is safe; the next Hermes session respawns it. Swapfiles do not shrink immediately after the kill, so do not count it as freed disk until `sysctl vm.swapusage` drops.
 - "Memory" on this Mac usually means swap thrash, not disk: check `sysctl vm.swapusage` and `top -l 1 -o mem -stats pid,mem,cmprs,command` before `df`. The holder was `celsus_jev.py score` (19 GB RSS, clef-flash on MPS) fired by the celsus-compose cron whenever a new blocked card needed a score; `kanban_clef.py` loads no model unless `--shadow-top` is passed. The model crons now run on a 2h cron expr; keep any model-loading step off a 30-minute interval on a 32 GB machine.
 - Finished kanban workspaces leave `next dev`, `vite` and `.verify/server.mjs` servers running for days (3 to 4 GB RSS mostly in swap). Find them with `lsof -a -d cwd -p <pid>` under `~/.hermes/kanban/workspaces/`, check the task status in `kanban.db`, then `kill -- -<pgid>`.
+- Docker's "reclaimed" total is not host space: builder + image prune reported 38 GB on 2026-11-18 while the host gained about 10 GiB (OrbStack's disk image returns space only partly). Report the df delta, never Docker's number.
 - `docker builder prune -af` plus `docker image prune -af` reclaimed 32 GB in one approved pass; `timeout` does not exist on macOS, run long docker commands as a background job.
 
 ## Maintenance cadence
