@@ -67,6 +67,7 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Stage by explicit path (`git add <file> <file>`), never `git add -A`, `git add .` or `commit -a`: worktrees here pick up other lanes' files, and one round swept another card's untracked doc into a scoped PR. Before every handoff, compare `gh pr view <n> --json files` with the card's changed_files and SCOPE line; any extra path is a defect.
 - Structured commit body (why / what / proof), then `gh pr create` with what is in, what was verified, and what is explicitly not proven. Never push to `main`, never merge, never delete a superseded branch.
 - Production deploy (the repo's Cloudflare deploy script plus its smoke checks) happens only after Deep picks a decision card: a `needs_input` kanban block with options and your recommendation first, deploy action named as the recommended option. Stage it and say where it is staged.
+- Every fix round rewrites the PR body (What is in, Verified, Not proven, test counts, approve calls) to the new head. Deep merges on the body, not the card: a body still describing an earlier head's behaviour (PR 165 round 3 still said PATCH "stamps the hash", the defect round 1 removed) is a defect, even with the code approved.
 - Keep contract PRs (API routes other cards depend on) draft until Deep says ship them; branch later fixes off `main` so each PR stays independently mergeable.
 
 ## Sending gates (who can actually receive mail)
