@@ -60,6 +60,7 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 6. When the full suite reports timeouts in files you did not touch, check `uptime` first: this suite pays a per-test setup cost, so a loaded machine inflates timeouts across unrelated files. Re-run the named files alone, and let CI on a clean runner arbitrate the final verdict. State in the PR body that the local run was noisy and CI is the gate, rather than re-running the whole suite until the box quiets down.
 7. `vitest.config` restricts `testMatch` per project, so a path-restricted run can match zero test files while other files in the same command do run. Read the `Test Files` count of every shard and require it above 0 before quoting a pass number: a shard that matched nothing is an unrun shard, not a green one.
 8. Poll `gh pr view <n> --json statusCheckRollup` for the conclusions (not `gh pr checks`, which reports `pending` for jobs that already finished) and require `mergeStateStatus=CLEAN` before merging.
+9. `pnpm dev` (Next 16.4) rewrites the tracked `AGENTS.md` on start (its first heading level flips), and the first start exits 1 on the security upgrade nudge, so retry once (`next-upgrade-reminder-retry`). After stopping a dev server in any worktree, run `git checkout -- AGENTS.md` before a `git status` scope claim, and never stage it. A reviewer's preview run in a lane's worktree dirtied it this way.
 
 ## Shipping
 

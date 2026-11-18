@@ -421,6 +421,13 @@ also fails a 44px minimum.
   card-to-card overlap, `naturalWidth` on images), print the counts, and act only on what
   the probe counts. Reverting a correct layout because a screenshot sounded wrong is the
   same error as trusting a green gate that never ran, in the other direction.
+- **A probe of your own needs the same rigor as the page.** Composite every
+  semi-transparent background up the ancestor chain before computing contrast:
+  treating a `bg-input/30` outline button as opaque reported 1.12:1 on buttons that
+  measure 15.9:1. Exclude content inside a closed `<details>`: Chrome still reports
+  its rects while `innerText` reads empty, so overlap and hit-test probes flag hidden
+  controls. Sanity-check a probe finding against one composited or visible control
+  before writing it up.
 - **Count what the fixtures already contain before you assert a count.** A new test
   written against a seeded database (seed rows, loaded templates, prior test runs) that
   expects the fresh data alone will report an inflated or deflated number and read as a
