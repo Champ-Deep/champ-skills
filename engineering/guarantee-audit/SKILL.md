@@ -96,6 +96,10 @@ docker run -d --name probe-redis -p 6399:6379 redis:7-alpine
 docker rm -f probe-redis
 ```
 
+### Cross-panel mutations need a consumer readback
+
+When two mounted panels render the same resource, mutate it through each panel and assert the other updates without navigation or reload. Drive create, delete and default/status changes against a stateful fixture listener, then read both panels and the listener's current record. A successful import followed by a delete can leave an optimistic imported-id Set claiming Connected forever while the server and management table show no connection. A duplicate-import test alone never exercises invalidation. Require reconnect to return after deletion and default markers to agree across consumers; a reload that repairs the UI is the control, not the fix.
+
 ### 4. Check whether the test double can express the failure
 
 This is the step that explains a green suite hiding a real bug. A fake removes
