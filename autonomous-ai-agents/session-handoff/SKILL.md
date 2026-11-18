@@ -41,6 +41,24 @@ A third variant exists when the owner delegates thinking, not typing: mark it `E
    - EXECUTE: numbered steps with exact commands or paths, a verification command after each step, and a stop-and-report rule for anything off-plan.
    - REVIEW: check the sender's evidence first, then the decision log for consistency, then the artifacts. Output one verdict per artifact (accept, fix, redo) and a correction list with reasons. Name any item that needs the stronger model to re-run.
 
+## Pasteable brief when the receiver is another harness
+
+When Deep asks for a prompt he pastes into Claude Desktop or another agent product, rather than a file, the sections above still apply but the artifact is one fenced block in chat. Build it in this order:
+
+1. **Receiver paragraph first**: who Deep is (city, time zone, roles), what the batch is for, one goal sentence. The receiver has no chat history and no Hermes context, so this paragraph and the paths below are its entire world.
+2. **A HARD RULES block before any work item**: never send, post, merge, deploy, pay or delete (stage it and record where it is staged); no em dashes or en dashes; the protected vault files are named; never read secrets or `.env`; never invent a number (label it unverified and say what would verify it); no wikilink without reading the link policy first.
+3. **Skill references by absolute path.** Another harness cannot resolve a Hermes skill name or call `skill_view`, so write each skill as its full `SKILL.md` path. Resolve every path yourself before handing the brief over, and state the pre-flight for Deep: if the product is sandboxed to one folder, those skill folders have to be allowed before the run starts.
+4. **Work items in priority order**, each carrying: the context files to read first, the skill paths to load, numbered do-steps, the deliverable path, and an explicit do-not-touch boundary.
+5. **Cap the review loop inside each item** (a round count, not "keep improving"). An uncapped improve loop spends the whole usage budget on item one and the rest of the batch never starts.
+6. **Handoff step last**: the receiver writes into the vault effort folder, because its transcript never comes back to Hermes. Structure it as done (paths, verification output) / not done / DECISIONS FOR DEEP with A (recommended), B, C and a default, so the next session can card them. Keep its final chat reply short.
+
+Pitfalls:
+- A decision only Deep can make (a staged draft nobody sent, a parked card) goes at the top of YOUR reply to him, not inside the brief: the other harness cannot act on it either, and buried in the brief it never reaches his desk.
+- Name the shared-repo hazard in the brief: other lanes edit the same repos, so the receiver works on its own branch in its own worktree (`shared-checkout-safety`), or it overwrites live work.
+- A verification script the brief points at must run in the receiver's harness. One written against Hermes browser helpers (`js`, `cdp`, `goto_url`) is dead weight elsewhere: tell the receiver to port the method to a tool the repo already has, and name that tool.
+- Before promising a cloud receiver, prove the code can reach it: repo visibility, whether a push triggers a build or deploy, and whether anything on the branch is barred from that repo by licence. When it cannot be pushed, write the brief for a local harness and say why.
+- No brief implies deploy rights. A config or cost change gets a branch, a test or a dry run, and a note of what is left for Deep to approve.
+
 ## Design-first handoffs
 When the owner says the next session should think part of it out, that part must not appear in the file as steps. Handing over a design problem as commands gets it executed literally and wastes the receiver's session.
 

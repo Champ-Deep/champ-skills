@@ -21,5 +21,7 @@ registry give everything the component table needs.
    (`/^_[A-Za-z]+_[0-9a-z]{4,}_\d+$/`) and hex literals. CSS-module components cannot take
    the project's tokens; heavy inline hex means a full tokenising pass. Reject or flag them.
 
+Pitfall: on current pages the record is JSON-escaped inside a script (`\"id\":1375,\"demoId\":747`), so the plain regex above finds nothing. Find the escaped slug (`\"slug\":\"<slug>\"`), take the 400 characters before it, and use the last `id` and `demoId` matched in that window. `capture_screenshot()` writes one fixed path every time: copy each shot to its own file before taking the next, or every `vision_analyze` sees the last preview.
+
 The browser session can drop mid-loop (`no close frame received`): write results to a
 workspace JSON after every component, not at the end.

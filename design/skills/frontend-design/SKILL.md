@@ -156,11 +156,14 @@ Commit to a BOLD aesthetic direction. "Clean and modern" is not a direction. It'
 |---|---|---|
 | The whole thing sucks, do it yourself | The lane's judgment | The work returns to the main lane (see `model-routing`); never re-spec the same brief to the lane that just failed. |
 | It looks generic / "could be any brand" | Architecture or content | Restart the page architecture. Restyling a composition already judged worthless produces a second rejection. |
+| "The pages here are so badly done" | Design skill skipped | The page was hand-assembled to hit a deadline without loading this skill, the brand skill or `visual-verify`. The composition cannot be rescued: rebuild from the loaded chain, and do not defend the hand-built version's craft. |
 | One element is off | Polish | Go back as a change request with the specific element named. |
 
 The same rejection a *second* time always means the first diagnosis was wrong: re-diagnose before patching again.
 
 For prose-heavy editorial, service or data pages the strongest anti-generic metaphor is the **document**, not the landing page: title block, numbered clauses, a sticky margin index with scroll spy, hairline-ruled dense tables, line-drawn figures labelled Fig. N, one accent color reserved for links and callouts and a second reserved only for defects or warnings, no cards, no shadows, no fade-up entrances. Editorial or technical *object* beats editorial *skin*: a page that reads as a spec sheet, ledger, dossier or field guide passes the swap test where a recolored card grid never does.
+
+**A working page with dead space is not finished.** A build can pass every functional check (zero console errors, correct behaviour, no page scroll) and still read as unfinished: an empty rail, a stretched native input, an orphaned card in an odd-column grid, a start screen anchored to one corner. Judge the screenshot against the direction before reporting done, and treat those layout defects as a required pass, not as notes for later. Functional proof and design proof are separate claims, and only one of them was measured.
 
 **Prove the direction on one section before building the site.** An open-ended "what direction do you want" costs a full rejected build; a screenshot of one representative section, headline through tables, costs one turn. Build that single section end to end, screenshot it, and only then extend the grammar to the remaining pages (the homepage as the index sheet of the same document system). Derive every later page from the proved section rather than re-inventing per page, and carry the same tokens, rules and figure style across all of them.
 

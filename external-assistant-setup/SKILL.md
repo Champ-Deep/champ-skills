@@ -18,7 +18,7 @@ metadata:
 - He asks what use cases are worth running on a new assistant, or for "the right context based on me".
 - An existing assistant's brief has gone stale because his goal for it changed.
 
-Not for: importing another assistant's memory export (that is `import-memory`), or drafting his social posts (that is `deep-social-voice`).
+Not for: importing another assistant's memory export (that is `import-memory`), drafting his social posts (that is `deep-social-voice`), or a one-off brief that hands another harness a bounded batch of work with skill paths, review rounds and a handoff step (that shape lives in `session-handoff`, "Pasteable brief when the receiver is another harness").
 
 Deep buys or opens an assistant (Grok Bot, ChatGPT, Gemini, Claude.ai) and asks for it to be set up and used "the right way", with the right context and the best use cases. The job is four things in order: ground it in what he already runs, scope what it is for, write a pack he can paste, and bound what it may touch. Do not start by writing the pack. The pack's goal line decides every use case in it.
 

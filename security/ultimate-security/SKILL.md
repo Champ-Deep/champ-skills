@@ -68,6 +68,7 @@ Where it is wired (`deploy_gate.py install <repo>` does all three, idempotent):
 | `scripts/publish.sh` (deependhq family, nightly publisher) | gate runs on the mirrored clone, before commit; `PUBLISH_SKIP_GATES` does not skip it |
 
 Agent rules for every deploy:
+- **Deep pre-approves the test deployment, not the gate.** Deploying to Cloudflare so he can test is his standing instruction, so never stop to ask permission for a test build: run the gate, deploy, hand back the URL. Permission to deploy is never permission to skip the gate, and a test URL still reaches a public hostname.
 - Bare `wrangler deploy`, `railway up` or any CLI deploy bypasses the hooks: run
   `python3 ~/champ-skills/security/ultimate-security/scripts/deploy_gate.py check .` first.
 - Before shipping, run `security-audit` in **guidance mode** over the diff being deployed (focused

@@ -83,6 +83,17 @@ that the old code still compiles. For a change made in several places (a
 replaced logo, a renamed section), grep the whole tree and show the count, not
 one hit.
 
+Behaviour keyed to elapsed time gets the same treatment one layer down. A
+countdown, a time-burn nudge or a timeout cannot be reached by a screenshot or
+by a click probe: the 28-minutes-in state of a 60-minute session does not exist
+at load time, so the timing layer passes every ordinary gate while never having
+been exercised. Require the build to ship a gated test hook (a `?test` flag
+exposing the clock, so Deep's own page is untouched), drive it to a state past a
+named threshold, and read the resulting text back from the DOM. When the hook
+is absent, run the other steps and then write "timing unverified, no test hook"
+in the report rather than letting a clean interaction probe stand as proof the
+clock works.
+
 ## Step 1: Audit — the machine pass
 
 ```bash
@@ -165,6 +176,10 @@ never as a green gate: the defects a second pass then finds were found by the qu
 the page did not change between the two.
 
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body), and when that ground is a gradient, against every stop in it, taking the worst. White body copy can clear 4.5:1 over a band's dark end and genuinely fail over its light end, and that split decides the fix: a genuine worst-stop failure moves the band to a dark ground (the same dark warmth, no desaturation), while an artifact that passes on every stop gets an opaque ground a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or is recorded as a known checker limitation. Real luminance maths in about ten lines of Python settles which case each FAIL is. Report FAILs you leave standing as measured passes with their worst-stop ratios, never as ignored.
+
+**Text over a moving scene cannot be audited from computed styles or one frame.** When the backdrop is an animated canvas, video or drifting layer, the computed-style ratio is read against whatever that element declares, not against the pixels the text sits on a moment later. Measure it on pixels: set the text colour to transparent on a copy of the page, capture a burst of frames while the scene moves (eight frames covers a fish swim cycle), and for each text box take the worst distance between its text colour and every pixel behind it across the burst. Fixed chrome that intersects the text region (a dock, a sticky banner, the fold) corrupts that measurement, so hide the fixed overlays and grow the viewport to the section's height before the burst, or the dock is what you end up grading. Report the worst per-element ratio with the element named, and sample the elements the eye actually reads: a visually hidden line must be recorded as unsampled rather than inherited from a breakpoint where it is visible.
+
+**A frame-rate claim needs an A/B against the same scene paused.** Counting `requestAnimationFrame` ticks while a feature plays only measures the harness: an unfocused, occluded or headless window throttles rAF and returns the same tick count with the feature paused as with it running. Take the count both ways before reporting any frame or animation cost; equal counts mean no perf conclusion is available, and the honest report says the frame rate was not measurable here rather than quoting the number.
 
 **A brand accent is graded at the size it is set at, not the size of the thing it sits
 inside.** A `%` or unit suffix in accent inside a 30px numeral is its own smaller text run,
@@ -511,6 +526,7 @@ Delivery is blocked until all of these are true:
 - [ ] A written critique exists, naming specific elements, not adjectives
 - [ ] Fixes applied and the audit re-run clean
 - [ ] Dark mode checked if it ships, reduced-motion checked if anything animates
+- [ ] Text over a moving or animated backdrop measured on a multi-frame pixel burst with the fixed overlays hidden (Step 1 method), worst per-element ratio reported; a frame-rate claim taken with the scene both playing and paused, or reported as not measurable
 - [ ] Any scrubbed or staged sequence sampled at a mid-state as well as settled: no element visible before its driver reaches it
 - [ ] One non-static capture per animated surface: page loaded without the flag, scrolled end to end, every gated element read back at its computed end state (not judged from the static export, which renders the end state whether or not the live page ever gets there)
 - [ ] Console is free of errors

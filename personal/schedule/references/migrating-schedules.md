@@ -19,6 +19,16 @@ Read once when moving three or more tasks from an external scheduler.
 - Table columns: source task, source cron, Hermes job name, job id, first local
   fire, known gap. This table is the approval artifact: the user pauses source
   jobs only after confirming it.
+- A source you cannot query gives you a dated snapshot, not a live inventory.
+  Print the snapshot's date in the parity table and on the decision card, and
+  ask the user in one line for anything created on the source after that date.
+  Those tasks are invisible to you, so an audit built on the snapshot will sum
+  short of the source account's real task count and nobody will notice which
+  rows are missing.
+- Prove every external connector the migrated prompt needs with one real call
+  before claiming parity, then still list it as a gap. A call from a live
+  session and a call from a scheduled run do not share credentials or toolsets,
+  so "worked when I tested it" is not evidence the first fire will work.
 
 ## 2. Classify each source task
 
@@ -64,6 +74,10 @@ Per-job spec differences follow the header. Do not fork the header per job.
   nothing created.
 - Verify by reading back: grep `hermes cron list` for the intended names, count
   equals the batch size, and each `next_run_at` matches the parity table.
+- Read back `deliver` too. A job that reached a chat channel on the source
+  must still reach that channel, and a Hermes job defaults to whatever chat it
+  was created from or to silent local files, so an unverified `deliver` means
+  the parity table is correct and the output lands where the user never looks.
 
 ## 6. Registry and handoff
 
@@ -83,3 +97,12 @@ Per-job spec differences follow the header. Do not fork the header per job.
   schedulers run the same work. Recommend pausing each source copy the day after
   its Hermes copy's first successful fire, never before (nothing has fired yet)
   and never as a blanket batch (a Hermes copy that fails leaves a silent gap).
+- Make the spec idempotent inside its own window, because the copy that fires
+  first owns the artifact. When the source copy runs earlier in the same window,
+  the Hermes run finds the finished artifact and must stop: put an early guard
+  in the spec itself ("if today's report already exists, reply SKIPPED with its
+  write time and stop"). Without it the losing run spends a full cycle reading
+  the winner's output as its own baseline and zeroing every delta it was meant
+  to measure. State on the card which copy wins the slot, since a Hermes copy
+  that always runs second only verifies until the source copy is paused, and
+  "verified" is not "written".

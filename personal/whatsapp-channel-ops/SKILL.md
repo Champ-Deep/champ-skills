@@ -29,6 +29,8 @@ Deep wants his WhatsApp group traffic available to the agent: action items and q
 - **Group access is claimed only from a state read, never from a list command's exit code or an empty result.** See step 1 for why the two look alike.
 - **Outbound is stage-only.** Draft the message and show it; Deep sends or approves the send lane, exactly as with email.
 - **A re-link runbook is not a connection strategy.** When he asks for a better way to connect rather than a repair of today's link, deliver a design: the read requirement in one paragraph, the constraints no option may break (group-only, read-only while in shadow mode, ban exposure from cold traffic on a linked number), a table of options where each row carries the first question that decides it, and the sources to research from. Any claim about what the official Business Platform can read must come from vendor documentation with a link and a retrieval date, because reading an existing group is not a normal capability of a business number and assuming it is either way wastes the build.
+- **A link is created only from the phone: a QR scan or an 8-digit pairing code typed under Linked devices.** No software can re-pair itself, so "seamless" means owning everything around that one human minute: detect the loss within minutes, refill the gap on re-link, alert the number's named custodian once with the action, and remind them before the phone stays offline too long. Never hand back a plan whose next step is the agent re-pairing on its own.
+- **The ESS is where extracted action items become assigned work, so feed it its own format.** Champ Hub already turns a meeting summary into reviewed tasks: items drafted with the owner as heard, a due phrase, a priority and a confidence, names matched against its own people, the host reviewing and publishing, and a lead's approval where one exists. Send group digests in Zoom's summary shape (`summary_title`, `summary_overview`, `summary_details[{label, summary}]`, `next_steps[]`) and let the ESS resolve people; never build a parallel assignee model or carry the HR directory inside Champ Bot. Integration detail: `docs/cloudflare-design.md` section 9 in the repo.
 - **No number purchase, group creation, payment or contract originates from a WhatsApp conversation.** Promises made in chat (an NDA coming, a payment landing Monday) route to a needs_input decision card first.
 
 ## Two different WhatsApp paths (never conflate them)
@@ -36,9 +38,17 @@ Deep wants his WhatsApp group traffic available to the agent: action items and q
 | Path | What it is | Where its state lives |
 |---|---|---|
 | `wacli` CLI | Deep's own WhatsApp client | `~/.wacli` |
-| Champ Bot (Lake Bot) | The group-reading bot: Baileys linked device in Docker on the DeependHQ-Hermes droplet at `/opt/champ_bot`; reads `@g.us` only, `OUTBOUND_ENABLED=false` | `/opt/champ_bot/auth_info` on the droplet + rows in the Supabase project |
+| Champ Bot (Lake Bot) | The group-reading bot: Baileys linked device held in a Cloudflare Durable Object, pulled on a schedule instead of held open; reads `@g.us` only, shadow mode with outbound off | Durable Object state in the Worker plus rows in the Supabase project; `GET /api/health` reports mode, schema readiness and connection state |
 
-When the question is "is the group bot reading my groups", the evidence is on the droplet, not in `wacli`:
+The earlier Docker form on the DeependHQ-Hermes droplet at `/opt/champ_bot` (auth_info on the box) is the previous deployment. Establish which one a status question refers to before quoting evidence for either.
+
+When the question is "is the group bot reading my groups", the evidence is the bot's own state endpoint, not in `wacli`:
+
+```bash
+curl -s https://champ-bot.deep-ae0.workers.dev/api/health
+```
+
+It reports `mode`, `schema_ready` and `connection.state` with the last pull time. An `unlinked` connection or `schema_ready: false` means it is reading nothing, however clean the deploy command looked. The Docker form still answers to the droplet:
 
 ```bash
 ssh root@64.227.154.215 'docker ps -a --format "{{.Names}}|{{.Status}}" | grep lake-bot; docker logs --tail 20 lake-bot-listener'
@@ -48,7 +58,7 @@ ssh root@64.227.154.215 'docker ps -a --format "{{.Names}}|{{.Status}}" | grep l
 
 ## Procedure
 
-1. **Read link state before anything else: `wacli doctor`** (CLI at `/Users/deep/.local/bin/wacli`, store `~/.wacli`). The verdict lives in the AUTHENTICATED / CONNECTED / SESSION_REVOKED / GROUPS / MESSAGES fields. The command exits 0 even when AUTHENTICATED is false, and `wacli groups list` / `wacli chats list` then print only their header rows: that reads like "no groups" but means "not linked". An unlinked store reports MESSAGES 0, so the honest report is "not linked, nothing to read", never "no groups found".
+1. **Read link state before anything else: `wacli doctor`** (CLI at `/Users/deep/.local/bin/wacli`, store `~/.wacli`). The verdict lives in the AUTHENTICATED / CONNECTED / SESSION_REVOKED / GROUPS / MESSAGES fields. The command exits 0 even when AUTHENTICATED is false, and `wacli groups list` / `wacli chats list` then print only their header rows: that reads like "no groups" but means "not linked". An unlinked store reports MESSAGES 0, so the honest report is "not linked, nothing to read", never "no groups found". The bot's link is read the same way, from its health endpoint above: report `paired`, `connection.state` and `last_pull_at` from that read, never from the deploy command's exit code.
 2. **Let Deep pick the connection path (decision card, recommendation first):**
 
    | Path | Isolation | Cost |
@@ -69,3 +79,5 @@ ssh root@64.227.154.215 'docker ps -a --format "{{.Names}}|{{.Status}}" | grep l
 - Reading an existing group needs a linked device; do not re-research official paths without a reason. Meta's Groups API is OBA only, for groups the business creates by invite link, capped at 8 people, and Twilio exposes no native group access (both read from vendor pages 2026-11-12; recheck the date before quoting). WhatsApp's linked-devices FAQ says linking an unofficial client can get the account banned, so the number is a spare, never Deep's own.
 - A linked device can live in a Cloudflare Durable Object (Baileys on workerd with ws, lru-cache, pino and bridge shims; creds in DO SQLite; cron pull, no standing socket). Worked example: `~/repos/Champ_Bot` `worker/wa-session.ts` and `docs/cloudflare-design.md`. Proven only to the pairing QR; treat multi-day survival as unproven until a paired number shows it.
 - Filtering queries by JID is not isolation. A linked primary number still writes account-level metadata to `~/.wacli`; when Deep says his personal chats must stay out, the only hard answer is a separate number (path A). Say which guarantee each path actually gives instead of letting "I only query groups" stand in for it.
+- An outage is a possible gap until proven otherwise. A re-link is followed by a history hand-off from the phone, but how far back it reaches is unverified, so dedupe by message id on ingest and report the window you can actually prove. Never answer "was anything missed" with a clean deploy log.
+- A second number buys continuity at the cost of a second SIM and a second ban exposure, so it is a standby for groups already read and never a channel for cold outreach.

@@ -475,12 +475,22 @@ markdown readout script.
   Questions that are really asks of one named person belong in the readout script
   or chat, never on the screen: a page full of your own to-dos sends the meeting
   off track.
+- **A page shared beyond one reader loses the rest.** Whatever audience the page
+  travels to, it carries no decision only Deep can make, no internal card ids, and no
+  individual performance data (commit counts, missed targets, KRA slips) even when
+  accurate. Those go in chat or into a `needs_input` card. A personal note about one
+  attendee on a page the whole team opens is a privacy failure dressed as
+  transparency, and the footer is where it usually sneaks in.
 - **Label each figure's check status separately**, one line in the hero and again
   in the footer: what you verified against the live source and when, what is quoted
   as reported and not re-measured, what sits behind credentials and was not
   queried. A single blanket "figures unverified" disclaimer is wrong the moment
   you have checked part of them, and it goes stale when a source becomes
-  checkable: update the line in the same edit that gains the check.
+  checkable: update the line in the same edit that gains the check. When the page
+  lists many rows gathered from one directory, put the status on the row itself
+  (checked against the source / inferred from the listing) and carry the counts in
+  the footer: a block-level claim covers the rows nobody verified, and a reader
+  works a list row by row, not by re-reading the hero.
 
 When Deep will present the page rather than send it, also write the **spoken** script:
 
@@ -557,7 +567,11 @@ reports the app generates.
 7. **Mobile-first responsive.** Base styles for narrow, `clamp()` for scaling,
    media queries for layout shifts only.
 8. **Never invent a number.** Every figure comes from the source; rates and shares
-   computed from stated figures are allowed and labeled as computed.
+   computed from stated figures are allowed and labeled as computed. Resolve every
+   identifier (stall code, hall, URL, row id) by looking it up inside the build
+   script against the fetched dataset instead of typing it, and fail the build when a
+   lookup returns nothing: a hand-transcribed identifier is an error that reads as
+   fact on the page, and the count of records the build resolved is a footer line.
 9. **Never invent a rule either.** A label or explanation that describes system logic
    (what a gate means, what would flip it, which statuses a stat counts) is a claim
    about code. Read the code that defines it and match the words to it: a "held for a
