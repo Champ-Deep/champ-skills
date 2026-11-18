@@ -82,6 +82,8 @@ it back in the same test.
 
 A safety or refusal rule set (regex gates, keyword lists) that passes its own bank proves only the bank, because the bank is what it was tuned on. Before reporting it done, run at least 10 held-out prompts it must refuse and 10 it must answer, written after the rules, in the product's real phrasing ("can I have magnesium-rich food" is a food question that a drug-name list will refuse). Paste the per-prompt table, and list every miss in either direction as a stated limit or a fix. A widened term list mostly buys recall with false refusals, and only the must-answer half shows that. Every rule added in a fix round gets its own must-answer probes that reuse its trigger words with an ordinary object, in the users' dialect: a rule for "what should I take for acidity" also refused "what should I take for breakfast", which is how Indian English asks what to eat, and a held-out set written before the rule never tried it.
 
+A held-out set must vary every input the classifier reads, not only the text. A headline rule that also takes the account name was proven on 26 headlines where 23 used "Acme Robotics" and the rest two plain names, and passed 16 of 18 negatives. Real names broke it 10 of 12: substring matching typed "Artificial intelligence startup raises" as funding for Intel and "Solar startup" for Ola, and a first-word fallback matched "Inc." for "HP Inc.". When a rule takes a name, id or locale argument, the held-out set needs short names, names that are substrings of common words, generic first words and punctuated legal suffixes.
+
 ## A fix fitted to the reported input is proven on that input only
 
 A precision fix for a heuristic (a scraper, a classifier, a parser rule) that is
