@@ -71,6 +71,8 @@ and holding a slot, and the three register variants.
 
 Use `body.contentType: html`. Graph drafts get no Outlook signature, so the sign-off must be in the body.
 
+Restaging an old or deleted draft carries its words, never its format: rebuild the body as html, keep any dated fact the old copy held ("first found 30 Oct") next to the new re-check date, and re-apply "one clear ask with a date" even when the brief says to change only one line. Deep's 10 Nov wipe of 95 drafts was for bot context and bad formatting, so a text/plain carry-over repeats the defect he deleted. Fix a staged draft in place with `update-mail-message` on the same id, so the id already named on the decision card stays valid and no second copy appears.
+
 ```html
 <p>Hi Ajay,</p>
 <p>I hope you're doing well! One paragraph per p tag.</p>
