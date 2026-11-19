@@ -89,6 +89,7 @@ Base: `Data_Security_NDA_Marketing_Pilot.docx` control set. Add: guest/member pr
 - **NEVER** sign as "Champions Group", "Champions Accelerator", or any trading name. Trading names cannot hold rights, enforce non-circumvention, or be sued.
 - Affiliate definition pulls in the operating companies actually involved (Lake B2B, Champions Infometrics, SPAN, InfraTech, Aventura, Ranch, Beach Cities, Champions Club, SPVs).
 - Signatory: Director of the contracting company, never "CEO, Champions Accelerator".
+- Entities with details already on record (verify with Finance, never "none on record"): CHAMPION INFOMETRICS PRIVATE LIMITED, CIN U72901KA2016FTC093020, HSR Layout office, directors listed, CIPL paper carries CIPL branding (`Other/Archive/Claude Cowork-2026-11-06/memory/space-99222188/feedback_champions_infometrics_name.md`); Lake B2B Inc. (Delaware) for LakeB2B paper (same file, AGR NDA); Champions Superior Capital Private Limited. When the entity is unchosen, list these candidates with their paths for Finance to pick. Before any "no entity or CIN in the vault" line, grep the vault for `Private Limited` and the CIN pattern `[UL][0-9]{5}[A-Z]{2}[0-9]{4}(PTC|PLC|FTC|OPC)[0-9]{6}`: a vendor-agreement issues list made that claim while CIPL's CIN sat in the vault.
 
 ### Step 4: Standard positions (Schedule 1 defaults)
 
