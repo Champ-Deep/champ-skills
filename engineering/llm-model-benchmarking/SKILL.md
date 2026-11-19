@@ -78,6 +78,8 @@ Deep's standing correction (2026-10-31): a tool's recommendation is one input, n
 - An Anthropic-compatible endpoint returns thinking blocks alongside text. When `content` comes back empty on HTTP 200, read the raw body before concluding anything.
 - An ad-hoc probe (a throwaway harness written outside the suite) needs three guards or it reports the wrong winner. **Empty output with `finish_reason=length` means the cap was too low, not that the model failed**: hidden reasoning spends the output budget, so re-run that row with a much larger `max_tokens` before scoring it. **Identical prompts hit provider cache**, so latencies of 0.2s against 30s are a cache artifact: put a random nonce in each request before timing anything. **A small sample cannot crown a replacement**: only say a candidate beats the incumbent when it passed every run of the task where the incumbent also passed, with the run counts beside both.
 
+- **An agentic build eval must put the absolute output directory in the prompt.** `hermes -p <profile> chat` tools start in the profile's `terminal.cwd` (the vault root on `default`), not the shell's cwd, so "work in the current directory" sends parallel runs to one shared file: they overwrite each other, a model may even merge a rival's edits, and the vault root collects stray files. Template the path into a per-run copy of the brief, then confirm each run's files landed in its own directory before scoring. Worked example: `Efforts/LLM Bake-off/Showcase Page Eval v1/run.sh`.
+
 ## References
 
 - `references/model-drivers.md`: verified wrapper recipe for driving any OpenRouter model through Claude Code headless, lane checks before a full run, and the auth check that proves which model actually answered.
