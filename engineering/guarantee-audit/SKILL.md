@@ -234,6 +234,7 @@ the author. Run the visual verification gate and open the screenshots.
   does not reproduce, and a child's silence is not an all-clear.
 - **A healthcheck that discards its return value always passes.** Assert on the
   exit code and prove it red with the dependency absent.
+- **A gate that reuses a fetch helper inherits its content filters.** When a compliance read (robots.txt, a manifest, a policy file) goes through a page fetcher, read that fetcher's reject rules (content-type allowlist, block-page or captcha regex, size cap) and feed the gate a body that trips each one. A robots gate that caught every fetch error as "allowed" silently ignored any robots.txt containing `Disallow: /captcha/`, because the page fetcher's challenge regex rejected the file.
 - **A guard in the route is not a guard in the service.** Any non-HTTP caller
   bypasses it. Check where the refusal actually lives.
 - **Local green is not the deployed system.** A container that boots healthy
