@@ -9,7 +9,34 @@ Entry point: `research-to-visual` picks the format and writes the verdict brief;
 
 A showcase page proves one result to a buyer who skims. It earns a second look the way Paddle and passionfroot pages do: one atmospheric moment at the top, editorial numbers, real charts that animate to their values, and small responses under the pointer that make the page feel built with care. The LakeB2B case study v2 set (Oct 2026) is the reference build: `Atlas/Context Docs/Lake B2B/Case Studies/v2/` in the Celsus vault. The Champions Group x Onex check-in (`Calendar/Meetings/2026-10-07 - Champions Group x Onex Check-in.html`) is the reference for a post-meeting partner page.
 
-The working kit lives in the vault at `Other/Skills/showcase-page/kit/` (`core.css`, `core.js`, `build.py`, `shoot.py`, worked examples). Copy it into the session and build from it. When the vault is not mounted, rebuild the same structure from `references/components.md`.
+The working kit is the `kit/` folder in this skill's directory (`core.css`, `core.js`, `build.py`, `shoot.py`, worked cases 02 and 03). The vault copy at `Other/Skills/showcase-page/kit/` has more worked cases (04, 05, 06, `fin`), which are worth reading for structure.
+
+## Start here: compose on the kit, whatever model you are
+
+The kit is what makes these pages beautiful, and it is not optional. In a same-brief bake-off (Opus 5.5, GPT-6.2 Astra, GPT-6.2 Sol, 2026-11-19, `Efforts/LLM Bake-off/Showcase Page Eval v1/`), all three pages passed every technical gate. Deep picked the Opus page. It was the only one built on the kit: 70 kit classes, 21 scroll reveals, 12 count-ups, waffle charts, spotlight panels, and a 6 by 3 matrix of buying roles by channel. The other two read the skill, then wrote a standalone page from scratch with their own CSS: zero count-ups, zero unit charts, zero spotlight. The Astra page took one write and one look and was done in 7 minutes. It was also the plainest. Follow these steps in order:
+
+1. **Copy, never build in place.** `cp -R <skill_dir>/kit <out>/kit`. `build.py` writes `dist/` next to itself, so building inside the shared kit collides with other runs.
+2. **Read before writing.** Read `kit/core.css`, `kit/core.js` and one worked case (`kit/cases/02.html` plus `02.json`) in full before you write any page markup. Model the new case on the worked case's placeholders (`{{NAV}}`, `{{CTA}}`, `{{FOOT}}`), classes and data attributes.
+3. **Build through the kit.** Write `kit/cases/<id>.html` and `<id>.json`, then run `python3 build.py <id>`. Copy `dist/<slug>.html` to the filename the brief asks for. A hand-written standalone page with its own stylesheet fails this skill even when it passes every gate. Page-specific CSS goes in the case JSON `css` key on top of `core.css`, never in place of it.
+4. **Required set pieces for a case study.** Each is a kit feature:
+   - an atmospheric hero with a word-split headline (`data-words`);
+   - three floating `.fcard` stat cards that count up (`data-count`);
+   - a unit or waffle chart (`data-waffle`) for each count that has its own unit;
+   - one matrix or diagram that shows the mechanism (for example roles by channel), not three icons in a row;
+   - a scorecard `.band`;
+   - `.panel` cards with the spotlight;
+   - `data-reveal` on every section.
+   Keep the hero atmosphere inside the brand palette. The one critique of the winning page was a neon sunset horizon that read as a consumer brand, not B2B data.
+5. **Kit fingerprint gate.** Run this before calling the page done. It counts markup attributes only, because inlined `core.js` also contains these names inside selectors:
+   `for a in data-reveal data-count data-waffle data-words; do printf "%s=%s " $a $(grep -oE "$a(=\"|[ >])" index.html | wc -l); done`
+   - Pass: `data-reveal` at least 8, `data-count` at least 3, `data-waffle` at least 1, `data-words` at least 1.
+   - A zero means a hand-written page. Rebuild it on the kit; do not patch it.
+   - Calibration on the bake-off pages: the kit page measured 21, 12, 2 and 1, and both hand-written pages scored zero on all of the last three.
+6. **At least two critique rounds.** Each round:
+   - screenshot 1440 and 390;
+   - open each screenshot in three bands (hero, middle, bottom) with the vision tool;
+   - list the defects, fix them, and reshoot.
+   Stop only when a round finds nothing worth fixing. One write followed by one look is not a design pass.
 
 ## What went wrong before (do not repeat)
 
@@ -98,6 +125,7 @@ Section order for a Case Study: sticky nav with the real logo on the page ground
 
 ## Step 6: Verify
 
+0. The kit fingerprint gate from Start here passes. A page that fails it does not enter the checks below.
 1. `python3 shoot.py <slug> --export` for each page: overflow 0 at 1440 and 390, no small tap targets, zero console errors.
 2. Open the 1440 hero, the 1440 full page in two halves, and the 390 full page with the Read tool. Check: hero headline wraps in three lines or fewer, cards overlap the hero edge cleanly, no label collides on any chart, no orphaned single tile or dot row, table columns fit their panel.
 3. Check one motion frame mid-scroll (bars and dots mid-animation, spy rail on the active step) and one hover state per micro-interaction.
