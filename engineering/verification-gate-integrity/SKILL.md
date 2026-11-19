@@ -125,6 +125,8 @@ clicks on a disabled button, so a UI test cannot reach the handler guard, and re
 it alone stays green. Report that guard as unarmed (defence in depth), or call the
 handler directly if it must be proved.
 
+An HTTP assertion is vacuous when the app picked its auth mode at import time. A `/mcp` mount chosen by `if auth.enabled()` when the module loaded stays API-key-only for the whole test process, so a JWT test that sets the issuer in a fixture gets 401 from the old wrapper, never from the new gate. Assert through the object the live mount calls (`asyncio.run(Verifier().verify_token(t))`), then delete the fix line and require red: one card's suite stayed 10 passed with its only MCP bypass fix removed.
+
 A style assertion is vacuous the same way when the fixture's own CSS, or the browser default,
 already produces the value. A CTA fixture declared `button:focus-visible{outline:2px solid}`
 and Chromium draws a focus ring anyway, so `outlineStyle != 'none'` stayed green with the kit's
