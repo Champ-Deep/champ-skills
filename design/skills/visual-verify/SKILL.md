@@ -482,6 +482,8 @@ screenshots time out, so on a cold or slow page the probe is the reliable channe
 shot is the bonus. Assert page state after each step (a step counter, a `.sel` class) and
 let the assertion failure, not the missing highlight, drive the fix.
 
+**A skeleton that promises "nothing jumps" is a geometry claim against the resolved page.** Shooting the skeleton proves it renders, not that it matches. Load the skeleton state (session held) and the resolved state (session fulfilled) at each shipping width and diff the boxes: rail width, top bar height, and the left/top of the main column's first two blocks (heading, composer or list). Report the delta table and require each delta within 4px. A replica shell with its own header, or the old loading heading kept as the skeleton's h1, passes every screenshot and still jumps 50px when data lands.
+
 **A panel shorter than its column is a layout defect wearing a vaguer costume.** A two-column section whose detail panel sits at `align-items: start` ends short of the checklist beside it, and the vision pass reads it as "dead space below the card", which is the same complaint in softer words. Set `align-items: stretch` on the grid so the panel fills, re-shoot, and require both columns to end on one baseline before you call it fixed.
 
 **A headline's line count and an intentional overlap are geometry claims, not
