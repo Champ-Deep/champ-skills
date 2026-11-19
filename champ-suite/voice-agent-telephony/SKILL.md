@@ -123,6 +123,15 @@ transferee may be hung up too. Always run a ring-no-answer probe (target never
 answers, wait past the Dial timer) and check the channel list after it; the
 fast 404 case does not cover it.
 
+Classify by the switch's own code sets, never by one example code. Asterisk
+(res_pjsip_refer.c) sends these final NOTIFYs before it moves anything: 404
+(no such extension), 400/403/500 (blind transfer INVALID, NOT_PERMITTED, FAIL;
+400 when the transferor is in an app such as Echo, not a bridge). After the
+move its framehook sends only 486 (busy) and 503 (congestion, or the
+transferee's hook destroyed). A client that keeps the leg only on 404 hangs up
+a live call on 400/403/500. Probe one non-404 pre-move case too: transfer a
+call to an Echo extension and assert the call and its channel survive.
+
 ## Diagnose by failure signature
 
 | Signature | Cause | Where to look |
