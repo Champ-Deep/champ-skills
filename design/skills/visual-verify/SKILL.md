@@ -150,6 +150,20 @@ a colour or identity claim is weaker still, because the model reads the design
 expectation, not the pixel. Treating the critique as fact spends a fix round on a
 defect that was never there.
 
+**A whole-page computed contrast sweep settles every colour claim at once, and it
+runs on the shipped file.** When a vision pass lists contrast or colour problems
+("low contrast", "unreadable on black", "near-zero contrast pills"), do not
+spot-check the named elements: walk every element that owns a text node on the
+final file, composite each one's colour stack up to its first opaque background,
+and report every ratio under the WCAG floor for its size and weight, light and
+dark. One sweep is cheaper than N spot-checks and settles both directions: it
+names the elements that genuinely fail, and it disproves the rest of the list.
+A clean sweep plus a real vision finding means the finding is about hierarchy,
+crowding or tone rather than legibility, so fix it there instead of touching the
+palette. Note that a sweep of computed styles still cannot judge a page's
+typography or hierarchy: a legible page can still fail the five-second test, and
+that half of the critique stays with the eye.
+
 **A composite of image assets gets a fabricated punch list, and the single asset is
 the only probe.** When the deliverable is a set of exported PNGs (a profile grid, a
 contact sheet, an ad tile set) there is no DOM to measure, so an open "critique this
@@ -490,6 +504,8 @@ are the same pixels, so record which of the two you measured rather than acting 
 adjective.
 
 **A map or chart marker the page exists to show must win its own hit test.** Sample filler placed near a real point (a client metro 400km from the HQ) and enlarged hit areas both let a neighbour's button own the real point's pixels, so a click on the headquarters opens a sample card while every screenshot shows the right marker. For each real point, and every point a lede tells the reader to select, assert `document.elementFromPoint(centerX, centerY).closest('button')` is that point's own control at each shipping width, by pointer coordinates rather than `el.click()`, which bypasses the overlap. Move or drop the filler before you enlarge or shrink hit areas.
+
+**An enlarged hit area must never cover another target's visible box.** A transparent `::after` with a negative inset (the usual way to give a 20px inline chip a 44px target) is painted above earlier siblings, so on a narrow width where two chips sit on consecutive lines at the same x, the lower chip's expansion owns the upper chip's visible pixels: a pointer on chip 2 highlighted and opened source 3. A probe that only checks points 20px above and below each centre passes, because it tests the expansion and never the box. For every target, assert `elementFromPoint` at its visible centre, top+3 and bottom-3 returns itself, at 375 with dense text (chips on adjacent lines), then check the expansion points. Where the two rules collide, the visible box wins and the expansion yields; inline text targets are exempt from the 44px floor in WCAG 2.5.8, so report the shortfall instead of covering a neighbour.
 
 **Probe interactivity as behavior, not as a screenshot, in one batched run.** A page with a live input, tickable items or a tab strip can pass every geometry gate while its logic is dead: nothing in `audit.py` computes what a control does. After the audit, drive the loaded page once at each shipping width and print in a single loop: the computed output after a representative input (including the empty input and one that exceeds the cap, where clamping must show), the overflow rect-walk, the disabled sweep, the dash count off `document.body.innerText`, and the console error list. Then prove persistence for any state the page claims to keep (reload, read it back), because a storage write that silently fails on `file://` or in a locked-down profile turns a stated feature into a lie the screenshot cannot show. Keep the probe as a re-runnable script beside the artifact so each fix round re-asserts instead of re-typing, and scrub any synthetic values you wrote into that persisted store back to the clean state before handoff, re-reading it to confirm: the QA session writes to the same storage key the user will open, so a delivered workbook full of test notes is a real failure mode. An asserted text output beats pixels here: a recalculated number proves the handler ran, while a shot of the number only proves it rendered once. For toggle rows that build a package total (service checklists, add-on pricing), assert the arithmetic, not the active style: click one row off, print the recomputed total AND the on-state count AND the line "every counterparty figure is still present", because the failure mode is a filter that drops the other party's own number from the page they are about to be shown.
 
