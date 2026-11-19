@@ -305,8 +305,15 @@ def main():
             page.locator('#tab1').press('ArrowUp')
             expect(page.locator('#tab5')).to_be_focused()
             page.locator('#hwf').scroll_into_view_if_needed()
-            page.wait_for_timeout(150)
-            check(page.locator('#hwf canvas').evaluate('''c=>{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let ink=0;for(let i=0;i<d.length;i+=4)if(d[i+1]>65)ink++;return ink>100;}'''), 'footer contains halftone pixels')
+            # layout() clears the canvas on ResizeObserver/fonts.ready and the repaint needs an
+            # IntersectionObserver callback plus one rAF; poll instead of reading once at 150ms.
+            inked = False
+            for _ in range(20):
+                if page.locator('#hwf canvas').evaluate('''c=>{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let ink=0;for(let i=0;i<d.length;i+=4)if(d[i+1]>65)ink++;return ink>100;}'''):
+                    inked = True
+                    break
+                page.wait_for_timeout(150)
+            check(inked, 'footer contains halftone pixels')
             page.locator('#name').fill('Preview Tester')
             page.locator('#consent').check()
             for email in ('preview@gmail.com','preview@outlook.co.uk'):
