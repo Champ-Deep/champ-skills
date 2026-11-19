@@ -159,6 +159,10 @@ lower-case token. Run the pattern you will quote, verbatim, and paste the hit fi
 is zero. The hit is evidence, not the conclusion: one doc mention does not implement a feature, so
 state the finding as "no implementation, one doc mention at <path:line>" rather than a clean zero.
 
+## A status reason in a readback is a measurement, not a string
+
+A readback that prints `NOT_RUN table missing: X` from a string literal reports a schema fact it never checked, and the line stays the same on a database where X exists. Derive every "missing" reason from the query error (a zero-row `SELECT 1 FROM X LIMIT 0` through the same catch path), and print a distinct reason when X is present but no grading query exists yet. Before pinning a capability as absent, grep open PR heads for its table (`git grep -l <table> $(git for-each-ref --format='%(refname)' refs/remotes/origin) -- db/`): one always-on readback hard-coded "agent API keys missing" while `hb_api_keys` already sat in two open PRs, so the acceptance run on the merged RC would have read NOT_RUN for a table it had.
+
 ## The gate you wrote for a deployment has never run anywhere
 
 A smoke script, deploy check or post-rollout probe is unverified code until something
