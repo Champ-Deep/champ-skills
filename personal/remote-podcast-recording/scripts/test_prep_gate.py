@@ -29,4 +29,13 @@ assert any("route discrepancy" in f for f in mutate(lambda s: s["route"].update(
 assert any("not verified 200" in f for f in mutate(lambda s: s["resources"]["links"].append({"url": "https://dead.example", "status": 404})))
 assert any("forbidden" in f for f in mutate(lambda s: s["public_text"].update(resources_page="Host Name wrote this \u2014 x")))
 assert any("read back" in f for f in mutate(lambda s: s["drafts"].update(staged=[{"subject": "x", "deduped": True, "read_back": False}])))
-print("OK: example passes and 10 mutations are each caught")
+assert any("ruling is not recorded" in f for f in mutate(lambda s: s["timing"].update(ruling="")))
+assert any("superseded" in f for f in mutate(lambda s: s["timing"].update(superseded="")))
+assert any("owner_status" in f for f in mutate(lambda s: s["timing"].pop("owner_status")))
+assert any("required term" in f for f in mutate(lambda s: s["public_text"].update(resources_page="Nothing useful here.")))
+try:
+    timing_gap_minutes("2030-01-15", {"clock": "11:00 AM", "zone": "CET"}, good["timing"]["host_pack"])
+    raise SystemExit("unknown zone was accepted")
+except ValueError as err:
+    assert "unknown time zone" in str(err)
+print("OK: example passes and 14 mutations are each caught")

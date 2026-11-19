@@ -4,7 +4,7 @@ The procedure that turns a booked episode into a host script, a resource guide a
 
 ## 0. Reuse before building
 
-Search the vault, the board and the mailbox for the same episode first: an existing host pack, script page, resources page, Manu-style page request, questions mail. Extend what exists. A second build or a second draft for the same ask is a defect, not progress. Existing cards own their own work: link them, never recreate them.
+Search the vault, the board and the mailbox for the same episode first: an existing host pack, script page, resources page, the page owner's request, questions mail. Extend what exists. A second build or a second draft for the same ask is a defect, not progress. Existing cards own their own work: link them, never recreate them.
 
 ## 1. Questions: the guest's wording wins
 
@@ -36,7 +36,7 @@ Share one browser window (the resources page or prepared screenshots), never the
 - After the episode the list becomes **actual** only from the real recording or its transcript: what was said, not what was planned. Drop planned tools that were never mentioned.
 - Every card: a tool's own tagline or README (never memory), a real capture, one link. Curl every link and ship only 200 (or a redirect ending in 200). A dead link drops its card, not the page.
 - Copyable agent skills are de-identified: no vault paths, names, client data, card ids, tokens, internal URLs. Copy them into the guide as reviewed text, then grep the result.
-- No private vault, client or credential content in any public text. Run the leak scan in `prep_gate.py` on the exact public text.
+- No private vault, client or credential content in any public text. Take the forbidden and required term lists from the latest brief version or delta (a later delta overrides an earlier brief), and run the leak scan in `prep_gate.py` on the real public page text once it exists (strip script, style and tags), never on a placeholder. A gate that only passes a placeholder proves nothing. If a true leak shows, name it and do not edit the page.
 
 ## 7. Page route and ownership
 
@@ -51,7 +51,7 @@ A page route stated in a transcript can differ from the route in the page reques
 
 ## 9. Timing and occurrence gates
 
-- Two surfaces that state different times (a spoken zone, a host pack, an invite body, an invite start field) are a conflict. Convert both to UTC for the same date, name the gap in minutes, record it, and leave the choice to the card that owns timing. Never pick a time. Open one `needs_input` block only when no card owns timing yet; never a second one.
+- Two surfaces that state different times (a spoken zone, a host pack, an invite body, an invite start field) are a conflict. Convert both to UTC for the same date and name the gap in minutes. Read the owner card first: if it carries a ruling, the ruling is the authority, record it with the card id and mark the other surface superseded (`owner_status: ruled`); defer only while the card is open. Never pick a time yourself. Open one `needs_input` block only when no card owns timing yet; never a second one.
 - A pre-event send (join early for sound check, share questions, agenda) needs proof the event has not happened: search the mailbox for a recording-ready mail and read the dated meeting notes. If the event already happened, the send is obsolete; stage nothing.
 - "Happened" is claimed only from such evidence, never from the plan.
 - Post-event follow-ups (support offers, barter, consulting) stay held until the occurrence is proven and the owner releases them. Preparing a skill or a guide never releases them.

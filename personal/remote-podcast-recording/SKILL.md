@@ -17,7 +17,7 @@ The host does not choose the platform, so the tier decides everything downstream
 - Is there a live audience? A webinar with attendees needs registration and a moderated Q&A; without attendees it is a closed studio and no link should go out.
 - Who owns the record button and who joins as a panelist.
 - Is the guest on the same platform or dialling in by phone (phone audio cannot be isolated from the host's track).
-- The exact start time in IST, and whether it was said in the invite, the calendar or chat. Present a conflict as one `needs_input` block with the times and platforms as options; never pick a recording time yourself. When a card already owns the timing decision, record the conflict (both times converted to UTC, the gap in minutes) and defer to that card instead of opening a second one.
+- The exact start time in IST, and whether it was said in the invite, the calendar or chat. Present a conflict as one `needs_input` block with the times and platforms as options; never pick a recording time yourself. When a card already owns the timing decision, read it first: if it has ruled, that ruling is the authority and the other surface is recorded as superseded; if it is still open, record the conflict (both times converted to UTC, the gap in minutes) and defer to it instead of opening a second one.
 
 A claim about a tier must come from the vendor's own page fetched in the same session, quoted back with its URL. Vendor tier tables change and the guest's host account is the authority, not the vendor's marketing page.
 

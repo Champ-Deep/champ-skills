@@ -25,6 +25,8 @@ def to_utc(date, clock, zone):
     """date 'YYYY-MM-DD', clock '2:30 PM', zone 'PST' or 'Eastern'."""
     t = datetime.strptime(f"{date} {clock.strip().upper()}", "%Y-%m-%d %I:%M %p")
     z = zone.strip().upper()
+    if z not in FIXED and z not in REGION:
+        raise ValueError(f"unknown time zone {zone!r}, use one of {sorted(FIXED) + sorted(REGION)}")
     if z in FIXED:
         return (t - timedelta(hours=FIXED[z])).replace(tzinfo=timezone.utc)
     return t.replace(tzinfo=ZoneInfo(REGION[z])).astimezone(timezone.utc)
@@ -54,6 +56,11 @@ def check(s):
         need(bool(t.get("owner_card")), "timing conflict has no owner card named")
         need(not t.get("new_decision_cards"), "a new timing decision card was created, defer to the owner card")
         need(not t.get("picked_a_time"), "a time was picked silently")
+        # The owner card is read first: once it has ruled, the ruling is the authority and the other surface is superseded.
+        need(t.get("owner_status") in ("open", "ruled"), "owner_status must be open or ruled, read the owner card")
+        if t.get("owner_status") == "ruled":
+            need(bool(t.get("ruling")), "owner card has ruled but the ruling is not recorded")
+            need(t.get("superseded"), "owner card has ruled but the losing surface is not named as superseded")
 
     # 3. Occurrence gate: pre-event sends are dead once the event has happened.
     occ = s["occurrence"]
@@ -63,6 +70,7 @@ def check(s):
         need(not occ.get("claimed_happened"), "claims the recording happened with no evidence")
 
     # 4. Held follow-ups stay held.
+    # shortcut: trusts the declared held_cards list, so read the card status itself before declaring it empty; upgrade by passing live statuses in.
     need(not set(s["held_cards"]) & set(s["released_cards"]), "a held follow-up card was released")
 
     # 5. Consent and production: observed features are not evidence of tracks, licence, quality, consent.
@@ -89,6 +97,9 @@ def check(s):
     for name, text in s["public_text"].items():
         for p in pats:
             need(not re.search(p, text), f"public text '{name}' matches forbidden pattern {p}")
+        # Required terms come from the latest brief version, checked on the real page text.
+        for term in s.get("required_public", []):
+            need(term in text, f"public text '{name}' is missing required term {term}")
 
     # 9. Nothing sent, posted or published; drafts need provider read-back.
     need(s["drafts"]["sent"] == 0 and not s["published"], "something was sent or published without approval")

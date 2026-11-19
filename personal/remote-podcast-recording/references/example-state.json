@@ -1,26 +1,75 @@
 {
   "questions": {
-    "agreed": ["Question one, exactly as the guest approved it.", "Question two, exactly as the guest approved it."],
-    "script": ["Question one, exactly as the guest approved it.", "Question two, exactly as the guest approved it."]
+    "agreed": [
+      "Question one, exactly as the guest approved it.",
+      "Question two, exactly as the guest approved it."
+    ],
+    "script": [
+      "Question one, exactly as the guest approved it.",
+      "Question two, exactly as the guest approved it."
+    ]
   },
   "timing": {
     "date": "2030-01-15",
-    "spoken": {"clock": "11:00 AM", "zone": "PST"},
-    "host_pack": {"clock": "2:30 PM", "zone": "Eastern"},
+    "spoken": {
+      "clock": "11:00 AM",
+      "zone": "PST"
+    },
+    "host_pack": {
+      "clock": "2:30 PM",
+      "zone": "Eastern"
+    },
     "conflict_recorded": true,
     "owner_card": "t_example1",
     "new_decision_cards": [],
-    "picked_a_time": false
+    "picked_a_time": false,
+    "owner_status": "ruled",
+    "ruling": "Owner card ruled the host pack time; the spoken time is superseded.",
+    "superseded": "spoken"
   },
-  "occurrence": {"recording_ready_mail_found": false, "claimed_happened": false},
-  "held_cards": ["t_example2"],
+  "occurrence": {
+    "recording_ready_mail_found": false,
+    "claimed_happened": false
+  },
+  "held_cards": [
+    "t_example2"
+  ],
   "released_cards": [],
-  "claims_made": ["panelist_video", "spotlight", "local_record_available"],
+  "claims_made": [
+    "panelist_video",
+    "spotlight",
+    "local_record_available"
+  ],
   "evidence": {},
-  "route": {"transcript": "/podcasts", "brief": "/podcast", "resolution": "defer_to_owner_thread", "new_approval_card": false},
-  "resources": {"status": "provisional", "links": [{"url": "https://example.com", "status": 200}]},
-  "forbidden_public": ["Host Name", "Client Name"],
-  "public_text": {"resources_page": "Tools we mentioned. Free resource from the show."},
-  "drafts": {"sent": 0, "pre_event_staged": [], "staged": []},
-  "published": []
+  "route": {
+    "transcript": "/podcasts",
+    "brief": "/podcast",
+    "resolution": "defer_to_owner_thread",
+    "new_approval_card": false
+  },
+  "resources": {
+    "status": "provisional",
+    "links": [
+      {
+        "url": "https://example.com",
+        "status": 200
+      }
+    ]
+  },
+  "forbidden_public": [
+    "Host Name",
+    "Client Name"
+  ],
+  "public_text": {
+    "resources_page": "Tools we mentioned. Free resource from the show."
+  },
+  "drafts": {
+    "sent": 0,
+    "pre_event_staged": [],
+    "staged": []
+  },
+  "published": [],
+  "required_public": [
+    "Tools"
+  ]
 }
