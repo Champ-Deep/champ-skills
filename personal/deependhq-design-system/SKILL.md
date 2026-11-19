@@ -167,6 +167,7 @@ Non-negotiable. Verify, do not assume.
 - **Never apply `opacity` to text.** Use `--dim`. Every historical contrast failure on this site came from stacking opacity onto already-muted color.
 - Every interactive element has a visible `:focus-visible`: 2px solid `--accent`, 2px offset. No `outline: 0` without a designed replacement.
 - Every touch target is **44x44 minimum**, measured including padding. A 36px control is only permitted inside 8px of surrounding padding.
+- Inline targets inside running text (citation chips, footnote numbers) are the exception: never grow them vertically with a negative-inset pseudo element, because the lower line's expansion paints over the chip above and a click opens the wrong source. Expand sideways only into the chip's own margin, report the real height as a shortfall (WCAG 2.5.8 inline exception), and keep a full-size alternate link (the numbered source row). A brief that asks for a 44px inline chip, or proves it with `elementFromPoint` 20px above and below centre, is wrong: gate on each chip owning its visible centre, top+3 and bottom-3 under a real pointer on stacked one-chip-per-line text.
 - Every hover-revealed fact has a focus and a touch equivalent. Data visualizations are the usual offenders.
 - Skip link and `<main>` on every page.
 - Colour is never the only carrier of state. Active nav gets `aria-current`. Arc colour is paired with a text tag.
