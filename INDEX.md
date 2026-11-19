@@ -248,7 +248,7 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `model-api-capability-verification` | Personal Ops (champ-science plugin) | Use before claiming a model API can or cannot do something. |
 | `model-routing` | Personal Ops (champ-science plugin) | Use when routing work across subscription and API lanes. |
 | `release-integration-engineering` | Personal Ops (champ-science plugin) | Use when consolidating branches into a gated release. |
-| `remote-podcast-recording` | Personal Ops (champ-science plugin) | Use when setting up a podcast or webinar recording. |
+| `remote-podcast-recording` | Personal Ops (champ-science plugin) | Use when preparing a podcast or webinar recording. |
 | `schedule` | Personal Ops (champ-science plugin) | Create or migrate scheduled tasks in Hermes cron. |
 | `skill-repo-sync` | Personal Ops (champ-science plugin) | Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo. |
 | `sprint-mode` | Personal Ops (champ-science plugin) | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |
@@ -567,7 +567,7 @@ Champ's vault, daily start, site ops, agent runtime and workspace skills.
 | `model-api-capability-verification` | Use before claiming a model API can or cannot do something. |
 | `model-routing` | Use when routing work across subscription and API lanes. |
 | `release-integration-engineering` | Use when consolidating branches into a gated release. |
-| `remote-podcast-recording` | Use when setting up a podcast or webinar recording. |
+| `remote-podcast-recording` | Use when preparing a podcast or webinar recording. |
 | `schedule` | Create or migrate scheduled tasks in Hermes cron. |
 | `skill-repo-sync` | Use whenever a skill is created, updated, or vendored for Champ, to sync it into the shared champ-skills repo. |
 | `sprint-mode` | Autonomous time-boxed task execution engine. Reads TASKS.md, ranks tasks by priority and feasibility within a given time window, then executes them with full autonomy usi |

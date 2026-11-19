@@ -1,11 +1,13 @@
 ---
 name: remote-podcast-recording
-description: "Use when setting up a podcast or webinar recording."
+description: "Use when preparing a podcast or webinar recording."
 ---
 
 # Remote podcast recording
 
 A recording has four deliverables in order: capture (the only thing that cannot be redone), the host's script, the show notes, then the copilot if it is wanted on air. A beautiful show notes page with no isolated audio track is a failed recording.
+
+**Preparing an episode (script, resource guide, rehearsal, handoffs):** follow `references/podcast-preparation-workflow.md` before the steps below, and finish by running `python3 scripts/prep_gate.py <state.json>` (shape in `references/example-state.json`; `scripts/test_prep_gate.py` proves the gate still catches each failure). It holds the gates this skill does not repeat: guest-agreed questions verbatim, provisional versus actual resource lists, consent and production evidence, the occurrence gate for pre-event sends, held follow-ups, dedupe and provider read-back, and draft-only mail.
 
 ## Step 1: Establish the facts before advising
 
@@ -15,7 +17,7 @@ The host does not choose the platform, so the tier decides everything downstream
 - Is there a live audience? A webinar with attendees needs registration and a moderated Q&A; without attendees it is a closed studio and no link should go out.
 - Who owns the record button and who joins as a panelist.
 - Is the guest on the same platform or dialling in by phone (phone audio cannot be isolated from the host's track).
-- The exact start time in IST, and whether it was said in the invite, the calendar or chat. Present a conflict as one `needs_input` block with the times and platforms as options; never pick a recording time yourself.
+- The exact start time in IST, and whether it was said in the invite, the calendar or chat. Present a conflict as one `needs_input` block with the times and platforms as options; never pick a recording time yourself. When a card already owns the timing decision, record the conflict (both times converted to UTC, the gap in minutes) and defer to that card instead of opening a second one.
 
 A claim about a tier must come from the vendor's own page fetched in the same session, quoted back with its URL. Vendor tier tables change and the guest's host account is the authority, not the vendor's marketing page.
 
@@ -74,7 +76,7 @@ A live copilot that listens to the guest must capture the Mac's own output, whic
 Serve it on `127.0.0.1` and add `Access-Control-Allow-Origin: null` to its JSON response, or a page opened from `file://` (which sends a null origin) cannot read it. Only the guest's transcript text should leave the machine; the audio stays local, and the advice model goes out on the shared OpenRouter key, which has a weekly limit to check first.
 
 ## Pitfalls
-- **Never give a recording time as advice.** Two different surfaces will state two times for one recording; presenting both as a `needs_input` block with the times as options is the whole answer, and picking one silently risks a missed recording.
+- **Never give a recording time as advice.** Two different surfaces will state two times for one recording; presenting both as a `needs_input` block with the times as options (or deferring to the card that already owns the decision) is the whole answer, and picking one silently risks a missed recording.
 - **Do not promise Riverside-equivalent quality on a tier that does not have it.** Ask the host's edition first and quote the vendor page; if the edition lacks local tracks, say so and fall back to the separate-track cloud settings plus a local backup on each end.
 - **A summary of the guest's own introduction is a rewrite.** Use her words verbatim for why she is qualified, because she is the one on the call and the summary will be checked against her answer.
 - **Never leave verify tags in spoken text.** Anything unconfirmed gets an amber chip and a confirm-before-broadcast line, so a fact that is wrong on air is caught in the tech check, not by the audience.
