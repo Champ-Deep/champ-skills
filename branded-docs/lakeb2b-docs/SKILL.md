@@ -94,3 +94,5 @@ Hard rules:
 
 `pip install weasyprint --break-system-packages`. The CSS includes font
 fallbacks, so it renders even without Montserrat and JetBrains Mono installed.
+
+If WeasyPrint segfaults on macOS (exit 139, Homebrew pango mix), do not keep retrying. Render the same HTML with Playwright Chromium: add the Google Fonts link for Montserrat and JetBrains Mono, then `page.pdf(prefer_css_page_size=True, print_background=True)`. Chromium reflows wider than WeasyPrint, so a section that fit one page may spill. Check each page's content bottom with PyMuPDF, force `break-before:page` on sections, and use `tr{break-inside:avoid}` so a table row never strands alone on a new page.
