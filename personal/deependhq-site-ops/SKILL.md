@@ -77,6 +77,7 @@ ls "$VAULT_ROOT/Calendar/Daily Notes" && ls "$VAULT_ROOT/Other/.secrets/"
 |---|---|
 | local == live, both stale | **Publishing is fine. Authoring never ran.** Look upstream at Part A and the mount. |
 | local newer than live | Push failed, or it went to `initial-site` instead of `main`, or Workers Builds failed. |
+| vault publisher copy newer than live, preflight holds | Entries are written and held by the security gate, not missed. The stale banner then tells every visitor Deep skipped days. Read `brand.today_date` in the vault copy before calling a stale log a miss, and surface a content-only publish as a decision for Deep: prove it with `diff -rq` of a `git archive origin/main` against the vault copy (only content.json, data.js, feeds and prerendered pages may differ, nothing under worker/, scripts/, migrations/ or source). Never run it without his yes. |
 | local stale, live stale, daily notes missing for those dates | Part A could not write. Almost always a vault mount or path problem. |
 | daily notes exist, no journey entries | Part B's "nothing to publish" escape hatch fired. Check whether the note had usable material. |
 | `check-gaps` prints nothing but the site is old | The gap is more than 10 days back and has fallen out of the scan window. Widen the window before it becomes permanent. |
