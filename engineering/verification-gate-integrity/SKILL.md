@@ -361,6 +361,14 @@ value explicitly in the config (`advanced.disableOriginCheck: false`), then brea
 to confirm the cross-site test goes red. Grep the library's context setup for `isTest` or
 `NODE_ENV` before trusting any green security test built on it.
 
+The same library can swallow an error your callback awaits. Better Auth 1.7 runs every
+`sendVerificationEmail` and `sendResetPassword` through `runInBackgroundOrAwait`, which
+catches and only logs, so sign-up answers 200 while no mail left. A claim that a failure
+"surfaces" is proved only by breaking the dependency (`EMAIL_MODE=send` with no binding) and
+reading the HTTP status the client got. A validation hook on create is a claim about create
+only: with `input: true` the field is also writable through `/update-user`, so probe the
+update path with the bad value and read the row back.
+
 ## Name the fixture boundary of every pass
 
 A run driven by fixture identities, seeded databases or canned provider responses
