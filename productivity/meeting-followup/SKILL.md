@@ -127,3 +127,12 @@ vault note.
 - A commitment already satisfied by an existing vault artifact: link it, do not rebuild it.
 - Meeting with no commitments by Deep: run intake, produce the chase list, skip drafting.
 - Sensitive or external-facing drafts (client emails, offers): always drafts, clearly labeled, never sent.
+- A "call vs paper" comparison cites the counterparty's newest document per clause, not the first one read.
+  List every dated written version first (proposal, draft agreement, MOU), then fill each "in writing"
+  cell from the latest one that covers it. A schedule that quoted an 11 Nov "standard or expedited" offer
+  as the written position missed that the vendor's own 16 Nov draft had already picked standard and dropped
+  the premium, and that its "targets are not a payment condition" clause conflicts with milestone-gated
+  advances.
+- Superseding your own earlier artifact: in the same run, comment the new path and sha256 on every card
+  that still points at the old one (grep open cards for the old filename). Otherwise the downstream lane
+  attaches the superseded file.
