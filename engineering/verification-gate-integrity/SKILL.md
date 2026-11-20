@@ -356,6 +356,15 @@ tree for that symbol first and rewrite the assertions in the same change: tests 
 old contract, so they go red by design and read as a regression, inviting a rollback of the
 polish. Report the rewritten assertions alongside the new pass count.
 
+The reverse case is a regression wearing a rewrite: when a change that was NOT meant to
+remove a guarantee turns an existing test red and you loosen its assertion, read the test's
+name first. If the name still states the old guarantee ("ip zones without ips are not
+queried") and the new assertion no longer checks it, the code regressed, not the test.
+Restore the strict assertion and fix the code, or rename the test and list the behaviour
+change in the handoff. One DNSBL change narrowed `s.asked == []` to "the disabled zone was
+not asked", which hid that IPv4 zones now queried their control for domains with no IPv4
+and stored the zone as unknown.
+
 ## A library can switch its own guard off under test
 
 Some auth libraries relax a security check when they detect a test runtime (Better Auth
