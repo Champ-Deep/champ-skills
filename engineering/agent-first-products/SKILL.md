@@ -25,6 +25,24 @@ development skill) and not for an MCP server on its own (use `mcp-builder`).
 
 Each step gates the next.
 
+## 0. Name the outcome before building any agent
+
+Customers want an outcome from their own harness (Claude Code, ChatGPT, Gemini, Hermes),
+not our agent. Before an orchestrator or sub-agents, ask whether the outcome ships as
+tools (step 3) plus a consumer skill folder: SKILL.md saying when to call each tool,
+what each result means and what it does not prove. Build our own agent only where it
+takes a side effect a customer's harness must not (sending, spending, writing to a
+client system). Heuristic from one creator's talk, not evidence: the access can be
+metered like an API. Before any outside caller, settle three things:
+
+- Who may call it, and how each caller is metered and revoked (a per-customer key, not
+  the owner login).
+- Data rights: contact-level or licensed data stays out of the first tool set until
+  the licence and consent position is written down. Counts and aggregates come from a
+  query, never from a model.
+- Where inference cost sits. A read-only tool backed by rules costs us no model spend;
+  a tool that calls a model per request does, and needs its own cost line.
+
 ## 1. Scope it standalone, before any code
 
 - Own repo, own entry points, own API key. Sibling products (ChampIQ and any other
