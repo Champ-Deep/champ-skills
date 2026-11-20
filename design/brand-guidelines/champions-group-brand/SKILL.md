@@ -101,6 +101,7 @@ Files live in the Celsus vault at `Other/Skills/champions-group-brand/assets/`. 
 ### Placement rules
 
 - **No boxes.** The logo sits straight on the page ground: no white pill, card, tile or rounded box behind it, on any brand. If the only file available has a background, find or make a transparent version before using it; prefer transparent files every time.
+- **A logo swap rule must out-specify the base image rule.** `.brand img{display:block}` beats a bare `.logo-d{display:none}`, so light and dark logos both rendered and a ghost wordmark sat behind the real one. Scope the swap as `.brand .logo-d` and `:root:not([data-theme="light"]) .brand .logo-l`, then probe `getComputedStyle(img).display` for both under each `color_scheme` before shooting.
 - **Swap by ground, not by box.** Full-colour on light grounds, reversed on dark grounds. In a nav that starts over a dark hero and turns light on scroll, carry both files and switch them with the nav state and with dark mode.
 - **Size:** at least 54px tall in a desktop nav (50px on phones) so "Group" stays readable; minimum digital width 160px elsewhere. Minimum print width: 30mm.
 - **Clear space:** height of the "C" on all sides.
