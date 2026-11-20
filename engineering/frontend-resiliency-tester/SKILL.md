@@ -153,6 +153,7 @@ When generating tests, always cover these categories:
 - Special characters: `<script>`, SQL injection patterns, unicode, emoji
 - Number boundaries: 0, -1, MAX_SAFE_INTEGER, NaN, Infinity
 - Date edge cases: leap years, timezone boundaries, epoch
+- Number inputs on a write path: type `0`, `-3`, `2.5` and empty, then press the real submit button in one gesture, and assert either a visible inline error with no request sent or the exact value posted. Library number fields (Base UI, coss) clamp on blur, so a typed 0 posts 1 with no warning, and a hidden form proxy carries the native step error, so a fractional value submits nothing and shows nothing (console: "An invalid form control ... is not focusable"). On an append-only ledger that wrong 1 cannot be edited away.
 
 ### 2. State Management Edge Cases
 - Redundant state detection: verify derived values aren't stored separately (test that `fullName` is always `${firstName} ${lastName}`)
