@@ -48,6 +48,11 @@ Following up on a discussion means, in priority order:
   meeting id, or grep the watcher's stored tool result for the register quote:
   `sqlite3 -readonly ~/.hermes/state.db "select id from messages where role='tool' and content like '%<quote>%'"`.
   A follow-through card that maps a promise to a tool must quote the transcript lines that name it.
+  The same applies to softer wording: "detail beyond the summary line not seen" or "summary read only" is
+  an unrecoverable claim too. `get_meeting` returns the summary and the transcript in one result, so read
+  the transcript body (grep its `Speaker` lines for the topic's words) before writing that a role, duty or
+  figure "was not said". One role-evidence readout said nothing past "for data selling" was said, while the
+  stored result held the business line, the KRA basis and the multi-channel condition verbatim.
 - Sweep the mailbox for the same evening (Outlook `$search="keyword AND received>=YYYY-MM-DD"`): follow-ups
   get emailed after the call, and final pricing, attached decks, and internal decisions live in mail bodies
   and attachments. A ledger built from the transcript alone misses commitments that were sent rather than said.
