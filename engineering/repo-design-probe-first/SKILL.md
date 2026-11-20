@@ -60,6 +60,14 @@ doc that asserts "the gate has no parameter X" is worth nothing unless checked.
   of relevance.
 - If a claim is only asserted, verify it. "Rule X is not gated" is checkable in
   two lines and is often load-bearing for the whole design.
+- An ABSENT or "no X on this screen" claim is read off the screen's own render
+  tree for the default config, not inherited from an earlier inventory row with
+  a narrower scope. Open the screen component, list every section it renders in
+  the default branch (read the tweak or flag defaults), and grep it for the
+  thing's words and handlers (`onBook`, `Book`, `buy`, `price`). An app brief
+  reused "in-app lab test booking: ABSENT" to say the home had no commercial
+  content, while the default Today home rendered a "Book a session" therapy
+  marquee and an AI carousel that both route to a booking screen with no backend.
 
 ## Deliverable
 
