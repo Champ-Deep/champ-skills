@@ -266,6 +266,8 @@ only call had failed this way; the same query returned 5 unrelated pages on retr
 
 DNS blocklists refuse public resolvers in ways that look like a clean answer: through 8.8.8.8 Spamhaus DBL returns NXDOMAIN even for its own test point `dbltest.com`, and SURBL answers `127.0.0.1` for "your access is blocked", which a naive `127.*` rule reads as a listing. Before reporting any zone as not listed, query that zone's documented test point (`dbltest.com.dbl.spamhaus.org`, `test.surbl.org.multi.surbl.org`) through the same resolver in the same run, and report the zone `unknown` unless it returns a listing code. Treat each list's refusal codes (`127.255.255.x` DBL, `127.0.0.1` SURBL and URIBL) as unknown, and label the result with the resolver IP actually used, never a fixed string. A domain health probe once reported `dbltest.com` as `pass, not listed` through Google while its handoff claimed public resolvers came back unknown.
 
+When you recommend a fix for a refused list, quote that list's terms of use, do not paraphrase them. Spamhaus fair use 1.1.1 limits the free public mirrors to non-commercial use, whatever resolver sends the query; an own recursive resolver only meets 1.1.3 (identifiable network). A decision card that recommended "own resolver, nothing to buy" for a commercial sender stated the identifiability rule as if it settled the commercial one.
+
 ## Promotion is a sequence of claims, not one
 
 Deploying is a chain (find the version, deploy it, promote it), and the tool's success
