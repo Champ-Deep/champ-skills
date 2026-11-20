@@ -5,6 +5,15 @@ description: "Use when Event Scout card scans fail or OCR changes."
 
 # Event Scout OCR benchmark
 
+## Cloudflare build (branch cf/native, since 2026-11-21)
+
+Event Scout runs as a Worker at `https://event-scout.deep-ae0.workers.dev` (code in `worker/`, D1 `event-scout-db`, KV `event-scout-files`). OCR is `ocrCard` in `worker/src/routes/core.ts`: OpenRouter only when the `OPENROUTER_API_KEY` secret is set, then Workers AI vision. Bench it through the live Worker, not Railway: `BASE=... TOKEN=<admin session> CARDS=~/repos/event-scout/bench/cards MODELS=@cf/a,@cf/b node worker/test/ocr_bench.mjs` (calls the admin-only `POST /api/admin/ocr_probe?model=`, saves nothing).
+
+- Result 2026-11-21, 24 images (photo + glare): `@cf/mistralai/mistral-small-3.1-24b-instruct` 99.4% fields, 23/24 perfect, p50 3.6 s, p95 6.4 s; `@cf/meta/llama-4-scout-17b-16e-instruct` 97.6%, 20/24, p50 7.7 s. Mistral is primary. Never bench `@cf/moonshotai/*` (banned).
+- An admin session for a bench: register a throwaway via `/api/register/`, set `is_admin=1` with `wrangler d1 execute --remote` by id (the tool masks digits in emails, so match on id), log in, and delete the user and its rows after. Python urllib gets 403 from workers.dev; use node fetch or curl.
+- `fetch().text()` strips the CSV's UTF-8 BOM; assert the BOM on `arrayBuffer()` bytes.
+- The Railway steps below are the legacy path, kept for the archive database only.
+
 Reproduce with the benchmark before touching the extractor. Repo `~/repos/event-scout` (public). Scan path: `add_contact_from_image` -> `extract_contact_with_openrouter` (primary) -> `extract_contact_from_image_with_gemini` (fallback). One prompt `OCR_PROMPT`, one field set `OCR_EMPTY` (name, title, company_name, email, phone, linkedin, website). Website is stored in `links` with label `Website`; title in `contacts.title`.
 
 ## Reproduce before guessing
@@ -20,9 +29,10 @@ The runner prints a markdown table (field accuracy, all-fields-per-card, p50/p95
 
 ## Lessons
 
-- Prove the app with the key the app ships, not the Railway key. `scripts/prod_smoke.py` reads `APP_API_KEY` from Railway, so it passes while the live web app (`event-scout-delta.vercel.app`, hardcoded `CONFIG.API_KEY` in `mobile-frontend.html`) gets 401 on every call: "Failed to load contacts" and scans that never finish. Compare the two values in python without printing either, then run one scan through the page's own `#galleryInput` (CDP `DOM.setFileInputFiles`).
-- Read `railway logs` after a passing scan to see which provider served it. A pass can hide a dead primary: two OpenRouter 401s, then Gemini, at 8 to 10 s a card against a 30 s client timeout.
-- For event readiness run a concurrent burst (10 cards, one user), not a single scan, and delete the contacts after. There is no user delete endpoint, so save the test user's id and reuse it instead of registering again.
+- Prove the app with the key the app ships, not the Railway key. `scripts/prod_smoke.py` reads `APP_API_KEY` from Railway, so it passes while the live web app (`event-scout-delta.vercel.app`, hardcoded `CONFIG.API_KEY` in `mobile-frontend.html`) gets 401 on every call: "Failed to load contacts" and scans that never finish. Compare the two values in python without printing either. The fix, when they differ, is `railway variables --set APP_API_KEY=<the value the app ships>`; it needs no code change and Railway redeploy is the confirmation. After the fix, prove it as one loop with the app's key: `list_contacts` -> one scan -> `export_contacts` -> `DELETE /contact/{contact_id}?user_id=...`.
+- Assert scan output against known ground truth in the right response key: `POST /add_contact_from_image` returns `extracted_fields` (parsed) alongside `contact`/`contact_id` (stored), so a checker aimed at the wrong key reports every field mismatched on a perfect extraction.
+- Read `railway logs` after a passing scan to see which provider served it. A pass can hide a dead primary: OpenRouter 401s (a dead key reports `User not found`), then Gemini, at 10 to 19 s a card against a 30 s client timeout, versus 2.7 to 3.8 s on the healthy primary.
+- Test contacts are deleted one at a time through `DELETE /contact/{contact_id}?user_id=...` (there is no bulk or user-level delete), so record each `contact_id` as you create it; reusing one test user across runs is still right, because every scan registers a new row.
 
 - A 0.00 accuracy row is usually a dead key or retired model, not OCR quality. Found 2026-10-29: `gemini-2.0-flash` NOT_FOUND, Railway Gemini key free tier RESOURCE_EXHAUSTED, Railway OpenRouter key 401, `anthropic/claude-sonnet-4-5` gone from OpenRouter. Check `GET /v1beta/models?key=` and `GET openrouter.ai/api/v1/models` first.
 - Pin Gemini direct to `-latest` aliases (`gemini-flash-lite-latest`); dated flash models retire within months and the scan path dies silently.
