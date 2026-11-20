@@ -66,6 +66,8 @@ The logo is a blue wordmark under three rising blocks (yellow, amber, orange). T
 | Web (site fonts) | Dosis (600 or 700) | Open Sans 400/700 | Libre Baskerville italic, sparingly for pull quotes |
 | Word, PowerPoint, PDF sent to clients | Arial Bold | Arial | Arial Italic |
 
+Live site check (20 Nov 2026, style.css plus the Google CSS it imports): the site loads only Dosis 400 (`css?family=Dosis`) and Open Sans 400, 400 italic and 700. h1 to h6 default to Open Sans 400. Dosis appears only through `.font-alt` (uppercase, 3px letter-spacing: section h2 titles, counter numerals, footer), `#nav` and `.form-control`. The 600 or 700 Dosis weight above is a target for new work, not what the site runs. Any brief that says "current" weights or usage must re-read the live CSS, not this table.
+
 Office files use Arial because Dosis and Open Sans are not installed on most client machines and Word silently substitutes them. Sizes for documents: title 22 pt, H1 15 pt blue, H2 11.5 pt ink, body 10 pt, tables 9 pt, footer 8 pt.
 
 ## Logo
