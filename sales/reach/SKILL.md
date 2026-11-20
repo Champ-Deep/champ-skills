@@ -17,7 +17,7 @@ One skill, five stages, one orchestrator. Pick the stage from the ask, read only
 | **reach-activate** | Stage A. Multi-channel surround-sound play, one-page asset, optional deck | `modes/reach-activate/MODE.md` |
 | **reach-cadence** | Stage C. Six-touch follow-up cadence: Day 1, 3, 7, 14, 21, 30 | `modes/reach-cadence/MODE.md` |
 | **reach-hold** | Stage H. Existing account depth, call prep, what to ask | `modes/reach-hold/MODE.md` |
-| **domain-drop** | A team member drops a company domain and needs the 360 read plus a sequence shaped for Harbinger, Salesforce, Outlook or plain email. Also the managed agent's system brief | `modes/domain-drop/MODE.md` |
+| **domain-drop** | A team member drops a company domain with a Mode. Prospect: the 360 read plus a sequence shaped for Harbinger, Salesforce, Outlook or plain email. Account (paying client): a Growth Plan from the member's Context. Also the managed agent's system brief | `modes/domain-drop/MODE.md` |
 
 ## Routing rules
 
