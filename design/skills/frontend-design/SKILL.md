@@ -331,6 +331,8 @@ For an intelligence workspace, make the acceptance unit a changed analytical sta
 
 A stat or footer fed by a second request has three states, not two: loading, loaded-empty, failed. Collapsing loading into the loaded-empty branch (`data ? find(...) ?? null : null`) prints a fabricated 0 or "nothing recorded" until the request lands. Render a loading marker until it settles, and prove it by delaying that endpoint in the browser test and reading the value mid-flight.
 
+A polling loop survives a bad poll. A status page that polls a long job (a run, an export) must keep its timer alive through a non-ok or failed response: show the notice, schedule the next poll, clear the notice when a good poll lands. Returning early on `!res.ok` freezes the page on "running" forever while it tells the user to try again. Prove it with a stub that answers running, then 503, then done, and assert the done state arrives without a reload.
+
 When an asynchronous response contains scene-specific data, render it only if its scene and source match the current selection. Clearing stale state in an effect alone leaves one render where the new component can receive the old data shape and crash.
 
 Keep home-page search and comparison choices aligned with backend capabilities. Regional aggregate data cannot support company-level filters or inferred country totals. Compare links must preserve the requested cohorts and respect the same feature gate as the destination.
