@@ -81,6 +81,8 @@ situation that mentions a price, so treat that as the designed answer to stage, 
 gate failure to route around.
 
 ## Pitfalls
+- Search the board's Scheduled shelf before the first question, not only the vault and the repo. Decision cards past the 15 card desk cap are shelved there unseen, so a brief that sounds new is often a plan that stalled on rulings he never saw. Name those cards in the opening and say which ones his answers settle.
+- When a question times out mid-grill, stop asking. Write the rulings so far into the effort note, put the unanswered and unasked forks on one stacked decision card with a default that spends, merges and sends nothing, and comment each ruling on the older card it settles without completing that card.
 - Number the open decisions and carry that numbering into the brief and the chat summary (1-9), so Deep answers by number and the answers drop straight onto build cards.
 
 - Never run a contact-enrichment or lead-pull pipeline for a product brief. A brief is not a
