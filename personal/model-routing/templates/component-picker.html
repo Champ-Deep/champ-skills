@@ -1,0 +1,71 @@
+<!--
+  Component picker widget for a frontend brief.
+
+  Copy to scratch (e.g. ~/.hermes/cache/scratch/<project>/picker.html), replace the
+  rows and options, then serve it in chat with a line of its own:
+
+    ::preview{file="/abs/path/to/picker.html"}
+
+  Rules for using it:
+  1. Every option's data-hermes-send value MUST carry the region number, the
+     component name and the 21st.dev id verbatim, e.g.
+       data-hermes-send="Project pick: region 3 = Animated Bento 19042"
+     so his reply, one row or all rows, arrives with ids the brief can use.
+  2. After each answer, patch this file: add class="picked" to the chosen option
+     and set data-hermes-send="" on it (an option still offering a send invites a
+     second, conflicting answer).
+  3. The frame injects var(--foreground), var(--muted-foreground), var(--accent),
+     var(--border), var(--card) plus the app font and zero margins before your
+     styles. Never set your own background, font or margins. Everything below the
+     frame stays flush left; do not wrap in a centering container.
+  4. One widget, all regions: asking region by region costs a round trip each.
+-->
+<div class="pk">
+  <style>
+    .pk { display: grid; gap: 14px; max-width: 760px; }
+    .pk h2 { font-size: 13px; font-weight: 600; color: var(--muted-foreground);
+             text-transform: uppercase; letter-spacing: .06em; margin: 0 0 2px; }
+    .pk .row { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+    .pk .row > b { display: block; font-size: 13px; margin-bottom: 8px; }
+    .pk .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pk button { font: inherit; font-size: 12.5px; text-align: left; cursor: pointer;
+                 background: var(--card); color: var(--foreground);
+                 border: 1px solid var(--border); border-radius: 8px;
+                 padding: 7px 10px; line-height: 1.3; max-width: 100%; }
+    .pk button:hover { border-color: var(--accent); }
+    .pk button.picked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .pk button.picked::after { content: " \2713"; color: var(--accent); }
+    .pk .id { color: var(--muted-foreground); }
+    .pk .note { font-size: 12px; color: var(--muted-foreground); }
+  </style>
+
+  <h2>Pick per region</h2>
+
+  <div class="row">
+    <b>1. Region name</b>
+    <div class="opts">
+      <button data-hermes-send="Project pick: region 1 = Component Name 12345">Component Name <span class="id">12345</span></button>
+      <button data-hermes-send="Project pick: region 1 = Other Component 67890">Other Component <span class="id">67890</span></button>
+    </div>
+  </div>
+
+  <div class="row">
+    <b>2. Region name</b>
+    <div class="opts">
+      <button data-hermes-send="Project pick: region 2 = Component Name 24680">Component Name <span class="id">24680</span></button>
+      <button data-hermes-send="Project pick: region 2 = Other Component 13579">Other Component <span class="id">13579</span></button>
+    </div>
+  </div>
+
+  <div class="note">Or reply in chat: <b>region N = component id</b> per line, every region in one message.</div>
+
+  <script>
+    // Clicking sends the prompt; the widget file itself is patched afterwards to
+    // mark the pick, so the state lives in the file, not in this script.
+    document.querySelectorAll('.pk button[data-hermes-send]').forEach(b => {
+      b.addEventListener('click', () => {
+        window.hermes && window.hermes.send(b.dataset.hermesSend);
+      });
+    });
+  </script>
+</div>

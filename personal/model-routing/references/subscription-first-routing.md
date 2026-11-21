@@ -12,7 +12,9 @@ Tiers, decided by card priority when no human pin exists (Deep, 2026-11-07):
 |---|---|---|---|
 | Hardest | 90+ | Claude Opus 5.5 | whichever of Anthropic direct or Antigravity Claude has more headroom; both at reserve: pin Anthropic and wait, never downgrade |
 | Important | 75 to 89 | Claude Sonnet 5.5 | same |
-| Routine | below 75 | GPT-6.1 Sol on ChatGPT | at the ChatGPT reserve: Antigravity Gemini (Argon for frontend when its bucket allows, Flash otherwise); only when that is also at reserve: bounded paid OpenRouter Auto |
+| Routine | below 75 | GPT-6.2 Sol on ChatGPT | at the ChatGPT reserve: Antigravity Gemini Flash; only when that is also at reserve: bounded paid OpenRouter Auto |
+
+The tiers apply to worker cards only. Since 2026-11-21 frontend always runs its profile default, the frontier GPT (`gpt-6.2-astra`), at every priority; it has no fallback chain and waits at the ChatGPT reserve (Deep's rule: never downgrade front-end work).
 
 Antigravity model ids carry an effort suffix: `claude-opus-5-5-medium`, `claude-sonnet-5-5-medium`, `gemini-4-argon-medium`, `gemini-3.8-flash-medium`. Provider id `antigravity-subscription-directsdk` (plugin in each executing profile's `plugins/`; a profile without the plugin reports Unknown provider and silently falls through to the paid chain, so check `hermes -p <profile> plugins list` first). Proven with real tool calls on frontend and worker for Argon, Flash and Opus (2026-11-07).
 
@@ -20,9 +22,9 @@ Governor pins are sticky: a tiered card stays on its Claude pool until that pool
 
 The governor applies these to unpinned ready frontend and worker cards and rebalances only the pins it made (`managed_routes` in the state file). A human pin at any priority is left alone. Set the priority honestly at `kanban_create`: priority is the tier switch.
 
-Native `fallback_providers` per profile, for runtime errors mid-card: frontend Sol, then Antigravity `gemini-4-argon-medium`, then `openrouter-budget/openrouter/auto`; worker Sol, then Antigravity `gemini-3.8-flash-medium`, then Auto.
+Native `fallback_providers` per profile, for runtime errors mid-card: frontend none (`[]`, a failed call retries on Astra); worker Antigravity `gemini-3.8-flash-medium`, then Auto.
 
-Frontend and worker primary: provider `openai-codex`, model `gpt-6.1-sol`, ChatGPT subscription. Native `fallback_providers` has Antigravity Gemini before the paid entry (see Routes). Main judgment, planner and reviewer keep their separate Anthropic lanes. Do not auto-escalate repeat failures to Opus.
+Primary on `openai-codex` (ChatGPT subscription): frontend `gpt-6.2-astra`, worker and content `gpt-6.2-sol`. Native `fallback_providers` has Antigravity Gemini before the paid entry (see Routes). Main judgment, planner and reviewer keep their separate Anthropic lanes. Do not auto-escalate repeat failures to Opus.
 
 The `providers.openrouter-budget` definition in each executing profile must have:
 
@@ -34,11 +36,21 @@ The `providers.openrouter-budget` definition in each executing profile must have
 
 Do not buy OpenAI or Anthropic tokens again through this fallback. Do not raise the shared key credit limit without approval. Query `/api/v1/auth/key` before a paid probe. Limits belong to that key, not to a remembered dollar amount.
 
+**Pinning a card while a governor tick is in flight loses the pin.** The tick reads rows first and writes pins later, so a card you pin to Sol in that window (priority 75+ is a Claude tier) is re-pinned to Opus 20 s afterwards and recorded as managed. Read the card's events after the next tick; if a governor `model_override_set` follows yours, pin again and drop the id from `managed_routes`. The pin is what makes a high-priority frontend card the lane head on the ChatGPT pool instead of waiting behind the reviewer for the one Anthropic slot.
+
 ## Admission and quota switching
 
 `~/.hermes/scripts/kanban_quota_guard.py --apply`, scheduled by script-only cron `f84b5393e7df` every5min, uses live `hermes usage --provider ... --json` snapshots. Reserves are25% Anthropic,15% ChatGPT,20% OpenRouter. Unknown snapshots deny admission and do not trigger paid routes.
 
+**Reading live lane headroom: the state file, not memory.** `~/.hermes/state/kanban_quota.json` is rewritten every 5 minutes and is the authority on which pools may claim a card this tick: `snapshots.<pool>.windows[].used_percent` (lower is better; an `unavailable_reason` means the quota is unknown, and unknown counts as empty), `reserves`, `allowed_profiles` (who may claim now), `target_concurrency` against `running` (whether the board is at its ceiling), `caps_live` with `caps_configured_at` and `gateway_boot_at` (numeric caps apply only once the gateway booted after they were written), and `managed_routes` (the pins the governor owns, so it re-pins those and leaves human pins alone).
+
+Slots each pool grants, by headroom read from `allowance()` in `kanban_quota_guard.py` (re-read that function when the answer matters; it is the source of truth): Anthropic 0 at or below 25% left, 1 below 60%, 2 above; ChatGPT 0 at or below 15%, 1 below 40%, 2 above; Antigravity buckets 0 at or below 20%, 1 below 50%, 2 above; shared OpenRouter 0 at or below 20% else 1. So a pool reading 12% against a 20% reserve is closed while another reads two open slots: "that lane is busy" and "that pool is empty" are different states with different fixes, and answering one as the other sends Deep to restart a gateway that is working. State the headroom together with the reserve whenever you report which lanes can run.
+
 Ordinary queued frontend/worker Sol cards switch to bounded Auto at the ChatGPT reserve, using `hermes kanban set-model`, with a routing comment and exact DB read-back. Only routes recorded as managed by this governor return to Sol when the window recovers. Preserve explicitly pinned specialist models and never touch running cards. Paid fallback on an actual runtime provider error uses Hermes's native fallback chain, not a Jev cross-provider rewrite.
+
+**The guard fails safe by emptying the allowlist.** Its cron wrapper runs `hermes config set kanban.dispatch_profiles '[]'` whenever `--apply` exits non-zero, so one broken guard run (an interpreter lacking the modules `hermes_cli` imports is the usual cause) freezes every lane while `ready` cards pile up with `skipped_nonspawnable`. Read the guard's job row in `hermes cron list` first, fix the script, and let a clean `--apply` write the allowlist back; hand-setting the key while the guard still fails only delays the next freeze. Diagnosis order and the `skipped_nonspawnable` class live in `kanban-task-intake` section 2.
+
+**Moving held cards to another pool on Deep's instruction.** Tier is priority, so while Anthropic is at reserve every `default`, `planner`, `reviewer` card and every priority 75+ card waits, and "run my side projects now" means the ChatGPT pool instead: `hermes kanban set-model <id> --provider openai-codex gpt-6.1-sol` per ready card (it takes effect on the next dispatch). Then remove those ids from `managed_routes` in `~/.hermes/state/kanban_quota.json`, because the governor only skips a pin it does not own and will re-route a managed card on its next tick. Read the pins back from `tasks` before reporting which cards moved, and say in the card comment which pool the card is now on, so a later ruling about quota is not read as a reassignment.
 
 Global maximum3 workers, maximum1 per profile. `dispatch_profiles` is live per claim, but numeric caps are captured at gateway boot. Governor leaves admission empty until the observed gateway boot is newer than `caps_configured_at` in `~/.hermes/state/kanban_quota.json`. A gateway restart must be run from the user's own external Terminal, after active workers finish. Do not bypass the tool's self-restart protection. The five-minute quota reserve is an admission policy, not a per-token hard budget. The existing provider key limit remains the paid hard backstop.
 

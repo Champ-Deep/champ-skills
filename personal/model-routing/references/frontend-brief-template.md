@@ -25,7 +25,10 @@ Give exact hex values with role names. When a reference mock uses another brand'
 colours, include a mapping table (mock's dark becomes our primary, mock's accent
 becomes ours, mock's light becomes ours) and one line banning the reference's
 palette outright, or the lane copies it verbatim. State the type stack and say
-whether it is locked.
+whether it is locked. When the reference component comes from a different framework
+than the target repo (21st.dev picks are React, the host is Svelte), state "layout
+reference only" and ban installing that stack, or the lane ports the dependency
+instead of the layout.
 
 ## 4. Section-by-section spec
 
@@ -58,8 +61,15 @@ architecture; do fix the constraints (host, data source, brand) that narrow it.
 - Every interactive control listed and "tested in a real browser".
 - Named QA skills with exact viewport widths and where screenshots land.
 - A concrete content grep (e.g. forbidden characters) returning nothing.
+- The recipe to boot the app for QA when the repo needs services: which compose
+  services to start, port remaps for ports already occupied on the machine, the
+  `.env` fields to set (names and placeholders, never real secrets), the seed
+  command, and the node version with the nvm source line. Acceptance commands are
+  unrunnable without it, so a brief that omits the boot recipe stalls the lane
+  before its first edit, and a lane left to guess at the recipe invents one.
 - Reduced-motion emulation checked.
 - Branch rules: work branch, main untouched, whether no-remote is fine.
+- Deep's two output reviews (`_config/bots.md` rule 10), stated verbatim in the brief: for a new page, direction or redesign, stop at the first render (layout, type, imagery in place, before polish), run `preview_deploy.sh`, comment the 390 and 1440 screenshot paths, and `kanban_block(kind="needs_input", reason="CHECKPOINT: <1 to 3 things to look at>. PREVIEW: <url>")`; resume on his `go` or apply his change list. The final review request carries the PREVIEW url first so the reviewer can put the OUTPUT REVIEW in front of him.
 
 Unmentioned gates read as optional to the lane. Anything you want verified must
 be written here, not implied in the goal.
@@ -85,6 +95,11 @@ the config file's empty fields, and anything skipped.
   with its real output as the criterion: a count you did not run is a guess, and a
   wrong expected number makes a correct build fail review or a wrong one pass. When
   your mental count and the command disagree, the command is the criterion.
+- Mark every field in a pasted contract as stable or growing: counters, sums and
+  "as of" timestamps accrue between the brief and the run, so pin exact values only
+  on stable fields (order, membership, counts of fixed things) and write growing
+  values as `>=` the number you measured. An equality assert on an accruing figure
+  fails a correct build the day after the brief is written.
 - Name the negatives next to every permission granted (host, repo visibility, scope).
   Absence of a rule reads as permission to a lane working from the brief alone, so a
   custom domain or a public repo gets one line saying it stays out of bounds.
@@ -105,6 +120,14 @@ the config file's empty fields, and anything skipped.
 - Put the user's complaint into the brief as the fix spec, not as background: the
   called-out element gets its own designed replacement, everything else inherits
   the reference layout.
+- **A complaint names a symptom; the brief must carry the cause.** For every defect
+  he calls out, read the code path behind it and write the `file:line` cause into
+  the brief next to the fix: a screen shown before the page is usually a render
+  gate waiting on data resolution, a clipped panel is usually an ancestor's
+  overflow or positioning, not the panel's own styles. A lane briefed only on the
+  symptom restyles the surface and leaves the defect in place, or "corrects" the
+  neighbour element that was behaving correctly, and reports the complaint as
+  addressed.
 - Cap runtime (`max_runtime_seconds`) and require real verification output, or an
   an open-ended brief on a single-shot lane can end mid-build.
 
