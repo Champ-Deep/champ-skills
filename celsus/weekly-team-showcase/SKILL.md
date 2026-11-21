@@ -1,6 +1,6 @@
 ---
 name: weekly-team-showcase
-description: "Use when Deep presents to his team: weekly update, demo, run sheet, or decision topic."
+description: "Use when Deep presents to his team: weekly update, demo, run sheet, decision topic, or a discussion pack that gets them answering."
 version: 1.0.0
 author: Champ
 license: MIT
@@ -16,9 +16,9 @@ Deep's weekly update is him presenting work to his team: what we built, proof th
 
 ## When to Use
 
-Deep says weekly update, team showcase, demo for the team, walk the team through, or present our work. Also use it for a per-person run sheet he wants to send the team (one page, what each person owns this week), and when a meeting note schedules him to showcase something. Not for client meetings (`meeting-prep`) or his own weekly review (`weekly-review`).
+Deep says weekly update, team showcase, demo for the team, walk the team through, or present our work. Also use it for a per-person run sheet he wants to send the team (one page, what each person owns this week), and when a meeting note schedules him to showcase something. Also use it when he asks for **things to discuss with a team**, or for **news and something to get them answering and thinking**: that is deliverable D below. Not for client meetings (`meeting-prep`) or his own weekly review (`weekly-review`).
 
-Three deliverables exist under this skill. Pick by what Deep asks for.
+Four deliverables exist under this skill. Pick by what Deep asks for.
 
 ### A. Demo showcase run sheet (he presents our work)
 
@@ -65,12 +65,31 @@ Build it in this order:
 4. **Pre-flight that opens the live proof**: the one screen that makes the argument real (a report, a dashboard), screenshotted, plus the source for any third-party number, plus a check that the meeting invite exists with the right people on it.
 5. **A do-not-say list and a feedback block** (the forcing-choice questions from A), then **If something goes wrong**.
 
+### D. Discussion pack (he wants them answering, not watching)
+
+Deep asks for "a couple of things to discuss with <team>", or for news and prompts to get them answering and thinking. Nothing to demo, no status to read, so the currency is a room that talks back. One self-contained HTML file delivered as a MEDIA card: `Efforts/Active/<team>/<YYYY-MM-DD> <Team> Discussion Points.html`. He asked for the HTML itself after being answered in chat, so a wall of text in the reply is not the deliverable.
+
+Build it in this order:
+
+1. **Header carries the source line.** Which file, which date range, and what the data does not contain (deal values, client-stated facts). He opens with it so nobody over-reads the numbers.
+2. **An opener of three to four recent headlines** in the team's own domain, one block each: headline, two or three sentences of what happened, a tinted **Ask the room** question, then a **Sources** line of real links. Order the headlines so the last one lands on the gap we sell into. He reads the headline, asks the question, and lets two or three people answer before he gives the so-what.
+3. **The numbered points he came for.** Numbered heading, a tinted `say` box holding the one line he reads verbatim, short bullets, then a dark **Ask of each leader** bar with one action and a deadline.
+4. **A closing guess round.** Four or five questions each leader writes into chat *before* anyone speaks, scored in the next session. Ask for a number, a named client, or a yes with a reason.
+
+Pack rules:
+
+- **Every block ends with a question the room must answer out loud.** A pack Deep reads top to bottom is a status update with extra steps; the structure above exists so he asks and they talk.
+- **Put the provenance of every external number on the page, not only in the reply to him.** Vendor-reported ARR, valuations and case-study rates, and a vendor's claim about a public dataset, each carry their qualifier inline ("as reported by X", "a vendor claim, not a CMS figure"), because he repeats them aloud in front of the team.
+- **Ask a guess, never "any thoughts?".** A number or a named client written into chat before anyone speaks cannot be copied, and gives you a scorecard for the next session.
+- **Print it.** `@media print` a Sources line prints its own URL after the link (`a::after{content:" (" attr(href) ")"}`): a printed pack whose source cannot be found invites an argument instead of a check.
+- Reference pack: `Celsus/Efforts/Active/Gen Z Leaders/2026-11-20 Gen Z Leaders Discussion Points.html`.
+
 ## Procedure
 
 1. Gather what shipped this week from the effort folder, kanban cards (done and open) and the audit or test notes. Name the owner and status of each next step.
 2. **Rehearse the exact demo on the live deployment the same day**, scripted end to end (API calls or Playwright). Record the real answers. The scorecard comes only from this run, never from memory or earlier local runs.
 3. Screenshot every screen the demo touches (visitor view, login, each admin page) with Playwright into `walkthrough/`. Check them with vision and confirm the menu labels in the click path match what is on screen.
-4. Write the run sheet. Use plain words, tables over bullets, and no em dashes. For C there is nothing to rehearse: replace steps 2 and 3 with the evidence pull for each topic (read the source end to end, screenshot the one live report, check the third-party number against its own source).
+4. Write the run sheet or the pack. Use plain words, tables over bullets, and no em dashes. For C and D there is nothing to rehearse: replace steps 2 and 3 with the evidence pull (for C, read each topic's source end to end, screenshot the one live report, check the third-party number against its own source; for D, open each headline's source far enough to state what you actually read, and pull every team number out of the named file rather than memory).
 5. Close with a decision card only if Deep must do something before the meeting (a key, a variable, an approval).
 6. After the meeting: run `meeting-followup` on his notes. Feedback becomes kanban cards and gets logged in the effort folder.
 

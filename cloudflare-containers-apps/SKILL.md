@@ -60,6 +60,16 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
 - Read back deployed HTML, JavaScript and CSS and compare their hashes with the final source. A successful image rollout does not prove an already-running container has changed. Verify an actual stop/start, stored mutation survival and restoration of the test mutation. Record any first-request transient separately instead of hiding it behind a later successful retry.
 - Use the approved Cloudflare connector for Access policy changes when Wrangler OAuth lacks those scopes. Never extract tokens from Wrangler credential files or silently grant broad access. If a generated MCP `get` schema contains identical string alternatives in `oneOf`, use an exact-filtered list endpoint for readback rather than changing permissions or guessing another identifier.
 
+## Cost guardrails
+
+Containers bill for provisioned resources whether or not they serve traffic, so an always-on container is the largest line item a Workers account carries.
+
+1. **Set `sleepAfter` on every container that is not genuinely constant-traffic**, and size each app at the smallest instance it needs (`max_instances: 1` unless concurrency demands otherwise). A config with three large instances and no sleep timer is the shape that produces an unexpectedly large bill, and it is a config fix, not a code fix.
+2. **Tear preview and staging containers down when their PR merges.** A preview that outlives its branch bills continuously and, by default, shares production's bindings.
+3. **Read the bill as a computed estimate when the API refuses it**: count running instances, multiply provisioned memory and disk by hours, label the number `estimated`. Method, rates and the three delete-set categories live in the `decommission-readiness-audit` skill under `references/cloudflare-cost-audit.md`.
+4. **Find orphans before blaming live code for a spike.** A container or durable object namespace whose owning script no longer exists keeps running until it is deleted. Join container instances and DO namespaces against the current worker list, and treat any entry with no script as deletable.
+5. **A `last_updated`-only health check never times out.** A DO namespace object with no `expires` is pinned for the life of the namespace, so it counts as running around the clock whether or not requests arrive.
+
 ## Verification before reporting a deploy as done
 
 1. `curl` an unauthenticated endpoint and an authenticated one on the live

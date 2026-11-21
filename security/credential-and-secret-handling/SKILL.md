@@ -118,6 +118,21 @@ plus a one-line comment, tell him the file path and line, and let him paste the
 value himself. Confirm success by testing the key against its service (status
 code only), never by printing the file back.
 
+## Credentials you generate for him
+
+A one-time setup link, invite or reset token you just minted is a credential: the
+secret is the URL, so it travels exactly like a password.
+
+- Deliver it as a file, never inline in chat text, and never into a vault note or
+  a repo. One line in the message: what it is, where the file is, when it expires,
+  what to do when it does.
+- Mint it single-use with a short expiry, and name the endpoint that reissues it.
+  A link redeemable twice, or one that outlives its window, is a standing password
+  reset in whoever's inbox holds it.
+- State the expiry in the same message and stage the reissue (a card or a task) if
+  the screen it unlocks will not exist before then: a link that expires before he
+  can use it is a failed handoff, not a near miss.
+
 ## Storing a credential in the vault
 
 "Save it in my Celsus vault" does NOT mean write the value into a markdown note.

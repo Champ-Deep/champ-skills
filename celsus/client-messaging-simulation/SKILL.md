@@ -49,6 +49,14 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
 4. **Stage the send, never send**: create a kanban card for the `inbox` lane with
    recipient, subject, three points, and the report path. Deep presses Send.
    APAC accounts are Rupak's; do not draft those.
+5. **Hand Deep a run of show beside the report.** A client call runs on reasoning, not scores, so the
+   deliverable includes: (a) a "why each concept exists" table, one row per variant carrying the finding
+   it bets on, its score, where it runs and its weak spot; (b) every losing variant kept on the page with
+   the reason it lost, because a variant that kills part of the existing plan is the strongest line in the
+   meeting; (c) an objections section grouped by theme, each answer one or two sentences that concede first
+   when the objection is right, then stop. Instruct Deep to read the order of the variants, never the number:
+   when the estimated-rate bands overlap the panel itself flags the pair as too close, and a quoted mean
+   gets read aloud as a click rate.
 
 ## Hosted path (jobs + share link)
 
@@ -130,8 +138,9 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
   `["owner", "director"]`) so personas are not `unknown`. An agency panel that nulled them came back with consumer deal attitudes
   ("discount hunter", "brand loyal") as its only trait segments.
 - **The rank-1 level is often the 3.00x lift ceiling** (`agent_lifts` clips at 3.0). When the winner shows "reacts 3.00x typical
-  copy", its predicted rate is the cap, not a measurement: say so, and judge the lead by panel mean, positive count and band
-  overlap. Re-scoring identical copy in a second panel moved its mean from 0.343 to 0.090, so a within-run gap of that size is a lean.
+  copy", its predicted rate is the cap, not a measurement: say so, and judge the lead by panel mean, positive count, band
+  overlap and each variant's min/max spread: equal means can be one steady variant against one polarised one, and that
+  spread decides which segment each variant runs to. Re-scoring identical copy in a second panel moved its mean from 0.343 to 0.090, so a within-run gap of that size is a lean.
 - **A rewritten CTA that offers an artifact ("want the full report?") needs that artifact carded** before `final` is handed to
   staging, and the staging child must get a comment saying so. If the artifact derives from a client's report, sharing it is a
   Deep decision (needs_input), not a staging step.
@@ -154,6 +163,17 @@ Repo: `~/repos/champoracle-agent` (uv, Python, `uv run champoracle ...`).
 - **Em dash filtering happens at render time** in the HTML escaper, not in the data.
   If you surface raw panel quotes anywhere else (an email, a chat message), strip
   dashes there too.
+- **Verify a client's age or legacy claim against news, not their own site.** Their pages repeat their own
+  marketing line, so they cannot confirm it: a legacy headline was false by two years while the client's site
+  still carried the date. Check for closures, shutdowns and relaunches before the claim enters a brief, and
+  raise the gap yourself first with a corrected wording ready, so the client hears it from you and not from
+  a commenter.
+- **Cite each baseline copy with its source and the day you copied it.** Keep the Meta Ad Library ID and date
+  beside the variant in the brief: the first objection to a quoted client ad is "that is not ours", and the
+  answer cannot be reconstructed from memory later.
+- **A sticky header hides the top of what an element screenshot captures.** For a tall section judge table fit
+  in JS (each table's `scrollWidth` against its parent's `clientWidth`) instead of trusting the capture, whose
+  header overlays the first rows.
 - **The report is committed, the data is not**: `data/` is gitignored, so briefs and
   reports never leave the machine through a push. Commit only `src/` and `tests/` on
   a feature branch; do not merge without Deep.

@@ -1,0 +1,53 @@
+---
+name: decommission-readiness-audit
+description: Use when auditing whether projects can leave one host.
+version: 1.0.0
+author: Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [infrastructure, migration, audit, cloudflare, railway, decommission]
+    related_skills: [risky-changes, champ-portfolio-triage, verification-gate-integrity]
+---
+
+# Decommission readiness audit
+
+## When to Use
+
+Deep asks whether his projects are already on the target platform, whether an
+old host (Railway and similar) can be cancelled, or wants a migrate/retire
+readiness verdict before a cutover. Code-layer removal inside one deploy is
+`risky-changes`; repo-level assessment is `champ-portfolio-triage`.
+
+Read-only. Prove, per project, that a working counterpart exists on the target host and that the data has a verified backup, before anything is deleted. Source platform to target platform: Railway to Cloudflare and similar retire or migrate asks. The deliverable is an evidence table plus a `needs_input` decision card with A/B/C options and a recommendation first. Never delete, deploy or change DNS during the audit.
+
+## Always-on rules
+
+- **Live response headers are the authority, not platform inventory.** A domain listed under a platform's custom-domains list may be served by someone else entirely, and a proxied record pointing at the old origin still answers. Probe every hostname.
+- **Never delete before a verified backup.** Volumes and managed databases hold the only copy of data. Check `pg_dump`/`mongodump` availability up front; if the tool is missing, the backup step in the card names the install first. Say this in the report explicitly.
+- **Read secret names, never values.** Cloudflare `/workers/scripts/{w}/settings` returns secret names only; plain-text vars are readable and are where an origin hostname hides.
+- **Counts in the decision card come from the same computed table as the body.** Type them once, programmatically, and reconcile: a card whose summary count disagrees with its own lists gets corrected in a comment, because the summary is what downstream readers quote.
+- **Team-owned repos need an owner ack before delete.** Attribute each project to the GitHub repo owner first; a project built from a teammate's account is their call, staged as a recommendation only.
+- **End the report with a `Not checked:` section.** Name billing, data row-level parity, anything inferred from a proxy signal. An audit that only lists findings invites the reader to assume the rest was verified.
+- **The chat table is one row per project, with no lists inside a cell.** Deep reads the table first and decides from it; a paragraph or a comma-run covering several projects in one line makes him stop and ask for them separately, so split on his wording ("one for each") rather than keeping a tidy table. Extra detail, the full delete set and the long lists go in the card body, and a cell only holds the columns that support the verdict.
+- **Traffic equal to zero over the whole window means the window is too short, not that the service is dead.** A metric series starts at its oldest returned sample, and anything idle since before that timestamp reads "never used". Widen the window and re-pull, because a longer look-back costs one query and the wrong verdict retires a live project.
+
+## Procedure
+
+1. **Inventory both sides in code, dump to scratch.** Source platform via its API (see `references/railway-graphql.md`): projects, services, service instances, custom domains, environments, volumes. Target host via its REST API (see `references/cloudflare-parity.md`): zones + DNS records (read `proxied` and the record target), workers scripts and their settings bindings, pages projects, account subdomain. Write JSON to `~/.hermes/cache/scratch/` and print compact rows; the raw files are cited in the report. Include the target host's cost-bearing resources in the same dump: containers with their size, instance count and owning script, and durable object namespaces with their script. When the ask names the bill or a cancellation, price that side as well: `references/cloudflare-cost-audit.md`.
+2. **Measure liveness per service, not per project.** A window of outbound network bytes summed over daily samples tells you in use versus idle; treat CPU as a relative signal only, never quote the sum as a percentage. Start at 7 days when the question is "is this used now", widen to months when the question is "when was it last used" (a 7-day window returns zeros for a dormant project, which is silence, not a date). Loop with sleeps, save the rows, and sort the report on this number.
+3. **Probe every hostname with live headers** (`curl -sS -o /dev/null -m 15 -D - https://HOST`, threaded, and record the SSL errors too):
+   `cf-ray` alone = target host serves it; `x-<source-platform>` = old host still serves it; **both** = target host is proxying the old origin, so the migration is front-half only; `x-vercel` or another third host = it never belonged to either side; a certificate error on a `www` variant while the apex answers means the cert has no SAN for that name, report it as its own defect.
+4. **Classify each project into exactly one bucket:** ready to retire (target host serves it, old host idle or failing), moved but old host still carrying load (data, DNS, IP dependency or auto-deploy), front-half only (target proxies the old origin), no counterpart on the target. Buckets must be exhaustive; every project lands in one.
+5. **Check the data gate per project.** Volume sizes and DB types from step 1, plus repo docs for the documented cutover plan (search deploy/runbook files for the source platform's name). A documented resync that has not run yet is a blocker, not a done migration.
+6. **Search the vault for prior rulings** on this migration before proposing anything: decision desk notes and open cards already hold cutover gates and named decisions. Cite them in the card so you do not re-ask a question with an answer.
+7. **When the ask includes a cost or a cancellation, price the target host too** (`references/cloudflare-cost-audit.md`). Running instances of a container platform dominate the bill, so count them, find the ones no code uses, and put both totals (estimate, and the delete set) in the decision card.
+8. **Open one `needs_input` card** with the bucket table in the body and three options, recommendation first. Then reply in chat with the same table: short verdict, one table, decision card, and the `Not checked` list.
+
+## Pitfalls
+
+- **Do not infer idle from the logs endpoint alone.** Request logs attach to a specific recent deployment and can return zero rows for a service that is busy; the 7-day egress metric is the liveness source, logs only add the hostnames that called in.
+- **A health check hitting the old origin counts as traffic.** One request on a monitoring path is not a user; name the path when it is the only evidence, so the reader does not treat it as demand.
+- **Staging and preview workers on the target host do not count as a counterpart.** A project with only preview/staging scripts while its production domain answers from the old host is unmigrated; match on production role, not on name similarity.
+- **Grep the repo docs, not just the APIs, for hidden couplings.** Static IP allowlists, webhook receivers and auto-deploy hooks keep a retired project alive in practice even when all traffic has moved; these are the findings that change the recommendation.
+- **GraphQL 400s from the source platform usually mean a bad field in the projection, not a dead API.** Catch the HTTP error, read its body, and retry with a reduced field set instead of concluding the data is unavailable (see `references/railway-graphql.md`).

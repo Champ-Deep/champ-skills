@@ -142,6 +142,8 @@ blocks the whole chain, so the push never runs and the only output is a timeout.
 destructive process operations in their own terminal call, ahead of the git chain that
 carries the actual intent.
 
+A checkout intended to *restore paths* must carry the paths: `git checkout <ref> -- ` with nothing after the `--` is a detached HEAD, not a no-op, and every later command in the chain then runs on a branch nobody is tracking. When it happens, `git checkout -q <the-branch>` puts it back and `git status -sb` (which prints `HEAD (no branch)` when wrong) confirms the restore in the same turn, before reporting anything else. Run a command that reads branch state (`git rev-parse --abbrev-ref HEAD`) right after any checkout you did not intend to make, because an unintended detach is silent in the rest of the output.
+
 Likewise, `git checkout <main-branch>` fails when another worktree holds that branch
 (`'main' is already used by worktree at ...`), and the failure aborts the rest of the
 chain. Push the release without switching: `git push origin <your-branch>:main` when

@@ -33,6 +33,14 @@ Goal: prove research -> draft -> review -> send works on the real deployment, wi
 4. End with one real message from a production sender to a real address the requester owns, and quote the persisted row (`outreach_emails`: id, from, to, status, error). A pipeline read-back proves the record moved; only the receiving address, reached on a domain outside this system, proves delivery.
 5. Read back the live version/health endpoint and quote it in the report.
 
+## Pre-flight: both systems ready before the batch
+
+When the ask is "make sure the intake tool and the outreach tool are both
+ready" for an incoming list, follow `references/preflight-readiness.md`: prove
+each system with its own shipped credentials and a full round trip, separate
+"configured" from "working", measure the send ceilings, and surface one
+decision card for the brand/sender choice.
+
 ## Pitfalls
 
 - Treat `rows_written: 0` as a failed write, not a no-op: a UNIQUE constraint (for example one profile URL per contact record) silently rejects the update and the next run reproduces the old failure.
