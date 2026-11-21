@@ -152,7 +152,7 @@ Auto-merge also drops tests silently. After the last merge compare every test ti
 
 A PR is superseded when the same subject exists on the base (`git log --format=%s origin/main | grep -xF <subject>`) and the diff reverse-applies (`git diff c^ c | git apply --check -R` prints nothing on the base tree); a branch whose merge is textually clean against V2 may still need closing because it adds a second copy of a feature, so say that in the verdict.
 
-Migrations: do not renumber by reflex. Run `wrangler d1 migrations list <db> --remote` (read-only) first; wrangler applies by name, so a database that already applied a name re-runs it under a new one.
+Migrations: do not renumber by reflex. Run `wrangler d1 migrations list <db> --remote` (read-only) first; wrangler applies by name, so a database that already applied a name re-runs it under a new one. Report the unapplied list as that command prints it, never as the PRs' own migrations: a carried branch with its own deploy env that shares `migrations_dir` puts its migrations into the production database too, and a column it adds to a shared schema file makes the main app's full-row selects fail until that migration runs. Then "one revert removes it" and "inert unless MODE=true" are false; say so in the report.
 
 Public repos: a PR that committed QA screenshots or VERIFICATION files gets them removed in their own commit, and the report says only a squash merge keeps them out of history.
 
