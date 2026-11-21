@@ -134,6 +134,15 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Reject test drafts you do not want sent, and say in the reason why, so a leftover draft cannot be approved later.
 - After any write, read the row back from D1 (`email_drafts` with its `pilot_meta`, plus `transport` on `pilot_campaigns`) before claiming the path works; a 200 only proves the route ran.
 
+## Meetings, booking and capture
+
+Plan of record: `Celsus/Efforts/Active/Champ Harbinger/2026-11-21 - End-to-end product map and meeting agent plan.md`. Check it before building any of this.
+
+- Harbinger has no calendar, booking or meeting code, and `src/lib/mailbox/oauth.ts` asks mail scopes only. A calendar feature needs calendar scopes on the same Google and Microsoft app registrations, so put mail and calendar in one ask to IT.
+- ChampLantern is the vendor-to-client appointment desk (FastAPI, React), not a booking-link scheduler and not on Cloudflare. A brief that says to reuse Lantern for booking links is a mis-recollection: read the plan's booking ruling first.
+- A meeting transcript is private content. Store it for the member and the org and never run it through `processEpisode`, for the same reason as intake notes: the graph has no tenant column. Redact before storing, because recordings catch secrets spoken aloud.
+- FluidVoice and FluidAudio run Parakeet on Apple hardware through CoreML, so they are a desktop lane (ChampVox). Hosted speech to text on Cloudflare means the Workers AI catalog (`@cf/deepgram/nova-3`, `@cf/deepgram/flux`); the repo has no speech to text of its own.
+
 ## Pitfalls
 
 - Never write a status or guardrail message that asserts a check which did not run. Distinguish "has not been checked yet" / "was last seen X" / "is X": the fail-closed path is where a user reads the loudest claim, and a wrong claim there sends them fixing DNS that was fine.

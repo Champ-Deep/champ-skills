@@ -326,6 +326,8 @@ of the deck, never the file he might send).
    next step with a name and a date. His edits to the definition on the call become the SLA we
    send, so the sheet must leave room to write them.
 
+7. **Write the words to the script standard in `weekly-team-showcase` (Rules: a script makes Deep the expert in the room).** SAY lines add what the slide cannot show, with the likely follow-up and its answer under each. In a 30 minute prospect call the deck gets 15 minutes: the first half belongs to their answers to the intro questions.
+
 File it under the naming rule in 11c as `DECK RUN SHEET (private)`.
 
 ---
