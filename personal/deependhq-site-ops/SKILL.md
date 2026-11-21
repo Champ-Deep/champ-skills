@@ -131,6 +131,14 @@ Compare the authored journey fields, not the entire entry object: `build-data.mj
 - The yes covers one publish. The next held entries need a new yes or a clean stamp.
 - From this Mac, plain `curl` can return status 000 on every host and `gh` can hang, because IPv6 is tried first. Use `curl -4` and `GH_HTTP_TIMEOUT=25` before calling a site down.
 
+## One release train, and what to check before changing the repo
+
+- When two finished branches both change the Worker (a toolkit branch and a redesign branch), merge them into one head BEFORE the audit wave. The stamp fingerprints the sensitive surface, so a stamp on one branch is void the moment the other merges, and each extra audit round costs most of a day.
+- A consolidation brief built from `git branch -r` and open PRs misses the work that matters here: lanes commit to local `dh-*` worktree branches that are never pushed. List `git worktree list` in the brief, name each local head with its sha, and prove containment with `git merge-base --is-ancestor` before archiving the card that built it.
+- A crashed lane leaves uncommitted edits in its worktree. Preserve them without touching the tree: `git stash create "<note>"`, then `git branch wip/<name> <sha>`, then push to the private `champ-backup` remote. Tell the resumed card where the snapshot is.
+- Before changing repo visibility, grep the site for links to the repo (`git grep 'github.com/Champ-Deep/deependhq-site'`). The Pipeline page, content.json and llms.txt publish it as "Read the source", so going private breaks public links until they are removed, and content.json must be fixed in the vault publisher copy or the nightly rsync restores the link.
+- Archiving a finished card that has children: link the children you still want gated under the new gate card first, then archive oldest gate first. A child whose last open parent is archived promotes to ready and spawns a worker.
+
 ## Backfill missing days
 
 Order matters and there is a deadline.
