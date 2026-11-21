@@ -51,6 +51,8 @@ Decide and write down, in this order:
 
 ## 2. Auth plumbing
 
+- Library: Better Auth is Deep's default for new sign-in work, not Clerk. Clerk stays only in apps that have not been migrated yet, and each of those moves on its own card. Read the current Better Auth setup through Context7 before writing code.
+- Moving an app off another auth provider is a data migration, not an import swap: wallets, runs, files and API keys are keyed by the old provider's user id. Keep those ids, add a mapping from the new user to the old id matched on a verified email only, stage it behind a flag, rehearse the rollback, and make the cutover its own decision. A card that says "remove the old imports and rewire" orphans every account.
 - Session cookie for the browser UI. No API key field anywhere in the UI: a key
   in the browser bypasses every per-account cap, and a shared key can only be
   bounded by the company ceiling.
