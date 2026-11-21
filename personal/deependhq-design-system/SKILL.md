@@ -157,6 +157,8 @@ Five rules. A component failing any of them is not done.
 4. Interactive graphics click through to something. A node you can hover but not open is decoration.
 5. Section padding tops out at 96px. Larger reads as abandonment.
 
+A line read verbatim from a record (a post title as proof, a quote) is sized by its data, not by the brief's word "line": measure its rendered line count at 375, 768 and 1440 before writing "one linked line" or "three lines or fewer" into acceptance, and say in the brief whether a long value is clamped or shown whole. The week 50 title (147 chars) wrapped to 4, 5 and 3 lines and took door 01 to 7 lines of prose at 375.
+
 Company cards must never look inactive. The phrase "quiet in the public log" is banned. Fallback order when there is no recent entry: product chips, then tags, then last-ship date. There is always something to show.
 
 ## Accessibility acceptance criteria
