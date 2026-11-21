@@ -29,6 +29,8 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 
 ## Auth, orgs and provider keys (checked 13 Nov, origin/main e1608ed)
 
+- ChampIQ is retired (Deep, 22 Nov): Harbinger itself is the harness that outside apps (Event Scout, voice agents, email agents) connect into. Never tell Deep to "create a ChampIQ key" or point anything at ChampIQ. The `chh_` key minted at `/api/champiq/api-key` and checked by `validateApiKey()` is Harbinger's own inbound API key for every `/api/v1/*` route; call it the Harbinger API key. Prod had 0 ChampIQ URLs, 0 `champiq_queue` rows and 0 keys on 22 Nov; card t_e547c4b4 renames it to Settings, Connected apps (one key per app) and deletes the dead ChampIQ outbound code.
+
 - Auth is home-grown on D1 (`auth_users`, `auth_sessions`, `auth_invites`); Clerk was removed in PR #92. `better-auth` is NOT in package.json: Deep may say "we use Better Auth", but this repo does not. There are no organizations; Admin > Teams are budget groups only ("Data stays per-user"), and many tables still carry a leftover `clerk_org_id` from the Clerk era.
 - Provider key resolution (`src/lib/keys/resolve.ts`): user key (Settings > Keys, `user_api_keys`) -> one global super admin key (`app_settings`) -> env. There is no per-org layer. Draft PR #122 adds a provider registry API for the Keys drawer.
 - Prod has 2 auth users, so an auth migration now moves almost nothing. Decision card t_53ef29a9 (pending): move to the Better Auth organization plugin (orgs, owner/admin/member roles, custom permissions such as `providerKeys: read/update`, invitations; verified via Context7 `/better-auth/better-auth`), or build orgs on the current login, or stay global-admin-only.
