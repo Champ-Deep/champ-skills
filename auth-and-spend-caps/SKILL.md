@@ -124,3 +124,11 @@ verbatim into the brief; the frontend lane never invents endpoints.
   lands later than that.
 - **Do not hand the frontend lane architecture.** Land the endpoints, migration
   and pushed base branch first, paste the contract verbatim, then create the card.
+- **On Cloudflare Workers with SPA assets, add `"run_worker_first": ["/api/*"]`.**
+  With `not_found_handling: "single-page-application"`, a browser navigation
+  (`Sec-Fetch-Mode: navigate`) to `/api/auth/reset-password/<token>` is answered by
+  index.html, so every setup link opens the app shell and never redirects. curl
+  sends no such header and passes, so prove setup links in a real browser.
+- **Prove the setup link in a browser before you report it as working.** Open it
+  with a real browser and confirm the Set password screen. Opening it does not use
+  the token up; only submitting a password does.
