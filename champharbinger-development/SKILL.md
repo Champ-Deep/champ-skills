@@ -142,6 +142,14 @@ Plan of record: `Celsus/Efforts/Active/Champ Harbinger/2026-11-21 - End-to-end p
 - ChampLantern is the vendor-to-client appointment desk (FastAPI, React), not a booking-link scheduler and not on Cloudflare. A brief that says to reuse Lantern for booking links is a mis-recollection: read the plan's booking ruling first.
 - A meeting transcript is private content. Store it for the member and the org and never run it through `processEpisode`, for the same reason as intake notes: the graph has no tenant column. Redact before storing, because recordings catch secrets spoken aloud.
 - FluidVoice and FluidAudio run Parakeet on Apple hardware through CoreML, so they are a desktop lane (ChampVox). Hosted speech to text on Cloudflare means the Workers AI catalog (`@cf/deepgram/nova-3`, `@cf/deepgram/flux`); the repo has no speech to text of its own.
+- Booking is built inside Harbinger (Deep's ruling, 21 Nov): `src/lib/booking` (pure slot engine in `slots.ts`, writes in `service.ts`), member routes under `/api/booking`, guest routes under `/api/book` (public in `src/proxy.ts`, authed by a manage token). Double booking is refused by the `booking_slot_locks` primary key, not by a read before the write. Keep every new write path on `createBooking`.
+
+## Writing to D1 from this repo
+
+- The db layer is drizzle `sqlite-proxy` over one HTTP call per statement. There is no `batch` and no transaction, so one statement is the only atomic unit. For all-or-nothing writes use a single multi-row insert behind a unique index, then compensate on a later failure.
+- A broken unique index arrives as an `Error` whose `cause` carries D1's text (`UNIQUE constraint failed: ...`); the outer message is drizzle's "Failed query". Walk the cause chain. Checks for the Postgres code `23505` (still present in `src/app/api/mailboxes/route.ts` and `src/lib/services/knowledge-base.ts`) never match on D1.
+- `pnpm db:generate` names the file at random (`0009_huge_forge`). Rename the `.sql` and the `tag` in `db/migrations/meta/_journal.json` together. Check the new file holds only your tables: a diff that carries other tables means the schema drifted from the last snapshot.
+- A pure function that takes `now` as an argument makes the D1 tests deterministic. Route tests that must call `Date.now()` should take their slot from the route's own response instead of a fixed date.
 
 ## Pitfalls
 
