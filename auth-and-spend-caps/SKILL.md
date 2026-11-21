@@ -102,7 +102,8 @@ verbatim into the brief; the frontend lane never invents endpoints.
 3. On the deployed URL, signed-out checks only unless Deep approves a paid probe:
    health, sign-in route present, public sign-up refused, signed-out API 401.
    Never bootstrap, create accounts or sign in on live to test.
-4. Name which layer each claim rests on, and call an unexercised layer
+4. When the paid provider has no key yet, do not stop at unit tests: put the provider's base URL behind one env var, run a local fake that plays each outcome (done, asks, capped, failed) with every payload labelled SAMPLE DATA, and drive the member journey over real HTTP on the local runtime. Report it as proven on a fake, with the provider's response shapes named as unverified.
+5. Name which layer each claim rests on, and call an unexercised layer
    unexercised (`verification-gate-integrity`). A route-selection claim needs the
    probe that exercises it; otherwise report it as fixed in code, unproven in
    production.
