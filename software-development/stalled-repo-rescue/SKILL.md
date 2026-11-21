@@ -48,6 +48,10 @@ gh run list --limit 5          # when was CI last red, and on what?
 gh api repos/OWNER/REPO/actions/workflows --jq '.workflows[].name'
 ```
 
+**Count local-only commits before anything else.** The approved work is often unpushed: `for b in $(git for-each-ref --format='%(refname:short)' refs/heads); do echo $b $(git rev-list --count $b --not --remotes=origin); done`, plus every worktree HEAD (`git worktree list`). Pushing V2 publishes those commits, so name it in the report and scan them (`gitleaks detect --log-opts=origin/main..HEAD`) first. A rebased copy of a stacked PR (`rebase/prN-on-<sha>`) is the carrier: merge it, then prove the PR head and the stacked PR head are ancestors of V2.
+
+**Look for a rescue of this repo that has already run before you inventory it.** A done card holding a V2 branch and per-branch verdicts is the starting inventory: take its branch as the base and classify only what has moved since. Re-deriving containment for work that was already proven produces a second base and a second set of verdicts that disagree with the first.
+
 Record the branch tips, dates, and which branch is the base. Then classify
 every branch with a containment check, not a name:
 
@@ -139,6 +143,18 @@ matching spec file is a product. Deleting it is destroying someone's work.
 a browser `src/` tree is a packaging bug. Give it its own directory, its own
 `package.json` with the dependencies it actually imports, and its own
 `tsconfig.json`. Use `git mv` so history follows the files.
+
+## 3b. A clean or hand-resolved merge is not a working merge
+
+After every merge of an overlapping PR run the full typecheck and suite before the next one. Textually clean merges still break: a shared component changed meaning (a spinner that gained `role="status"`), a default tab moved, a status label was renamed, a security flag one lineage removed (an admin role permission) was relied on by the other's test. Fix the semantic seam, never the assertion's intent, and write the choice into the report. When two lineages answer the same security question, take the later audited one and adapt the older test with a comment saying why.
+
+Auto-merge also drops tests silently. After the last merge compare every test title on every carried branch with the V2 tree (`it(`/`test(` titles and `def test_`) and re-add or record each rename.
+
+A PR is superseded when the same subject exists on the base (`git log --format=%s origin/main | grep -xF <subject>`) and the diff reverse-applies (`git diff c^ c | git apply --check -R` prints nothing on the base tree); a branch whose merge is textually clean against V2 may still need closing because it adds a second copy of a feature, so say that in the verdict.
+
+Migrations: do not renumber by reflex. Run `wrangler d1 migrations list <db> --remote` (read-only) first; wrangler applies by name, so a database that already applied a name re-runs it under a new one.
+
+Public repos: a PR that committed QA screenshots or VERIFICATION files gets them removed in their own commit, and the report says only a squash merge keeps them out of history.
 
 ## 4. Fix the structural cause, then the residue
 
