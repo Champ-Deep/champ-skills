@@ -69,6 +69,13 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
 - Pass secrets into the container through `envVars` set in the Container subclass constructor from `env`; forward by name prefix so new settings need no Worker change.
 - Keep snapshot integrity metadata on the same R2 object (`customMetadata`, 2 KB cap) so a crash between two uploads cannot leave a blob and its checksum out of step.
 
+## Cutover from an external origin (Railway, a VM)
+
+- **A flip made with `wrangler deploy --var MODE:container` lasts until the next plain `wrangler deploy`**, which reads the toml default and silently sends traffic back to the old origin. Writes then split between the R2 snapshot and the origin, and the next flip restores a snapshot that lacks the origin's writes. In the switch runbook, commit the new mode in `wrangler.toml` and deploy from that commit; keep `--var` for the rollback only.
+- **Copy the origin's database last.** Create buckets, deploy the container application (image build takes minutes) and set secrets first; then copy, seed, verify the seeded object's sha256 and switch back to back, so the lost-write window is minutes, not the whole runbook. Copy a live WAL-mode SQLite with the backup API (`sqlite3 src ".backup /tmp/x.db"` or `Connection.backup`), not `tar` of the volume.
+- **Take the env var list from the origin itself, names only** (`railway variables --kv | cut -d= -f1`, never values), not from the repo docs. A doc-derived list drops mode flags (for example `SPAN_CARDS_ONLY=1`) that change what clients see, and the container boots without them.
+- Re-read real data after the switch (an admin count against the snapshot manifest), not only `/healthz` and 401s: health answers the same from an empty seed.
+
 ## Cost guardrails
 
 Containers bill for provisioned resources whether or not they serve traffic, so an always-on container is the largest line item a Workers account carries.
