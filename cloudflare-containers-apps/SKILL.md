@@ -60,6 +60,15 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
 - Read back deployed HTML, JavaScript and CSS and compare their hashes with the final source. A successful image rollout does not prove an already-running container has changed. Verify an actual stop/start, stored mutation survival and restoration of the test mutation. Record any first-request transient separately instead of hiding it behind a later successful retry.
 - Use the approved Cloudflare connector for Access policy changes when Wrangler OAuth lacks those scopes. Never extract tokens from Wrangler credential files or silently grant broad access. If a generated MCP `get` schema contains identical string alternatives in `oneOf`, use an exact-filtered list endpoint for readback rather than changing permissions or guessing another identifier.
 
+## Container lifecycle pitfalls
+
+- **PID 1 ignores SIGTERM unless the process installs a handler.** `stop()` and `sleepAfter` both send SIGTERM, so a plain Python or Node server never dies and keeps billing until the kill grace period ends (minutes). Install a SIGTERM handler (flush state, then `os._exit(0)`) in the final process, including any 503 fallback server. Prove it with a stop and a timed cold start, not by the `stop()` return value.
+- Any request, even a polled 503, renews `sleepAfter`. Do not poll a broken container to wait it out.
+- First deploy of a container application can answer "no Container instance available" for a few minutes while it provisions. Retry before debugging.
+- A Worker secret change or a new image does not replace a running instance until it stops. Add a token-guarded `/__state/stop` route to force a restart and to time cold starts.
+- Pass secrets into the container through `envVars` set in the Container subclass constructor from `env`; forward by name prefix so new settings need no Worker change.
+- Keep snapshot integrity metadata on the same R2 object (`customMetadata`, 2 KB cap) so a crash between two uploads cannot leave a blob and its checksum out of step.
+
 ## Cost guardrails
 
 Containers bill for provisioned resources whether or not they serve traffic, so an always-on container is the largest line item a Workers account carries.
