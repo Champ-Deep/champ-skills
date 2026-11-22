@@ -156,6 +156,8 @@ Migrations: do not renumber by reflex. Run `wrangler d1 migrations list <db> --r
 
 Public repos: a PR that committed QA screenshots or VERIFICATION files gets them removed in their own commit, and the report says only a squash merge keeps them out of history.
 
+**Re-list open PRs on every fix round.** A PR opened after intake (often a runbook or cutover card running in parallel) can conflict with V2's files or contradict a config V2 carries. Before each re-handoff run `gh pr list --state open`, `git merge-tree --write-tree --name-only <new-pr-head> HEAD` for each PR not in the verdict table, and grep its docs for the carried PRs' numbers. Put the conflicted files, the land order and any contradiction (one runbook said a carried `*/*` zone route must not ride along) in the report and the decision text.
+
 ## 4. Fix the structural cause, then the residue
 
 After the split, re-run the typecheck. A strict tsconfig will surface a small
