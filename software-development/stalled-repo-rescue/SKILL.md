@@ -298,6 +298,13 @@ unverified rather than reported.
   zero. Widen Node's family-autoselection timeout in the Dockerfile build stage
   (see `references/node-ci-gotchas.md`) instead of adding retries.
 
+- **A push that adds or edits `.github/workflows/*` is refused over HTTPS with the `gh` OAuth token** ("without `workflow` scope"). Set an SSH push URL (`git remote set-url --push origin git@github.com:OWNER/REPO.git`); the SSH key is not scope limited. Check `gh auth status` scopes before promising CI.
+- **A base with no workflow file means a draft PR runs nothing.** `ls .github/workflows` on the base first; if absent, carry the CI file from whichever branch has one and extend it (one job per package, Postgres as a `services:` block, a gate job), and add the PR base branch pattern to its `pull_request.branches`.
+- **Tests that monkeypatch a module attribute without restoring it only fail once another carried suite runs after them** (a fake `get_db_session` made the later idempotency tests fail 4 of 4). Fix the fixture to restore (`yield`, then reset), never the later assertion. Run the full suite in one process, not per file.
+- **Test-name comparison across branches is cheap and finds silent merge loss:** `git grep -hE 'def test_' <ref> -- tests | sed -E 's/^\s+//;s/\(.*//' | sort -u` per ref, then `comm -23 all v2`.
+- **When the base is a deployed rewrite of an old app, say what V2 changes on the deployed side** with the empty-diff proof (`git diff <base> V2 -- worker web`), so an approver sees production is untouched.
+- **The Mac may lack a system lib the runner has** (libzbar): name that failure as environmental and prove it on the runner log rather than skipping the test.
+
 ## Verification
 
 - Every package typechecks and builds with zero errors, run from a clean clone
