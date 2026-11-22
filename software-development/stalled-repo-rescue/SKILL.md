@@ -66,6 +66,16 @@ for b in main feature-a feature-b; do
 done
 ```
 
+**Squash merges make containment lie both ways.** `merge-base --is-ancestor` says "unique" for every branch whose PR was squashed (157 branches, 3 ancestors). Prove a squashed PR with `git diff <squash>^ <squash> | git patch-id --stable` equal to `git diff <merge-base> <PR head> | git patch-id --stable`, then test each branch tip as an ancestor of that PR head (`gh pr list --state all --json headRefOid,mergeCommit`). For leaf commits cherry-picked into a squash, grep the squash message for `(cherry picked from commit <sha>)`, or test `git apply --check -R` of the commit against the squash tree. File byte identity is weaker evidence: label it and keep the branch.
+
+**Carry stack tips, not every PR.** Merge only the head of each stack (`merge-base --is-ancestor` among open PR heads finds them); a bundle PR (a base that holds three others) shows up the same way. Run the merge loop once with `git merge --abort` on conflict to get the conflict map before resolving anything. Two PRs that redesign the same page (nav, Home, dashboard) are a product call: leave both PRs out of V2 with the conflicted file list instead of choosing.
+
+**Sweep unpushed work outside the remotes.** `git rev-list --no-merges <every local branch> <every worktree HEAD> --not --remotes=origin <V2>` found 8 unpushed commits in the canonical checkout (three real fixes, a deflake, a whole separate tool). Cherry-pick the small ones with `-x`; report the separate tool instead of publishing it.
+
+**Migrations that all took the next number.** Eight PRs wrote `0009_*.sql`. Take ours for `_journal.json` and the incoming snapshot during the merge, `git mv` the incoming SQL to the next number and append the journal entry (`when` greater than the last), then once at the end run `drizzle-kit generate` against a clean tree: every generated statement must already appear verbatim in the renumbered files, keep only its snapshot as the last number, delete its SQL, and confirm the next run says "No schema changes". Then `wrangler d1 migrations list <db> --remote` (read only) to state what prod has not applied. Tests that open a migration by its number break on renumbering; match by name.
+
+**Mocks drift silently.** After merging an API change (`getModelSync` became async `getModel`, a key store was retired), the textually clean merge fails in tests that mock the old shape. Run the whole suite right after the last merge and fix mocks, never assertions.
+
 **Check root commits before treating a branch as salvageable work.** Two
 branches in one repo can have different root commits, meaning they are two
 different projects that were started in one directory and never reconciled:
