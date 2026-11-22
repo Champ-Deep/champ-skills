@@ -304,6 +304,7 @@ unverified rather than reported.
 - **A suite run in the working tree writes artifacts you then commit:** a scan test wrote three vCard QR PNGs into `saved_qr/` and a `git add -A` put them on a public V2. Before each commit run `git status --short` and add by path; point any test that writes into a repo dir at `tmp_path` the way the repo's other tests already do.
 - **Test-name comparison across branches is cheap and finds silent merge loss:** `git grep -hE 'def test_' <ref> -- tests | sed -E 's/^\s+//;s/\(.*//' | sort -u` per ref, then `comm -23 all v2`.
 - **When the base is a deployed rewrite of an old app, say what V2 changes on the deployed side** with the empty-diff proof (`git diff <base> V2 -- worker web`), so an approver sees production is untouched.
+- **Reverting a carried file out of V2 changes the delete list.** A branch whose only copy of that content is now history (ancestor, but not in the tree) comes off the close/delete list until the content is ported. Cloudflare asset serving 307s `/x.html` to `/x`: curl `-L /x` when hashing a served page against the live site.
 - **The Mac may lack a system lib the runner has** (libzbar): name that failure as environmental and prove it on the runner log rather than skipping the test.
 
 ## Verification
