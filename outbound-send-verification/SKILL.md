@@ -39,7 +39,12 @@ When the ask is "make sure the intake tool and the outreach tool are both
 ready" for an incoming list, follow `references/preflight-readiness.md`: prove
 each system with its own shipped credentials and a full round trip, separate
 "configured" from "working", measure the send ceilings, and surface one
-decision card for the brand/sender choice.
+decision card for the brand/sender choice. When the two systems are joined by
+an integration (a sync, a webhook, a handoff of records), also prove the bridge
+as its own tier: each system passing on its own says nothing about the link,
+and a missing receiving route and a missing API key block different tiers.
+The tier table and the safe way to exercise the link are section 4 of that
+reference.
 
 ## Pitfalls
 

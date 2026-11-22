@@ -525,6 +525,15 @@ reads exactly like a failed fix. Never edit the working tree while the image
 builds: the snapshot is already taken, so the change ships next time and the
 after-check silently grades the old code again.
 
+The same rule gates destructive probes. A sign-up probe, a registration or a send is a
+*write*, and running it as the next link of an `&&` chain executes it the moment the deploy
+command exits, which it does whether or not the build actually shipped. One run probed
+production right after an `npm ci` that had failed silently, so the probe hit the old code,
+created two real rows on a live database, and had to be rolled back by hand. Order the chain:
+install, build, deploy with output redirected to a log, then search that log for the deploy's
+own success marker, and only once the marker is there run the probe. Verify the *live* build
+changed by its version identifier before the probe, not by the deploy command's exit code.
+
 Read the whole deploy log after the rollout line, not just the line itself: some
 deploy scripts emit their own failure summary, a failed post-deploy smoke for
 instance, *after* the platform reports the container live. Quoting the first line
@@ -539,5 +548,16 @@ run it against both variants, and report the two scores side by side. A verdict 
 "the recommended structure answers better" is only a number once the same probe
 produced both numbers, and the losing variant's failures should be listed, not just
 counted, so the reader sees which questions it got wrong. If a variant cannot run the
-probe at all, that is the result, and it belongs in the table rather than in a
+If a variant cannot run the probe at all, that is the result, and it belongs in the table rather than in a footnote.
+
+## A live probe must restore the pre-probe state before you report counts
+
+A registration, scan or send against production writes rows into every table it
+touches, so any count you quote afterwards is your own test data on top of the
+real data. Delete what the probe created across all of those tables, children
+before parents (a parent-first delete is refused by the constraint and leaves
+half the rows behind), then re-query and report only the post-purge numbers.
+State the purge as part of the verification: a baseline that moves between runs
+turns the next reader's comparison into noise and hands them a total nobody can
+reproduce.
 footnote.

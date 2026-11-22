@@ -226,6 +226,39 @@ pass rather than a copy:
   forwarded-env list all name it. Where a test keeps those three in step, missing
   the third is caught only by running that branch's suite.
 
+## An outbound push sync is at-least-once, with parity as the gate
+
+A seam that pushes records into another app (our system to theirs, on a cron) has
+four parts, and each one exists to close a silent-loss mode:
+
+- **Detect change by payload hash, not by "is it new".** Any write path can change
+  a record after creation (a note added by a colleague, a voice transcript landing
+  late), so store a hash of the exact payload sent and re-send whenever it differs.
+  A create-only push loses every later edit without erroring. The same hash makes
+  the send idempotent for the receiver and lets "unchanged, not re-sent" be an
+  assertion in the test rather than a hope.
+- **Sweep on a timer as well as on write.** Writes that bypass your push path
+  (imports, admin edits, another service writing the same table) are caught by a
+  periodic sweep over records whose hash changed; the push-on-write path is
+  latency, the sweep is the guarantee.
+- **Backfill new-only, never upsert-over.** A re-sync of a source system runs as
+  `INSERT OR IGNORE` (or an equivalent keyed on the source id) so rows already
+  edited on the target are not clobbered by stale source copies. Re-running it is
+  how you pick up records created after the first migration without a rollback plan.
+- **Prove parity with a script kept in the repo, not with the importer's exit
+  status.** Compare source and target id sets per table and per owner, print the
+  mismatched ids, and re-run it after any deletion on either side. "Ran without
+  error" proves the transfer started; only the id-set diff proves nothing was
+  skipped. This is the same gate `decommission-readiness-audit` requires before
+  an old host is retired.
+
+The contract itself (endpoint, auth, exact field names, the receiver's upsert and
+idempotency rules) belongs in a doc committed next to the sender, written from the
+code that already sends it. Name the auth as an existing key type the receiver
+mints, so the go-live is one `wrangler secret put` rather than a redesign, and
+leave the sync switched off until that key exists: a push to a receiver that
+rejects it must be a visible off state, never a retry loop of 401s.
+
 ## Pitfalls
 
 - **Calling a deployment covered because the change is merged.** Merged into which

@@ -188,6 +188,10 @@ tail -30 <its-transcript-log>                   # which gate was it in?
 
 If the merges are complete, markers are absent and the remote has nothing, the handoff failed on the gates, not the merge: take the gates over yourself in a background process that logs each exit code separately (`npm ci`, typecheck, tests, lint, build, backend suite), then push on green. Do not replay the merge steps and do not re-dispatch a worker into a tree that is already merged.
 
+**Running the gates in the shared worktree makes every later commit unproven by construction.** The pushed head must be the tree the gates were collected from, so gate the run in a throwaway clone instead of editing and re-committing in place: commit the WIP first, `git clone` the branch to scratch (shallow is enough for tests), apply your patch there, run the full gate list to separate logs, and push only if the scratch clone is green. Delete the clone afterwards. If you push a review fix without rerunning the gates, state in the PR body that the pushed head is unproven until they rerun, because a green run collected on the earlier tree does not describe the head now on the remote.
+
+**A lane that the dispatcher admits no workers for is not "queued", it is stalled, and Deep is waiting in chat.** After one explicit go for you to proceed, run the release yourself in the recorded order rather than reporting the card's position as progress: one numbered commit per merge or resolution, one checkpoint commit after each green gate, a gate list where every command is rerun and re-reported from the final head, and the PR body carrying every test you touched with the reason and its red proof. State plainly in the handoff that the dispatcher admitted no worker and that you executed the plan inline, so the reviewer knows the lane model was bypassed rather than assumed healthy. Do not present a card's status column as the deliverable when no process has moved it.
+
 ## 9. Open one PR and leave it unmerged
 
 Push the integration branch only after all gates are evidenced. Create one PR to the specified base, preserve the requested title and merge policy, request review, and do not merge or delete branches unless explicitly instructed.
@@ -215,6 +219,35 @@ Two more things the reviewer needs in that body:
 A check that can never conclude is not a gate: a job wired to a deploy platform, secret, or environment this repo has never configured will sit pending forever and makes "all checks green" unreachable. Resolve it explicitly before merge (remove the job, make it non-blocking, or create the missing platform resource) and state which you chose; never report the check set as satisfiable while one job cannot run.
 
 A consolidation branch carries commits from several identities: the user, agents, upstream authors. Check who is on it with `git log origin/main..HEAD --format='%ae' | sort | uniq -c`. If the repo was forked from an upstream that ships its own workflows (a CLA assistant, an old release pipeline), those will fail or fire on identities upstream never saw: read the failed run's log, determine whether the check is actually required before treating it as a blocker, and surface a keep/delete decision for that workflow file to the user. Do not edit an inherited workflow unasked, and do not silently accept red as "known".
+
+### Ship an approved fix before the merge decision
+
+Review has approved the work and production needs it now, while merging and
+deleting remain Deep's call (a security fix, a broken user-facing path). Do not
+merge in order to make the deploy happen. Deploy a release branch instead:
+
+1. Cut it from the branch production actually runs, not from the working base:
+   `git checkout --detach origin/<deployed-branch>`, then merge each approved
+   head into it.
+2. Resolve a conflict in favour of the deployed side (`git checkout --ours --
+   <file>`) only after grepping the deployed branch for the fix's own marker, so
+   the choice is proven equivalent rather than merely convenient.
+3. Grep every conflicted file for markers before committing. A stray `<<<<<<<`
+   ships as broken JavaScript while the deploy still reports success:
+   `git grep -n -E '^(<<<<<<<|=======|>>>>>>>)'` must print nothing.
+4. Push it as a dated, named branch (`release/<YYYY-MM-DD>`). An unpushed
+   detached HEAD leaves production running code no ref can reproduce, so the
+   next session cannot tell what is live.
+5. Deploy from that checkout, then prove it from the served artifact: curl the
+   live HTML for a string only the new code introduces, and run the repo's own
+   live smoke suite against production. The deploy command's success line is
+   not that evidence.
+6. Report it as "production runs branch X, the PRs are still open, merging them
+   is Deep's call", so a green deploy is never read as a merge that happened.
+
+**Never deploy a PR head directly to save the branching.** The deployed commit
+then exists only as a head nobody else builds from, the working base never
+receives the fix, and the next deploy from that base silently reverts it.
 
 ## 10. Act only on an explicit go
 

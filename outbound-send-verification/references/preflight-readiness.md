@@ -57,7 +57,39 @@ no code can raise:
   thin, name the risk that a batch stops partway instead of discovering it
   mid-run.
 
-## 4. Report readiness as per-system evidence, plus the one decision
+## 4. Prove the bridge itself as its own tier
+
+Two systems each passing their own round trip says nothing about the link
+between them. That link usually fails in one of three ways, and they need
+different wording in the report:
+
+| Tier | Question | Evidence |
+|---|---|---|
+| A | Does system 1 work at all? | its own key, its own full loop (sections 1 to 3) |
+| B | Is system 2's receiving contract present? | the route exists and parses, at the exact path and shape system 1 calls |
+| C | Has anything ever crossed? | a real record system 1 wrote, read back in system 2's storage |
+
+- **A 404 on a "why is it not syncing" probe is tier B, not a secret problem.**
+  The receiving route may not be deployed yet (an unmerged, undeployed branch),
+  in which case no key can help: name the unshipped pull request as the cause
+  and card its merge as the decision, rather than telling the requester to set
+  a variable that will change nothing.
+- **A `configured: false` flag means a secret is missing, and it gates only
+  tier C.** List the exact secret names, which worker takes them, and the
+  command to set them, as a decision card. An API key can never make a route
+  appear, and a deployed route can never sync without the key: say which of the
+  two is blocking instead of reporting the integration as "not working".
+- **Exercise tier C without touching production.** Run the producer locally
+  (`wrangler dev --local` with a `.dev.vars` file naming the consumer's preview
+  URL and a throwaway key) pointed at a preview of the consumer, and read the
+  result back from that preview's own storage. The preview must have its own
+  database, never a shared or production one, or the exercise writes into
+  production rows. Use synthetic records only when either repo is public.
+- Report each tier separately, one line each, with the command output behind
+  it. Collapsing them into "the integration works" or "it is not connected"
+  hides the one tier that is actually blocking.
+
+## 5. Report readiness as per-system evidence, plus the one decision
 
 Table the two systems separately with the observed evidence (list 200, scan
 field match, export header, provider key verdict, sender row read back), then
