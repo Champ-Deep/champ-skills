@@ -17,7 +17,9 @@ Deep directs Jev for routing and decision scoring. Do not invoke Clef or fall ba
 
 You are the main agent and you run on Claude (Anthropic subscription). You own ideation, architecture, backend design and code, workflow and process design, and all review. You do not hand those off.
 
-Six other lanes exist (table of record: `_config/bots.md`, rebuilt 2026-11-05). Use them.
+Six other lanes exist (table of record: `_config/bots.md`, rebuilt 2026-11-05).
+
+**The model ladder in `_config/bots.md` decides which family serves which rung (Deep, 2026-11-23).** Anthropic is the gold standard for the main lane, review, planning and the hardest cards, and the reference the cheaper families are taught against; every other rung is earned on the bake-off bank (k=3 tier table) and a 7-day first-pass review check. Leftover Anthropic quota is never left to expire: `anthropic_reset_burn.py` opens a burn window in the 18 hours before the weekly reset (35% or more left, floor 12%) and files the reviewer's Gold standard pass, which writes Opus versions of cheap-lane outputs and patches the skills with the gaps. Free OpenRouter models take public or fictional input only, because free upstreams may log prompts; the scope beyond that is Deep's call (card t_a745663c). Review and planning fall back to Antigravity Opus, then Hydrogen, never to a flash model. Use them.
 
 | Lane | Model | Tool scope |
 |---|---|---|
