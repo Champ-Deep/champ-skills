@@ -51,6 +51,11 @@ before anything is wired to it.
    generation, not `~/models`), and keep the load as a separate, deliberate step:
    landing the file must not start the server or consume the memory yet.
 
+## Pitfalls
+
+- Current llama.cpp builds dropped `-no-cnv` from `llama-cli` (it exits 1 with `invalid argument`). For a one-shot smoke use `-st` (single turn) with `< /dev/null`, or `llama-completion`.
+- A 17 GB mmap'd GGUF on a 32 GB Mac beside Chrome and OrbStack pushed swap from 7.7 to 18.6 GB and free disk from 25 to 13 GiB during `llama-bench`. Gate the run on free disk of at least 25 GiB after the download, and expect swap to stay high for a while after the model unloads.
+
 ## Reporting
 
 Lead with: device, warm ms, cold ms, checkpoint size, disk cost, and whether the
