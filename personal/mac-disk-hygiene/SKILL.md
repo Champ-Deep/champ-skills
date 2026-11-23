@@ -88,6 +88,10 @@ Any "clean up my disk / storage is full" ask, before a big install (model pull, 
 - Docker's "reclaimed" total is not host space: builder + image prune reported 38 GB on 2026-11-18 while the host gained about 10 GiB (OrbStack's disk image returns space only partly). Report the df delta, never Docker's number.
 - `docker builder prune -af` plus `docker image prune -af` reclaimed 32 GB in one approved pass; `timeout` does not exist on macOS, run long docker commands as a background job.
 
+- Before a model pull, the fastest safe win is still build dirs (`node_modules`, `.next`, `.turbo`, `.wrangler`) in done/archived kanban workspaces, found with `os.walk` (they are nested, a top-level check finds none), skipping any workspace that is a live process cwd (`lsof -Fn -d cwd`): 8 GiB on 2026-11-24. `disk_sweep.py --apply` plus Docker builder prune gave only 1.3 GiB that day.
+- To shrink OrbStack's RAM use `orb restart docker` (bare `orb restart` only prints help). All 23 containers came back on their restart policies within 60 s; Helper RSS fell 9.3 to 7.2 GB and swap 9.4 to 7.7 GB.
+- Hugging Face pulls here run at 1 to 3 MiB/s. A second parallel downloader (`hf download` beside `curl`) splits the line and slows both, so run one resumable `curl -C -` under `caffeinate -i` and verify size plus sha256 against the repo tree API.
+
 ## Maintenance cadence
 
 - Weekly: run the existing approved native uv/npm/pip cleanup, then re-check `df`; keep additional caches outside that policy until separately approved.
