@@ -11,7 +11,7 @@ Tiers, decided by card priority when no human pin exists (Deep, 2026-11-07):
 | Tier | Priority | Model | Pool |
 |---|---|---|---|
 | Hardest | 90+ | Claude Opus 5.5 | whichever of Anthropic direct or Antigravity Claude has more headroom; both at reserve: pin Anthropic and wait, never downgrade |
-| Important | 75 to 89 | Claude Sonnet 5.5 | same |
+| Important | 75 to 89 | Gemini 4 Hydrogen High (`antigravity-subscription-directsdk/gemini-4-hydrogen-high`, Deep 2026-11-22, t_93eeedab) | Gemini bucket of the Antigravity plan; at its 20% reserve: Claude Sonnet 5.5 by the Hardest-tier pool rule. A card on Hydrogen stays put on a missed quota read. Hydrogen cut off 1 of 3 long-context runs at the output limit, so the reviewer watches long outputs on these cards |
 | Routine | below 75 | GPT-6.2 Sol on ChatGPT | at the ChatGPT reserve: Antigravity Gemini Flash; only when that is also at reserve: bounded paid OpenRouter Auto |
 
 The tiers apply to worker cards only. Since 2026-11-21 frontend always runs its profile default, the frontier GPT (`gpt-6.2-astra`), at every priority; it has no fallback chain and waits at the ChatGPT reserve (Deep's rule: never downgrade front-end work).
