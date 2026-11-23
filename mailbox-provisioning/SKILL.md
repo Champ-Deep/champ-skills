@@ -38,6 +38,8 @@ When money or an access grant is involved (domain order, plan purchase, vendor k
 
 ## Pitfalls
 
+- Treating agent-inbox APIs (OpenMail, AgentMail) as cold volume infra. AgentMail bans cold outreach outright. OpenMail Pro allows B2B outreach only to addresses not scraped, guessed or from a purchased/rented list, max two follow-ups, and caps new recipients per account (150 to 500/day across every pod) on top of per-domain tiers starting at 20/day, so adding inboxes or pods buys isolation, not volume. Cold volume on bought data goes on Google/Microsoft mailboxes (InboxKit class) plus a sequencer; check the vendor's terms page before planning a lane on it.
+
 - Purchased mailboxes are inactive until the provider's own onboarding finishes; importing before activation fails login verification and must be redone.
 - Auto-publishing a provider's DNS records into someone's zone: act on the record's `purpose` field, never on its shape. An inbound `mx` record at a name that already has MX records takes over the owner's inbound mail, so report it as a conflict and add nothing; SPF merges by hand; an existing DMARC stays. Build the test fixture from the provider's documented record list (OpenMail: apex MX, long DKIM TXT, `bounce` MX + SPF, `_dmarc`), not from a guess, or the dangerous case never runs.
 - Comparing a long TXT (DKIM) for idempotency: Cloudflare stores content over 255 bytes as quoted strings (`"part1" "part2"`). Join the strings before comparing, or every re-run posts a duplicate record.
