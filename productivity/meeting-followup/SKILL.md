@@ -56,8 +56,8 @@ Following up on a discussion means, in priority order:
 - Sweep the mailbox for the same evening (Outlook `$search="keyword AND received>=YYYY-MM-DD"`): follow-ups
   get emailed after the call, and final pricing, attached decks, and internal decisions live in mail bodies
   and attachments. A ledger built from the transcript alone misses commitments that were sent rather than said.
-- Scheduled sweep: pull all meetings since the last run. get_meeting_assets returns a huge payload; save to
-  file and extract with jq (transcript_items, content_markdown), never read raw into context.
+- Scheduled sweep: recover the latest state-bearing response from the same watcher before pulling. A `[SILENT]` response has no state; look past quiet runs in the cron outputs and then the watcher's recorded assistant turns. First-run fallback applies only when neither has a watermark. Calculate the 48-hour overlap from that watermark, page through Wispr, and compare exact meeting IDs in code before fetching transcripts. Do not repair malformed stored IDs by guessing; corroborate the exact live ID against earlier responses or an existing source-linked work record. Keep the prior watermark on quiet runs and honor the exact suppression token.
+- get_meeting_assets returns a huge payload; save to file and extract with jq (transcript_items, content_markdown), never read raw into context.
 - Speaker resolution: "my notes" transcripts label people Speaker 1/2/etc. Identify Deep by voice: he is the
   one coaching, setting strategy, and saying "I'll send you the plan from my end." Verbal tics: "things like
   that", "you know", "incredibly important". If identity is genuinely ambiguous, ask once via AskUserQuestion.
