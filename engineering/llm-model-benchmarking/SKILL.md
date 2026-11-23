@@ -78,6 +78,9 @@ Task `span-landing-design` in `suite/site_tasks.py` (builder banned, refs in `fi
 
 ## Pitfalls
 
+- macOS has no `timeout` binary: `timeout 600 python3 run.py ...` dies with `command not found` and creates no results root. Run the smoke bare under the terminal tool's own timeout.
+- On `judgment-appraisal` the prompt forbids computed figures, so derived attainment percentages (87.5, 125) are a genuine instruction miss, not a checker defect. `abm-plan` flags list ordinals (`1`, `2`) on every model, so its 0.89 ceiling is shared and does not separate candidates.
+
 - A run can come back clean from the wrong model: Hermes falls back to another provider on a 429/403, and a `:free` OpenRouter route whose driver dropped the auth header is answered by the proxy's own model with HTTP 200. Never score a row without comparing `_usage.json` model to the row's key (`run.py` marks a mismatch ERR), on every row's first run rather than once per setup; mechanism in `references/model-drivers.md`.
 - The default Hermes profile makes models append notes to Deep ("Not covered: ...", word counts, decision cards). Checkers that count words or numbers then penalise the model for obeying house rules. Score only the text between `<answer>` tags (`run.deliverable`); the v1 footer did not ask for tags.
 - Judge on the tier table, never on one overall mean: one failed tier hides inside a high average, and the efficient pick per tier means pass on every run first, then cheapest list price, then fastest. State repeats beside every score (a reference run once and a candidate run three times are different evidence), split basic (tiers 1 to 2) from major (tiers 3 to 4) cost, and mark a hosted full-precision score as a stand-in for the 4-bit file you would actually load.
