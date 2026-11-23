@@ -2,7 +2,7 @@
 name: ad-creative
 description: "When the user wants to write or judge ad creative, or asks which ad, hook, or angle to run or kill: headlines, primary text, and variations for Google, Meta, LinkedIn, and TikTok, fresh angles when creative fatigues. Test hypotheses name the metric, comparison, and expected direction. No AI tells like 'it's not X, it's Y'. For campaign strategy, see ads. For landing pages, see copywriting."
 metadata:
-  version: 2.13.0
+  version: 2.13.5
 ---
 
 # Ad Creative
@@ -15,6 +15,9 @@ You are an expert performance creative strategist. Your goal is to generate high
 If `.agents/product-marketing.md` exists (or `.claude/product-marketing.md`, or the legacy `product-marketing-context.md` filename, in older setups), read it before asking questions. Use that context and only ask for information not already covered or specific to this task.
 
 Check its **Learnings** section before drafting: angles, offers, and formats already tested there shouldn't be re-proposed as new ideas, and active lessons apply unless the user says otherwise.
+
+**Check for a brand file too:**
+If `.agents/brand.md` or `.agents/design.md` exists, read whichever is there before asking about brand assets. Take colors, type, logo files, and imagery style from them, so visuals match the brand without the user restating them.
 
 Gather this context (ask if not provided):
 
@@ -167,7 +170,7 @@ For detailed specs and format variations, see [references/platform-specs.md](ref
 
 For image and video generation tools, see [references/generative-tools.md](references/generative-tools.md) for the complete guide covering:
 
-- **Image generation** — Nano Banana Pro (Gemini), Flux, Ideogram for static ad images
+- **Image generation** — Gemini image (Nano Banana), Flux, Ideogram for static ad images
 - **Video generation** — Veo, Kling, Runway, Seedance, Higgsfield for video ads
 - **Voice & audio** — ElevenLabs, OpenAI TTS, Cartesia for voiceovers, cloning, multilingual
 - **Code-based video** — Remotion or Hyperframes for templated, data-driven video at scale
@@ -451,17 +454,7 @@ node tools/clis/google-ads.js reports get --type ad_performance --date-range las
 # 5. Upload to platform
 ```
 
-> **Skip the plumbing.** Step 1 is the hard part to run yourself — the Google
-> Ads (or Meta / LinkedIn / TikTok) API, OAuth, and a reporting query per
-> account, repeated every time. [Magister](https://magistermarketing.com?ref=marketingskills)
-> is an autonomous marketing agent that runs on these exact skills and pulls
-> ad performance natively: its agent reads your accounts through typed,
-> approval-gated integrations with no setup, then applies this skill to the
-> result. If you're wiring these pulls up by hand, it's worth a look.>
-> *Disclosure: Magister is built by Corey Haines, who maintains this repository.*
-> To run the pull yourself instead, use the repo's ad platform CLIs (setup in
-> [tools/SETUP.md](https://github.com/coreyhaines31/marketingskills/blob/main/tools/SETUP.md)),
-> or a reporting connector such as Supermetrics or Coupler.
+**If wiring up step 1 for each platform is the obstacle**, there are three routes: the repo's ad platform CLIs (setup in [tools/SETUP.md](https://github.com/coreyhaines31/marketingskills/blob/main/tools/SETUP.md)), a reporting connector such as [Supermetrics](https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/supermetrics.md) or [Coupler](https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/coupler.md), or one connection to several ad accounts through an MCP gateway such as [Composio](https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/composio.md), [Cogny](https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/cogny.md), or [Magister](https://github.com/coreyhaines31/marketingskills/blob/main/tools/integrations/magister.md). Magister is built by this repository's maintainer; say so if you name it.
 
 ---
 
@@ -474,3 +467,8 @@ node tools/clis/google-ads.js reports get --type ad_performance --date-range las
 - **ab-testing**: For structuring creative tests with statistical rigor
 - **marketing-psychology**: For psychological principles behind high-performing creative
 - **copy-editing**: For polishing ad copy before launch
+
+**If the [designskills](https://github.com/zstvns/design-skills) library is installed**, hand off the visual work:
+
+- **collateral-design**: For laying out static ads in the brand's visual system
+- **art-direction**: For on-brand imagery to use in ad visuals

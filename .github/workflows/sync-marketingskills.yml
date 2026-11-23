@@ -1,0 +1,39 @@
+name: Sync marketingskills
+
+on:
+  schedule:
+    # Monday 13:00 UTC. workflow_dispatch runs the same job by hand.
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-marketingskills
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Check the vendoring safety logic
+        run: python3 scripts/sync_marketingskills.py --self-test
+
+      - name: Vendor the latest upstream skills
+        id: vendor
+        run: python3 scripts/sync_marketingskills.py --report "${RUNNER_TEMP}/marketingskills-report.json"
+
+      - name: Open or update the sync pull request
+        if: steps.vendor.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/sync_marketingskills.py --open-pr --report "${RUNNER_TEMP}/marketingskills-report.json"
