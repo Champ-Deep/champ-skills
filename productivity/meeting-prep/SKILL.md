@@ -594,6 +594,7 @@ verdict and candidate labels, vault paths): a zero dash count is not a leak test
 pass every visual gate with the internal notes still on screen. Depth on the file pair, the
 localStorage tickables and the routing of the build itself lives in `celsus-client-call-prep`,
 `references/call-artifacts-html.md`. Name files by role, never p1, p2 or ds.
+When a private discovery script becomes a page the interviewees will see, three things stay behind and one thing is added. Predicted answers ("likely to hear") stay private, because a leader shown the expected answer gives it back. Pay, bonus and credit reasoning stays private and is restated at system level ("the records were built to pay and collect, not to plan"). Per-person questions and leave-out lists stay private, so one shared page carries no names. What gets added is the reasoning per question ("why I am asking", "what your answer changes"). Put the forbidden-term regex inside the build script as an assert, so the page cannot be written with a leak, and re-run it on rendered text after opening every disclosure.
 When a prep note points Deep at an existing showcase, pick the file a done fix or review card
 approved, matched by the sha256 in that card's metadata, never by a "(share)" or newest-looking
 name. Before writing "reuse the reviewed page", grep the board for open or done cards on that
