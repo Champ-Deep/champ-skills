@@ -48,6 +48,10 @@ Keep proof work bounded on a constrained disk: inspect free space and swap, remo
 
 Make initial hidden states explicit in CSS as well as the animation timeline. Static analyzers may not resolve selector arrays passed to timeline setters. Regenerate QA images from every new final encode; cached frames can falsely verify an earlier revision. An image-state assertion is a regression check, not evidence of good pacing or a substitute for audiovisual review.
 
+## Seams and branded transitions
+
+A baked-in dissolve across a jump cut (two heads ghosted for 2 to 3 frames) is fixed by dropping the ghost frames and hard-cutting to a punch-in (about 1.12x, cropped so the background logo stays whole), with a 30ms audio fade inside the speech gap. Prove it with per-frame YDIF: one large spike with small neighbours is a clean cut. A vision model can still report ghosting on a clean cut, so trust the measurement. For a greeting, a seasonal title card that dissolves into the speaker under peak leaf cover, a held first frame while leaves clear, then speech, reads as one smooth move.
+
 ## Format adaptations
 
 Thoughtful interview: longer complete ideas, fewer callouts. Product demo: preserve visible evidence and keep text outside the UI. Low-resolution portrait: no aggressive crop, zoom or detail-restoration claim. Other canvas sizes: scale margins then measure actual rendered output.
