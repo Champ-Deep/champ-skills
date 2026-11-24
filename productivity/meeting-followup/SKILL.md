@@ -66,6 +66,9 @@ Following up on a discussion means, in priority order:
   change identity mid-transcript when participants drop off or diarization drifts. Attribute each commitment
   by content (who would plausibly owe it: client side vs ours, which role), cross-check against invite
   attendees, and mark the attribution CONFIRM whenever it changes who owes what.
+- If the full transcript is about a different meeting than the attached calendar title, retain the recording ID
+  and share link, file under the recorded subject, and document the mismatch. Do not infer client attendance,
+  commitments, recipients or invitees from the unrelated event. Corroborate internal names independently.
 
 ### Step 2: Build the commitment ledger
 
