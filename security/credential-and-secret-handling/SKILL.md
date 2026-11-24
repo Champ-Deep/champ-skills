@@ -143,6 +143,18 @@ browser prompt; the vault is for the reference, not the secret.
 If a login page is not currently open, say what is needed and stop there rather
 than inventing a storage location.
 
+## Provisioning a named SSH key
+
+Confirm the target account's effective sudo policy, supplementary groups, and
+Docker socket access before installing a public key on a shared host. An
+existing named account can still be root-equivalent; keep it untouched and use
+a separate unprivileged account for a test-only grant. Check the actual sudo
+policy, not the exit status of a bare `sudo -l` listing. Verify the authorized
+key fingerprint and a real SSH public-key acceptance check against the pinned
+host key. An accepted key offer proves the server recognizes the key, not that
+the recipient has completed a signed login. Never obtain their private key to
+close that gap.
+
 ## Editing an env file without reading it
 
 `read_file` refuses `.env` and its siblings by design (defense in depth). Do not

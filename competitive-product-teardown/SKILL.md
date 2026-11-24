@@ -42,6 +42,18 @@ parity spec comes from dated docs and third-party reviews tagged [DOC], and thei
 to walk away from a category they defined is the strongest market prior you have; it must
 appear in the recommendation, not as a footnote.
 
+When the source is a colleague's spoken report instead of a repo, the same rule applies
+to the numbers: **a reported outcome is a README.** Rates and volumes quoted from a
+conversation (leads, replies, bookings, daily caps) describe that person's own funnel on
+inputs nobody has seen, so treat them as a hypothesis about the interaction rather than a
+benchmark to beat. Copy the loop: what the user sees first, what they steer, what they
+review before anything leaves the building. Evaluate it against your own product with the
+same scripted run on both sides (identical synthetic input, time and steps to the first
+reviewable result, decision rule written down before the run), label every quoted figure
+as reported alongside its transcript source in the deliverable, and state plainly when no
+authenticated view of the vendor's own UI was available: a public site plus one
+conversation is all the parity map can rest on.
+
 ## Phase 1: own ground truth first, before delegating
 
 Do not open with a fan-out. Establish the baseline yourself, because you need it to judge

@@ -120,6 +120,8 @@ run the selftest before scheduling, then prove first run / silent second run as 
 
 ## Reconcile dedupe state before producing anything
 
+For a read-only digest, use `continuity: true` and `[SILENT]` rather than adding a state file. Verify continuity on disk as `context_from: ["self"]`; `continuity` is the tool field, not the stored key. Tell the job which material changes warrant a new alert, so routine heartbeats and shelf moves do not retrigger the digest.
+
 An agent job that picks "today's item" from a state file (a log, a queue, a manifest) must reconcile that state against the artifacts actually on disk before it creates anything new. State and disk drift apart whenever items are written outside the job: a batch pre-written into one file, a run that died between state append and file write, or a human who edited the file. Without the check the job re-produces an item the state says already exists, and the duplicate lands in a real destination (a card, a post, a send) before anyone notices.
 
 Assert both directions: a state row with no artifact means draft it from the batch source; an artifact with no state row means stop and report, do not overwrite. Put the assertion in the prompt as an explicit early step, because a fresh session sees only the prompt, never the drift it was written against.

@@ -20,10 +20,10 @@ metadata:
 
 Turn supplied material into a dated rollout he can rule on in one reply. The ask usually arrives as "build on this and give me an implementation strategy, timeline, owners and an accountability system". Four surfaces, always:
 
-1. The plan note in the effort folder, `status: proposed`, delivered as `MEDIA:/abs/path`.
+1. The plan note in the effort folder, `status: proposed`, delivered as `MEDIA:/abs/path`. For a same-day ask the surface is instead a dated overlay section inside the daily note, three columns (time | what to do | evidence to record), because a plan that expires at midnight has no effort folder worth opening; deliver it as `MEDIA:` the same way.
 2. A receiver note appended to the handoff recording where you diverged from it and what its step 0 found.
 3. A TASKS.md row carrying `[kanban:<id>]` (the card is the surface, the row is the record).
-4. One blocked decision card, read back from the board before you report it.
+4. One blocked decision card per independent ruling, read back from the board before you report it; stack two rulings into one card only when they are genuinely one reply (step 10).
 
 Nothing is sent, asked, built or scheduled until he rules.
 
@@ -39,6 +39,8 @@ Nothing is sent, asked, built or scheduled until he rules.
 
 **5. Verify its claims about task state against the record, never its prose.** Sweeps and migrations archive rows as stale, so a row described as done may be archived and never actioned. TASKS.md and the board are the state; the handoff is a report of the state when it was written. Correct the claim in the receiver note instead of repeating it.
 
+Deployment claims take the same treatment: read the identity actually served (version endpoint, served asset hash, migration set) and compare it with the candidate head before writing any phase that depends on that build. Equal heads mean there is no deploy step at all, so pilot the served build; differing heads mean a pilot of the served build cannot cover the candidate, so isolated staging becomes its own gated decision and every pilot row must name the build it exercised.
+
 **6. Label what is not verified, high in the document.** Numbers lifted from meeting notes are CLAIMED, each with its source line. Arithmetic on claimed numbers is still claimed, and a ratio built from two claims inherits both. Resolve what you can (an abbreviation, a contract value) and mark the rest.
 
 **7. Owners: propose, never assign.** One accountable owner per stage, sourced from who already does the work (`Atlas/People`, meeting notes, existing meeting cadence). A seat the vault cannot support stays visibly unowned with the reason written in the table. Every slate carries that nobody has been asked.
@@ -49,7 +51,7 @@ Nothing is sent, asked, built or scheduled until he rules.
 
 **10. One decision card, stacked, with a default.** Two rulings that are genuinely one reply (the plan and its owner slate) stack as `1.` / `2.` in the decision-card shape with a single default-by line and `Reply with the numbers`. Give it an explicit priority at creation so the desk cap does not park it before its default fires, and tell him in the reply that it may be shelved and that answering in chat works too.
 
-**11. Deliver, then verify with commands.** Run the vault link verifier on the note, sweep the file for em dashes and en dashes, confirm the play and metric counts you claim in the reply match a regex count over the file, and read the card back.
+**11. Deliver, then verify with commands.** Run the vault link verifier on the note, sweep the file for em dashes and en dashes, confirm the play and metric counts you claim in the reply match a regex count over the file, and read the card back. Then one assertion pass over everything this session wrote: each card id occurs exactly once in the note and once as a `[kanban:<id>]` stamp in TASKS.md, the unchecked-row count equals the rows you added, the touched ranges are dash-free, and every card you created reads back `blocked` from `hermes kanban list --status blocked --json` (a create response is not board state).
 
 ## Pitfalls
 

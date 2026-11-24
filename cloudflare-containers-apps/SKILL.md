@@ -39,6 +39,36 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
    correct auth, which reads as a 403 auth failure. Set a normal
    `User-Agent: <YourApp>/<version>` header on any server-side fetch.
 
+## Deploy failures that are config, not code
+
+- **A CI build that reaches `wrangler deploy` and dies there is a config
+  mismatch, not a build problem.** The `account_id` in `wrangler.jsonc` must
+  equal the account the build actually runs under; confirm with
+  `npx wrangler whoami`, which prints the logged-in email, account name and
+  account ID, before editing anything. A stale account ID fails only at
+  deploy time, after the image build has already succeeded.
+- **A mismatched Worker `name` in config is a warning, not the failure**, but
+  fix it anyway or Cloudflare opens an automated PR against the repo that
+  changes the config for you. Rename in the config and in the deploy docs in
+  the same commit.
+- **A one-line body like `This deployment is not configured yet.` is a
+  deliberate fail-closed check.** Grep the Worker source for that exact
+  string to find the list of required secrets it enforces, then set those
+  secrets rather than debugging the route. Repo code refuses to boot with a
+  demo secret published in the source, so the fix is always new secrets, not
+  a code change.
+- **Set a secret without ever printing it: generate the value, pipe it on
+  stdin.** `printf '%s' "$VAL" | npx wrangler secret put NAME` keeps it out of
+  argv, shell history and the transcript. When a human needs the value later
+  (a lab password), write it once to a `umask 077` file outside the repo and
+  hand over the path, not the value. A random secret nobody can read is a
+  lockout: save it somewhere retrievable at set time.
+- **Prove the fix on the live URL, not on the CLI exit code.** Probe the
+  health route, the protected route both without credentials (expect 401) and
+  with them (expect 200), and the discovery endpoint (`/.well-known/...`), in
+  one batch of curls. An unauthenticated 401 beside an authenticated 200 is
+  the shortest proof that secrets took effect and the guard is behaving.
+
 ## State and backups
 
 - Persist anything a container loses on restart (workspaces, API keys, report
