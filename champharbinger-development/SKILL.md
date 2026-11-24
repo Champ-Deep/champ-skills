@@ -52,6 +52,12 @@ ChampHarbinger is Deep's cold-email sending platform: Next.js on Cloudflare Work
 - Correct behaviour is: walk every minute since the last successful tick (bounded, one hour), enqueue each matching schedule, and advance the stored minute only after the sends succeed. Marking the slot first turns one transient D1 error into a permanently lost period.
 - Expect a one-time burst of every hourly job on the first deploy that adds catch-up.
 
+## D1 cost: rows read, not storage
+
+- D1 bills rows SCANNED ($0.001 per million beyond 25 billion a month), and a poll loop multiplies any scan: every `boss.work()` queue (12 on main) runs its own 2 s `tick`, and each tick ran `expireStale()`, whose `state = 'active'` predicate had no leading-column index, so it was `SCAN jobs` over a table nothing prunes. That one statement read 364 billion rows in 31 days on prod alone and the same again across staging and two previews (a ~$540 bill). Any statement added to a tick, cron or poll path must show `SEARCH ... USING INDEX` in `explain query plan` and a near-zero `meta.rows_read` from `wrangler d1 execute --remote --json` before it ships.
+- `jobs_state_started_idx (state, started_on)` was added by hand to the four live D1s on 24 Nov. Until its migration merges, a D1 created from `db/migrations` (every new preview) lacks it: run the `CREATE INDEX IF NOT EXISTS` on any fresh preview DB, and write the migration with IF NOT EXISTS or deploy.sh aborts on the live DBs.
+- Find the spender with `wrangler d1 insights <db> --timePeriod 31d --sort-type sum --sort-by reads --json` (fields `totalRowsRead`, `avgRowsRead`, `numberOfTimesRun`) and `wrangler d1 info <db> --json` (`rows_read_24h`). Every preview worker is a full copy of the poller with its own cron keeping the container awake, so a preview left running costs like a second production.
+
 ## Build loop
 
 1. `source ~/.nvm/nvm.sh && nvm use 24`, then `pnpm` for everything (repo tooling is pnpm).
