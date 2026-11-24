@@ -1,1 +1,1 @@
-Vendored from https://github.com/coreyhaines31/marketingskills at 1f83744, licence MIT, copied 2026-11-12. Unmodified except evals/ removed. Re-vendor from upstream rather than editing in place.
+Vendored from https://github.com/coreyhaines31/marketingskills at 5b2b400eec1e7e1cec76245a715d0b0d4fd2a9c1, version 2.14.25, license MIT, Copyright (c) 2025 Corey Haines. Unmodified except evals/ removed. Re-vendor from upstream rather than editing in place.
