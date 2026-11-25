@@ -173,6 +173,12 @@ click the link from the view and re-read the counter to prove it cannot move.
 
 Before publishing that a source shows nothing, or that it "does not back" a
 claim, check that the source was configured to measure that thing at all.
+**The same applies when the empty set came back under a refusal**: a broker
+route refused for budget, quota or entitlement returns no rows with a success
+status, so the refusal code has to be carried on the stored evidence row itself
+or the empty answer is indistinguishable from a real absence at read time. An
+adapter that discards the refusal header and keeps only the payload deletes the
+difference between "measured nothing" and "not measured".
 A switched-off tracker, a wrong entity or brand key, or a range older than the
 tool's own data start all return clean zeros indistinguishable from a real
 absence, and a feature that is off makes "no change" look like proof of
@@ -201,6 +207,22 @@ lands, read the rows back through the query a consumer actually runs and assert
 every fixture row carries the flag (`all(...)` over the returned set), then
 report that assertion. "Everything is labelled" must be a measured claim, not a
 claim about the seeding code.
+
+## A spend figure is a disclosure, not a derivation
+
+Money is the most quotable thing in a pack and the least derivable. Publish a
+bid, budget, spend or award figure only when the source discloses that specific
+number, and carry currency, period and scope with it. Counting creatives,
+impressions or placements does not produce spend; a public procurement award is
+a different quantity with a different name; and a marketplace price is a price,
+not what anyone paid. Where the number does not exist, the pack says so in the
+same cell a figure would have occupied, because a blank reads as zero to a
+reader skimming a table.
+
+Recency gets the same treatment: a last-seen timestamp is evidence of
+observation, not of activity. Label the row by what was observed and when, and
+never promote it to "running" or "active" on the strength of the newest
+timestamp in the set.
 
 ## A score shown as a feature is a derived number under the same gate
 

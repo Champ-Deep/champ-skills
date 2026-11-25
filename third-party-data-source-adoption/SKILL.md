@@ -60,6 +60,31 @@ nothing, the direct client is correct and the credential becomes a blocked
 decision card. See `references/broker-routes-and-billing.md` for the full
 recipe, including how to tell reported price from actual spend.
 
+**An enrichment step inside a request path sends identifiers out and carries the
+refusal back in.** When the broker call sits behind a user-facing agent run
+rather than an operator's terminal:
+
+- **Payload is identifiers only** (exact domain, pinned limit), never the
+  caller's free text, notes or prompt. The broker and every upstream provider
+  on the route see the request, so one line of internal context in the body is
+  a disclosure you did not choose. Prove it with a test that intercepts the
+  outgoing requests and asserts the internal strings are absent from every
+  payload: a test that only asserts the response parsed cannot fail for a leak.
+- **No member-supplied key and no caller-chosen endpoint.** The credential is a
+  server-side secret and the endpoint list is a constant in code, so a user
+  cannot aim the run at a pricier route or exfiltrate the key through config.
+- **Credit-covered routes get a zero cash ceiling**, so a provider routing
+  change cannot silently turn a subscription-covered lookup into a billed one;
+  see the reference for the exact header pair.
+- **Record the refusal on the evidence row** (`not_connected`,
+  `budget_refused`, `source_unavailable`) next to the fields that did arrive.
+  An empty result set from a refused route is not a zero and must never be
+  rendered or reported as "no data", which is why the status has to live on the
+  stored row rather than in a log line.
+- **Evidence stays private to the intake.** Receipts, served-provider headers
+  and raw payloads are internal state reused on later turns; the client-facing
+  artefact gets a curated excerpt, never the raw receipt.
+
 ## Procedure
 
 0. **Check the account's own dashboard for an account-level default before

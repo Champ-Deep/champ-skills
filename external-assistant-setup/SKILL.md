@@ -20,7 +20,7 @@ metadata:
 
 Not for: importing another assistant's memory export (that is `import-memory`), drafting his social posts (that is `deep-social-voice`), or a one-off brief that hands another harness a bounded batch of work with skill paths, review rounds and a handoff step (that shape lives in `session-handoff`, "Pasteable brief when the receiver is another harness").
 
-Deep buys or opens an assistant (Grok Bot, ChatGPT, Gemini, Claude.ai) and asks for it to be set up and used "the right way", with the right context and the best use cases. The job is four things in order: ground it in what he already runs, scope what it is for, write a pack he can paste, and bound what it may touch. Do not start by writing the pack. The pack's goal line decides every use case in it.
+Deep buys or opens an assistant (Grok Bot, ChatGPT, Gemini, Claude.ai) and asks for it to be set up and used "the right way", with the right context and the best use cases. The job is five things in order: ground it in what he already runs, scope what it is for, write a pack he can paste, wire its skills if the product has skills, and bound what it may touch. Do not start by writing the pack. The pack's goal line decides every use case in it.
 
 Per-product files, if he wants them, live in the vault under `Efforts/Active/<Product>/`, not here: this skill carries the procedure, and `references/positioning-and-voice.md` carries what to say about him.
 
@@ -70,7 +70,13 @@ Fill every fact from the vault. Mark each gap he must fill with `[fill in]` and 
 
 End the deliverable with what you deliberately left out (revenue, client and team names, anything from his inbox) and any line he should check because it came from an older note.
 
-### 5. Bound what it may touch
+### 5. Wire its skills when the product has skills
+
+A managed Claude agent (Claude Platform / Console) takes skills through a different mechanism than a pasted context pack, and only one of its two routes stays current. `references/managed-agent-skills.md` carries the routes, the pack layout, the reference-closure pass that must run before a pack is called done, and the build guards that fail instead of shipping.
+
+If the product has no skills feature, say so in one line and move on: the context pack from step 4 is the whole job there.
+
+### 6. Bound what it may touch
 
 Put the access boundary in your reply as its own section, always:
 
@@ -83,7 +89,7 @@ Put the access boundary in your reply as its own section, always:
 
 Never grant: work mail, Cloudflare or any deploy key, repo push rights, a payment card, his Mac, or logins for LinkedIn, Instagram, TikTok or Reddit on the assistant's cloud browser. Those platforms restrict accounts driven by automation; post through Postiz's official APIs instead. State that as the reason, and note it is his policy, not a checked reading of their terms.
 
-### 6. Close with the approvals and the open items
+### 7. Close with the approvals and the open items
 
 The last section of the reply is the two or three things only he can settle (where he will reliably tap approve, whether footage exists for video channels, which goals in an older pack are now stale), each with your recommendation first. Do not mark the setup done while they are open.
 
@@ -95,6 +101,7 @@ The last section of the reply is the two or three things only he can settle (whe
 - Do not name the assistant after a word the site already uses for a character. Check the site's voice file first; a name that reads as a mascot there reads as a mascot everywhere.
 - Keep per-Bot job messages subordinate to the pack. When the goal changes, supersede the old job message in place with a dated note, and say which one is current.
 - Never hand a third-party assistant code or deploy access and then ask it to "improve the site". It scouts and reports; builds stay in the Hermes lanes.
+- Close a skill pack by reference closure, never by taste. Hand-picking a "best" subset leaves the surviving skills pointing at skills that were left out, and the agent quietly produces worse work instead of failing loudly. Rule on every skill name a packed skill mentions.
 - When he wants the assistant to be how Hermes reaches him, bridge through one private GitHub repo granted issues-only, never a connector into the Mac or the board. Hermes writes the open decisions into one issue and reads back strictly formatted comment lines keyed by card id; the assistant only reads the issue, confirms the exact lines with him and posts them. Prove the Hermes side end to end with throwaway cards, and say plainly that nothing inside the assistant's app was run. Worked example: the Desk bridge in `Efforts/Active/Grok Bot/Grok Bot.md`.
 
 See `references/positioning-and-voice.md` for the wording to reuse.

@@ -54,6 +54,24 @@ as reported alongside its transcript source in the deliverable, and state plainl
 authenticated view of the vendor's own UI was available: a public site plus one
 conversation is all the parity map can rest on.
 
+## Probe the asked-for dimension before planning any adoption
+
+When the ask names a capability domain ("full visitor intelligence", "cell-level
+diffing", "offline support"), grep the competitor tree for that domain's core
+vocabulary *before* drafting any adoption or integration plan: the domain's vendor
+names, the schema columns, the two or three file names the feature would need.
+
+```bash
+rg -il "maxmind|ipapi|geoip|enrich|intent_score" <clone> | head -20
+```
+
+A zero-hit result rewrites the deliverable. The recommendation flips from "adopt this
+platform" to "keep our stack and port N named patterns", and the plan becomes a
+pattern-port table (mechanism, the our-file it lands in, value) instead of a migration.
+Planning adoption first and discovering the absence later wastes the whole plan.
+State the exact search in the deliverable so it can be re-run; a grep hit list proves
+strings, not behaviour, and the pitfall below still applies to any absence you claim.
+
 ## Phase 1: own ground truth first, before delegating
 
 Do not open with a fan-out. Establish the baseline yourself, because you need it to judge
@@ -75,8 +93,14 @@ reads it.** Three commands settle it: commits ahead and behind per line against 
 company default (`git log origin/main..<line> --oneline | wc -l`, and the reverse), and a
 no-touch merge preview (`git merge-tree --write-tree origin/main <line>`, which reports
 the conflict list without touching a worktree). Report which line the user's requested
-features actually live on: work stranded on a personal branch is a finding that changes
+Report which line the user's requested features actually live on: work stranded on a personal branch is a finding that changes
 the plan more than any competitor detail.
+
+**The split can span two repositories, not just branches.** When our own capabilities
+answering the requested dimension are divided across two of our repos, put that in the
+first table and make merging our own two halves wave one of the fix plan, ahead of
+every port from the competitor: porting a third-party pattern into a half-built base
+means doing the work twice.
 
 **Snapshot a repo before dispatching readers.** Copy or fresh-clone it into scratch and
 point the briefs at the copy. Read-only specialists cannot lose the source, but a folder
@@ -198,8 +222,9 @@ Before delivering, run the vault's mechanical checks on the file itself:
 python3 -c "import re,sys;t=open(sys.argv[1]).read();b=[i+1 for i,l in enumerate(t.split(chr(10))) if re.search(r'[\u2014\u2013\u2012\u2015]',l)];print('violations:',len(b),b[:5])" <file>
 ```
 
-Deliver the path as `MEDIA:` so it renders as an openable card, never a bare path. Lead the
-chat reply with the finding that changes the plan most. Do not replay the process.
+Deliver the path as `MEDIA:` on its own line at the end of the reply, so it survives a
+long multi-table answer and does not read as a bare path in prose. Lead the chat reply
+with the finding that changes the plan most. Do not replay the process.
 
 ## Upstream fork sync
 

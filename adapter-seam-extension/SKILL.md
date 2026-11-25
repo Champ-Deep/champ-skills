@@ -115,6 +115,52 @@ claim.
 State plainly what is not live yet. If per-resource links still come from an env
 setting rather than a table, say the seam is not yet reading any real data.
 
+## Run the consumer's real code against the miss shape
+
+When the two halves of a seam live in different repos and neither build is
+warm, "prove it end to end" has a cheaper form: drive synthetic payloads through
+the consumer's actual code path and print what came back.
+
+1. **Locate the seam on the lineage that ships.** Grep `origin/main` as well as
+   your checkout, and state ahead/behind for both repos. A connector can exist
+   only on a feature branch while you cite main, or vice versa, and you then
+   verified the wrong file.
+2. **Read the consumer's fall-through condition first**: which field keys its
+   fallback (`error`, `success`, an empty body). That field *is* the contract,
+   and it is the field the producer most often drops.
+3. **Execute, don't read.** For a TypeScript consumer, strip types in place with
+   Node's `require("node:module").stripTypeScriptTypes(src)` into a temp dir
+   (rewrite the relative import specifiers to the sibling files you strip the
+   same way), import the result, and stub `fetch`. No repo build, no keys, no
+   server.
+4. **Drive the miss shape with a non-empty body** — a failure response that
+   still carries text. A consumer that returns that body as usable output
+   silently defeats the caller's fallback, and the failure becomes data.
+5. **Report the printed return value.** "Reading the handler, it looks fine" is
+   a claim; the executed miss shape is the evidence.
+
+## The file you emit is a contract too
+
+Bulk handoffs leave as files (CSV/JSON) that another system imports. The producer
+owns guarantees the importer will never tell you it missed:
+
+- **Neutralise formula leaders** (`=`, `+`, `-`, `@`, leading tab/CR/LF) in every
+  value you did not author: a spreadsheet preview executes them, and a leading
+  apostrophe is the escape.
+- **Never clobber an existing artifact.** Write to a temp file in the target
+  directory, fsync, then `os.link` so a rerun fails loudly instead of replacing
+  the export a human is about to import.
+- **Fail, never truncate, at the destination's row cap.** The importer's limit
+  silently drops the tail of a delta; refuse before writing anything and say how
+  to narrow the source.
+- **Emit changes, not rows.** A row whose only difference is a timestamp is not
+  a change, and re-emitting unchanged rows forces the importer to create
+  duplicates. Delta the producer computes is delta the consumer can trust.
+- **Inputs carrying no tenant identifier: one client per file, enforced.** If
+  source rows have no owner column, isolation rests on which directory the file
+  sits in, so refuse mixed scopes at parse time rather than trusting the caller's
+  folder habit.
+
 ## Build the payload from the provider's contract, never from our model
 
 A seam that mirrors our own field names onto a foreign API is the version that

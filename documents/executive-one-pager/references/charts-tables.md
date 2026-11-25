@@ -23,7 +23,7 @@ Never mix units on one scale. Accounts and contacts, dials and conversations, se
 ## Marks and labels
 
 - Values sit on or beside the mark. The reader never hunts an axis.
-- Bars are `display:block` with width from the stated number (`--w:65.04%`). Compute widths in code, never by eye.
+- Bars are `display:block` with width from the stated number (`--w:65.04%`). Compute widths in code, never by eye. The denominator is the axis the chart claims, never the largest row: normalizing every bar to `value / max` fills the top bar's whole track while its own label reads 70%, and no audit, contrast sweep or screenshot compares a bar's length to the number printed beside it. Share of the whole divides by 100; a scale divides by the axis maximum the caption states. Check length against label row by row in the same probe as the range-mark rule below.
 - A range mark (50,000 to 60,000) is two fills whose widths sum to 100% of the track: the solid fill runs to the low end of the range, the hatched fill covers the remainder. Paint the solid at 100% and overlay the hatch and both fills cover the whole track, so the bar reads as one uniform mark and the range encoding vanishes. Probe the rendered fill widths against the scale (`i.getBoundingClientRect().width / track.width`) rather than trusting the percentages in the source.
 - Bubble and dot sizes scale by area (`r = rmax * sqrt(v / vmax)`), never by radius.
 - Colour encodes one thing per chart. Brand gradient for "ours" or "kept", neutral for "missing" or "to go", red outline for a risk.
@@ -43,5 +43,5 @@ Never mix units on one scale. Accounts and contacts, dials and conversations, se
 ## Numbers
 
 - Every figure comes from the evidence. Rates and shares computed from stated figures are allowed; extrapolation is not.
-- Round shares so they sum to 100 (67, 25, 8) and keep rates to one decimal.
+- Round shares so they sum to 100 (67, 25, 8) and keep rates to one decimal. Independent rounding overshoots as row count grows (seven rounded rows can total 101), so adjust the largest row or add a `.fine` note that shares are rounded: a chart whose shares total 101 under a share-of-whole caption is a claim defect, not a rounding nicety.
 - Count-up animations end on the exact stated value, formatted with thousands separators, and the HTML holds the final value so static export and no-JS readers see it.

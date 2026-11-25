@@ -63,6 +63,50 @@ message. The template is the more consequential grant, so gate it to admin.
    `{{client.name}}` can never reach a recipient. Flatten newlines in substituted
    values: a value must not be able to inject a header.
 
+## The reader never holds the send credential
+
+When a read-only system (collector, scraper, ingest) grows a send path, the
+transport credential stays in the send lane's own process and store; the read
+side keeps its read scope only. Unify the operator experience, not the
+credentials: the read side *stages* a draft carrying evidence, recipient and
+copy, and the send lane approves and emits it. A worker that can browse a
+client's site must not be able to speak to the client's audience, and a
+collection error must never become an outbound message.
+
+**A transport timeout is an unknown outcome, not a failure.** If the provider
+may have accepted before the timeout, persist `unknown` and reconcile against
+the provider's own sent log before any resend; the unknown row blocks the next
+attempt until reconciled. Treating it as failure is the classic double send.
+
+## One deliverable, two artefacts: only one of them is shareable
+
+When an agent produces a pack for a human to pass on, split the output at
+creation time into an internal artefact (plan, evidence ledger, sequence,
+recommendation) and a recipient artefact (subject plus body). Separate files
+with separate ids, never one document with an internal section to be trimmed by
+hand: a trimmed document is a document someone will forget to trim.
+
+The share surface then scopes to the recipient artefact by exact filename and
+terminal state, over the existing owner-authorised download route:
+
+- Gate on the whole state (`completed` + `satisfied` + non-empty plan), not on
+  the plan alone. Anything else returns a typed refusal (409 `draft_not_ready`)
+  rather than the internal file, so a partially-run job degrades to "nothing to
+  copy" instead of to a leak.
+- Take the **newest** entry matching that exact filename, and treat a stale or
+  superseded draft as unavailable. Clear the rendered draft and disable the
+  copy control on navigation: a previous subject's note copied out of the next
+  subject's view is the same bug as sending to the wrong recipient.
+- **No copy-all, no preview of the internal artefact.** A control that copies the
+  pack, or a view that renders the plan for convenience, is the leak. Copy the
+  one file's bytes, show them as escaped text, and let the human edit in their
+  own mail client.
+- A member who is not the owner gets 404, not 409: the refusal code itself must
+  not confirm that the resource exists.
+- Test the gate as a matrix over (status, verdict, plan present) against the
+  expected code, plus the wrong-owner case. The matrix is the contract; a test
+  covering only the happy path proves nothing about which state leaks.
+
 ## Refuse loudly; never degrade to a no-op
 
 Missing provider, read-only mode, and placeholders must all raise and persist a

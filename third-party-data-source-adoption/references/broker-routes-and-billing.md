@@ -45,6 +45,17 @@ before reporting the layer as working.
 - Pass the broker's cost-cap and attribution headers on every call so one loop
   cannot run the bill, and put the feature tag in the metadata header so spend
   is attributable to the feature that caused it.
+- **A lookup the team already pays for runs at a zero cash ceiling.**
+  `X-Treg-Route-Max-Cost: 0` says refuse rather than bill if a routing change
+  would put the call on a cash provider, and `X-Treg-Route-Waterfall: 0` stops a
+  miss from falling through to a second provider that does bill. Together they
+  keep a credit-covered enrichment step at zero cash spend with nobody watching
+  the ledger.
+- **Branch broker refusals on the error header, not the status code.** A relayed
+  4xx or 5xx can be the upstream provider's own, and a 402 under the zero ceiling
+  is a routing refusal rather than a failed lookup. Record it as its own state
+  instead of as an error, and keep `X-Treg-Served-By` on the receipt so the
+  answer can be attributed later.
 - Report the per-call price as the reported charge, not as spend.
 
 ## 4. Read spend from the ledger, never from the response header

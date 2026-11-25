@@ -1,6 +1,6 @@
 ---
 name: session-handoff
-description: Use when handing work to another model. Writes handoff.
+description: Use when handing off to a model or a source with no connector. Writes handoff.
 version: 1.0.0
 author: Deep (Champions Group)
 license: internal
@@ -43,7 +43,9 @@ A third variant exists when the owner delegates thinking, not typing: mark it `E
 
 ## Pasteable brief when the receiver is another harness
 
-When Deep asks for a prompt he pastes into Claude Desktop or another agent product, rather than a file, the sections above still apply but the artifact is one fenced block in chat. Build it in this order:
+When Deep asks for a prompt he pastes into Claude Desktop or another agent product, rather than a file, the sections above still apply but the artifact is one fenced block in chat.
+
+Reach for this unprompted when the work he named depends on a source this session cannot read: a connector Hermes does not hold, or data that lives only in another product. Say in one line which capability is missing here, then hand the brief. Never fill the scope with an adjacent source (vault recaps, a partial connector, a neighbouring dataset) and let the original ask read as met: whether a substitute is good enough is his call, and it belongs in the reply to him, not buried in the brief. Build it in this order:
 
 1. **Receiver paragraph first**: who Deep is (city, time zone, roles), what the batch is for, one goal sentence. The receiver has no chat history and no Hermes context, so this paragraph and the paths below are its entire world.
 2. **A HARD RULES block before any work item**: never send, post, merge, deploy, pay or delete (stage it and record where it is staged); no em dashes or en dashes; the protected vault files are named; never read secrets or `.env`; never invent a number (label it unverified and say what would verify it); no wikilink without reading the link policy first.

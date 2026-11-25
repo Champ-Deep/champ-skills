@@ -26,6 +26,8 @@ Don't write generic PM/engineer/sales questions. Read enough about the actual te
 
 The single most valuable thing you can find is a genuine tension: a place where the candidate's strongest instinct might actually work against what this role needs. That tension, if it's real, should become the "must-ask" question that decides the meeting. Don't manufacture one if it doesn't exist, if the candidate is a clean fit, say so and focus the prep on confirming depth rather than inventing conflict.
 
+For a technical seat (software developer, AI/ML), go one step past confirming the footprint exists: read what is actually in the repos and build the must-ask from it. The mechanism the candidate can be asked to trace line by line, a QA or fallback step written into the repo, a push dated the day before the interview, a short course certificate that explains why the scaffolding looks generated. Each beats a generic debugging question because the answer is checkable against the file. The tension that decides these seats is a polished repo against the candidate's ability to trace it, so ask for the one file the candidate chooses and listen for whether they wrote it or generated it.
+
 ## Step 3: Write the prep note
 
 Save as `Atlas/Hiring/Interview Prep - <Candidate Name> (<Role / Team>).md`. Structure:
@@ -104,6 +106,14 @@ If the call is imminent (under an hour) and the user already has the chat prep, 
 ## Step 5: Wrap up
 
 Present both files. Keep the chat summary short, the documents speak for themselves and the user is about to walk into (or is already in) a meeting. Lead with anything time-sensitive (a calendar mismatch, a missing piece of context you couldn't find) before the content summary. Don't re-explain everything that's already written in the prep note.
+
+## Two or more candidates in one day
+
+Back-to-back interviews (same day, same organizer, one shared meeting room) are one batch, not N independent preps:
+
+1. Reconcile every invite against the calendar before building: the stated day is a claim, and slots sharing a room have zero buffer between them. Report at the TOP of the reply, before any candidate content: the real date, each candidate's slot, the RSVP state, the room's admission rule (waiting room, admit one at a time), and any collision with another call in the same hour. That is the part that decides whether the interviews can actually run in sequence, and no single candidate's document shows it.
+2. Build one artifact per candidate as usual, each with its own sourcing.
+3. End the reply with ONE side-by-side table across the candidates: slot, the single decision to make, verified signals with their source, the conditions for advancing, the unknowns to probe, and the guardrails. The interviewer reads that table in the minute before the call; the per-candidate files carry the depth. Close with what was not checked and the one live risk.
 
 ## Notes for future interviews
 
