@@ -71,6 +71,7 @@ When the request asks for a style (pop art, neon, stained glass, claymation, gli
 5. Zero console errors.
 6. Full width on wide screens: no narrow centered column with dead space either side.
 7. The Paddle bar. Would Paddle ship this? Editorial numbers on hairlines, real visuals in every section, responsive details under the pointer. If not, fix before delivery.
+8. Public/indexable pages ship SSR or build-time SSG/prerendered HTML (never a bare CSR SPA) and pass the raw-HTML `curl` SSR/SEO gate in `seo-toolkit/references/ssr-seo-hygiene.md` (first-byte copy, single `<h1>`, unique title/description/canonical, valid JSON-LD, real 404 on unknown slugs, real `<a href>` nav, no accidental `noindex`).
 
 ## References
 

@@ -4,7 +4,7 @@ Use when a site is a sales prospect (no Search Console access, no decline to dia
 
 ## Procedure (about 15 minutes, all from the terminal)
 
-1. Headers and doors: `curl -sI https://site/` plus `curl -s -o /dev/null -w '%{http_code}' http://site/` and one bogus URL. http returning 403 or a soft 200 on bogus URLs is a damage-control row. Always send a browser User-Agent; export-SaaS hosts (waimaoniu, made-in-china builders) 403 bare curl.
+1. Headers and doors: `curl -sI https://site/` plus `curl -s -o /dev/null -w '%{http_code}' http://site/` and one bogus URL. http returning 403 or a soft 200 on bogus URLs is a damage-control row. Always send a browser User-Agent; export-SaaS hosts (waimaoniu, made-in-china builders) 403 bare curl. Check raw HTML against the SSR and vibe-coded SEO pitfall list in `references/ssr-seo-hygiene.md` (CSR empty shell, client-only meta/canonicals, `<div onClick>` links, split-text H1s, accidental `noindex`).
 2. `python3 scripts/crawl_sitemap.py https://site/ build/`. Crawl every sitemap URL, not the homepage: the big defects (duplicate SKU pages, tag-page bloat, templated descriptions) are invisible from one page. Keep `build/raw/` so every number in the audit has a file behind it.
 3. Read `crawl.json` for three things in this order: identical bodies or duplicate title pairs (cannibalisation), URL prefix counts (`product-tag-*` at 300 words each is index bloat), and the share of pages carrying one boilerplate description.
 4. hreflang: grep the homepage for `hreflang`, then curl every alternate on both schemes. Tags pointing at http:// or at hosts that fail on https are a damage-control row, not a technical footnote.

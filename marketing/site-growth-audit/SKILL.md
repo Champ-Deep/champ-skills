@@ -51,7 +51,7 @@ node -e "const d=require('./content.json');console.log(d.brand, d.stats)"
 git log --oneline 2>&1 | head -3
 ```
 
-**The duplicate-content check is the one that finds the big defect.** Sibling entity URLs on a site built with one prerendered file per page type will all hash identically, and a nonexistent slug will hash identically too. That single test finds more ranking damage than any amount of tag auditing, and it is four lines of shell.
+**The duplicate-content check is the one that finds the big defect.** Sibling entity URLs on a site built with one prerendered file per page type will all hash identically, and a nonexistent slug will hash identically too. That single test finds more ranking damage than any amount of tag auditing, and it is four lines of shell. Run the full SSR and vibe-coded SEO pitfall floor in `seo-toolkit/references/ssr-seo-hygiene.md` alongside it (empty CSR shells, soft-404 SPA fallbacks, client-mutated meta/canonicals, `<div onClick>` navigation, split-text H1s, `opacity: 0` or canvas-trapped copy, accidental `noindex`).
 
 **Always check the git history before recommending edits.** A worktree with zero commits has no `git revert`, which changes the risk calculus of every change in the plan. Say so in the plan and make a backup step phase zero.
 

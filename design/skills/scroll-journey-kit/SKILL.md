@@ -75,7 +75,7 @@ Always keep a plain-HTML twin of the data (table or list) for crawlers and scree
 - Pointer effects run only on `(hover:hover) and (pointer:fine)` and never under reduced motion. Touch gets the plain element, and the glow lights are hidden on touch.
 - Reduced motion: no pinning, no hidden content, no count-up, no split. Content is final and visible.
 - Pin only on desktop (1024 and up) when the hero object needs WebGL2 or enough memory. Phones and tablets get the same scenes as a normal-flow stack.
-- Hide content in CSS only under `html.rv-on`, set by the head probe. A failed script must never leave a blank page.
+- Hide content in CSS only under `html.rv-on`, set by the head probe. A failed script must never leave a blank page. Ship SSR or static HTML copy readable via `curl` without JS, and pass `seo-toolkit/references/ssr-seo-hygiene.md` on public pages.
 - Animate transform, opacity and CSS `translate`. No large blur filters on full-bleed layers.
 - Swap and split keep the label in `aria-label`.
 - Brand: navy #011A6B ground, lavender #7A76DA, gold #FFB703, magenta #DD1286, purple #6D08BE, muted #B9C0E4. Montserrat and IBM Plex Mono. Logo never animated. Zero em and en dashes. Sample figures labelled once in the footer.

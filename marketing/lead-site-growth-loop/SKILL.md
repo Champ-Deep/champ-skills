@@ -11,7 +11,7 @@ A repeatable system for a small data or services site that must turn organic and
 ## Order of work (do not reorder)
 
 1. **Claims audit first.** Grep the live page for every claim word (verified, guaranteed, named contact, fresh) and tie each to a figure and method from the data owner. A claim without evidence is rewritten before any traffic. A prettier or louder page that says something false is worse.
-2. **Ground truth by curl.** Status, headers, CSP, robots, sitemap count, `www` and `http` behaviour. Hash the home page and every segment URL: identical hashes mean the segments are one page and nothing is indexable. A bogus URL must return 404.
+2. **Ground truth by curl.** Status, headers, CSP, robots, sitemap count, `www` and `http` behaviour. Hash the home page and every segment URL: identical hashes mean the segments are one page and nothing is indexable. A bogus URL must return 404. Every public page must ship SSR or build-time SSG HTML and pass the raw-HTML pitfall gate in `seo-toolkit/references/ssr-seo-hygiene.md`.
 3. **Data asks.** Ask the data owner only for what changes a page claim: reconciled total, fill rate per field, definition and result of verification, source licence, refresh date, cost per delivered lead, delivery times. Do not repeat answered questions. Check the existing ledger of answers before drafting.
 4. **Measurement before ads.** Search Console (domain property, DNS TXT), GA4, and first-party attribution (UTM, landing page, referrer saved on each request row). A strict CSP blocks analytics tags; change CSP and the privacy notice in the same commit as the tag.
 5. **Pages only where the data supports them.** A segment page ships only with its own count, fill rates and sample. No template with swapped nouns.

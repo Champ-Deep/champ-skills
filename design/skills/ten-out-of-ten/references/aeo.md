@@ -31,7 +31,7 @@ Real published numbers only.
 Also ship `llms-full.txt` if there are guides/docs worth including in full.
 
 ### `public/index.md`
-The homepage content as clean markdown (headings, the copy, the FAQ, links). Link it from the HTML head: `<link rel="alternate" type="text/markdown" href="/index.md">`. This is the readable copy for crawlers that don't run JavaScript, essential for React/Vite single-page apps.
+The homepage content as clean markdown (headings, the copy, the FAQ, links). Link it from the HTML head: `<link rel="alternate" type="text/markdown" href="/index.md">`. This is an AI-reader complement alongside server-rendered or prerendered HTML, never a substitute for SSR/SSG on public pages.
 
 ### JSON-LD in `index.html`
 - `Organization` (or `LocalBusiness` / a specific subtype such as `AutoDealer`, `Dentist`, `Plumber` for local businesses): name, url, logo, description, telephone, address, areaServed, sameAs (socials).
@@ -53,7 +53,7 @@ Real `<title>` (brand + what + for whom, ≤ 60 chars), meta description (≤ 15
 
 ## Check it
 
-1. `curl -s <url> | grep -c "<a phrase from the hero>"`, if it's 0, the content only exists after JavaScript runs. Fix by prerendering, or make sure `index.md` and `llms.txt` carry it.
+1. `curl -s <url> | grep -c "<a phrase from the hero>"`, if it's 0, the content only exists after JavaScript runs. Fix by switching to SSR or build-time SSG/prerendering (`index.md` and `llms.txt` do not pass this check on their own). Also verify a bogus URL returns HTTP 404 (not a 200 SPA fallback) and follow `seo-toolkit/references/ssr-seo-hygiene.md`.
 2. `curl -A GPTBot -I <url>`, should be 200, not 403 (firewalls and bot protection often block AI crawlers).
 3. Validate the JSON-LD (it must parse, and the FAQ must match the page).
 4. If the `aeo-check` skill is installed, run `/aeo-check <url>` before and after launch for the off-site work (directories, "best of" lists, comparison pages), that's where most AI recommendations actually come from.

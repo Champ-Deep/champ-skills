@@ -54,6 +54,10 @@ the lane restyles the wrong thing.
 If more than one stack satisfies the deliverable format, give options, a default,
 and require the lane to state its choice and why in the summary. Do not over-specify
 architecture; do fix the constraints (host, data source, brand) that narrow it.
+For any public, indexable page, default to SSR or build-time SSG/prerendering
+(Next.js App Router, Astro, static HTML, or Worker-rendered HTML), never a
+client-only CSR SPA (bare Vite + React). Reserve CSR SPAs for authenticated apps
+and dashboards only (`noindex`).
 
 ## 7. Acceptance criteria (name the gates)
 
@@ -61,6 +65,11 @@ architecture; do fix the constraints (host, data source, brand) that narrow it.
 - Every interactive control listed and "tested in a real browser".
 - Named QA skills with exact viewport widths and where screenshots land.
 - A concrete content grep (e.g. forbidden characters) returning nothing.
+- For public/indexable pages: the raw-HTML `curl` SSR/SEO gate from
+  `seo-toolkit/references/ssr-seo-hygiene.md` (HTTP 200 with hero copy, single
+  `<h1>`, unique `<title>`, `<meta name="description">`, self-referencing canonical
+  and valid JSON-LD without JS; real 404 on a bogus slug; real `<a href>` links;
+  no accidental `noindex`).
 - The recipe to boot the app for QA when the repo needs services: which compose
   services to start, port remaps for ports already occupied on the machine, the
   `.env` fields to set (names and placeholders, never real secrets), the seed

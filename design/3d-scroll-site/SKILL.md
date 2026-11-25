@@ -59,7 +59,7 @@ Ask for Tier A assets on day one of any client build. Ship Tier C as the concept
 
 ## 4. Build recipe for a "comes together" hero
 
-1. Poster first. A static assembled image at every width in plain HTML. No JS visitor and reduced-motion visitor see this and nothing else.
+1. Poster first. A static assembled image plus full semantic SSR/SSG HTML copy (single `<h1>`, headings, specs, links, metadata) at every width in plain HTML. No JS visitor, crawler and reduced-motion visitor see complete content without canvas or WebGL; verify against `seo-toolkit/references/ssr-seo-hygiene.md`.
 2. Lazy load the scene. three.js is 150 KB gzip and more: load it after first paint and only above 700px wide with a GPU; on phones use the Tier B sequence or the poster plus CSS parallax.
 3. Scene setup: `PerspectiveCamera` 35 degrees; `Fog` matched to the sky colour; `DirectionalLight` with `castShadow` plus a soft `HemisphereLight`; ground `PlaneGeometry` with `ShadowMaterial` opacity 0.25; `ACESFilmicToneMapping`, `sRGBColorSpace`.
 4. Subject groups: one `Group` per module with its own start offset (x and z apart, slight y lift, 4 to 8 degree yaw). Docked position is `(0,0,0)` with yaw 0.

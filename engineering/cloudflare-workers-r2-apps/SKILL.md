@@ -14,9 +14,11 @@ Reference build: `~/repos/ChampCast` (Worker + R2 media + KV state + static admi
 - Worker handles `/api/*` and byte routes; everything else falls through to `env.ASSETS.fetch(request)`. `/tv` serves `public/tv.html` automatically.
 - Secrets: `printf '%s' "$TOK" | npx wrangler secret put NAME`; mirror into `.dev.vars` (gitignored) for `wrangler dev` and tests.
 
-## Static SPA plus one API route (the Workers + Assets shape)
+## Static SPA plus one API route (authenticated apps/tools only)
 
-For a built frontend (Vite) with a small API: `wrangler.jsonc` sets `main` to the worker, `assets.directory` at `./app/dist` with `binding: ASSETS` and `not_found_handling: "single-page-application"`, plus `run_worker_first: ["/api/*"]` so only API paths hit the worker and everything else falls through to `env.ASSETS.fetch(request)`. One deploy serves both; no Pages project needed.
+**Public, indexable pages must NOT use a CSR SPA or `not_found_handling: "single-page-application"`** (which serves HTTP 200 + homepage HTML on every unknown slug as a soft 404). For public sites on Cloudflare, use SSR or build-time SSG/prerendering (Next.js via OpenNext, Astro SSR/static, or Worker-rendered HTML) and real 404s per `seo-toolkit/references/ssr-seo-hygiene.md`.
+
+For an authenticated app or internal tool (`noindex`) built with Vite plus a small API: `wrangler.jsonc` sets `main` to the worker, `assets.directory` at `./app/dist` with `binding: ASSETS` and `not_found_handling: "single-page-application"`, plus `run_worker_first: ["/api/*"]` so only API paths hit the worker and everything else falls through to `env.ASSETS.fetch(request)`. One deploy serves both; no Pages project needed.
 
 - Local dev: `vite.config.ts` proxies `/api` to `http://localhost:8787` and wrangler dev runs from the repo root in a second terminal; if that stalls, the UI path that never calls the API still ships and can be tested.
 - Deploy proof: the hash check in `verification-gate-integrity` (served index hash vs local dist, then grep the served bundle for a feature string added this round).

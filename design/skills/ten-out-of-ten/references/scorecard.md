@@ -38,9 +38,9 @@ Ten checks, one point each. A check passes only if its test passes; no half poin
 **Test:** the first screen has no image over ~200 KB, below-the-fold images are lazy-loaded, logos are sized for their slot (not 2000px PNGs), video is lazy or click-to-load, and the JS bundle is reasonable for the stack (a landing page under ~300 KB gzipped total for the first view).
 **Fails:** a multi-megabyte hero, an embedded video iframe in the first view, or unoptimised logo walls.
 
-## 10. Findable by AI
-**Test:** the core content (what they do, where, prices if public, FAQ) is readable without JavaScript (server-rendered HTML, or a linked markdown copy), and the site ships `llms.txt`, JSON-LD (Organization or LocalBusiness + FAQPage), a `robots.txt` that doesn't block GPTBot / OAI-SearchBot / ClaudeBot / PerplexityBot / Google-Extended, a sitemap, and a real title, meta description and OG image.
-**Fails:** a JS-only page with no markdown copy, crawlers blocked, or no structured data.
+## 10. Findable by search and AI
+**Test:** the core content (what they do, where, prices if public, FAQ), single `<h1>`, unique `<title>`, `<meta name="description">`, self-referencing canonical, OG image and JSON-LD (Organization or LocalBusiness + FAQPage) are all present in raw SSR/prerendered HTML via `curl` without JavaScript, unknown URLs return real HTTP 404, internal links use real `<a href>`, and the site ships `llms.txt`, `sitemap.xml` and a `robots.txt` that does not block search or approved AI crawlers.
+**Fails:** a JS-only CSR shell (even if `index.md` exists), soft-404 SPA fallback, missing canonical/meta/structured data, or crawlers blocked.
 
 ## Writing the score
 

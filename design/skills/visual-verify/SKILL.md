@@ -572,6 +572,7 @@ Delivery is blocked until all of these are true:
 - [ ] Every interactive control the page ships, driven in one batched behavior probe at each shipping width: no control is disabled in its default state without an explicit source attribute, each one advances page state when driven, computed outputs recompute (empty and over-cap inputs included), and any state the page claims to keep survives a reload
 - [ ] Local-only or self-contained claims proved with `scripts/offline-check.py`, browser offline: zero external requests, zero storage writes
 - [ ] Data-classification check: a deliverable carrying personal data (employee names with home locations, shift or travel times) was previewed on a local static server only, and no public URL appears in the file, the handoff, or the screenshot paths
+- [ ] Public/indexable web pages: raw-HTML `curl` SSR/SEO check passes per `seo-toolkit/references/ssr-seo-hygiene.md` (first-byte HTML contains hero copy, single `<h1>`, unique `<title>`, `<meta name="description">`, self-referencing canonical and valid JSON-LD without JS; bogus URL returns HTTP 404, not a 200 SPA shell; navigation uses real `<a href>`; no accidental `noindex`)
 - [ ] The swap test passes: this could not be any other brand's page
 
 If a browser is unavailable, every unchecked line above appears in the handoff as an explicit **unverified** list. An honest gap beats a fabricated pass.

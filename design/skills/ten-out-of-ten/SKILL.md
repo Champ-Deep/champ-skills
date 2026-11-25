@@ -116,7 +116,7 @@ Write what you take from each reference in `README.md` (layout and rhythm only, 
 <!-- ui-library-picker -->
 **Component libraries.** Before sourcing or hand-building any component, load the `ui-library-picker` skill and follow its `references/component-adoption.md`: reuse the host's existing kit, run `scripts/pick.py "<task>" --all` from that skill's directory, search 21st.dev for the structural regions, write the chosen libraries and component ids into the brief, and prove mounted use in a browser. Read `get_usage` live: there is no fixed code-pull cap.
 
-Read `references/conversion.md` and build the page. Stack: whatever the project uses; default Vite + React + Tailwind v4. Every section must pass its rule in `conversion.md`. The short version:
+Read `references/conversion.md` and build the page. Stack: whatever the project uses, defaulting to SSR or build-time SSG/prerendering (Next.js App Router, Astro, or static HTML + Tailwind v4) so every public page ships full crawlable HTML on first byte. Never default to a bare client-rendered Vite SPA for indexable pages; see `seo-toolkit/references/ssr-seo-hygiene.md`. Every section must pass its rule in `conversion.md`. The short version:
 
 1. **Hero**, the outcome in plain words + for whom, one primary CTA, a second "try it now" action if the product can be tried live (a phone number answered by the product, a demo, a free tool), and a product visual that shows the product working, not a stock image.
 2. **Proof band** directly under the hero, real client logos (moving or static) + one plain statement of what they do.
@@ -147,7 +147,7 @@ Read `references/qa.md`. Screenshot every section at 390px and 1440px, fix every
 
 ## Step 9: AI visibility (AEO)
 
-Read `references/aeo.md` and ship the files: `llms.txt`, `index.md` (the page as markdown), JSON-LD (Organization/LocalBusiness + FAQPage), `robots.txt` allowing the AI crawlers, a sitemap, OG tags, and a check that the core content is readable without JavaScript. If the `aeo-check` skill is installed, run it on the live URL before and after launch.
+Read `references/aeo.md` and `seo-toolkit/references/ssr-seo-hygiene.md`, and ship the files: server-rendered or prerendered HTML readable via `curl` without JavaScript, `llms.txt`, `index.md` (as a markdown complement, never a substitute for SSR HTML), JSON-LD (Organization/LocalBusiness + FAQPage), `robots.txt` allowing the AI crawlers, a clean `sitemap.xml`, unique title/description/canonical/OG tags, and real 404s on unknown routes. If the `aeo-check` skill is installed, run it on the live URL before and after launch.
 
 ## Step 10: Re-score
 
@@ -160,7 +160,7 @@ Then score the new build with the same scorecard, the same way. Write `SCORE-aft
 Only when the user says to. Walk them through it, or run it with them:
 
 1. **GitHub:** make a repo and push (`gh repo create <name> --private --source . --push`, or create it on github.com and add the remote). Check nothing secret is committed first.
-2. **Vercel:** sign in with GitHub, *Add New → Project*, import the repo. Vite is detected automatically (build `npm run build`, output `dist`). Deploy, and open the `*.vercel.app` URL.
+2. **Vercel / Cloudflare:** sign in with GitHub, *Add New -> Project*, import the repo. Next.js and Astro SSR/SSG builds are detected automatically. Verify unknown routes return HTTP 404 (no SPA catch-all rewrite). Deploy, and open the preview URL.
 3. **Domain:** *Project → Settings → Domains*, add the domain, then add the DNS records Vercel shows (an A record for the root, a CNAME for `www`) at the domain registrar.
 
 Never point a domain that's serving a live site at the new build without the owner's explicit OK. Use a fresh domain, a subdomain, or the `vercel.app` URL until they say so. Re-run the AI visibility checks (`curl` the live URL, `aeo-check`) once it's live.
