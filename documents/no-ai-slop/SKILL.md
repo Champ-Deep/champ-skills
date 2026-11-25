@@ -56,7 +56,7 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 
 ## Patterns to cut
 
-**Binary contrasts.** "This is not X. It's Y." / "The question isn't X, it's Y." / "It's not just X but Y." / "Not because X. Because Y." / "Most pilots don't fail because of X." / "It stops being a data problem. It becomes a field problem." / "The problem wasn't the A, the B, or the C." State Y directly.
+**Binary contrasts.** "This is not X. It's Y." / "The question isn't X, it's Y." / "It's not just X but Y." / "Not because X. Because Y." / "Most pilots don't fail because of X." / "It stops being a data problem. It becomes a field problem." / "The problem wasn't the A, the B, or the C." State Y directly. Exception: a plain exclusion the reader acts on ("Follower count doesn't matter", "No experience needed") is information, not a contrast, so it stays when the source or brief asked for it to be said. Build any forbidden-word gate only from the brief's own "keep clean of" list: a creator Story lane added `followers?` to its gate and cut the one line Deep had asked to tell creators.
 
 **Throat-clearing openers.** "Here's the thing," "Let me be clear," "I'll be honest," "The uncomfortable truth is." Cut and state the point.
 
