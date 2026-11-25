@@ -70,6 +70,8 @@ Read `docs/CLOUDFLARE.md` in the repo for layout, switch steps and rollback. Rul
 - `Dockerfile` is a gate-sensitive file: any edit means `deploy_gate.py check .` says AUDIT-REQUIRED until a full audit run is stamped. Edit it once, early.
 - Staging: `npx wrangler deploy --env staging` with `NODE_OPTIONS=--network-family-autoselection-attempt-timeout=2000` (the image push fails with `fetch failed` over IPv6 otherwise). Set `DM_KEY` with `wrangler secret put` from a umask 077 file; the Worker returns 503 until it is set. Proof: `node tools/cf-proof.js seed|stop|check <url>`, then stop the container and delete both R2 objects. `docker stop` and `tee` are blocked in unattended runs; `docker exec <c> kill -TERM 1` and plain redirects work.
 - Do not run `cf-proof.js` against a table with real players: it creates heroes.
+- Any boot with an empty bucket starts a blank campaign, and `server.js` pushes it to R2 on SIGTERM. So in a cutover, put the live save into R2 before the first deploy, never after. After a proof cleanup, the bucket holds a blank save once anything wakes the container.
+- The Worker returns 503 unless `DM_KEY` is at least 12 characters. Check the length of the key you copy from Railway (print the length only) before switching.
 
 ## Pitfalls
 
