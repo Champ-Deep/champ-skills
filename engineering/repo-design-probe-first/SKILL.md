@@ -69,6 +69,15 @@ doc that asserts "the gate has no parameter X" is worth nothing unless checked.
   content, while the default Today home rendered a "Book a session" therapy
   marquee and an AI carousel that both route to a booking screen with no backend.
 
+- A "what the app does today" section that proposes a control on a surface
+  (downloads, uploads, exports) inventories that surface by sweep, not by the
+  handlers you happened to open: `git grep -ln Content-Disposition <sha> -- src`
+  (or the surface's own header or helper), on every remote head in the local
+  worktree (`git for-each-ref refs/remotes`), plus the existing precedent for
+  the input the control needs (`getClientAddress`, adapter config). An ESS
+  download note read 2 of 5 file routes on a stale head and called downloads
+  unlogged, while `api/payroll/export` already logged every download.
+
 ## Deliverable
 
 Design doc citing `file:line` throughout, a probed migration file, a stated
