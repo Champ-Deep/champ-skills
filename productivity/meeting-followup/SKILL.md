@@ -102,6 +102,11 @@ team can adopt on the spot. Pick one, build it well.
 Check the calendar for every future touchpoint mentioned in the meeting. Missing: flag it at the top of the
 report (or draft the invite if calendar write access exists). Existing: confirm Deep is an attendee.
 
+Before creating an ideation booking card, check for an unbooked card for the same working session.
+When a later recording adds scope or verifies an invitee, update that card and its prep note instead of
+creating a second invite. Mark old invite payloads superseded, recheck availability and duplicates, and
+keep private sources out of the invite.
+
 ### Step 6: File via meeting-intake
 
 Run the meeting-intake pipeline: vault note in Calendar/Meetings/, tasks into TASKS.md, cross-links. Dedupe
