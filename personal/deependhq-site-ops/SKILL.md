@@ -18,6 +18,12 @@ metadata:
 
 Operate and repair the nightly loop that publishes deependhq.com from Deep's Obsidian vault.
 
+## The weekly improvement loop
+
+The site's design and content upgrade cycle is a separate scheduled job, not part of the nightly publisher: cron `deependhq-weekly-loop`, Thursdays 16:30 IST, whose spec is the vault file `Other/Skills/deependhq-weekly-upgrade/SKILL.md` (read it with `read_file`; it is not installed, so `skill_view` cannot load it). It closes last week's cards, runs the live audit, opens one planner card, and writes a review note under `Efforts/Active/DeependHQ Site/Weekly Reviews/`.
+
+The audit is `Other/Skills/deependhq-weekly-upgrade/audit.mjs`, run on the nvm node with `NODE_PATH` pointed at a `node_modules` whose `playwright-core` browser build exists in `~/Library/Caches/ms-playwright`. "Executable doesn't exist" means that copy's build is gone, so pick another `node_modules` by comparing its `browsers.json` revision against the cached builds instead of reinstalling browsers.
+
 ## Toolkit facts that cost a lane a round
 
 - Adding a whole new tool action (contract, pure core shared with the browser, selftests, fixture, browser proof, the card that builds the window) follows `references/toolkit-tool-actions.md`. The one rule from it that applies to any AI feature here: the model proposes, the browser computes, and no digit from a model reply is ever rendered.

@@ -41,7 +41,27 @@ the commercial pages. **Report the sitemap count and the live count side by side
 say which one the analysis is built on.** An audit built only on the sitemap misses the
 pages that were never published.
 
-`references/live-inventory-recipe.md` has the enumeration, pagination and diff recipe.
+Three diffs make the omission diagnosis actionable, and all three come from the same
+reconciliation pass:
+
+- **Declaration diff:** every child sitemap in every index versus the `Sitemap:` lines
+  in `robots.txt`. A blog instance published under its own `/blog/sitemap_index.xml`
+  that `robots.txt` never declares is invisible to any crawler that trusts `robots.txt`,
+  however complete the index itself is.
+- **Count diff:** the `X-WP-Total` header against sitemap `<loc>` count per post type.
+  The gap pages almost always share one explanation readable from the REST payload:
+  `yoast_head_json.robots.index`. A `noindex` left over from staging on published money
+  pages is a rescue (flip to `index,follow` and add to the sitemap); genuine utility
+  pages (forms, surveys, thank-you, legal) belong out of the sitemap permanently.
+- **Bogus-sitemap diff:** low-value custom post types that ride along in the root index
+  (newsletters, brochures, infographics, webinars). Check their word counts and inbound
+  counts before retiring them: the migration-artifact ones are thin and unlinked, the
+  substantive ones fold into a resources sitemap instead of dying.
+
+Deliver the reconciliation as a **per-URL disposition manifest** (one row per live page:
+current sitemap, target sitemap or exclusion, index directive, inbound/outbound counts,
+word count, traffic, recommended action), not as prose. The manifest is what the web
+team executes against; the report is what the stakeholder reads.
 
 ### 2. Raw internal link counts are mostly template, and reporting them is a false claim
 

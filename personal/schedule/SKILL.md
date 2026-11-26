@@ -25,6 +25,15 @@ existing script's config instead: two crons probing the same targets double
 the alerts and then disagree with each other. A new card is warranted only
 when nothing currently watches those targets.
 
+Then look for a spec that is already written and only unscheduled: a process
+skill sitting in the vault under `Other/Skills/` that no job points at. That
+is the common failure, a procedure written once, run once and never wired up.
+Schedule it and point the prompt at its path rather than rewriting it: the
+prompt carries the objective, the absolute path to the spec, and one line
+telling the run to read that file first with `read_file`, because a vault
+skill is not installed and `skill_view` cannot load it. Report the pair, job
+id plus spec path, so neither half is discoverable without the other.
+
 ## 1. Analyze the session
 
 Review the session history to identify the core task the user performed or requested. Distill it into a single, repeatable objective.
@@ -37,6 +46,9 @@ Include in the description:
 - A clear objective statement (what to accomplish)
 - Specific steps to execute
 - Any relevant file paths, URLs, repositories, or tool names
+- A pointer to a spec already on disk by absolute path, instead of its text
+  pasted into the prompt. Same rule as the migration step below: a pasted copy
+  drifts from the file, and two versions of one procedure are two answers.
 - Expected output or success criteria
 - Any constraints or preferences the user expressed
 

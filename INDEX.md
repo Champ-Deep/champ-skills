@@ -81,9 +81,9 @@ Searchable index of every skill in this repo. Each skill is a self-contained fol
 | `reddit-reply` | Marketing & Content | Draft and vet Reddit comments that read as a practitioner rather than a vendor. Use for any Reddit reply, r/Coldemailing daily engagement, or whenever a reply could touch |
 | `revops` | Marketing & Content | When the user wants to design revenue operations, or asks when a lead is ready for sales or why sales and marketing disagree on lead quality: lifecycle stages, MQL and SQ |
 | `science-topic-forge` | Marketing & Content | Judge, reshape, and convert any research topic idea into a best-practice Claude Science prompt tuned to the ICP of the Champions Group brand it is for (LakeB2B, Ampliz, S |
-| `seo-toolkit` | Marketing & Content | SEO in three modes: (1) People Also Ask strategy: harvest PAA questions, topic clusters, FAQ hub architecture, briefs and roadmap for a domain; (2) rapid rank: page-level |
+| `seo-toolkit` | Marketing & Content | SEO in one toolkit, six modes: PAA/FAQ hub architecture, rapid rank for a single page, search intent audit for traffic or ranking decline (intent match, trust gap, SERP d |
 | `site-growth-audit` | Marketing & Content | Audit a live site and turn findings into a ranked plan. |
-| `site-interlink-audit` | Marketing & Content | Use to audit a site's internal linking and link gaps. |
+| `site-interlink-audit` | Marketing & Content | Use when auditing a site's internal linking and link gaps, or reconciling its XML sitemaps against the live inventory. |
 | `slack-gif-creator` | Marketing & Content | Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GI |
 | `span-ad-creative` | Marketing & Content | Use when SPAN needs campaign ad concepts or ad creative. |
 | `span-answer-page` | Marketing & Content | Write short, answer-first SPAN pages (users lists, customers lists, comparisons) to the SPAN page standard with audio overview, Ask AI, copy as Markdown, preferred source |
@@ -360,9 +360,9 @@ Blog, campaign, SEO, copywriting, social, thought leadership.
 | `reddit-reply` | Draft and vet Reddit comments that read as a practitioner rather than a vendor. Use for any Reddit reply, r/Coldemailing daily engagement, or whenever a reply could touch |
 | `revops` | When the user wants to design revenue operations, or asks when a lead is ready for sales or why sales and marketing disagree on lead quality: lifecycle stages, MQL and SQ |
 | `science-topic-forge` | Judge, reshape, and convert any research topic idea into a best-practice Claude Science prompt tuned to the ICP of the Champions Group brand it is for (LakeB2B, Ampliz, S |
-| `seo-toolkit` | SEO in three modes: (1) People Also Ask strategy: harvest PAA questions, topic clusters, FAQ hub architecture, briefs and roadmap for a domain; (2) rapid rank: page-level |
+| `seo-toolkit` | SEO in one toolkit, six modes: PAA/FAQ hub architecture, rapid rank for a single page, search intent audit for traffic or ranking decline (intent match, trust gap, SERP d |
 | `site-growth-audit` | Audit a live site and turn findings into a ranked plan. |
-| `site-interlink-audit` | Use to audit a site's internal linking and link gaps. |
+| `site-interlink-audit` | Use when auditing a site's internal linking and link gaps, or reconciling its XML sitemaps against the live inventory. |
 | `slack-gif-creator` | Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GI |
 | `span-ad-creative` | Use when SPAN needs campaign ad concepts or ad creative. |
 | `span-answer-page` | Write short, answer-first SPAN pages (users lists, customers lists, comparisons) to the SPAN page standard with audio overview, Ask AI, copy as Markdown, preferred source |

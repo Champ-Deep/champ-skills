@@ -1,6 +1,6 @@
 ---
 name: site-interlink-audit
-description: Use to audit a site's internal linking and link gaps.
+description: Use when auditing a site's internal linking and link gaps, or reconciling its XML sitemaps against the live inventory.
 ---
 
 # Site Interlink Audit
@@ -116,7 +116,15 @@ certain when it came from a heuristic. When the tool cannot infer entities for a
 - Never pad a short tile list back to N with groups that FAILED the size floor. A sliver
   is worse than a missing tile; the tail bucket already accounts for what was folded.
 - Fold tiny sections SERVER-side (a 1-page section beside an 800-page one cannot hold a
-  label at any scale). Fold further CLIENT-side on rendered size.
+  label at any scale). Fold further CLIENT-side on rendered size. The server-side fold
+  for an existing bundle is a DATA edit, not a template edit: `report.py` groups treemap
+  tiles by `n['section']`, so remap every node's `section` and `type` (and
+  `plan['work'][i]['section']`) in the bundle/plan JSON to a coarser taxonomy, then
+  re-run `report.py` and `verify_report.py`. Iterate the taxonomy until BOTH narrow-width
+  gates pass ("tiles too small" and "no ellipsised tile labels" at 390): five or six
+  merged groups with SHORT names pass, ten fine-grained ones fail, and a long name like
+  `resources` ellipsises even when its tile is big enough. Never patch the template or
+  the verifier to silence a tile gate: the gate is reporting real slivers.
 - A synthetic tail tile built from the union of scattered rects is often a thin column.
   If the union is narrower than the floor, drop the tile rather than label it badly.
 - A single long word cannot wrap: shrink its font BEFORE the candidate loop ellipsises it.
