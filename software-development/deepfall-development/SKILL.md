@@ -25,9 +25,11 @@ Not for: pure art-asset work (`sprite-art-pipeline`), post-deploy service debugg
 1. **Units.** `npm test` from the repo root: exit 0 and every script prints `PASS` (eleven
    scripts on the Cloudflare branch, ten on main; not three). One of them is a headless bot
    that plays a whole descent through the real server, so a rule change that breaks the bot
-   broke the game, not just a test. `test/autodm.test.js` is probabilistic and fails about 1 run
-   in 6 on untouched main (`cutting words on every first swing at an ally: 0/8`); rerun it
-   before blaming your change, and fix the test, not the rule.
+   broke the game, not just a test. `test/autodm.test.js` failed about 1 run in 6 on untouched main
+   (`cutting words on every first swing at an ally: 0/8`) because the test set `c0.level` but
+   `recompute()` re-derives level from `xp`, which varies with the bot descent; the fix (PR 3,
+   pin `c0.xp = 900`) is test-only. Set `xp`, never `level`, in any test fixture. Until PR 3 is
+   on your base, rerun before blaming your change, and fix the test, not the rule.
 2. **The full night.** `npm run e2e` (equivalently `npx playwright test`): one spec drives
    the TV at 1080p plus phone and DM contexts through join, combat, and every flow you
    added. It writes PNGs into `test-results/`.
