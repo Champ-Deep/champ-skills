@@ -129,6 +129,15 @@ its static assets (a dry-run bundle plus a copied asset snapshot is enough, loca
 database included) and assert on the served response there. One served-header read
 from the deploy-shaped bundle replaces any number of dev-server reads.
 
+## Assert the whole network log, not the route under test
+
+When a gate turns on auth or ownership (a session token, a signed link), fail the run on
+any 4xx in the recorded network log except the ones the step expects, and assert on that
+list rather than printing it. A W1 token gate asserted "exactly one /chat 403" and only
+printed `INFO 403s after tampering: [/chat, /me]`, so a /track-versus-/me race (a fresh
+session row created before its token was stored) shipped as green twice. Drive the racy
+step several times (six new chats, not one) because a race lands about one time in six.
+
 ## Prove the gate discriminates
 
 Point the repaired gate at the pre-fix build and confirm it reports the old numbers. A
