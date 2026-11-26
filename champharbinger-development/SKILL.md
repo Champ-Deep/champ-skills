@@ -179,6 +179,9 @@ Plan of record: `Celsus/Efforts/Active/Champ Harbinger/2026-11-21 - End-to-end p
 - A multi-row insert on D1 is capped by 100 bound parameters per statement: chunk rows by `floor(100 / columns)` (11 columns gives 9 rows) and test a batch larger than one chunk.
 - `explain query plan select 1 from a left join b ...` drops the unused LEFT JOINs, so it reports only `SCAN a`. Select a column from every joined table when proving an index is used.
 - `quick-send.db.test.ts > streams a LinkedIn URL...` fails with `proposedSendAt` null whenever the suite runs late in the UTC day (seen at 23:31 UTC, also on clean e1608ed): it expects a free slot before the UTC day ends. Prove it pre-existing with `git stash` in the same worktree and say so in the PR; it is not your diff.
+- A detector db test that scans the whole local D1 (every scope, every due person) sees the people of every earlier case in the file: a case run with a fixed future `now` makes them all due again. Count only that case's own calls (filter the fake's recorded URLs by the case's people), and give each case its own campaign owner so each scope's daily cap is its own.
+- A filter that sits before a top-N slice (drop reshares, then keep the newest 5) is untested unless the filtered fixture row is the NEWEST: placed older, the slice drops it anyway and deleting the filter stays green. Same for a recency window: test it with a lone stale row. Prove each with a mutation (PR 208 caught both).
+- `src/lib/services/title-match.ts` `normalizeTitle` tests "president" as c_level before vice president, so "Vice President Marketing" reads c_level. Anything comparing seniority (promotion detection) must special-case it; `src/lib/suggestions/seniority.ts` does.
 - A pure function that takes `now` as an argument makes the D1 tests deterministic. Route tests that must call `Date.now()` should take their slot from the route's own response instead of a fixed date.
 
 ## Pitfalls
