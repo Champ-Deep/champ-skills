@@ -66,6 +66,10 @@ failure too.
 
 Backgrounding multiplies the same error, because the harness reports the pipeline's status as the job's: a command run as `deploy.sh 2>&1 | tee log` finishes with tee's zero, so a run that died mid-build surfaces as "completed normally (exit code 0)". When you background anything that can fail, redirect instead of piping (`deploy.sh > log 2>&1`), and before repeating any wrapper status, grep the log for the script's own failure markers and probe the target's live identity. A completion notification is a statement about the wrapper, never about the work.
 
+## A pass after an aborted first run is a pass on leftover state
+
+A proof script that hung or failed on its first run and passed on the second may owe the pass to what the first run left behind: a container already booted, persisted Durable Object or D1 state, a cached build. Re-run it from a clean slate (remove the containers it starts, wipe the local state dir) before reporting it green, and make the script refuse to start when such leftovers exist, or point its state at a fresh temp dir. Read a "not reproduced" note about a first-run failure as an open defect, and name its measured wait (a 610 s hang is a cold-start finding, not a slow build). An isolation guard check needs a mutation too: if the route it tests returns the same generic 500 with the guard deleted, probe the guard directly (from inside the container) instead.
+
 ## A test that passes only in file order is not a gate
 
 A test that relies on state an earlier test left behind (a config row an admin test
