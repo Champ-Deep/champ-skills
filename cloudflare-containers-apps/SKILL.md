@@ -93,6 +93,7 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
 ## Container lifecycle pitfalls
 
 - **PID 1 ignores SIGTERM unless the process installs a handler.** `stop()` and `sleepAfter` both send SIGTERM, so a plain Python or Node server never dies and keeps billing until the kill grace period ends (minutes). Install a SIGTERM handler (flush state, then `os._exit(0)`) in the final process, including any 503 fallback server. Prove it with a stop and a timed cold start, not by the `stop()` return value.
+- **A state cutover puts the save before the first deploy, and a recovery closes every client first.** A container that pushes state on SIGTERM writes a blank save to R2 the first time a fresh boot sleeps, so put and `cmp` the live save before any deploy, and keep the Worker failing closed (secret unset) until it lands. Browser clients that auto-reconnect (`ws.onclose = () => setTimeout(connect, 1500)`) re-boot the container within seconds of a stop, so a "stop, re-put" recovery must start with "close every tab", then stop, re-put, `cmp`, and only then reopen.
 - Any request, even a polled 503, renews `sleepAfter`. Do not poll a broken container to wait it out.
 - First deploy of a container application can answer "no Container instance available" for a few minutes while it provisions. Retry before debugging.
 - A Worker secret change or a new image does not replace a running instance until it stops. Add a token-guarded `/__state/stop` route to force a restart and to time cold starts.
