@@ -102,6 +102,10 @@ ls db/migrations/*.sql | sed 's|.*/||' | cut -d_ -f1 | sort | uniq -d          #
 python3 -c "import json;d=json.load(open('db/migrations/meta/_journal.json'));t=[e['tag'] for e in d['entries']];print(len(t),len(set(t)),t[-3:])"
 ```
 
+**Porting an uncommitted cumulative patch onto a newer base** (a repair line built on old production, the base a later consolidation): `git apply --3way <patch>` leaves stage files, so `git checkout --conflict=diff3 -- <files>` shows the base side, and most hunks then classify mechanically (one side unchanged from base, or one side's text contained in the other because both lines carried the same upstream PR). Resolve those first; hand-compose only the rest. Two traps: (1) a function the patch deletes can still be called by base code that merged cleanly; only the full suite caught `NameError: _first_img` in one port, so run it on a fresh database before any browser work. (2) When the newer base's only change to a file is work the patch already re-implemented, take the patch's whole file and name that PR in the report, or both copies of a function survive the merge; then list what that PR carried besides the re-implemented part (a guide fallback was lost this way) and card it.
+
+When re-running the patch's own browser checks against the release tree, copy each card's `qa/` folder whole. Excluding images to save space removed a fixture's served picture and turned a passing reader check red. Run every check on the patch's own tree (base archive plus patch) as the baseline, so a failure splits into port regression versus pre-existing flake.
+
 Then verify before staging:
 
 ```bash
