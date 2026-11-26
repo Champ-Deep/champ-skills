@@ -263,3 +263,7 @@ Deep rejected a 16-screen home with a sign-off band above a two-part footer. Mea
 ## One mode per page
 
 A heading-only fix leaves hybrids: a Fraunces headline over a green mono kicker and a mono lede. The mode class on the page wrapper (`mode-editorial` or `mode-operator`, tokens in `system.css`) must decide the display face, accent, eyebrow and body together. When a page looks like another site, read its wrapper's mode first: pillars and privacy shipped as `mode-operator`, and writing, posts and company pages shipped with no mode at all.
+
+**A variant switch on a mode-classed wrapper can lose to the scheme rule.** `:root[data-scheme="light"] .mode-editorial { --accent: ... }` in `system.css` has specificity 0,3,0, so a component rule such as `.ea-hero[data-p=b] { --accent: ... }` (0,2,0) silently does nothing in the light scheme while dark looks right. Prove every accent or palette switch by computed colour in both schemes, and treat two variant screenshots with the same sha256 as a failed switch, not a match.
+
+**Unmounting an island unmounts every effect it ran.** The aquarium island also ran the Encrypted Text decrypt on `[data-v3-encrypted]`. Before you swap an island out of a page, grep it for `querySelector` and carry each page-level effect into the replacement, so Deep's picks keep moving.
