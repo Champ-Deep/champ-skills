@@ -98,6 +98,7 @@ container) behind a Worker on Cloudflare, and for reading the state it keeps.
 - First deploy of a container application can answer "no Container instance available" for a few minutes while it provisions. Retry before debugging.
 - A Worker secret change or a new image does not replace a running instance until it stops. Add a token-guarded `/__state/stop` route to force a restart and to time cold starts.
 - Pass secrets into the container through `envVars` set in the Container subclass constructor from `env`; forward by name prefix so new settings need no Worker change.
+- **A Worker path split must match the decoded path the origin will route on.** `new URL()` keeps `%2F` encoded, so `/api/sign%2Fstatus` fails `startsWith("/api/sign/")`, while `Container.containerFetch` forwards `request.url` unchanged and uvicorn/Starlette decode `%2F` to `/` before routing (proven on uvicorn 0.27.0). The request lands in the router the split was meant to keep out. Match on `decodeURIComponent(url.pathname)` (400 on `URIError`), or refuse any path containing `%2f` or `%5c`, and test both encoded forms (`/api/sign%2Fstatus`, `/api%2Fsign/status`).
 - Keep snapshot integrity metadata on the same R2 object (`customMetadata`, 2 KB cap) so a crash between two uploads cannot leave a blob and its checksum out of step.
 
 ## Cutover from an external origin (Railway, a VM)
