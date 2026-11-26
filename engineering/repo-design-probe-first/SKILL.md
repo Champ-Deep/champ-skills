@@ -78,6 +78,24 @@ doc that asserts "the gate has no parameter X" is worth nothing unless checked.
   download note read 2 of 5 file routes on a stale head and called downloads
   unlogged, while `api/payroll/export` already logged every download.
 
+- A protection the design leans on (Postgres RLS, auth middleware, a route
+  disable list, a "denial never falls back" rule) is traced to the code that
+  runs under the default config, not taken from a docstring or migration
+  comment. Check that the session variable is set on the same connection and
+  transaction the route queries with, and that the app's DB role does not own
+  the table without `FORCE ROW LEVEL SECURITY`. Build a disable list by
+  enumerating every route (`git grep -n '@router\.' <sha> -- src/api`) and
+  write the boundary as an allowlist. Follow the default fetch engine's whole
+  fallback chain for 403 and 429. A ChampSet pilot plan cited LakeStream RLS
+  as its store's tenant guard while `auth.py` ran `set_config(..., true)` on a
+  separate pooled connection as the owning `scraper` role, disabled 4 routes
+  while `/extract` still sent page text to OpenRouter, and gated denials per
+  arm while the default `fallback` engine retried a 403 through Camofox.
+- An acceptance plan maps every step of its user journey to a numbered gate
+  with a denominator. A step with only a build test (recipe versioning,
+  segment, draft citation) is an ungated step, and the brief's named stages
+  are the ones most often left that way.
+
 ## Deliverable
 
 Design doc citing `file:line` throughout, a probed migration file, a stated
