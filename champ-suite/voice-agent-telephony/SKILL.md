@@ -132,6 +132,17 @@ transferee's hook destroyed). A client that keeps the leg only on 404 hangs up
 a live call on 400/403/500. Probe one non-404 pre-move case too: transfer a
 call to an Echo extension and assert the call and its channel survive.
 
+A kept leg is proven only when it still works: after the pre-move rejection,
+transfer the same call again to a reachable target and assert it lands. Also
+probe an unregistered target (Dial CHANUNAVAIL returns at once, post-move), not
+only a ringing one that never answers.
+
+Champ Softphone QA harness: `app/qa/*.mjs` and `demo/gate.mjs` need the repo
+root served on 3117 (it imports `/transports/sipjs.mjs` at runtime, so serve the
+commit under test), `npm ci` at the root for sip.js, and `PLAYWRIGHT_PATH` set to
+an existing `node_modules/playwright` whose headless-shell revision is cached
+(the default celsus-os-ui path no longer has one).
+
 ## Diagnose by failure signature
 
 | Signature | Cause | Where to look |
