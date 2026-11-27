@@ -73,10 +73,15 @@ to be, and only the box makes that visible.
 - **Occlusion** needs the depth band to run from the feet up past the head. A band that
   ends above the feet paints the legs in front of the occluder and the torso behind it,
   which no single-frame screenshot shows as broken.
-- **Gait**: travel per full stride cycle should be on the order of half the figure's
-  height. Measure it as two shots N seconds apart, not by eye: far less than that means
-  the feet slide, and a figure that walks for a fixed time then freezes forever is a
-  loop defect worth naming.
+- **Gait**: measure the stride off the sprite itself, not a rule of thumb. In the
+  contact cell, take the heel-to-heel spread at the sole baseline from the alpha
+  channel; one full cycle (two steps) must travel about twice that along the axis the
+  sprite faces. Compute travel from the transforms two samples apart, split into the
+  facing axis and the rest: a profile sprite that faces right but moves mostly down the
+  screen (toward the camera) skates even when its total travel looks right. One atlas
+  had a 0.4 h step, so 0.8 h per cycle, while the build moved 0.18 h per cycle
+  sideways and 0.43 h in total. A figure that walks for a fixed time then freezes
+  forever is a loop defect worth naming.
 - **Provenance census**: count the rendering sources on one page (base raster art,
   code-drawn props, sprite animation, UI chrome). Any code-drawn layer over base art has
   to match its edge quality, texture and scale, or it reads as a second art direction
