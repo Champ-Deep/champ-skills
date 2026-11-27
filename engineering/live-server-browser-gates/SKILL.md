@@ -212,3 +212,9 @@ For browser syntax errors or hydration stalls after a clean compile, read [brows
   security change; map the allowed hostname onto the local build instead.
 - **Reporting a mapped-origin pass as a production test.** Same origin string, different
   deployment; state the method and the untested remainder with the verdict.
+- **Testing a page-specific widget state on a synthetic `page.route` body.** It skips
+  the real page's CSP, chrome and ids. Write the tag and the planned CSP origins into the
+  recorded replay files instead: a `route.fulfill`ed document loading a 127.0.0.1 script
+  dies on Chrome's loopback check ("Permission was denied ... loopback address space").
+- **Copying a baseline from the brief.** "Hidden below 768 px as the base set it" can be
+  wrong (the base hid only the sprite); measure the base page at the same widths first.
