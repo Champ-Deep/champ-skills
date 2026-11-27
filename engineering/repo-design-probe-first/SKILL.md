@@ -83,7 +83,12 @@ doc that asserts "the gate has no parameter X" is worth nothing unless checked.
   runs under the default config, not taken from a docstring or migration
   comment. Check that the session variable is set on the same connection and
   transaction the route queries with, and that the app's DB role does not own
-  the table without `FORCE ROW LEVEL SECURITY`. Build a disable list by
+  the table without `FORCE ROW LEVEL SECURITY`. List every migration that
+  names the protection (`git ls-tree -r --name-only <sha> | grep -i rls`): a
+  later `disable_rls` file can undo the one you read, and the migrate runner
+  applies all of them in order. Read the auth middleware's public-prefix list
+  too: a prefix like `/api/` leaves every route without its own auth
+  dependency open to anonymous calls. Build a disable list by
   enumerating every route (`git grep -n '@router\.' <sha> -- src/api`) and
   write the boundary as an allowlist. Follow the default fetch engine's whole
   fallback chain for 403 and 429. A ChampSet pilot plan cited LakeStream RLS
@@ -95,6 +100,15 @@ doc that asserts "the gate has no parameter X" is worth nothing unless checked.
   with a denominator. A step with only a build test (recipe versioning,
   segment, draft citation) is an ungated step, and the brief's named stages
   are the ones most often left that way.
+- Every expected outcome in an answer key (robots disallow is `denied`,
+  "waits Retry-After", "Camofox down gives `transient`") traces either to a
+  cited `file:line` that does it today or to a named build step that adds it.
+  Grep each repo on the request path for the behaviour's own words
+  (`git grep -il 'robots\|retry-after' <sha> -- src`) and follow a denial
+  rule into the second repo's worker too (tier escalation, proxy tier), not
+  only the first repo's fetch. One round-2 pilot plan made ChampSet's 403 path
+  terminal while LakeStream's `workers/base.py` still escalated 403, 429 and
+  503 up to a proxy tier, and no repo read robots.txt or Retry-After at all.
 
 ## Deliverable
 
