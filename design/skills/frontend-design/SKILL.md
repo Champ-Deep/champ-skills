@@ -32,7 +32,7 @@ Any HTML, page, form, checklist, dashboard or single-file artifact deliverable s
 
 This skill is **Phase 1**: structure, the design system, and the first cut of styling. It pairs with a **Phase 2** refinement skill, `ui-polish`, which hunts the residual "AI tells" (emoji icons, default palettes, decorative graphics where data belongs, overstuffed sidebars, static pricing) and replaces them with senior-designer choices.
 
-Always produce the DESIGN.md (below). It is the contract the polish pass reads, so the two phases never fight. When the work is a fix or feature PR into an existing product repo that already owns a DESIGN.md, keep the per-change DESIGN.md and any VERIFICATION.md in the task workspace or the PR body and out of the diff: committed, they squat the repo's spec name and carry local paths and stale process notes onto main. After you finish Step 3, hand off to Step 4.
+Use the project DESIGN.md as the contract the polish pass reads. Create it only when missing and within the brief. For a fix or feature on an existing project, keep task-specific design and verification notes in the task workspace or PR body, not the project spec. After you finish Step 3, hand off to Step 4.
 
 ## Priority System
 
@@ -57,7 +57,7 @@ Rules ranked by impact. When time is limited, address higher priorities first.
 
 ## Default Baseline: DESIGN.md
 
-Every frontend output MUST be anchored on a **DESIGN.md**, an AI-readable design spec in the schema defined by [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md). This is a curated index of 60+ DESIGN.md files covering brands from Stripe to SpaceX, each with 9 standardized sections an agent can consume directly.
+Anchor every frontend output on the project's **DESIGN.md**. Our nine sections below are a house checklist, not the [Google DESIGN.md specification](https://github.com/google-labs-code/design.md). [VoltAgent Awesome DESIGN.md](https://github.com/VoltAgent/awesome-design-md) supplies design references, not project specs. Respect the file's existing format; use `design-md` when the project requires Google's token format or lint/export.
 
 → *Consult [design-md-baseline reference](reference/design-md-baseline.md) for the full schema, curated index, closest-analog table, authoring workflow, and Champions brand-skill integration rules.*
 
@@ -78,7 +78,7 @@ Every frontend output MUST be anchored on a **DESIGN.md**, an AI-readable design
 **Precedence chain** (highest wins):
 
 ```
-Champions brand skill → venture-specific DESIGN.md → curated VoltAgent DESIGN.md → generator-built DESIGN.md
+Applicable brand skill > project DESIGN.md and existing tokens > original draft for unresolved choices
 ```
 
 If a Champions Group or venture brand skill is loaded, its tokens override the DESIGN.md wherever they conflict. The DESIGN.md fills in everything the brand skill doesn't specify.
@@ -89,12 +89,11 @@ If a Champions Group or venture brand skill is loaded, its tokens override the D
 
 ## Step 0: Design System Generator → DESIGN.md
 
-Before writing any code, generate a complete design system **and output it as a DESIGN.md file** following the 9-section schema above. This is the single biggest upgrade over ad-hoc design decisions.
+Before writing code, resolve the project design system. Reuse its DESIGN.md if present; write one with the checklist above if it is missing and the brief calls for a new design system.
 
 1. **Resolve DESIGN.md source** using the precedence chain:
-   - If a Champions/venture brand skill is active → start from its tokens, populate remaining DESIGN.md sections around them.
-   - If the target resembles a known brand → find the closest analog in the [curated index](reference/design-md-baseline.md) and fork it.
-   - Otherwise → generate from scratch using the steps below.
+   - Read the applicable brand skill and the project's `DESIGN.md`; keep working tokens and patterns in place.
+   - If there is a real gap, use one [reference pattern](reference/design-md-baseline.md#2-upstream-reference-library) that serves the same user job. Write the adaptation in your own words. If nothing fits, generate an original direction using the steps below.
 
 2. **Identify product type** and match to recommended styles.
    → Consult [styles database](reference/styles-database.md) for product-type-to-style mapping.
@@ -113,7 +112,7 @@ Before writing any code, generate a complete design system **and output it as a 
 
 7. **Declare device class and motion budget.** Which surfaces does this ship to, and what is the frame and payload ceiling.
 
-8. **Output as a DESIGN.md** with all 9 sections populated, plus CSS custom properties / design tokens ready for implementation.
+8. **Record the decisions** in a new project's DESIGN.md using the house checklist or its required token format. For work on an existing spec, keep any task notes in the brief; do not replace the root spec. Reuse its CSS custom properties / tokens.
 
 **Design System Persistence**: Create a Master set of tokens. For specific pages or components, create Override layers that extend the master. This prevents drift.
 
@@ -433,7 +432,7 @@ The DON'T guidelines above are the fingerprints of AI-generated work. The classi
 
 ## Pre-Delivery Checklist
 
-1. **DESIGN.md produced**: All 9 sections populated, precedence chain respected, device class and motion budget declared, saved alongside output
+1. **DESIGN.md applied**: Existing contract respected, or a new spec written when in scope; device class and applicable motion budget declared
 2. Accessibility: contrast passes, keyboard works, screen reader tested
 3. Responsive: tested at 320px, 768px, 1024px, 1440px+, plus aspect-ratio checks if the target includes foldables
 4. Performance: images optimized (WebP/AVIF), CLS < 0.1

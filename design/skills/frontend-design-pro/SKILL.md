@@ -32,6 +32,8 @@ These run in every mode, in this order, before the mode's own build steps.
 
 Infer the brand from the request or ask "which brand?" once. Load the brand skill (`lakeb2b-brand-guidelines`, `span-brand-guidelines`, `ampliz-brand-guidelines`, `metricfox-brand-guidelines`, `champions-group-brand`) and lock its colours, fonts and logo rules. No brand named means the neutral theme in `references/templates.md`. Brand rules override every palette, font and treatment in the mode files.
 
+**Design reference before components.** Follow the `frontend-design` baseline in `reference/design-md-baseline.md`. Read the project's existing `DESIGN.md` first. For a genuinely missing direction or pattern, use one VoltAgent Awesome DESIGN.md reference as inspiration, not as the spec. Put `reference URL + pattern kept + what stays on-brand` in the brief before component selection, or record `reference: none` when nothing is missing. Keep the existing spec intact unless the brief explicitly changes the design system.
+
 ### 2. Template
 
 For a new page, propose one template from `references/templates.md` (Case Study, Executive One-Pager, Campaign Report, Partner Pitch, Event Recap, Market or Data Snapshot) in a single AskUserQuestion, recommended first. Skip it when the request names the format.
