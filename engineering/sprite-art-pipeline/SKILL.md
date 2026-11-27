@@ -77,6 +77,10 @@ compositions (`hyperframes-*`), or layout verification of the surrounding UI (`v
    ("is the character blank or pixel-art?", "is the label clipped?") rather than "does this
    look good". Finish through the `visual-verify` gate, including the production URL.
 
+## Original props for 2D web games
+
+For a new rigid environment prop, use Blockbench's Generic Model as an art tool, not a runtime dependency. Save the editable `.bbmodel` with its texture embedded, export a transparent orthographic PNG and reopen the model in a fresh editor tab. Use a large viewport and frame the whole silhouette before cropping: the preview crop only trims what is already in frame. Check all edges, alpha, and legibility at the actual sprite size. Use integer scaling and nearest-neighbor for pixel art; keep existing character sheets and gameplay state unchanged. Artwork illustrating a multiplayer phase must follow existing public phase state, never reveal or derive private roles or votes.
+
 ## Pitfalls
 - "Pixel art" that is anti-aliased anime art is not grid-true: check resolution first (688x1024 is not a sprite sheet size), then unique colour count with PIL (`len(set(img.convert("RGB").getdata()))`, 47k-91k means gradient shading, not a palette). Quantise to 32-64 colours and nearest-neighbour upscale only after the check, or downstream pixel snapping produces mush.
 
