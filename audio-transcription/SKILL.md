@@ -77,6 +77,18 @@ A 6-8 minute recording takes roughly a minute of CPU per file on this machine; a
 
 Files arrive with odd characters: non-breaking spaces in the middle of a name (the repr shows `\xa0`), stray double spaces, missing extensions. Match on a distinctive substring (company, person) instead of retyping the name, then pass the exact `os.listdir` entry to ffmpeg.
 
+## Identifying which recording is which
+
+When several candidates could be the same session's take (scratch vs
+production, original vs re-export), decide by content, not metadata: transcribe
+each candidate and match the distinctive lines you already know (the title
+line, numbered questions, exact quoted phrasing). Exports inherit names, so
+filename, folder and mtime are weak evidence. Run the batch in the background
+with one output file per candidate, and report the match per candidate: the
+file whose transcript matches the approved script in full is the take, one that
+matches only partially is scratch or a different version. Never name a winner
+from how the file looks on disk.
+
 ## From transcript to structured fields
 
 When the point is rows rather than text, extract with a second pass over the transcripts: map each recording to its prospect, pull the fields the speaker actually states (name, title, company, country, ERP in use, timeline, authority), and label every field no source covers `Not captured`. Never fill a gap from a guess, and say in the report which fields the calls could not supply.

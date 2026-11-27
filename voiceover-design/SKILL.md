@@ -23,7 +23,7 @@ captions or transcription alone, or for cutting clips out of a long recording
 
 The output is never
 just prose: it is a beat map, a timed script, a casting call, and a prompt the
-studio agent can execute. Four steps, in this order.
+studio agent can execute. Five steps, in this order.
 
 This skill designs and prompts. Generation runs in the studio agent (ElevenLabs,
 HeyGen, or the local TTS engine documented in the `media-use` skill's
@@ -37,6 +37,10 @@ for the company, the campaign and any standing voice preference. Brand palette,
 fonts, naming rules and client-facing restrictions live in the brand skill, never
 in your own judgement. If no brand shows on screen, say which brand you assumed
 and why, rather than inventing one or staying silent.
+
+## Recover an existing take before generating
+
+When asked to reuse an original Studio take, check the source before opening a new TTS editor. A named MP4 can contain only a music bed, and a generic ElevenLabs export can belong to another project. Probe audio streams and transcribe plausible exports locally against distinctive lines. If the Studio project name is missing, use the meeting time to narrow the browser's history to Studio project URLs; treat same-window hits as candidates until the timeline or audio matches. If no original is accessible, ask for the project link and workspace or the actual audio export. Do not substitute newly generated audio unless explicitly approved.
 
 ## 1. Beat map: what is on screen, second by second
 
@@ -139,3 +143,22 @@ Paste-ready, self-contained, with these sections in this order:
 
 If the agent cannot select a voice by ID, tell it to search the library by name
 and confirm the match before generating.
+
+## 5. Confirm the production take before any handover
+
+A project usually carries a timing scratch and the real voice under similar
+names, and the scratch is easy to mistake for the deliverable:
+
+- **A scratch voice is a timing reference and never ships.** If the artifact in
+  hand is scratch, say so and hold the review or the send until the production
+  take is verified. Reviewing a scratch cut as the final voice burns a round on
+  a placeholder, and attaching it to a staged draft puts the placeholder in
+  front of the recipient.
+- **Recover, do not regenerate.** When the production take is missing from
+  disk, pull it back from the studio project's own history or export.
+  Regenerating on any voice discards takes Deep already heard and approved.
+- **Verify the recovered take against the approved script and its beat
+  windows** before it replaces anything: transcribe it, match every spoken line
+  to the approved wording and to the beat it must land in, and report the lines
+  that differ. A file's name, folder or export date proves nothing about which
+  take it is.

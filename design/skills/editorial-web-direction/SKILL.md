@@ -17,6 +17,10 @@ Fail the page if the hero is a centred headline, a subtitle, two buttons and an 
 
 List what the page can truthfully show before choosing a layout: the person's name and how they say it, their titles, real numbers (derived from data, never typed in), dated work, real clients only if public, quotes in their own words, one strong image or object. A device with nothing true to fill it is decoration. Drop it.
 
+For an illustrated place, use the original artwork to calibrate figure scale and local photographs to ground the buildings. Draw the place first. Let activities be partly occluded discoveries at different depths rather than evenly spaced foreground demonstrations; a prominent activity legend can undo that hierarchy even when the drawing is right.
+
+For animated people in an ink panorama, reference its incidental figures when commissioning the walk sheet. A single pose translated with a bob reads as a sliding cutout. Check contact and passing poses, cadence, scale and foreground occlusion in a short crop of the actual scene, not on a white character sheet alone.
+
 ## Step 2: Pick devices
 
 One dominant device for the hero, at most two supporting devices for the rest of the page. Write one sentence per device on what it does for this audience.
