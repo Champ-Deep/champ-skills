@@ -511,6 +511,17 @@ An enumeration, timing or delivery probe compares a known account with an unknow
 
 Read the gate's configuration line, not just its verdict word: a finding printed as a block beside `WARN-ONLY (in gate-config.json warn_only)` stopped nothing, so "the gate passed" then describes the config rather than the code. Quote the classification back, and when a required audit was skipped because the owner said to proceed, carry the skip into the PR body and the report as an unproven item instead of letting the green checklist stand in for it.
 
+## A green battery can test an adjacent property
+
+A suite that passes, and would go red if the code broke, still proves only the property
+its assertions compute. "Every hotspot opens its card" stays green while every hotspot
+sits above the subject it names, because placement was never part of any assertion.
+Before quoting a pass count as evidence for a claim, restate the claim as one measurable
+predicate and check that an assertion in the run actually computes it. When they differ,
+report the suite as passing a different property rather than as support for the claim,
+and keep the two numbers apart in the report: tests that ran, tests that address the
+claim.
+
 ## Report the shortfall
 
 When a gate turns out not to have been running, say so plainly and quantify it. Do not

@@ -197,6 +197,16 @@ the page did not change between the two.
 
 **A gesture's target in drawn art is computed from the source, not read off the PNG.** Pointing, gaze and arrow direction are the joke or the message in a meme or diagram, and a vision pass will "confirm" a closed pointing loop that the geometry breaks: one Life of Champions build capped every arm at 150 px, so the long point (right figure to left figure) ended at x 588, inside the centre figure's column (445 to 635) and 263 px short of its target, while three of five neutral vision reads named the centre figure. For every drawn pointer, compute the fingertip from the build's own coordinates and assert it lies outside every non-target figure's column and within about 40 px of the target's body. Put the assert in the export script.
 
+**A hotspot over artwork is graded against the art it names, not against the card it
+opens.** A hit-target battery that only asserts "clicking X opens X's card" stays green
+while every box sits above its subject, because placement was never asserted. Convert
+the subject's art coordinate through the container's rendered scale, `elementFromPoint`
+the result and require that hotspot's own label, at every shipping width. When you are
+reviewing a build whose source you did not write, there are no source coordinates, so
+measure subjects with a labelled ruler overlaid on an upscaled crop of the raw asset
+and treat each read as a hypothesis the probe settles. Full recipe:
+[artwork-hit-target-audit.md](references/artwork-hit-target-audit.md).
+
 **An exported image is checked for the size the brief states.** `locator.screenshot()` on an SVG captures its CSS box, not its viewBox, so a 1080 viewBox inside a card column exports at the column width with the card's border and rounded corners baked in. One Life of Champions export.py rendered at a 1080 viewport and still wrote 480 by 479 and 480 by 480 PNGs with white corners, while the brief listed both as 1080 by 1080. After every export, open the file with PIL and assert `im.size` equals the stated size and that each corner pixel is the art's own background colour.
 
 **Transparent chrome over content audits against the wrong ground, too.** A fixed nav that is clear at the top of the page, or any element sitting on a gradient band, gets composited against the body colour instead of what actually renders behind it, so it FAILs at ratios like 1.1, 1.7 and 2.4 while the page is fine. Before touching the palette, compute the ratio by hand: the element's text colour against the ground colour it actually sits on (the hero's own colour, not the body), and when that ground is a gradient, against every stop in it, taking the worst. White body copy can clear 4.5:1 over a band's dark end and genuinely fail over its light end, and that split decides the fix: a genuine worst-stop failure moves the band to a dark ground (the same dark warmth, no desaturation), while an artifact that passes on every stop gets an opaque ground a machine can composite (a solid `background-color` under the gradient, an opaque scrolled state) or is recorded as a known checker limitation. Real luminance maths in about ten lines of Python settles which case each FAIL is. Report FAILs you leave standing as measured passes with their worst-stop ratios, never as ignored.
